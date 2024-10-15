@@ -146,6 +146,11 @@ parameters:
 			path: inc/classes/class-astra-sites-error-handler.php
 
 		-
+			message: "#^Action callback returns null but should not return anything\\.$#"
+			count: 1
+			path: inc/classes/class-astra-sites-importer-log.php
+
+		-
 			message: "#^Argument of an invalid type array\\<string\\>\\|false supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: inc/classes/class-astra-sites-importer-log.php
@@ -217,6 +222,11 @@ parameters:
 
 		-
 			message: "#^Method Astra_Sites_Importer_Log\\:\\:start\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: inc/classes/class-astra-sites-importer-log.php
+
+		-
+			message: "#^Parameter \\#3 \\$autoload of function update_option expects bool\\|null, string given\\.$#"
 			count: 1
 			path: inc/classes/class-astra-sites-importer-log.php
 
@@ -311,6 +321,11 @@ parameters:
 			path: inc/classes/class-astra-sites-importer.php
 
 		-
+			message: "#^Parameter \\#3 \\$autoload of function update_option expects bool\\|null, string given\\.$#"
+			count: 1
+			path: inc/classes/class-astra-sites-importer.php
+
+		-
 			message: "#^Static property Astra_Sites_Importer\\:\\:\\$instance \\(object\\) in isset\\(\\) is not nullable\\.$#"
 			count: 1
 			path: inc/classes/class-astra-sites-importer.php
@@ -319,6 +334,16 @@ parameters:
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: inc/classes/class-astra-sites-importer.php
+
+		-
+			message: "#^Call to static method show_nps_notice\\(\\) on an unknown class Nps_Survey\\.$#"
+			count: 1
+			path: inc/classes/class-astra-sites-nps-notice.php
+
+		-
+			message: "#^Static property Astra_Sites_Nps_Notice\\:\\:\\$instance \\(object\\) in isset\\(\\) is not nullable\\.$#"
+			count: 1
+			path: inc/classes/class-astra-sites-nps-notice.php
 
 		-
 			message: "#^Call to an undefined method object\\:\\:get_white_label_name\\(\\)\\.$#"
@@ -381,6 +406,11 @@ parameters:
 			path: inc/classes/class-astra-sites-page.php
 
 		-
+			message: "#^Parameter \\#3 \\$autoload of function update_option expects bool\\|null, string given\\.$#"
+			count: 3
+			path: inc/classes/class-astra-sites-page.php
+
+		-
 			message: "#^Property Astra_Sites_Page\\:\\:\\$instance has unknown class instance as its type\\.$#"
 			count: 1
 			path: inc/classes/class-astra-sites-page.php
@@ -402,6 +432,11 @@ parameters:
 
 		-
 			message: "#^Call to static method get_instance\\(\\) on an unknown class Nps_Survey_Script\\.$#"
+			count: 1
+			path: inc/classes/class-astra-sites-update.php
+
+		-
+			message: "#^Parameter \\#3 \\$autoload of function update_option expects bool\\|null, string given\\.$#"
 			count: 1
 			path: inc/classes/class-astra-sites-update.php
 
@@ -1115,12 +1150,17 @@ parameters:
 			path: inc/classes/class-astra-sites.php
 
 		-
+			message: "#^Parameter \\#3 \\$autoload of function update_option expects bool\\|null, string given\\.$#"
+			count: 5
+			path: inc/classes/class-astra-sites.php
+
+		-
 			message: "#^Parameter \\#3 \\$deps of function wp_enqueue_style expects array\\<string\\>, string given\\.$#"
 			count: 4
 			path: inc/classes/class-astra-sites.php
 
 		-
-			message: "#^Parameter \\#3 \\$photo_id of method Astra_Sites\\:\\:create_image_from_url\\(\\) expects string, int given\\.$#"
+			message: "#^Parameter \\#3 \\$photo_id of method Astra_Sites\\:\\:create_image_from_url\\(\\) expects string, int\\<0, max\\> given\\.$#"
 			count: 1
 			path: inc/classes/class-astra-sites.php
 
@@ -1610,6 +1650,11 @@ parameters:
 			path: inc/importers/batch-processing/class-astra-sites-batch-processing-brizy.php
 
 		-
+			message: "#^Parameter \\#3 \\$autoload of function update_option expects bool\\|null, string given\\.$#"
+			count: 1
+			path: inc/importers/batch-processing/class-astra-sites-batch-processing-cleanup.php
+
+		-
 			message: "#^Call to an undefined method object\\:\\:import\\(\\)\\.$#"
 			count: 1
 			path: inc/importers/batch-processing/class-astra-sites-batch-processing-customizer.php
@@ -1652,6 +1697,11 @@ parameters:
 		-
 			message: "#^Method Astra_Sites_Batch_Processing_Importer\\:\\:import_sites\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
+			path: inc/importers/batch-processing/class-astra-sites-batch-processing-importer.php
+
+		-
+			message: "#^Parameter \\#3 \\$autoload of function update_option expects bool\\|null, string given\\.$#"
+			count: 3
 			path: inc/importers/batch-processing/class-astra-sites-batch-processing-importer.php
 
 		-
@@ -1965,6 +2015,11 @@ parameters:
 			path: inc/importers/class-astra-sites-helper.php
 
 		-
+			message: "#^Offset 0 does not exist on array\\{0\\?\\: string, 1\\?\\: non\\-falsy\\-string\\}\\.$#"
+			count: 1
+			path: inc/importers/class-astra-sites-helper.php
+
+		-
 			message: "#^Parameter \\#1 \\$svg of static method Astra_Sites_Helper\\:\\:get_svg_dimensions\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: inc/importers/class-astra-sites-helper.php
@@ -2001,7 +2056,7 @@ parameters:
 
 		-
 			message: "#^Possibly invalid array key type \\(array\\<int, string\\>\\|string\\|null\\)\\.$#"
-			count: 6
+			count: 3
 			path: inc/importers/class-astra-widget-importer.php
 
 		-

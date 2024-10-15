@@ -379,26 +379,6 @@ export const checkFileSystemPermissions = async ( dispatch ) => {
 	}
 };
 
-// export const generateAnalyticsLead = async (
-// 	tryAgainCount,
-// 	status,
-// 	templateId,
-// 	builder
-// ) => {
-// 	const importContent = new FormData();
-// 	importContent.append( 'action', 'astra-sites-generate-analytics-lead' );
-// 	importContent.append( 'status', status );
-// 	importContent.append( 'id', templateId );
-// 	importContent.append( 'try-again-count', tryAgainCount );
-// 	importContent.append( 'type', 'ai-builder' );
-// 	importContent.append( 'page-builder', builder );
-// 	importContent.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
-// 	await fetch( ajaxurl, {
-// 		method: 'post',
-// 		body: importContent,
-// 	} );
-// };
-
 export const setSiteLanguage = async ( siteLanguage = 'en_US' ) => {
 	if ( ! siteLanguage ) {
 		return;

@@ -1,9 +1,6 @@
 /* @type {import('tailwindcss').Config} */
 module.exports = {
-	content: [
-		'./inc/lib/onboarding/assets/src/**/*.{jsx,js}',
-		'./inc/lib/nps-survey/src/**/*.{jsx,js}',
-	],
+	content: [ './inc/lib/onboarding/assets/src/**/*.{jsx,js}' ],
 	theme: {
 		extend: {
 			colors: {

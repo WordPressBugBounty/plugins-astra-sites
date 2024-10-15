@@ -13,6 +13,8 @@ import Input from '../components/input';
 import { useNavigateSteps } from '../router';
 import Container from '../components/container';
 import AISitesNotice from '../components/ai-sites-notice';
+import { toastBody } from '../helpers';
+import toast from 'react-hot-toast';
 
 const BusinessDetails = () => {
 	const { nextStep } = useNavigateSteps();
@@ -47,10 +49,10 @@ const BusinessDetails = () => {
 			if ( response.success ) {
 				setSiteLanguageListAIStep( response?.data?.data );
 			} else {
-				//  Handle error.
+				throw new Error( response?.data?.data );
 			}
 		} catch ( error ) {
-			// Handle error.
+			toast.error( toastBody( error ) );
 		}
 	};
 

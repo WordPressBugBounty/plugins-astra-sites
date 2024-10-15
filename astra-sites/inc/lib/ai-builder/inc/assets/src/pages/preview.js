@@ -61,7 +61,10 @@ const skipFeatures = !! aiBuilderVars?.skipFeatures;
 const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 	const { nextStep } = useNavigateSteps();
 	const handleStartBuilding = () => {
-		window.open( 'https://app.zipwp.com/founders-deal', '_blank' );
+		window.open(
+			`https://app.zipwp.com/founders-deal?source=${ wpApiSettings?.zipwp_auth?.source }`,
+			'_blank'
+		);
 	};
 
 	const [ loadingIframe, setLoadingIframe ] = useState( true );
@@ -84,6 +87,7 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 			businessContact,
 		},
 		aiSiteLogo,
+		aiSiteTitleVisible,
 		aiActiveTypography,
 		aiActivePallette,
 	} = useSelect( ( select ) => {
@@ -91,6 +95,7 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 			getWebsiteInfo,
 			getAIStepData,
 			getSiteLogo,
+			getSiteTitleVisible,
 			getActiveTypography,
 			getActiveColorPalette,
 		} = select( STORE_KEY );
@@ -99,6 +104,7 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 			websiteInfo: getWebsiteInfo(),
 			stepData: getAIStepData(),
 			aiSiteLogo: getSiteLogo(),
+			aiSiteTitleVisible: getSiteTitleVisible(),
 			aiActiveTypography: getActiveTypography(),
 			aiActivePallette: getActiveColorPalette(),
 		};
@@ -159,6 +165,10 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 				sendPostMessage( {
 					param: 'siteLogo',
 					data: mediaData,
+				} );
+				sendPostMessage( {
+					param: 'siteTitle',
+					data: aiSiteTitleVisible,
 				} );
 			}, 100 );
 		}

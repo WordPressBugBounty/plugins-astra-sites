@@ -2187,6 +2187,9 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		private function includes() {
 
 			require_once ASTRA_SITES_DIR . 'inc/classes/functions.php';
+			require_once ASTRA_SITES_DIR . 'inc/classes/compatibility/class-astra-sites-compatibility.php';
+
+			// classes 'inc/classes/class-astra-sites-'.
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-update.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-utils.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-error-handler.php';
@@ -2194,15 +2197,17 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-page.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-elementor-pages.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-elementor-images.php';
-			require_once ASTRA_SITES_DIR . 'inc/classes/compatibility/class-astra-sites-compatibility.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-importer.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-wp-cli.php';
+			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-file-system.php';
+			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-nps-notice.php';
+
+			// libraries 'inc/lib/class-astra-sites-'.
+			require_once ASTRA_SITES_DIR . 'inc/lib/onboarding/class-onboarding.php';
 			require_once ASTRA_SITES_DIR . 'inc/lib/class-astra-sites-ast-block-templates.php';
 			require_once ASTRA_SITES_DIR . 'inc/lib/class-astra-sites-zip-ai.php';
 			require_once ASTRA_SITES_DIR . 'inc/lib/class-astra-sites-zipwp-images.php';
-			require_once ASTRA_SITES_DIR . 'inc/lib/onboarding/class-onboarding.php';
-			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-file-system.php';
-			require_once ASTRA_SITES_DIR . 'inc/lib/nps-survey/nps-survey.php';
+			require_once ASTRA_SITES_DIR . 'inc/lib/class-astra-sites-nps-survey.php';
 		}
 
 		/**

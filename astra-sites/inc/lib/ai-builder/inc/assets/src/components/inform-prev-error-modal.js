@@ -10,8 +10,9 @@ import { RadioGroup } from '@headlessui/react';
 import { useNavigateSteps } from '../router';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import apiFetch from '@wordpress/api-fetch';
-import { setLocalStorageItem } from '../helpers';
+import { setLocalStorageItem, toastBody } from '../helpers';
 import { Tooltip } from 'react-tooltip';
+import toast from 'react-hot-toast';
 
 const supportLink = (
 	<a
@@ -87,10 +88,10 @@ const InformPreviousErrorModal = ( {
 				console.log( 'Data reset!' );
 			} else {
 				//  Handle error.
+				throw new Error( response?.data?.data );
 			}
 		} catch ( error ) {
-			// Handle error.
-			console.log( error );
+			toast.error( toastBody( error ) );
 		}
 	};
 

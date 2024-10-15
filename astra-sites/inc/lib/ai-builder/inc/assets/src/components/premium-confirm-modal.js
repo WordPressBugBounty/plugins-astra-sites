@@ -7,7 +7,10 @@ import Button from './button';
 
 const PremiumConfirmModal = ( { open, setOpen } ) => {
 	const handleStartBuilding = () => {
-		window.open( 'https://app.zipwp.com/founders-deal', '_blank' );
+		window.open(
+			`https://app.zipwp.com/founders-deal?source=${ wpApiSettings?.zipwp_auth?.source }`,
+			'_blank'
+		);
 	};
 	return (
 		<Modal open={ open } setOpen={ setOpen } className="sm:w-[27.5rem]">

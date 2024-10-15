@@ -5,17 +5,19 @@ class Astra_Sites_ZipWP_Api {
     /**
      * Member Variable
      *
-     * @var instance
+     * @var mixed
      */
-    private static $instance;
+    private static $instance = null;
 
     /**
      * Initiator
      *
      * @since 4.0.0
+	 * 
+	 * @return mixed
      */
     public static function get_instance() {
-        if ( ! isset( self::$instance ) ) {
+        if ( null === self::$instance ) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -54,7 +56,7 @@ class Astra_Sites_ZipWP_Api {
 	 * Get API headers
 	 *
 	 * @since 4.0.0
-	 * @return array
+	 * @return array<string, string>
 	 */
 	public function get_api_headers() {
 		return array(
@@ -130,6 +132,8 @@ class Astra_Sites_ZipWP_Api {
 	/**
      * Get the zip plan details
      * @since 4.0.0
+	 * 
+	 * @return \WP_REST_Response 
      */
     public function get_zip_plan_details() {
         $zip_plan = Astra_Sites_ZipWP_Integration::get_instance()->get_zip_plans();
@@ -151,7 +155,7 @@ class Astra_Sites_ZipWP_Api {
 	 * @return mixed
 	 */
 	public function get_user_credits( $request ) {
-		$nonce = $request->get_header( 'X-WP-Nonce' );
+		$nonce = (string)$request->get_header( 'X-WP-Nonce' );
 		// Verify the nonce.
 		if ( ! wp_verify_nonce( sanitize_text_field( $nonce ), 'wp_rest' ) ) {
 			wp_send_json_error(
@@ -200,7 +204,7 @@ class Astra_Sites_ZipWP_Api {
 			}
 			wp_send_json_error(
 				array(
-					'data' => 'Failed ' . $response_data,
+					'data' => $response_data,
 					'status'  => false,
 
 				)

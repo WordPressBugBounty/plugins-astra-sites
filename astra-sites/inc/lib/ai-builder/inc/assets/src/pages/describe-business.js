@@ -21,6 +21,8 @@ import { __, sprintf } from '@wordpress/i18n';
 import { useNavigateSteps } from '../router';
 import Container from '../components/container';
 import AISitesNotice from '../components/ai-sites-notice';
+import { toastBody } from '../helpers';
+import toast from 'react-hot-toast';
 
 const DescribeBusiness = () => {
 	const { nextStep, previousStep } = useNavigateSteps();
@@ -111,9 +113,12 @@ const DescribeBusiness = () => {
 						shouldValidate: true,
 					} );
 				}
+			} else {
+				throw new Error( response?.data?.data );
 			}
 		} catch ( error ) {
 			// Do nothing
+			toast.error( toastBody( error ) );
 		} finally {
 			setIsLoading( false );
 		}

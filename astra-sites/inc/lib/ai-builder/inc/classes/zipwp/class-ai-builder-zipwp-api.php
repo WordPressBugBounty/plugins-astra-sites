@@ -87,6 +87,35 @@ class Ai_Builder_ZipWP_Api {
 	}
 
 	/**
+	 * Set the dismiss time for the plan promotion.
+	 *
+	 * @return \WP_REST_Response|\WP_Error Response object on success, or WP_Error object on failure.
+	 */
+	public function set_plan_promo_dismiss_time() {
+		$dismiss_time = time();
+		update_option( 'ai_builder_promo_dismiss_time', $dismiss_time );
+
+		return new \WP_REST_Response( array( 'success' => true ), 200 );
+	}
+
+	/**
+	 * Get the dismiss time for the plan promotion.
+	 *
+	 * @return \WP_REST_Response|\WP_Error Response object on success, or WP_Error object on failure.
+	 */
+	public function get_plan_promo_dismiss_time() {
+		$dismisstime = get_option( 'ai_builder_promo_dismiss_time', 0 );
+
+		return new \WP_REST_Response(
+			array(
+				'success'      => true,
+				'dismiss_time' => $dismisstime,
+			),
+			200
+		);
+	}
+
+	/**
 	 * Register route
 	 *
 	 * @since 4.0.0
@@ -535,6 +564,30 @@ class Ai_Builder_ZipWP_Api {
 							'required' => true,
 						),
 					),
+				),
+			)
+		);
+
+		register_rest_route(
+			$namespace,
+			'/set-plan-promo-dismiss-time/',
+			array(
+				array(
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'set_plan_promo_dismiss_time' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				),
+			)
+		);
+
+		register_rest_route(
+			$namespace,
+			'/get-plan-promo-dismiss-time/',
+			array(
+				array(
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_plan_promo_dismiss_time' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
 				),
 			)
 		);

@@ -13,9 +13,10 @@ import { motion } from 'framer-motion';
 import { STORE_KEY } from '../store';
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import usePopper from '../hooks/use-popper';
-import { classNames } from '../helpers';
+import { classNames, toastBody } from '../helpers';
 import { useDebounce } from '../hooks/use-debounce';
 import LoadingSpinner from './loading-spinner';
+import toast from 'react-hot-toast';
 
 const container = {
 	closed: { opacity: 0 },
@@ -49,7 +50,14 @@ const BusinessTypes = () => {
 
 	const [ referenceRef, popperRef ] = usePopper( {
 		placement: 'bottom',
-		modifiers: [ { name: 'offset', options: { offset: [ 0, 4 ] } } ],
+		modifiers: [
+			{ name: 'offset', options: { offset: [ 0, 0 ] } },
+			{ name: 'flip', enabled: false },
+			{
+				name: 'preventOverflow',
+				options: { boundariesElement: 'viewport' },
+			},
+		],
 	} );
 
 	const [ openSuggestions, setOpenSuggestions ] = useState( false );
@@ -85,11 +93,15 @@ const BusinessTypes = () => {
 
 			if ( response.success ) {
 				setBusinessTypeListAIStep( response?.data?.data );
+			} else {
+				throw new Error( response?.data?.data );
 			}
-
 			setIsFetching( false );
 		} catch ( error ) {
-			// Do Nothing.
+			if ( error.name === 'AbortError' ) {
+				return;
+			}
+			toast.error( toastBody( error ) );
 		}
 	};
 
@@ -305,7 +317,10 @@ const BusinessTypes = () => {
 			id="business-types-suggestions"
 			ref={ referenceRef }
 			className={ classNames(
-				'relative pr-3 pl-4 py-3 bg-white rounded-md border border-solid border-border-tertiary'
+				'relative pr-3 pl-4 py-3 bg-white rounded-md border border-solid border-border-tertiary',
+				{
+					'pb-0 rounded-b-none border-b-0 shadow-md': openSuggestions,
+				}
 			) }
 			onKeyDown={ handleKeyDown }
 		>
@@ -347,15 +362,21 @@ const BusinessTypes = () => {
 			<div
 				ref={ popperRef }
 				className={ classNames(
-					'w-[calc(100%_+_2px)] p-3 z-10 bg-white shadow-lg border-x border border-solid border-border-tertiary rounded-md',
+					'w-[calc(100%_+_2px)] px-3 pb-3 z-10 bg-white shadow-md border-x border-b border-t-0 border-solid border-border-tertiary rounded-b-md',
 					{
 						invisible: ! openSuggestions,
 					}
 				) }
 			>
+				{ openSuggestions && (
+					<hr
+						className="!mx-0 !my-3 border-t border-solid border-b-0 border-border-tertiary"
+						tabIndex={ -1 }
+					/>
+				) }
 				<div
 					ref={ scrollableRef }
-					className="max-h-[300px] w-full overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1/2 [&::-webkit-scrollbar-thumb]:h-16 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-dark-app-background/20 [&::-webkit-scrollbar-thumb:hover]:bg-dark-app-background/30 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-track]:rounded-md scroll-p-0"
+					className="max-h-[180px] w-full overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar]:h-1/2 [&::-webkit-scrollbar-thumb]:h-16 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-dark-app-background/20 [&::-webkit-scrollbar-thumb:hover]:bg-dark-app-background/30 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-track]:rounded-md scroll-p-0"
 				>
 					<motion.ul
 						className="w-full flex flex-col gap-1"

@@ -122,6 +122,16 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 				}
 			}
 
+			if ( version_compare( $saved_version, '4.4.4', '<' ) ) {
+
+				$old_dismiss_varible = get_option( 'nps-survay-form-dismiss-status' );
+
+				if ( ! empty( $old_dismiss_varible ) ) {
+					update_option( 'nps-survey-astra-sites', $old_dismiss_varible );
+					delete_option( 'nps-survay-form-dismiss-status' );
+				}           
+			}
+
 			// Auto update product latest version.
 			update_option( 'astra-sites-auto-version', ASTRA_SITES_VER, 'no' );
 

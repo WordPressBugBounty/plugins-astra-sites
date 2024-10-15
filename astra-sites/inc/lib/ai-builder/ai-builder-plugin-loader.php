@@ -265,6 +265,7 @@ class Ai_Builder_Plugin_Loader {
 		$zipwp_auth = array(
 			'screen_url'   => ZIPWP_APP,
 			'redirect_url' => admin_url( 'themes.php?page=ai-builder' ),
+			'source'       => 'starter-templates',
 		);
 
 		if ( ! empty( $partner_id ) ) {
@@ -438,7 +439,7 @@ class Ai_Builder_Plugin_Loader {
 						$team_name,
 					),
 					'upgrade_text'      => __( 'Unlock Full Power', 'astra-sites' ),
-					'upgrade_url'       => 'https://app.zipwp.com/founders-deal',
+					'upgrade_url'       => 'https://app.zipwp.com/founders-deal?source=starter-templates',
 					'contact_url'       => $support_link,
 					'contact_text'      => __( 'Contact Support', 'astra-sites' ),
 				)

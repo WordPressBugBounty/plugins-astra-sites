@@ -4,9 +4,10 @@ import apiFetch from '@wordpress/api-fetch';
 import Dropdown from './dropdown';
 import { BoltIcon } from '@heroicons/react/24/outline';
 import Button from './button';
-import { classNames, formatNumber } from '../helpers';
+import { classNames, formatNumber, toastBody } from '../helpers';
 import useCredits from '../hooks/use-credits';
 import ConfirmationPopup from './confirmation-popup';
+import toast from 'react-hot-toast';
 
 const HeaderCreditStatus = () => {
 	const { remaining, currentBalanceStatus } = useCredits();
@@ -46,11 +47,12 @@ const HeaderCreditStatus = () => {
 			} );
 			if ( response.success ) {
 				window.location.reload();
+			} else {
+				throw new Error( response?.data?.data );
 			}
 		} catch ( error ) {
-			// TODO: Handle error
+			toast.error( toastBody( error ) );
 		} finally {
-			//setShowRevokePopup( false );
 		}
 	}, [] );
 

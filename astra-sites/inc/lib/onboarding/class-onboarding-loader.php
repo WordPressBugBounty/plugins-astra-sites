@@ -16,26 +16,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Intelligent_Starter_Templates_Loader {
 
 	/**
-	 * Member Variable
+	 * Instance
 	 *
-	 * @var instance
+	 * @since 3.0.0
+	 * @access private
+	 * @var object Class object.
 	 */
-	private static $instance;
+    private static $instance = null;
 
-	/**
-	 * Initiator
-	 *
-	 * @since 3.0.0-beta.1
-	 */
-	public static function get_instance() {
-		if ( ! isset( self::$instance ) ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
-	}
+    /**
+     * Initiator
+     *
+     * @since 3.0.0
+	 * @return mixed 
+     */
+    public static function get_instance() {
+        if ( null === self::$instance ) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
 
 	/**
 	 * List of hosting providers.
+	 * 
+	 * @var array<int, string> Hosting Provider.
 	 */
 	private $hosting_providers = array(
 		'unaux',
@@ -54,17 +59,16 @@ class Intelligent_Starter_Templates_Loader {
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-reporting.php';
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-helper.php';
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-integration.php';
-		// require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-replace-images.php';
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-api.php';
 
 		// Admin Menu.
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_body_class', array( $this, 'admin_body_class' ) );
+		add_filter( 'admin_body_class', array( $this, 'admin_body_class' ) );
 
 		// Assets loading.
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		add_filter( 'admin_init' , array( $this, 'page_builder_field' )  );
+		add_action( 'admin_init' , array( $this, 'page_builder_field' )  );
 
 	}
 
@@ -72,6 +76,8 @@ class Intelligent_Starter_Templates_Loader {
 	 * Add main menu
 	 *
 	 * @since 3.0.0-beta.1
+	 * 
+	 * @return void
 	 */
 	public function admin_menu() {
 		$page_title = apply_filters( 'astra_sites_menu_page_title', esc_html__( 'Starter Templates', 'astra-sites' ) );
@@ -83,6 +89,8 @@ class Intelligent_Starter_Templates_Loader {
 	 * Menu callback
 	 *
 	 * @since 3.0.0-beta.1
+	 * 
+	 * @return void
 	 */
 	public function menu_callback() {
 		?>
@@ -99,6 +107,8 @@ class Intelligent_Starter_Templates_Loader {
 	 *
 	 * @since 3.0.0-beta.1
 	 * @param string $classes Space separated class string.
+	 * 
+	 * @return string
 	 */
 	public function admin_body_class( $classes = '' ) {
 		$onboarding_class = isset( $_GET['page'] ) && 'starter-templates' === $_GET['page'] ? 'intelligent-starter-templates-onboarding' : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Fetching a $_GET value, no nonce available to validate.
@@ -189,7 +199,7 @@ class Intelligent_Starter_Templates_Loader {
 	/**
 	 * Get localized array for starter templates.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private function get_starter_templates_onboarding_localized_array() {
 		$current_user = wp_get_current_user();
@@ -240,6 +250,8 @@ class Intelligent_Starter_Templates_Loader {
 	/**
 	 * Check if we should report error or not.
 	 * Skipping error reporting for a few hosting providers.
+	 * 
+	 * @return bool
 	 */
 	public function should_report_error() {
 
@@ -284,8 +296,8 @@ class Intelligent_Starter_Templates_Loader {
 	 * @return void
 	 */
 	public function page_builder_field() {
-		register_setting( 'general', 'st-elementor-builder-flag', 'esc_attr' );
-		register_setting( 'general', 'st-beaver-builder-flag', 'esc_attr' );
+		register_setting( 'general', 'st-elementor-builder-flag', array( 'sanitize_callback' => 'esc_attr' ) );
+		register_setting( 'general', 'st-beaver-builder-flag', array( 'sanitize_callback' => 'esc_attr' ) );
 		add_settings_field('' , '<label>'. 'Starter Templates' . '</label>' , array($this, 'page_builders_enable_disable_option') , 'general' );
 	}
 
@@ -313,11 +325,6 @@ class Intelligent_Starter_Templates_Loader {
 		<?php
 		echo ob_get_clean();
 	}
-
-
-
-	
-
 }
 
 new Intelligent_Starter_Templates_Loader();

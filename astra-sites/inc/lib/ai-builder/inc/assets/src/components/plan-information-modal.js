@@ -46,10 +46,13 @@ const PlanInformationModal = ( { onOpenChange } ) => {
 
 	const handleManageUpgrade = () => {
 		if ( active_plan.name === 'Free' ) {
-			window.open( 'https://app.zipwp.com/pricing', '_blank' );
+			window.open(
+				`https://app.zipwp.com/pricing?source=${ wpApiSettings?.zipwp_auth?.source }`,
+				'_blank'
+			);
 		} else {
 			window.open(
-				'https://billing.zipwp.com/customer-dashboard/',
+				`https://billing.zipwp.com/customer-dashboard/?source=${ wpApiSettings?.zipwp_auth?.source }`,
 				'_blank'
 			);
 			// TODO: add api call later when available

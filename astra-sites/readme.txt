@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 4.4
 Requires PHP: 7.4
 Tested up to: 6.6.1
-Stable tag: 4.4.4
+Stable tag: 4.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -246,6 +246,19 @@ Once your website is generated, you have complete control over its content and l
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.5 - 15-October-2024
+- New:
+    - AI Builder: Implemented toasters to provide more detailed error information.
+    - AI Builder: Added source parameters to URLs redirecting to ZipWP for better tracking.
+    - Design Kit: Added source parameters to URLs redirecting to ZipWP for better tracking.
+- Tweak: Refactored the NPS code by separating it into an independent NPS library.
+- Improvement: 
+    - Design Kit: Removed outdated options data that were previously left undeleted.
+    - Design Kit: Optimized server API call execution for better performance.
+    - Enhanced code quality and optimization for better performance and maintainability.
+- Fix: 
+    - Free Images: Fixed broken UI components for Elementor and Beaver Builder.
 
 v4.4.4 - 07-October-2024
 - Fix: Resolved issue where the selected page builder was resetting after a page refresh.

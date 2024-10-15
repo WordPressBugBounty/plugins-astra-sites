@@ -453,7 +453,9 @@ const Images = () => {
 				},
 			} );
 			const imageResponse = res.data?.data || [];
-
+			if ( ! res?.success ) {
+				throw new Error( res?.data?.data );
+			}
 			// If there are no images, blacklist the engine
 			if ( imageResponse?.length === 0 ) {
 				blackListedEngines.current.add( engine );
@@ -476,35 +478,42 @@ const Images = () => {
 			// Return image response length
 			return imageResponse?.length || 0;
 		} catch ( error ) {
-			// Do nothing
+			if ( error.name === 'AbortError' ) {
+				throw error;
+			}
+			toast.error( toastBody( error ) );
 		}
 
 		return 0;
 	};
 
 	const getTemplates = async () => {
-		await apiFetch( {
-			path: 'zipwp/v1/template-keywords',
-			method: 'POST',
-			headers: {
-				'X-WP-Nonce': aiBuilderVars.rest_api_nonce,
-			},
-			data: {
-				business_name: businessName,
-				business_description: businessDetails,
-				business_category: businessType,
-				business_category_name: businessType,
-			},
-		} ).then( ( response ) => {
+		try {
+			const response = await apiFetch( {
+				path: 'zipwp/v1/template-keywords',
+				method: 'POST',
+				headers: {
+					'X-WP-Nonce': aiBuilderVars.rest_api_nonce,
+				},
+				data: {
+					business_name: businessName,
+					business_description: businessDetails,
+					business_category: businessType,
+					business_category_name: businessType,
+				},
+			} );
+
 			if ( response.success ) {
 				const templateKeywords = response?.data?.data ?? [];
 				setWebsiteTemplateKeywords( [
 					...new Set( templateKeywords ),
 				] );
 			} else {
-				// Handle error.
+				throw new Error( response?.data?.data );
 			}
-		} );
+		} catch ( error ) {
+			toast.error( toastBody( error ) );
+		}
 	};
 
 	useEffect( () => {
@@ -533,6 +542,9 @@ const Images = () => {
 				}
 			} catch ( error ) {
 				// Do nothing
+				if ( error.name === 'AbortError' ) {
+					return;
+				}
 			} finally {
 				imageRequestCompleted.current = true;
 				setIsLoading( false );

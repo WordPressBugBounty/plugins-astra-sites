@@ -75,5 +75,6 @@ module.exports = {
 		requestAnimationFrame: true,
 		EventSource: true,
 		ResizeObserver: true,
+		npsSurvey: true,
 	},
 };

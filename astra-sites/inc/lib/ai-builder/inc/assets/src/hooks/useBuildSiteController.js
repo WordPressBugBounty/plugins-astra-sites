@@ -3,6 +3,8 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { useNavigateSteps } from '../router';
 import { STORE_KEY } from '../store';
 import apiFetch from '@wordpress/api-fetch';
+import toast from 'react-hot-toast';
+import { toastBody } from '../helpers';
 
 const useBuildSiteController = () => {
 	const { nextStep } = useNavigateSteps();
@@ -154,11 +156,13 @@ const useBuildSiteController = () => {
 				if ( errorData && Object.values( errorData ).length > 0 ) {
 					return errorData;
 				}
+			} else {
+				throw new Error( response?.data?.data );
 			}
 
 			return {};
 		} catch ( error ) {
-			return {};
+			toast.error( toastBody( error ) );
 		}
 	};
 

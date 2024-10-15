@@ -3,20 +3,23 @@
 
 class Astra_Sites_ZipWP_Integration {
 
-    /**
-     * Member Variable
-     *
-     * @var instance
-     */
-    private static $instance;
+	/**
+	 * Instance
+	 *
+	 * @since 4.0.0
+	 * @access private
+	 * @var object Class object.
+	 */
+    private static $instance = null;
 
     /**
      * Initiator
      *
      * @since 4.0.0
+	 * @return mixed 
      */
     public static function get_instance() {
-        if ( ! isset( self::$instance ) ) {
+        if ( null === self::$instance ) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -172,6 +175,8 @@ class Astra_Sites_ZipWP_Integration {
 
     /**
      * Get ZIP Plans.
+	 * 
+	 * @return array<string, mixed>
      */
     public function get_zip_plans() {
         $api_endpoint = Astra_Sites_ZipWP_Api::get_instance()->get_api_domain() . '/plan/current-plan';
@@ -201,7 +206,7 @@ class Astra_Sites_ZipWP_Integration {
                     );
 				} else {
 					return array(
-                        'data' => 'Failed ' . $response_data,
+                        'data' => $response_data,
                         'status'  => false,
                     );
 				}

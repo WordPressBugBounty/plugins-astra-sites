@@ -18,6 +18,9 @@ const GetStarted = () => {
 	const sitesRemaining = zipPlans?.plan_data?.remaining;
 	const aiSitesRemainingCount = sitesRemaining?.ai_sites_count;
 
+	const { zipwp_auth } = wpApiSettings || {};
+	const { screen_url, redirect_url, source, partner_id } = zipwp_auth || {};
+
 	useEffect( () => {
 		const urlParams = new URLSearchParams( window.location.search );
 
@@ -90,17 +93,9 @@ const GetStarted = () => {
 								variant="blank"
 								hasSuffixIcon
 								onClick={ () => {
-									const url =
-										wpApiSettings?.zipwp_auth?.screen_url +
-										'?type=token&redirect_url=' +
-										wpApiSettings?.zipwp_auth
-											?.redirect_url +
-										'&ask=/register' +
-										( wpApiSettings?.zipwp_auth?.partner_id
-											? '&aff=' +
-											  wpApiSettings?.zipwp_auth
-													?.partner_id
-											: '' );
+									const url = `${ screen_url }?type=token&redirect_url=${ redirect_url }&ask=/register&source=${ source }${
+										partner_id ? `&aff=${ partner_id }` : ''
+									}`;
 
 									window.location.href = url;
 								} }
