@@ -116,13 +116,13 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 					$transient_duration = 2 * WEEK_IN_SECONDS;
 					$creation_time = $expiration_time - $transient_duration;
 
-					$status = Nps_Survey_Script::get_instance()->get_nps_survey_dismiss_status();
+					$status = get_option( 'nps-survay-form-dismiss-status', array() );
 					$status['dismiss_time'] = $creation_time;
 					update_option( 'nps-survay-form-dismiss-status', $status );
 				}
 			}
 
-			if ( version_compare( $saved_version, '4.4.4', '<' ) ) {
+			if ( version_compare( $saved_version, '4.4.6', '<' ) ) {
 
 				$old_dismiss_varible = get_option( 'nps-survay-form-dismiss-status' );
 
