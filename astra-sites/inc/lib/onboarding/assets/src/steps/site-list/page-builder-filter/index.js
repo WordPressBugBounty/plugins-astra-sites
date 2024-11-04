@@ -222,7 +222,7 @@ const PageBuilder = ( { placement = 'bottom-end' } ) => {
 							siteType: '',
 							siteOrder: 'popular',
 							onMyFavorite: false,
-							currentIndex: 1,
+							currentIndex: 2,
 						} );
 
 						const pageBuilderOptionId =

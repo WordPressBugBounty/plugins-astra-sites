@@ -10,6 +10,7 @@ const Modal = ( {
 	overflowHidden = true,
 	children,
 	hideCloseIcon = false,
+	onFullyClose,
 	className,
 } ) => {
 	let modalWidth = 'max-w-[35rem]';
@@ -36,7 +37,11 @@ const Modal = ( {
 	}
 
 	return (
-		<Transition.Root show={ open || false } as={ Fragment }>
+		<Transition.Root
+			show={ open || false }
+			as={ Fragment }
+			afterLeave={ onFullyClose }
+		>
 			<Dialog
 				as="div"
 				className="spectra-ai relative z-[99999999]"

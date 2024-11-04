@@ -54,6 +54,11 @@ if ( ! class_exists( 'Astra_Sites_Nps_Notice' ) ) :
 		 * @return void
 		 */
 		public function render_nps_survey() {
+
+			if ( ! class_exists( 'Nps_Survey' ) ) {
+				return;
+			}
+			
 			Nps_Survey::show_nps_notice(
 				'nps-survey-astra-sites',
 				array(

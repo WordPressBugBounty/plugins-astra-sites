@@ -6,12 +6,19 @@ import ImportSite from './import-site';
 import Survey from './survey';
 import SiteType from './site-type';
 import FeaturesStep from './features';
+import PageBuilder from './page-builder';
 
 export const STEPS = [
 	{
 		name: 'page-builder',
 		header: <SiteListHeader />,
 		content: <SiteType />,
+		class: 'step-page-builder',
+	},
+	{
+		name: 'classic-page-builder',
+		header: <SiteListHeader />,
+		content: <PageBuilder />,
 		class: 'step-page-builder',
 	},
 	{

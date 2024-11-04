@@ -64,6 +64,8 @@ const ImportAiSite = () => {
 		aiSiteTitleVisible,
 		aiActiveTypography,
 		aiActivePallette,
+		siteFeatures,
+		siteFeaturesData,
 	} = useSelect( ( select ) => {
 		const {
 			getWebsiteInfo,
@@ -72,6 +74,8 @@ const ImportAiSite = () => {
 			getSiteTitleVisible,
 			getActiveTypography,
 			getActiveColorPalette,
+			getSiteFeatures,
+			getSiteFeaturesData,
 		} = select( STORE_KEY );
 		return {
 			websiteInfo: getWebsiteInfo(),
@@ -80,6 +84,8 @@ const ImportAiSite = () => {
 			aiSiteTitleVisible: getSiteTitleVisible(),
 			aiActiveTypography: getActiveTypography(),
 			aiActivePallette: getActiveColorPalette(),
+			siteFeatures: getSiteFeatures(),
+			siteFeaturesData: getSiteFeaturesData(),
 		};
 	}, [] );
 
@@ -1188,14 +1194,27 @@ const ImportAiSite = () => {
 		const sourceCurrency =
 			templateResponse?.[ 'astra-site-surecart-settings' ]?.currency ||
 			'usd';
-		if ( '' === sourceID || 'null' === sourceID ) {
-			return true;
-		}
+
 		const surecart = new FormData();
 		surecart.append( 'action', 'astra-sites-import_surecart_settings' );
+		surecart.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+
+		if ( '' === sourceID || 'null' === sourceID ) {
+			const enabledFeatures = siteFeatures
+				.filter( ( feature ) => feature?.enabled )
+				.map( ( feature ) => feature?.id );
+			if (
+				enabledFeatures?.includes( 'ecommerce' ) &&
+				siteFeaturesData?.ecommerce_type === 'surecart'
+			) {
+				surecart.append( 'create_account', true );
+			} else {
+				return true;
+			}
+		}
+
 		surecart.append( 'source_id', sourceID );
 		surecart.append( 'source_currency', sourceCurrency );
-		surecart.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
 
 		const status = await fetch( ajaxurl, {
 			method: 'post',

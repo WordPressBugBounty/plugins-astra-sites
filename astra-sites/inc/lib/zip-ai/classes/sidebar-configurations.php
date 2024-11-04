@@ -329,7 +329,8 @@ class Sidebar_Configurations {
 		if ( 'widgets.php' === $pagenow ) {
 			$script_dep = array_diff( $script_info['dependencies'], [ 'wp-edit-post' ] );
 		}
-		$screen = is_admin() ? get_current_screen() : null;
+		// Note that the current screen function is loaded after admin_init, so if it doesn't exist set screen to null.
+		$screen = ( is_admin() && function_exists( 'get_current_screen' ) ) ? get_current_screen() : null;
 
 		// Register the sidebar scripts.
 		wp_register_script(

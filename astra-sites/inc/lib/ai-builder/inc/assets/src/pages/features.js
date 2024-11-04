@@ -146,7 +146,7 @@ const ICON_SET = {
 
 const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 	const { previousStep } = useNavigateSteps();
-
+	const disabledFeatures = aiBuilderVars?.hidden_features;
 	const { setSiteFeatures, storeSiteFeatures } = useDispatch( STORE_KEY );
 	const { siteFeatures, loadingNextStep } = useSelect( ( select ) => {
 		const { getSiteFeatures, getLoadingNextStep } = select( STORE_KEY );
@@ -219,6 +219,15 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 		}
 	}, [] );
 
+	const listOfFeatures = useMemo( () => {
+		// Exclude disabled features from UI only when site features have been fetched.
+		return isFetchingStatus === fetchStatus.fetched
+			? siteFeatures?.filter(
+					( feat ) => ! disabledFeatures?.includes( feat.id )
+			  )
+			: [];
+	}, [ siteFeatures, disabledFeatures, isFetchingStatus ] );
+
 	return (
 		<Container className="grid grid-cols-1 gap-8 auto-rows-auto !max-w-[55rem] w-full mx-auto">
 			<AISitesNotice />
@@ -235,7 +244,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 
 			<div className="grid grid-cols-1 lg:grid-cols-2 auto-rows-auto gap-x-8 gap-y-5 w-full">
 				{ isFetchingStatus === fetchStatus.fetched &&
-					siteFeatures.map( ( feature ) => {
+					listOfFeatures.map( ( feature ) => {
 						const isEcommerce = feature.id === 'ecommerce';
 
 						const FeatureIcon = ICON_SET?.[ feature.icon ];

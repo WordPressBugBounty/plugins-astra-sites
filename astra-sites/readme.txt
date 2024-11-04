@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 4.4
 Requires PHP: 7.4
 Tested up to: 6.6.1
-Stable tag: 4.4.6
+Stable tag: 4.4.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -246,6 +246,20 @@ Once your website is generated, you have complete control over its content and l
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.7 - 04-November-2024
+- New:
+    - AI builder: Added compatibility for importing SureForms templates.
+    - AI builder: Added filter to hide specified features on feature selection screen.
+- Improvement:
+    - Prompted users for detailed business descriptions to enhance content generation.
+    - Enabled SureCart provisional account creation when the eCommerce feature is selected.
+    - Added page builder selection screen for classic templates.
+    - Added pre-import warning to alert users about potential overrides of existing settings during template import.
+    - Hiding non-FSE page builder options when the Spectra One theme is active.
+    - Design Kit: Generating business description based on the selected language.
+    - Design Kit: Optimized styles for better readability and usability on smaller screens.
+    - AI Assistant: Resolved PHP fatal error caused by a conflict with certain plugins.
 
 v4.4.6 - 16-October-2024
 - Fix: Updated outdated migrations that were causing PHP errors.

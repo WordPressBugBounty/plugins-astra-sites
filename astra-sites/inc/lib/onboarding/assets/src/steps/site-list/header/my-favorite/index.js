@@ -14,7 +14,10 @@ const MyFavorite = () => {
 	const [ stateValue, dispatch ] = useStateValue();
 	const { onMyFavorite } = stateValue;
 
-	if ( getStepIndex( 'page-builder' ) === stateValue.currentIndex ) {
+	if (
+		getStepIndex( 'page-builder' ) === stateValue.currentIndex ||
+		getStepIndex( 'classic-page-builder' ) === stateValue.currentIndex
+	) {
 		return null;
 	}
 

@@ -31,10 +31,12 @@ const SyncLibrary = () => {
 		}
 	}, [ isLoading ] );
 
-	if ( getStepIndex( 'page-builder' ) === currentIndex ) {
+	if (
+		getStepIndex( 'page-builder' ) === currentIndex ||
+		getStepIndex( 'classic-page-builder' ) === currentIndex
+	) {
 		return null;
 	}
-
 	if ( syncStatus === true && !! updatedData ) {
 		const { sites, categories, categoriesAndTags } = updatedData;
 

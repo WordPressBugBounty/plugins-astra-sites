@@ -47,7 +47,7 @@ class Astra_Site_Options_Import {
 	 */
 	public function __construct() {
 		add_filter( 'st_importer_site_options', array( $this, 'classic_templates_options' ), 10, 1 );
-		add_action( 'st_importer_import_site_options', array( $this, 'import_classic_templates_options' ), 10, 2 );
+		add_action( 'st_importer_import_site_options', array( $this, 'import_classic_templates_options' ), 10, 1 );
 	}
 
 	/**
@@ -143,11 +143,10 @@ class Astra_Site_Options_Import {
 	 * @since 4.3.0
 	 * 
 	 * @param array<string, mixed> $options List of default options.
-	 * @param array<int, string>   $site_options List of site options.
 	 * 
 	 * @return void
 	 */
-	public function import_classic_templates_options( $options, $site_options ) {
+	public function import_classic_templates_options( $options ) {
 
 		if ( ! isset( $options ) ) {
 			return;
@@ -159,57 +158,53 @@ class Astra_Site_Options_Import {
 				// Is option exist in defined array site_options()?
 				if ( null !== $option_value ) {
 
-					// Is option exist in defined array site_options()?
-					if ( in_array( $option_name, $site_options, true ) ) {
+					switch ( $option_name ) {
 
-						switch ( $option_name ) {
+						// Set WooCommerce page ID by page Title.
+						case 'woocommerce_shop_page_title':
+						case 'woocommerce_cart_page_title':
+						case 'woocommerce_checkout_page_title':
+						case 'woocommerce_myaccount_page_title':
+						case 'woocommerce_edit_address_page_title':
+						case 'woocommerce_view_order_page_title':
+						case 'woocommerce_change_password_page_title':
+						case 'woocommerce_logout_page_title':
+								$this->update_woocommerce_page_id_by_option_value( $option_name, $option_value );
+							break;
 
-							// Set WooCommerce page ID by page Title.
-							case 'woocommerce_shop_page_title':
-							case 'woocommerce_cart_page_title':
-							case 'woocommerce_checkout_page_title':
-							case 'woocommerce_myaccount_page_title':
-							case 'woocommerce_edit_address_page_title':
-							case 'woocommerce_view_order_page_title':
-							case 'woocommerce_change_password_page_title':
-							case 'woocommerce_logout_page_title':
-									$this->update_woocommerce_page_id_by_option_value( $option_name, $option_value );
-								break;
+						case 'page_for_posts':
+						case 'page_on_front':
+								$this->update_page_id_by_option_value( $option_name, $option_value );
+							break;
 
-							case 'page_for_posts':
-							case 'page_on_front':
-									$this->update_page_id_by_option_value( $option_name, $option_value );
-								break;
+						// nav menu locations.
+						case 'nav_menu_locations':
+								$this->set_nav_menu_locations( $option_value );
+							break;
 
-							// nav menu locations.
-							case 'nav_menu_locations':
-									$this->set_nav_menu_locations( $option_value );
-								break;
+						// import WooCommerce category images.
+						case 'woocommerce_product_cat':
+								$this->set_woocommerce_product_cat( $option_value );
+							break;
 
-							// import WooCommerce category images.
-							case 'woocommerce_product_cat':
-									$this->set_woocommerce_product_cat( $option_value );
-								break;
+						// insert logo.
+						case 'custom_logo':
+								$this->insert_logo( $option_value );
+							break;
 
-							// insert logo.
-							case 'custom_logo':
-									$this->insert_logo( $option_value );
-								break;
+						case 'elementor_active_kit':
+							if ( '' !== $option_value ) {
+								$this->set_elementor_kit();
+							}
+							break;
 
-							case 'elementor_active_kit':
-								if ( '' !== $option_value ) {
-									$this->set_elementor_kit();
-								}
-								break;
+						case 'site_title':
+							update_option( 'blogname', $option_value );
+							break;
 
-							case 'site_title':
-								update_option( 'blogname', $option_value );
-								break;
-
-							default:
-								update_option( $option_name, $option_value );
-								break;
-						}
+						default:
+							update_option( $option_name, $option_value );
+							break;
 					}
 				}
 			}

@@ -160,6 +160,9 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 				}
 			}
 
+			// Replace SureForm ID's.
+			$content = $this->replace_sureforms_ids( $content );
+
 			// This replaces the category ID in UAG Post blocks.
 			$site_options = ST_Importer_File_System::get_instance()->get_demo_content();
 
@@ -203,6 +206,29 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 					'post_excerpt' => '',
 				)
 			);
+		}
+
+		/**
+		 * Replace SureForm IDs in content.
+		 *
+		 * @since 1.1.9
+		 *
+		 * @param string $content Post content.
+		 * @return string
+		 */
+		public function replace_sureforms_ids( $content ) {
+
+			$sureform_id_map = get_option( 'astra_sites_sureforms_id_map', array() );
+
+			if ( empty( $sureform_id_map ) ) {
+				return $content;
+			}
+
+			foreach ( $sureform_id_map as $old_id => $new_id ) {
+				$content = str_replace( '[sureforms id="' . $old_id . '"]', '[sureforms id="' . $new_id . '"]', $content );
+			}
+
+			return $content;
 		}
 
 		/**

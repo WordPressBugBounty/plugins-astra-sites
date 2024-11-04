@@ -236,4 +236,50 @@ class ST_Importer_Helper {
 		update_post_meta( $id, '_astra_sites_imported_post', true );
 		return $id;
 	}
+
+	/**
+	 * Get Business details.
+	 *
+	 * @since 4.0.0
+	 * @param string $key options name.
+	 * @return array<string, mixed>|array<int, string>|string|array<string>|array<string,string>
+	 */
+	public static function get_business_details( $key = '' ) {
+		$details = get_option(
+			'zipwp_user_business_details',
+			array(
+				'business_name'        => '',
+				'business_address'     => '',
+				'business_phone'       => '',
+				'business_email'       => '',
+				'business_category'    => '',
+				'business_description' => '',
+				'templates'            => array(),
+				'language'             => 'en',
+				'images'               => array(),
+				'image_keyword'        => array(),
+				'social_profiles'      => array(),
+			)
+		);
+
+		$details = array(
+			'business_name'        => ( ! empty( $details['business_name'] ) ) ? $details['business_name'] : '',
+			'business_address'     => ( ! empty( $details['business_address'] ) ) ? $details['business_address'] : '',
+			'business_phone'       => ( ! empty( $details['business_phone'] ) ) ? $details['business_phone'] : '',
+			'business_email'       => ( ! empty( $details['business_email'] ) ) ? $details['business_email'] : '',
+			'business_category'    => ( ! empty( $details['business_category'] ) ) ? $details['business_category'] : '',
+			'business_description' => ( ! empty( $details['business_description'] ) ) ? $details['business_description'] : '',
+			'templates'            => ( ! empty( $details['templates'] ) ) ? $details['templates'] : array(),
+			'language'             => ( ! empty( $details['language'] ) ) ? $details['language'] : 'en',
+			'images'               => ( ! empty( $details['images'] ) ) ? $details['images'] : array(),
+			'social_profiles'      => ( ! empty( $details['social_profiles'] ) ) ? $details['social_profiles'] : array(),
+			'image_keyword'        => ( ! empty( $details['image_keyword'] ) ) ? $details['image_keyword'] : array(),
+		);
+
+		if ( ! empty( $key ) ) {
+			return isset( $details[ $key ] ) ? $details[ $key ] : array();
+		}
+
+		return $details;
+	}
 }

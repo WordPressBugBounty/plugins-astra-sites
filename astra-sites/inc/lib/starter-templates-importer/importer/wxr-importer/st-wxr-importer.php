@@ -49,7 +49,6 @@ class ST_WXR_Importer {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-
 		add_filter( 'upload_mimes', array( $this, 'custom_upload_mimes' ) ); //phpcs:ignore WordPressVIPMinimum.Hooks.RestrictedHooks.upload_mimes -- Added this to allow upload of SVG files.
 		add_action( 'wp_ajax_astra-wxr-import', array( $this, 'sse_import' ) );
 		add_filter( 'wxr_importer.pre_process.user', '__return_null' );
@@ -85,6 +84,12 @@ class ST_WXR_Importer {
 			);
 			$imports[ $data['post_type'] ][] = $post_id;
 			update_option( 'astra_sites_ai_imports', $imports );
+		}
+
+		if ( 'sureforms_form' === get_post_type( $post_id ) ) {
+			$sureforms_id_map                 = get_option( 'astra_sites_sureforms_id_map', array() );
+			$sureforms_id_map[ $original_id ] = $post_id;
+			update_option( 'astra_sites_sureforms_id_map', $sureforms_id_map );
 		}
 	}
 

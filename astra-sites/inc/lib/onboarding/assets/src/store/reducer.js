@@ -163,6 +163,7 @@ export const initialState = {
 
 	// Import statuses.
 	reset: 'yes' === starterTemplates.firstImportStatus ? true : false,
+	allowResetSite: false,
 	themeStatus: false,
 	importStatusLog: '',
 	importStatus: '',

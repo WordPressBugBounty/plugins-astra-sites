@@ -201,7 +201,8 @@ const SiteType = () => {
 													builder === 'ai-builder'
 														? 'gutenberg'
 														: builder,
-												currentIndex: 1,
+												currentIndex:
+													builder === 'fse' ? 2 : 1,
 											} );
 											removeLocalStorageItem(
 												'st-scroll-position'

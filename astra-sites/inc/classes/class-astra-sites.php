@@ -350,6 +350,9 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 * @param array $data Post data.
 		 */
 		public function wp_slash_after_xml_import( $postdata, $data ) {
+			if ( 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
+				return $postdata;
+			}
 			return wp_slash( $postdata );
 		}
 

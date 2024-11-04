@@ -10,6 +10,7 @@
 namespace STImporter\Importer;
 
 use STImporter\Importer\WXR_Importer\ST_WXR_Importer;
+use STImporter\Importer\ST_Importer_Helper;
 use STImporter\Importer\ST_Widget_Importer;
 
 // Exit if accessed directly.
@@ -116,19 +117,31 @@ class ST_Importer {
 	 */
 	public static function import_surecart_settings( $id = 0 ) {
 
+		if ( ! is_callable( 'SureCart\Models\ProvisionalAccount::create' ) ) {
+			return array(
+				'status' => false,
+				'error'  => __( 'SureCart\Models\ProvisionalAccount::create function is not callable.', 'astra-sites' ),
+			);
+		}
+
+		// Create Account if surecart selected as a feature.
+		$create_account = isset( $_POST['create_account'] ) && 'true' === $_POST['create_account'] ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( $create_account ) {
+			$email = ST_Importer_Helper::get_business_details( 'business_email' );
+			return \SureCart\Models\ProvisionalAccount::create(  // @phpstan-ignore-line
+				array(
+					'email' => $email, // optional.
+					'seed'  => true,
+				)
+			);
+		}
+
 		$id = ! empty( $id ) ? base64_decode( sanitize_text_field( (string) $id ) ) : ''; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 
 		if ( empty( $id ) ) {
 			return array(
 				'status' => false,
 				'error'  => __( 'Id is empty.', 'astra-sites' ),
-			);
-		}
-
-		if ( ! is_callable( 'SureCart\Models\ProvisionalAccount::create' ) ) {
-			return array(
-				'status' => false,
-				'error'  => __( 'SureCart\Models\ProvisionalAccount::create function is not callable.', 'astra-sites' ),
 			);
 		}
 
@@ -252,11 +265,10 @@ class ST_Importer {
 	 * @since  1.0.0
 	 *
 	 * @param array<string, mixed> $options Array of options to be imported from the demo.
-	 * @param array<string, mixed> $site_options Array of site options to be imported from the demo.
 	 *
 	 * @return array<string, mixed>
 	 */
-	public static function import_options( $options = array(), $site_options = array() ) {
+	public static function import_options( $options = array() ) {
 
 		if ( empty( $options ) ) {
 			return array(
@@ -275,39 +287,34 @@ class ST_Importer {
 
 				// Is option exist in defined array site_options()?
 				if ( null !== $option_value ) {
+					switch ( $option_name ) {
+						case 'page_for_posts':
+						case 'page_on_front':
+								ST_Option_Importer::update_page_id_by_option_value( $option_name, $option_value );
+							break;
 
-					// Is option exist in defined array site_options()?
-					if ( in_array( $option_name, $site_options, true ) ) {
+						// nav menu locations.
+						case 'nav_menu_locations':
+								ST_Option_Importer::set_nav_menu_locations( $option_value );
+							break;
 
-						switch ( $option_name ) {
-							case 'page_for_posts':
-							case 'page_on_front':
-									ST_Option_Importer::update_page_id_by_option_value( $option_name, $option_value );
-								break;
+						// insert logo.
+						case 'custom_logo':
+								ST_Option_Importer::insert_logo( $option_value );
+							break;
 
-							// nav menu locations.
-							case 'nav_menu_locations':
-									ST_Option_Importer::set_nav_menu_locations( $option_value );
-								break;
+						case 'site_title':
+							update_option( 'blogname', $option_value );
+							break;
 
-							// insert logo.
-							case 'custom_logo':
-									ST_Option_Importer::insert_logo( $option_value );
-								break;
-
-							case 'site_title':
-								update_option( 'blogname', $option_value );
-								break;
-
-							default:
-								update_option( $option_name, $option_value );
-								break;
-						}
+						default:
+							update_option( $option_name, $option_value );
+							break;
 					}
 				}
 			}
 
-			do_action( 'st_importer_import_site_options', $options, $site_options );
+			do_action( 'st_importer_import_site_options', $options );
 
 			return array(
 				'status'  => true,

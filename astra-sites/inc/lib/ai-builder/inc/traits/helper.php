@@ -601,7 +601,7 @@ class Helper {
 			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
 		}
 
-		$result = ST_Importer::import_options( $options_data, ST_Option_Importer::site_options() );
+		$result = ST_Importer::import_options( $options_data );
 
 		if ( false === $result['status'] ) {
 			if ( defined( 'WP_CLI' ) ) {

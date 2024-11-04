@@ -446,6 +446,7 @@ class Ai_Builder_Plugin_Loader {
 			),
 			'default_website_language' => apply_filters( 'ai_builder_default_website_language', 'en' ),
 			'show_zip_plan'            => apply_filters( 'ai_builder_show_zip_plan_details', true ),
+			'hidden_features'          => apply_filters( 'ai_builder_hidden_features', array() ),
 		);
 	}
 
