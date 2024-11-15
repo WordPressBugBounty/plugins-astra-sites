@@ -39,6 +39,10 @@ const GetStarted = () => {
 		}
 	}, [] );
 
+	const encodedRedirectUrl = encodeURIComponent(
+		redirect_url + '&security=' + aiBuilderVars.zipwp_auth_nonce
+	);
+
 	return (
 		<div className="flex-1 w-full bg-container-background">
 			<Header />
@@ -93,7 +97,7 @@ const GetStarted = () => {
 								variant="blank"
 								hasSuffixIcon
 								onClick={ () => {
-									const url = `${ screen_url }?type=token&redirect_url=${ redirect_url }&ask=/register&source=${ source }${
+									const url = `${ screen_url }?type=token&redirect_url=${ encodedRedirectUrl }&ask=/register&source=${ source }${
 										partner_id ? `&aff=${ partner_id }` : ''
 									}`;
 

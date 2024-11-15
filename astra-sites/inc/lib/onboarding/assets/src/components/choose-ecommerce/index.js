@@ -17,22 +17,25 @@ const ChooseEcommerce = () => {
 		{ selectedTemplateID, allSitesData, currentCustomizeIndex },
 		dispatch,
 	] = useStateValue();
-	const [ checkedTemplateID, setCheckedTemplateID ] = useState();
+	const [ checkedTemplateID, setCheckedTemplateID ] =
+		useState( selectedTemplateID );
+
 	const selectedTemplate = allSitesData[ `id-${ selectedTemplateID }` ];
 	const relatedTemplateID =
-		selectedTemplate?.related_ecommerce_template !== '' &&
-		selectedTemplate?.related_ecommerce_template !== undefined
-			? selectedTemplate.related_ecommerce_template
-			: '';
+		selectedTemplate?.related_ecommerce_template || '';
 
 	const changeEcommerceTemplate = async ( event ) => {
-		event.stopPropagation();
 		const newTemplateId = parseInt( event.target.value );
+		const id = event.target.id;
+
+		// Update selected template ID in the state and UI
 		dispatch( {
 			type: 'set',
 			templateId: newTemplateId,
 		} );
 		setCheckedTemplateID( newTemplateId );
+		// Update stored state for selected plugin and trigger further checks
+		storedState[ 0 ].selectedEcommercePlugin = id;
 		await getDemo( newTemplateId, storedState );
 		await checkRequiredPlugins( storedState );
 		checkFileSystemPermissions( storedState );
@@ -40,7 +43,7 @@ const ChooseEcommerce = () => {
 
 	useEffect( () => {
 		setCheckedTemplateID( selectedTemplateID );
-	}, [] );
+	}, [ selectedTemplateID, relatedTemplateID ] );
 
 	useEffect( () => {
 		if ( ! relatedTemplateID ) {
@@ -49,7 +52,7 @@ const ChooseEcommerce = () => {
 				currentCustomizeIndex: currentCustomizeIndex + 1, // Skip 1 step.
 			} );
 		}
-	}, [] );
+	}, [ relatedTemplateID, currentCustomizeIndex, dispatch ] );
 
 	return (
 		<div className="customizer-ecommerce-selection mb-5 w-full">

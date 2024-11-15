@@ -58,6 +58,10 @@ if ( ! class_exists( 'Astra_Sites_Nps_Notice' ) ) :
 			if ( ! class_exists( 'Nps_Survey' ) ) {
 				return;
 			}
+
+			if ( class_exists( 'Astra_Sites_White_Label' ) && is_callable( 'Astra_Sites_White_Label::get_instance' ) && Astra_Sites_White_Label::get_instance()->is_white_labeled() ) {
+				return;
+			}
 			
 			Nps_Survey::show_nps_notice(
 				'nps-survey-astra-sites',

@@ -128,7 +128,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			$this->set_api_url();
 			$this->includes();
 			add_action( 'plugin_action_links_' . ASTRA_SITES_BASE, array( $this, 'action_links' ) );
-			add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+			add_action( 'init', array( $this, 'load_textdomain' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue' ), 99 );
 			add_action( 'elementor/editor/footer', array( $this, 'insert_templates' ) );
 			add_action( 'admin_footer', array( $this, 'insert_image_templates' ) );
@@ -1381,7 +1381,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 */
 		public function load_textdomain() {
 			// Default languages directory.
-			$lang_dir = ASTRA_PRO_SITES_DIR . 'languages/';
+			$lang_dir = ASTRA_SITES_DIR . 'languages/';
 
 			// Traditional WordPress plugin locale filter.
 			global $wp_version;

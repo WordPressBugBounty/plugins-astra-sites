@@ -142,7 +142,7 @@ const AdvancedSettings = () => {
 					<div className="mb-1">
 						<p className="text-sm text-body-text !leading-6">
 							{ __(
-								'It looks like you already have a website made with Starter Templates. Enable this to maintain your old data, including content and images.',
+								'It looks like you already have a website created with Starter Templates. Check this box to keep your existing content and images.',
 								'astra-sites'
 							) }
 						</p>
@@ -170,10 +170,7 @@ const AdvancedSettings = () => {
 								</svg>
 							</Checkbox>
 							<Label className="text-sm leading-4 text-nav-active font-medium cursor-pointer">
-								{ __(
-									"I understand, let's go!",
-									'astra-sites'
-								) }
+								{ __( 'Keep existing data!', 'astra-sites' ) }
 							</Label>
 						</Field>
 					</div>

@@ -48,10 +48,27 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureForms' ) ) :
 		 */
 		public function __construct() {
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'activation' ), 10 );
+			add_filter( 'srfm_enable_redirect_activation', array( $this, 'redirect_compatibility' ), 10, 1 );
 		}
 
 		/**
-		 * Set the source to 'starter-templates' on activation.
+		 * Stop the plugin activation redirection.
+		 *
+		 * @since 1.2.13
+		 *
+		 * @param bool $do_redirect is redirect.
+		 * @return bool
+		 */
+		public function redirect_compatibility( $do_redirect ) {
+			if ( astra_sites_has_import_started() ) {
+				return false;
+			}
+
+			return $do_redirect;
+		}
+
+		/**
+		 * Stop the plugin activation redirection.
 		 *
 		 * @since 1.0.15
 		 * @return void

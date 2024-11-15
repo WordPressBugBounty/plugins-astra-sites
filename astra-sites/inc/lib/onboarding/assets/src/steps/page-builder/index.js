@@ -58,7 +58,7 @@ const PageBuilder = () => {
 	return (
 		<DefaultStep
 			content={
-				<div className="page-builder-screen-wrap middle-content">
+				<div className="page-builder-screen-wrap">
 					<h1>{ __( 'Select Page Builder', 'astra-sites' ) }</h1>
 					<p className="screen-description">
 						{ __(

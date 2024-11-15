@@ -123,7 +123,7 @@ export const initialState = {
 		build_website_for: '',
 		opt_in: true,
 	},
-	selectedEcommercePlugin: 'surecart',
+	selectedEcommercePlugin: '',
 	isEcommerce: false,
 	allSitesData: astraSitesVars.all_sites || {},
 	allCategories: astraSitesVars.allCategories || [],

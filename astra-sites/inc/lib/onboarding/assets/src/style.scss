@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.final-step-wrapper{
+	border: 1ps solid red!important;
+}
+
 #starter-templates-ai-root {
 	font-size: 16px;
 	background: var( --st-background-primary );
@@ -103,6 +107,7 @@ a {
 	display: flex;
 	overflow: hidden;
 	height: calc( 100vh - 60px );
+	position: relative;
 }
 
 .hide-sidebar .step-col-right {
@@ -539,11 +544,6 @@ body.step-import-site-done {
 }
 
 .middle-content {
-	margin: 0;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate( -50%, -50% );
 	&.middle-content-import {
 		background: var( --st-background-primary );
 		padding: 30px;
@@ -923,6 +923,11 @@ body.step-import-site-done {
 
 .step-content.congratulations .content-wrapper {
 	animation: congrats-screen-fadeIn 500ms;
+}
+
+.content-wrapper:has(div.middle-content-import){
+	display: flex;
+	justify-content: center;
 }
 
 @keyframes congrats-screen-fadeIn {

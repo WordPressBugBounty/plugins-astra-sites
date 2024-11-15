@@ -392,6 +392,7 @@ class Ai_Builder_Plugin_Loader {
 		return array(
 			'ajax_url'                 => admin_url( 'admin-ajax.php' ),
 			'_ajax_nonce'              => wp_create_nonce( 'astra-sites' ),
+			'zipwp_auth_nonce'         => wp_create_nonce( 'zipwp-auth-nonce' ),
 			'adminUrl'                 => admin_url(),
 			'imageDir'                 => AI_BUILDER_URL . 'inc/assets/images/',
 			'supportLink'              => $support_link,
@@ -446,7 +447,7 @@ class Ai_Builder_Plugin_Loader {
 			),
 			'default_website_language' => apply_filters( 'ai_builder_default_website_language', 'en' ),
 			'show_zip_plan'            => apply_filters( 'ai_builder_show_zip_plan_details', true ),
-			'hidden_features'          => apply_filters( 'ai_builder_hidden_features', array() ),
+			'hide_site_features'       => apply_filters( 'ai_builder_hidden_site_features', array() ),
 		);
 	}
 

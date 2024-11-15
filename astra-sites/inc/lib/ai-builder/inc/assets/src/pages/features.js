@@ -146,7 +146,7 @@ const ICON_SET = {
 
 const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 	const { previousStep } = useNavigateSteps();
-	const disabledFeatures = aiBuilderVars?.hidden_features;
+	const disabledFeatures = aiBuilderVars?.hide_site_features;
 	const { setSiteFeatures, storeSiteFeatures } = useDispatch( STORE_KEY );
 	const { siteFeatures, loadingNextStep } = useSelect( ( select ) => {
 		const { getSiteFeatures, getLoadingNextStep } = select( STORE_KEY );

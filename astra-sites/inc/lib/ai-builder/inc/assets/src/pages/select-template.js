@@ -162,13 +162,30 @@ const SelectTemplate = () => {
 		return businessName;
 	};
 
-	const maybeHidePremiumTemplates = ( result ) => {
-		if ( ! aiBuilderVars?.show_premium_templates ) {
+	const handleHiddenTemplates = ( result ) => {
+		// Hide ecommerce templates if ecommerce is disabled in the AI Builder settings.
+		const hideEcommerceTemplates =
+			aiBuilderVars?.hide_site_features?.includes( 'ecommerce' );
+		// Hide premium templates if `show_premium_template` is false.
+		const hidePremiumTemplates = ! aiBuilderVars?.show_premium_templates;
+
+		if ( hidePremiumTemplates ) {
 			result = result.map( ( item ) => {
 				return {
 					...item,
 					designs: item?.designs?.filter(
 						( template ) => ! template.is_premium
+					),
+				};
+			} );
+		}
+
+		if ( hideEcommerceTemplates ) {
+			result = result.map( ( item ) => {
+				return {
+					...item,
+					designs: item?.designs?.filter(
+						( template ) => template.features.ecommerce !== 'yes'
 					),
 				};
 			} );
@@ -217,8 +234,8 @@ const SelectTemplate = () => {
 				} );
 				let result = response?.data?.data || [];
 
-				// Filter out premium templates if `show_premium_template` is false.
-				result = maybeHidePremiumTemplates( result );
+				// Filter out Hidden templates based on the settings.
+				result = handleHiddenTemplates( result );
 
 				if ( results.length === 0 ) {
 					results = result;
@@ -300,8 +317,9 @@ const SelectTemplate = () => {
 			let result = response?.data?.data?.result || [];
 			const lastPage = response?.data?.data?.lastPage || 1;
 
-			// Filter out premium templates if `show_premium_template` is false.
-			result = maybeHidePremiumTemplates( result );
+			// Filter out Hidden templates based on the settings.
+
+			result = handleHiddenTemplates( result );
 
 			const updatedAllTemplates = [
 				...allTemplates,

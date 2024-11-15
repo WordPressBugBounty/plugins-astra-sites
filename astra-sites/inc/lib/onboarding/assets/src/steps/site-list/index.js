@@ -93,9 +93,11 @@ const SiteList = () => {
 	} = storedState;
 
 	useEffect( () => {
-		setTimeout( () => {
+		const loadingTimeout = setTimeout( () => {
 			setLoadingSkeleton( false );
-		}, 300 );
+		}, 800 );
+
+		return () => clearTimeout( loadingTimeout );
 	}, [] );
 
 	useEffect( () => {
@@ -134,6 +136,16 @@ const SiteList = () => {
 			behavior: 'smooth',
 		} );
 	};
+
+	useEffect( () => {
+		// use timeout function so the new content wrapper for the builder will be loaded
+		const scrollTopTimeout = setTimeout( () => {
+			handleClickBackToTop();
+		}, 300 );
+
+		// Cleanup function to clear the timeout if the component unmounts
+		return () => clearTimeout( scrollTopTimeout );
+	}, [ builder ] );
 
 	const handleShowBackToTop = ( event ) => {
 		const SCROLL_THRESHOLD = 250;
@@ -214,7 +226,8 @@ const SiteList = () => {
 		};
 	}, [] );
 
-	const showSkeleton = siteData.gridSkeleton || bgSyncInProgress;
+	const showSkeleton =
+		siteData.gridSkeleton || bgSyncInProgress || loadingSkeleton;
 
 	return (
 		<DefaultStep

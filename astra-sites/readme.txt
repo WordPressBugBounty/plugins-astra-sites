@@ -4,8 +4,8 @@ Donate link: https://wpastra.com/pro/
 Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 4.4
 Requires PHP: 7.4
-Tested up to: 6.6.1
-Stable tag: 4.4.7
+Tested up to: 6.7
+Stable tag: 4.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,7 +42,7 @@ Say goodbye to spending days or weeks designing and building a website. With Sta
 
 = How Does Starter Template AI Website Builder Work? =
 
-Starter Templates integrates with ZipWP, our amazing AI website building platform. It takes care of everything for you, from design to content generation. 
+Starter Templates integrates with ZipWP, our amazing AI website building platform. It takes care of everything for you, from design to content generation.
 
 Let AI do the heavy lifting, so you can focus on your ideas!
 
@@ -50,17 +50,17 @@ Our mission is to unlock the power of the internet for small businesses. Creatin
 
 With Starter Templates, you can create a stunning website in a matter of minutes. Simply describe your idea, and watch as a WordPress website is built before your eyes.
 
-Want to create a lightweight website for your business that also looks exceptional? 
+Want to create a lightweight website for your business that also looks exceptional?
 
 = Follow the steps below: =
 
 1. Select the type of website you're creating (portfolio, business site, landing page, or something else).
 2. Provide your business name.
-3. Describe your business. Use AI to refine your description prompt if you need to. 
+3. Describe your business. Use AI to refine your description prompt if you need to.
 4. The AI will suggest images based on your input. Select the images you want to use.
 5. Add your contact details and social media handles so people can interact.
-6. Choose the website structure from the options. 
-7. Select any site features you need. 
+6. Choose the website structure from the options.
+7. Select any site features you need.
 8. The AI will generate a website in under 2 minutes.
 9. Customize your site as you see fit!
 
@@ -84,7 +84,7 @@ Here's what sets us apart:
 
 = Optimized Code =
 
-Pages created with Starter Templates have efficient code, and are free from all unnecessary elements. 
+Pages created with Starter Templates have efficient code, and are free from all unnecessary elements.
 
 This translates to faster load times and a smoother user experience for visitors regardless of browser or device.
 
@@ -92,7 +92,7 @@ This translates to faster load times and a smoother user experience for visitors
 
 Starter Templates goes beyond stunning design. It delivers readymade website templates specifically crafted with your business in mind.
 
-Launching an eCommerce store? We have a diverse selection of store templates to get you selling in no time. 
+Launching an eCommerce store? We have a diverse selection of store templates to get you selling in no time.
 
 Creating a business website? We have dozens of professional-quality designs ready for you to make your mark.
 
@@ -100,9 +100,9 @@ No matter your industry or niche, we have a template that perfectly aligns with 
 
 = Classic Starter Templates =
 
-Whether you're a small business owner, freelancer, or nonprofit organization, there's a template that suits your needs. Templates are carefully crafted to provide a polished and attractive look for your website. 
+Whether you're a small business owner, freelancer, or nonprofit organization, there's a template that suits your needs. Templates are carefully crafted to provide a polished and attractive look for your website.
 
-The cherry on top? Starter Template supports multiple page builders, including Elementor, Spectra, Gutenberg, and Beaver Builder. 
+The cherry on top? Starter Template supports multiple page builders, including Elementor, Spectra, Gutenberg, and Beaver Builder.
 
 You have the flexibility to customize your website your way.
 
@@ -110,7 +110,7 @@ You have the flexibility to customize your website your way.
 
 Want to customize your website to make it truly unique? Use sections and block patterns to add your personal style.
 
-Available sections include: 
+Available sections include:
 
 - Hero
 - Page Header
@@ -130,15 +130,15 @@ Available sections include:
 
 = AI-Integrated Adaptive Design Library =
 
-Personalize blocks and patterns to match your website style with the power of AI. 
+Personalize blocks and patterns to match your website style with the power of AI.
 
 The design library within the Starter Templates plugin is integrated with AI and royalty-free image repositories. All elements come pre-populated with relevant text and images that you can easily customize to match your brand.
 
 = Elementor Templates =
 
-A fan of Elementor? Look no further! Starter Templates offers a vast collection of professionally designed Elementor templates. 
+A fan of Elementor? Look no further! Starter Templates offers a vast collection of professionally designed Elementor templates.
 
-You can effortlessly import entire websites crafted with Elementor, individual pages, or even specific blocks to enhance your site's functionality and aesthetic appeal. 
+You can effortlessly import entire websites crafted with Elementor, individual pages, or even specific blocks to enhance your site's functionality and aesthetic appeal.
 
 Then just drag, drop, customize, and launch your website!
 
@@ -150,25 +150,25 @@ You can save hours of design time compared to building your website from scratch
 
 = WordPress Block Editor Templates =
 
-The WordPress block editor (formerly Gutenberg) is changing the game for website creation. 
+The WordPress block editor (formerly Gutenberg) is changing the game for website creation.
 
 Building from scratch can be time-consuming. Fortunately, Starter Templates offers a vast library of readymade templates to ignite your website's potential.
 
 = AI Assistant for WordPress =
 
-Our AI Assistant works in a similar way to ChatGPT but is specifically tailored for WordPress. 
+Our AI Assistant works in a similar way to ChatGPT but is specifically tailored for WordPress.
 
 With just a click of a button, you can use the power of artificial intelligence to help write copy for landing pages, proofread blog posts, translate content into different languages, generate custom HTML and CSS codes, and much more!
 
 = Royalty-Free Images =
 
-The Starter Templates plugin offers seamless integration with leading royalty-free image repositories such as Pexels and Unsplash. 
+The Starter Templates plugin offers seamless integration with leading royalty-free image repositories such as Pexels and Unsplash.
 
 You have access to millions of top-tier images within your WordPress dashboard. Simply search for the image you need and select it.
 
 = Training Videos =
 
-As the saying goes, "Give someone a fish, and they will eat for a day; teach them how to fish, and they will eat for a lifetime." 
+As the saying goes, "Give someone a fish, and they will eat for a day; teach them how to fish, and they will eat for a lifetime."
 
 Embracing this philosophy, we offer a range of comprehensive training videos designed to complement our templates. They provide the knowledge and skills necessary to build, launch, and maintain your website.
 
@@ -247,6 +247,21 @@ Once your website is generated, you have complete control over its content and l
 
 == Changelog ==
 
+v4.4.8 - 15-November-2024
+- Improvements:
+    - AI Builder: Hidding ecommerce templates if ecommerce feature is hidden.
+    - Free Images: Removed the "Free Images" option from the WordPress media library where images are not expected.
+    - NPS survey hidden for white-labeled environments.
+    - UI/UX optimizations for a smoother Classic Templates Builder experience.
+- Fixes:
+    - AI Builder: Addressed a security bug. Props to Patchstack for reporting it.
+    - AI Builder: Fixed SureCart settings import failed error.
+    - AI Builder: Resolved an issue causing the import process to fail due to unexpected SureForm plugin redirection upon activation.
+    - Free Images: Resolved an issue where the media library button text was incorrectly displayed in certain cases.
+	- Ensured selected eCommerce platform and feature plugin are synchronized.
+	- Resolved intermittent issue with other plugin updates failing.
+
+
 v4.4.7 - 04-November-2024
 - New:
     - AI builder: Added compatibility for importing SureForms templates.
@@ -270,11 +285,11 @@ v4.4.5 - 15-October-2024
     - AI Builder: Added source parameters to URLs redirecting to ZipWP for better tracking.
     - Design Kit: Added source parameters to URLs redirecting to ZipWP for better tracking.
 - Tweak: Refactored the NPS code by separating it into an independent NPS library.
-- Improvement: 
+- Improvement:
     - Design Kit: Removed outdated options data that were previously left undeleted.
     - Design Kit: Optimized server API call execution for better performance.
     - Enhanced code quality and optimization for better performance and maintainability.
-- Fix: 
+- Fix:
     - Free Images: Fixed broken UI components for Elementor and Beaver Builder.
 
 v4.4.4 - 07-October-2024
@@ -282,7 +297,7 @@ v4.4.4 - 07-October-2024
 - Fix: Corrected CSS issues affecting the appearance and functionality of checkboxes on the feature page.
 
 v4.4.3 - 30-September-2024
-- New: 
+- New:
     - AI Builder: Added functionality to save failed site creations and allow reimporting them.
     - AI Builder: Displaying users ZipWP plan information.
     - AI Builder: Displaying alert notice when AI site generation count is nearing its limit.
@@ -296,9 +311,9 @@ v4.4.3 - 30-September-2024
     - AI Builder: Showing Premium template notice on customizer screen if user has free plan.
     - AI Builder: Added a validation on Image upload to check if the image URL is valid.
     - Design Kit: Added loading skeleton when uploading the images on AI onboarding.
-    - Design Kit: Added images validation on AI onboarding. 
+    - Design Kit: Added images validation on AI onboarding.
 
-- Fix: 
+- Fix:
     - AI Builder: Customizer 'Show site title' option was not applied correctly during site import.
     - Design Kit: Resolved CSS conflicts with the WordPress core blocks.
     - Design Kit: Fixed PHP warning when generating content.
@@ -306,7 +321,7 @@ v4.4.3 - 30-September-2024
     - Images Library: Resolved issue where image search results reset to default after applying filters.
 
 v4.4.2 - 03-September-2024
-- New: 
+- New:
     - AI Builder : Added a filter to update default website language.
     - AI Builder : Added image replacement compatibility for archive product banner image.
     - Added filter to disable the "Design Kit" library.
@@ -344,14 +359,14 @@ v4.4.0 - 07-August-2024
     - Design Kit: Resolved visibility issue with the "Design Kit" button in WordPress 6.6 with the full site editor.
 
 v4.3.9 - 25-July-2024
-- Improvement: Improved the UI/UX.  
-- Improvement: AI Builder - Better error message handling.  
-- Improvement: AI Builder - Added new icon for the ecommerce feature.  
-- Improvement: Improved the way Starter Templates translate strings in the script.  
-- Fix: AI Builder - Fixed an issue where the template preview designs were showing ternary operation results as HTML.  
-- Fix: AI Builder - Required plugins data was incorrect on the Elementor templates screen.  
-- Fix: AI Builder - Social icons title was not translation-ready.  
-- Fix: AI Builder - Fixed an issue where the import process was failing after changing the site language.  
+- Improvement: Improved the UI/UX.
+- Improvement: AI Builder - Better error message handling.
+- Improvement: AI Builder - Added new icon for the ecommerce feature.
+- Improvement: Improved the way Starter Templates translate strings in the script.
+- Fix: AI Builder - Fixed an issue where the template preview designs were showing ternary operation results as HTML.
+- Fix: AI Builder - Required plugins data was incorrect on the Elementor templates screen.
+- Fix: AI Builder - Social icons title was not translation-ready.
+- Fix: AI Builder - Fixed an issue where the import process was failing after changing the site language.
 - Fix: Resolved a fatal error encountered with the Ghost Kit plugin.
 
 v4.3.8 - 16-July-2024

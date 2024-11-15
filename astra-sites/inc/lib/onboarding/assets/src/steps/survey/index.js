@@ -33,7 +33,7 @@ const Survey = () => {
 	const notInstalled = requiredPlugins?.required_plugins?.notinstalled;
 	const notActivated = requiredPlugins?.required_plugins?.inactive;
 	const allPuginList = [];
-	if ( notInstalled.length > 0 ) {
+	if ( notInstalled?.length > 0 ) {
 		notInstalled.map( ( plugin ) => {
 			return allPuginList.push( {
 				plugin,
@@ -42,7 +42,7 @@ const Survey = () => {
 		} );
 	}
 
-	if ( notActivated.length > 0 ) {
+	if ( notActivated?.length > 0 ) {
 		notActivated.map( ( plugin ) => {
 			return allPuginList.push( {
 				plugin,

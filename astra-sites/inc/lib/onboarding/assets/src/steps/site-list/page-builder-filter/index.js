@@ -132,6 +132,11 @@ const PageBuilder = ( { placement = 'bottom-end' } ) => {
 			astraSitesVars.adminURL + 'themes.php?page=ai-builder';
 	};
 
+	// dont show page builder selection on page builder screen (i.e. ci=1)
+	if ( currentIndex === 1 ) {
+		return;
+	}
+
 	return (
 		<Tippy
 			visible={ show }
@@ -169,7 +174,12 @@ const PageBuilder = ( { placement = 'bottom-end' } ) => {
 									className="w-full h-10"
 									onClick={ handleBuildWithAIPress }
 								>
-									<span>Try the New AI Builder</span>{ ' ' }
+									<span>
+										{ __(
+											'Try the New AI Builder',
+											'astra-sites'
+										) }
+									</span>{ ' ' }
 									<ArrowRightIcon className="w-5 h-5 ml-2" />
 								</Button>
 								<a

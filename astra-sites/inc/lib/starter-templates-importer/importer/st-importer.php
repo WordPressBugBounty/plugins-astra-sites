@@ -126,39 +126,39 @@ class ST_Importer {
 
 		// Create Account if surecart selected as a feature.
 		$create_account = isset( $_POST['create_account'] ) && 'true' === $_POST['create_account'] ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( $create_account ) {
-			$email = ST_Importer_Helper::get_business_details( 'business_email' );
-			return \SureCart\Models\ProvisionalAccount::create(  // @phpstan-ignore-line
-				array(
-					'email' => $email, // optional.
-					'seed'  => true,
-				)
-			);
+		$email          = ST_Importer_Helper::get_business_details( 'business_email' );
+		$currency       = isset( $_POST['source_currency'] ) ? sanitize_text_field( $_POST['source_currency'] ) : 'usd'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+		$data = array(
+			'email'            => $email, // optional.
+			'seed'             => true,
+			'account_currency' => $currency,
+		);
+
+		if ( ! $create_account ) {
+			$id = ! empty( $id ) ? base64_decode( sanitize_text_field( (string) $id ) ) : ''; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+
+			if ( empty( $id ) ) {
+				return array(
+					'status' => false,
+					'error'  => __( 'Id is empty.', 'astra-sites' ),
+				);
+			}
+
+			$data['source_account_id'] = $id;
 		}
 
-		$id = ! empty( $id ) ? base64_decode( sanitize_text_field( (string) $id ) ) : ''; // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+		$token = \SureCart\Models\ApiToken::get(); // @phpstan-ignore-line
 
-		if ( empty( $id ) ) {
-			return array(
-				'status' => false,
-				'error'  => __( 'Id is empty.', 'astra-sites' ),
-			);
-		}
-
-		$currency = isset( $_POST['source_currency'] ) ? sanitize_text_field( $_POST['source_currency'] ) : 'usd'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$token    = \SureCart\Models\ApiToken::get(); // @phpstan-ignore-line
 		if ( ! empty( $token ) ) {
-			\SureCart\Models\ApiToken::clear();  // @phpstan-ignore-line
+			return array(
+				'status' => true,
+				'msg'    => __( 'Account is already created.', 'astra-sites' ),
+			);
 		}
+
 		return \SureCart\Models\ProvisionalAccount::create(  // @phpstan-ignore-line
-			array(
-				'account_currency'  => $currency, // It will default to USD.
-				'account_name'      => '', // if you do not pass this it will default to the site name.
-				'account_url'       => '', // if you do not pass this it will default to the site url.
-				'email'             => '', // optional.
-				'source_account_id' => $id,
-				'seed'              => true,
-			)
+			$data
 		);
 
 	}

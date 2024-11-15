@@ -157,7 +157,8 @@ const OnboardingAI = () => {
 				'token',
 				'email',
 				'action',
-				'credit_token'
+				'credit_token',
+				'security'
 			);
 
 			window.onbeforeunload = null;

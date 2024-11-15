@@ -219,12 +219,23 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 		 * @return array $options The options.
 		 */
 		public function plugin_install_clear_directory( $options ) {
+
+
 			if ( true !== astra_sites_has_import_started() ) {
 				return $options;
 			}
+
+			$is_ast_request = isset( $_REQUEST['is_ast_request'] ) && 'true' === $_REQUEST['is_ast_request']; //phpcs:ignore 
+
+
+			if ( ! $is_ast_request ) {
+				return $options;
+			}
+
 			// Verify Nonce.
 			check_ajax_referer( 'astra-sites', 'ajax_nonce' );
-			if ( isset( $_REQUEST['clear_destination'] ) && 'true' === $_REQUEST['clear_destination'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This is a callback filter while performing plugin install action - https://developer.wordpress.org/reference/hooks/upgrader_package_options/, We don't quite have access to the nonce here. We are skipping it here.
+
+			if ( isset( $_REQUEST['clear_destination'] ) && 'true' === $_REQUEST['clear_destination'] ) {
 				$options['clear_destination'] = true;
 			}
 

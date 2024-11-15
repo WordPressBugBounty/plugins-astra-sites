@@ -172,7 +172,7 @@ const ClassicFeatures = () => {
 		dispatch,
 	] = useStateValue();
 	const storedState = useStateValue();
-	const [ selectedEcom, setSelectedEcom ] = useState( 'surecart' );
+	const [ selectedEcom, setSelectedEcom ] = useState();
 	const [ ecomSupported, setEcomSupported ] = useState( [
 		'surecart',
 		'woocommerce',
@@ -180,22 +180,26 @@ const ClassicFeatures = () => {
 
 	useEffect( () => {
 		if ( isEcommerce ) {
-			const activeSlugs = requiredPlugins?.required_plugins?.active?.map(
-				( plugin ) => plugin.slug
-			);
-			const inactiveSlugs =
-				requiredPlugins?.required_plugins?.inactive?.map(
+			const allSlugs = [
+				...( requiredPlugins?.required_plugins?.active?.map(
 					( plugin ) => plugin.slug
-				);
+				) || [] ),
+				...( requiredPlugins?.required_plugins?.inactive?.map(
+					( plugin ) => plugin.slug
+				) || [] ),
+				...( requiredPlugins?.required_plugins?.notinstalled?.map(
+					( plugin ) => plugin.slug
+				) || [] ),
+			];
 
 			setEcomSupported( [ 'surecart', 'woocommerce' ] );
-			if (
-				activeSlugs.includes( 'surecart' ) ||
-				inactiveSlugs.includes( 'surecart' )
-			) {
-				setSelectedEcom( 'surecart' );
-			} else {
-				setSelectedEcom( 'woocommerce' ); // Default to WooCommerce if surecart is not found
+
+			if ( ! selectedEcom || selectedEcom !== selectedEcommercePlugin ) {
+				if ( allSlugs?.includes( 'surecart' ) ) {
+					setSelectedEcom( 'surecart' );
+				} else {
+					setSelectedEcom( 'woocommerce' ); // Default to WooCommerce if surecart is not found
+				}
 			}
 
 			const updatedFeatures = siteFeatures.map( ( feature ) => {
@@ -210,7 +214,7 @@ const ClassicFeatures = () => {
 			} );
 		} else {
 			setEcomSupported( [ 'surecart', 'woocommerce' ] );
-			setSelectedEcom( 'surecart' ); // Default to 'surecart'
+			setSelectedEcom( selectedEcom || 'surecart' ); // Default to 'surecart'
 
 			// Ensure the ecommerce feature is not compulsory when no plugin is selected
 			const updatedFeatures = siteFeatures.map( ( feature ) => {
@@ -225,6 +229,7 @@ const ClassicFeatures = () => {
 			} );
 		}
 	}, [ selectedTemplateID, isEcommerce, selectedEcommercePlugin ] );
+
 	const handleToggleFeature = ( featureId ) => () => {
 		const updatedFeatures = siteFeatures.map( ( feature ) => {
 			if ( feature.compulsory ) {
@@ -258,6 +263,7 @@ const ClassicFeatures = () => {
 		} );
 
 		storedState[ 0 ].enabledFeatureIds = enabledFeatureIds;
+		storedState[ 0 ].selectedEcommercePlugin = selectedEcom;
 
 		await checkRequiredPlugins( storedState );
 	};

@@ -38,14 +38,23 @@ class Ai_Builder_ZipWP_Integration {
 
 		global $pagenow;
 
-		//phpcs:disable WordPress.Security.NonceVerification.Recommended
-
-		if ( ! is_admin() || ! isset( $_GET['page'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! is_admin() || ! isset( $_GET['page'] ) ) {
 			return;
 		}
 
 		// Check if we are on the starter templates page.
 		if ( 'themes.php' !== $pagenow || 'ai-builder' !== $_GET['page'] ) {
+			return;
+		}
+
+		if ( ! isset( $_GET['security'] ) ) {
+			return;
+		}
+
+		$security = sanitize_text_field( $_GET['security'] );
+
+		// Verify the nonce.
+		if ( ! wp_verify_nonce( $security, 'zipwp-auth-nonce' ) ) {
 			return;
 		}
 

@@ -228,6 +228,7 @@ const ImportSite = () => {
 					slug: plugin.slug,
 					init: plugin.init,
 					name: plugin.name,
+					is_ast_request: true,
 					clear_destination: true,
 					ajax_nonce: astraSitesVars._ajax_nonce,
 					success() {
