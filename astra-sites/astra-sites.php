@@ -3,7 +3,7 @@
  * Plugin Name: Starter Templates
  * Plugin URI: https://wpastra.com/
  * Description: Starter Templates is all in one solution for complete starter sites, single page templates, blocks & images. This plugin offers the premium library of ready templates & provides quick access to beautiful Pixabay images that can be imported in your website easily.
- * Version: 4.4.8
+ * Version: 4.4.9
  * Author: Brainstorm Force
  * Author URI: https://www.brainstormforce.com
  * Text Domain: astra-sites
@@ -19,6 +19,8 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 
 /**
  * Display notice if PHP version is below 7.4
+ *
+ * @return void
  */
 function astra_sites_php_version_notice() {
 	$plugin_name = 'Starter Templates';
@@ -37,7 +39,7 @@ if ( ! defined( 'ASTRA_SITES_NAME' ) ) {
 }
 
 if ( ! defined( 'ASTRA_SITES_VER' ) ) {
-	define( 'ASTRA_SITES_VER', '4.4.8' );
+	define( 'ASTRA_SITES_VER', '4.4.9' );
 }
 
 if ( ! defined( 'ASTRA_SITES_FILE' ) ) {
@@ -74,6 +76,7 @@ if ( ! function_exists( 'astra_sites_setup' ) ) :
 	 * Astra Sites Setup
 	 *
 	 * @since 1.0.5
+	 * @return void
 	 */
 	function astra_sites_setup() {
 		require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites.php';
@@ -99,18 +102,20 @@ if ( ! class_exists( 'BSF_Quick_Links' ) ) {
 	require_once ASTRA_SITES_DIR . 'inc/lib/bsf-quick-links/class-bsf-quick-links.php';
 }
 
-$bsf_analytics = BSF_Analytics_Loader::get_instance();
+if ( class_exists( 'BSF_Analytics_Loader' ) && is_callable( 'BSF_Analytics_Loader::get_instance' ) ) {
+	$bsf_analytics = BSF_Analytics_Loader::get_instance();
 
-$bsf_analytics->set_entity(
-	array(
-		'bsf' => array(
-			'product_name'    => __( 'Starter Templates', 'astra-sites' ),
-			'path'            => ASTRA_SITES_DIR . 'admin/bsf-analytics',
-			'author'          => 'Brainstorm Force',
-			'time_to_display' => '+24 hours',
-		),
-	)
-);
+	$bsf_analytics->set_entity(
+		array(
+			'bsf' => array(
+				'product_name'    => __( 'Starter Templates', 'astra-sites' ),
+				'path'            => ASTRA_SITES_DIR . 'admin/bsf-analytics',
+				'author'          => 'Brainstorm Force',
+				'time_to_display' => '+24 hours',
+			),
+		)
+	);
+}
 
 if ( ! function_exists( 'astra_sites_redirect_to_onboarding' ) ) :
 

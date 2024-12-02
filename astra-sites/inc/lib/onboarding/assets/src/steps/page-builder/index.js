@@ -21,7 +21,7 @@ const PageBuilder = () => {
 	const update = ( builder ) => {
 		const content = new FormData();
 		content.append( 'action', 'astra-sites-change-page-builder' );
-		content.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+		content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 		content.append( 'page_builder', builder );
 
 		fetch( ajaxurl, {

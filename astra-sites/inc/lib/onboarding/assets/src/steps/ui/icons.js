@@ -195,7 +195,7 @@ export const DesignLibraryLogo = ( { className } ) => (
 		xmlns="http://www.w3.org/2000/svg"
 	>
 		<g clipPath="url(#clip0_207_15102)">
-			{ ! astraSitesVars.is_white_label && (
+			{ ! astraSitesVars?.is_white_label && (
 				<path
 					fillRule="evenodd"
 					clipRule="evenodd"
@@ -1275,3 +1275,70 @@ export const TilesIcon = ( { className } ) => (
 		</defs>
 	</svg>
 );
+
+export const AILogoIcon = () => {
+	return (
+		<svg
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<g clipPath="url(#clip0_2088_1759)">
+				<path
+					d="M15.3828 16.0001V7.6001H17.0268V16.0001H15.3828Z"
+					fill="url(#paint0_linear_2088_1759)"
+				/>
+				<path
+					d="M12.636 16.0001L9.42 7.6001H11.064L14.376 16.0001H12.636ZM6 16.0001L9.312 7.6001H10.956L7.74 16.0001H6ZM7.56 14.1521V12.7001H12.828V14.1521H7.56Z"
+					fill="url(#paint1_linear_2088_1759)"
+				/>
+				<path
+					fillRule="evenodd"
+					clipRule="evenodd"
+					d="M18 4H6C3.79086 4 2 5.79086 2 8V16C2 18.2091 3.79086 20 6 20H18C20.2091 20 22 18.2091 22 16V8C22 5.79086 20.2091 4 18 4ZM6 2C2.68629 2 0 4.68629 0 8V16C0 19.3137 2.68629 22 6 22H18C21.3137 22 24 19.3137 24 16V8C24 4.68629 21.3137 2 18 2H6Z"
+					fill="url(#paint2_linear_2088_1759)"
+				/>
+			</g>
+			<defs>
+				<linearGradient
+					id="paint0_linear_2088_1759"
+					x1="18.9044"
+					y1="16.0001"
+					x2="11.7628"
+					y2="4.39495"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stopColor="#FE5BE4" />
+					<stop offset="1" stopColor="#5A03EF" />
+				</linearGradient>
+				<linearGradient
+					id="paint1_linear_2088_1759"
+					x1="18.904"
+					y1="16.0001"
+					x2="11.7624"
+					y2="4.39495"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stopColor="#FE5BE4" />
+					<stop offset="1" stopColor="#5A03EF" />
+				</linearGradient>
+				<linearGradient
+					id="paint2_linear_2088_1759"
+					x1="24"
+					y1="22"
+					x2="4.32787"
+					y2="-1.60656"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stopColor="#FE5BE4" />
+					<stop offset="1" stopColor="#5A03EF" />
+				</linearGradient>
+				<clipPath id="clip0_2088_1759">
+					<rect width="24" height="24" fill="white" />
+				</clipPath>
+			</defs>
+		</svg>
+	);
+};

@@ -34,7 +34,7 @@ const ClassicPreview = () => {
 			'free' !== templateResponse?.[ 'astra-site-type' ];
 
 		if ( premiumTemplate && ! licenseStatus ) {
-			if ( astraSitesVars.isPro ) {
+			if ( astraSitesVars?.isPro ) {
 				dispatch( {
 					type: 'set',
 					validateLicenseStatus: true,

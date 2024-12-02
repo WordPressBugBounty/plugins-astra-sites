@@ -191,7 +191,7 @@ const FontSelector = ( { options, onSelect, selected } ) => {
 
 		localStorage.removeItem( 'starter-templates-iframe-preview-data' );
 
-		window.location.href = astraSitesVars.siteURL;
+		window.location.href = astraSitesVars?.siteURL;
 	};
 
 	const nextStep = () => {

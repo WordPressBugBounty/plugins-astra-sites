@@ -21,12 +21,12 @@ const LicenseValidation = () => {
 	);
 
 	const getAccessLink = () => {
-		window.open( astraSitesVars.cta_links[ builder ] );
+		window.open( astraSitesVars?.cta_links[ builder ] );
 	};
 
 	const getwhiteLabelLink = () => {
-		if ( astraSitesVars.whiteLabelUrl !== '#' ) {
-			window.open( astraSitesVars.whiteLabelUrl );
+		if ( astraSitesVars?.whiteLabelUrl !== '#' ) {
+			window.open( astraSitesVars?.whiteLabelUrl );
 		}
 	};
 

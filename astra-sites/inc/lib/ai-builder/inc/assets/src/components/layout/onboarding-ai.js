@@ -29,14 +29,7 @@ import ErrorBoundary from '../../pages/error-boundary';
 import useEffectAfterMount from '../../hooks/use-effect-after-mount';
 import ApiErrorModel from '../api-error-model';
 import PlanInformationModal from '../plan-information-modal';
-import {
-	getPlanPromoDissmissTime,
-	getTimeDiff,
-	showAISitesNotice,
-} from '../../utils/helpers';
-import toast from 'react-hot-toast';
-import PlanUpgradePromo, { customToastOption } from '../plan-upgrade-promo';
-import { WEEKS_IN_SECONDS } from '../../utils/constants';
+import PlanUpgradePromoModal from '../plan-upgrade-promo';
 
 const { logoUrlLight } = aiBuilderVars;
 
@@ -198,36 +191,6 @@ const OnboardingAI = () => {
 		zip_plans: { active_plan },
 		show_zip_plan,
 	} = aiBuilderVars;
-
-	useEffect( async () => {
-		// handle not logged in case.
-		if (
-			typeof aiBuilderVars?.zip_plans !== 'object' ||
-			show_zip_plan !== '1'
-		) {
-			return;
-		}
-
-		const promoDismissTimeinMS = ( await getPlanPromoDissmissTime() )
-			.dismiss_time;
-
-		// if 2 weeks have not been passed
-		if ( getTimeDiff( promoDismissTimeinMS ) < 2 * WEEKS_IN_SECONDS ) {
-			return;
-		}
-
-		if ( showAISitesNotice() && active_plan?.slug !== 'business' ) {
-			toast.loading(
-				( { id: toastId } ) => (
-					<PlanUpgradePromo
-						toastId={ toastId }
-						zipPlans={ aiBuilderVars?.zip_plans }
-					/>
-				),
-				customToastOption
-			);
-		}
-	}, [] );
 
 	return (
 		<>
@@ -406,6 +369,7 @@ const OnboardingAI = () => {
 				<ContinueProgressModal />
 				<ApiErrorModel />
 				<PlanInformationModal />
+				<PlanUpgradePromoModal />
 			</div>
 			<div className="absolute top-0 left-0 z-20">
 				<AnimatePresence>

@@ -5,23 +5,23 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { STEPS } from '../steps/util';
 
 export const whiteLabelEnabled = () => {
-	return astraSitesVars.isWhiteLabeled ? true : false;
+	return astraSitesVars?.isWhiteLabeled ? true : false;
 };
 
 export const getWhileLabelName = () => {
-	return astraSitesVars.whiteLabelName;
+	return astraSitesVars?.whiteLabelName;
 };
 
 export const getWhiteLabelAuthorUrl = () => {
-	return astraSitesVars.whiteLabelUrl;
+	return astraSitesVars?.whiteLabelUrl;
 };
 
 export const isPro = () => {
-	return astraSitesVars.isPro;
+	return astraSitesVars?.isPro;
 };
 
 export const getProUrl = () => {
-	return astraSitesVars.getProURL;
+	return astraSitesVars?.getProURL;
 };
 
 export const sendPostMessage = ( data ) => {
@@ -80,7 +80,7 @@ export const getDefaultColorPalette = ( demo ) => {
 		if ( customizerData ) {
 			const globalPalette =
 				customizerData[ 'astra-settings' ][ 'global-color-palette' ]
-					.palette || [];
+					?.palette || [];
 
 			if ( globalPalette ) {
 				defaultPaletteValues = [
@@ -165,7 +165,7 @@ export const getColorScheme = ( demo ) => {
 };
 
 export const getAllSites = () => {
-	return astraSitesVars.all_sites;
+	return astraSitesVars?.all_sites;
 };
 
 export const getSupportLink = ( templateId, subject ) => {
@@ -175,7 +175,7 @@ export const getSupportLink = ( templateId, subject ) => {
 export const getGridItem = ( site ) => {
 	let imageUrl = site[ 'thumbnail-image-url' ] || '';
 	if ( '' === imageUrl && false === whiteLabelEnabled() ) {
-		if ( astraSitesVars.default_page_builder === 'fse' ) {
+		if ( astraSitesVars?.default_page_builder === 'fse' ) {
 			imageUrl = `${ starterTemplates.imageDir }spectra-placeholder.png`;
 		} else {
 			imageUrl = `${ starterTemplates.imageDir }placeholder.png`;
@@ -209,7 +209,7 @@ export const getTotalTime = ( value ) => {
 export const saveGutenbergAsDefaultBuilder = ( pageBuilder = 'gutenberg' ) => {
 	const content = new FormData();
 	content.append( 'action', 'astra-sites-change-page-builder' );
-	content.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 	content.append( 'page_builder', pageBuilder );
 
 	fetch( ajaxurl, {

@@ -1,5 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
+import toast from 'react-hot-toast';
+import { toastBody } from '../../helpers';
 
 const { themeStatus } = aiBuilderVars;
 
@@ -188,6 +190,18 @@ export const checkRequiredPlugins = async ( dispatch ) => {
 					notInstalledList: notInstalledPlugin,
 					notActivatedList: notActivePlugins,
 				} );
+			} else {
+				dispatch( {
+					importError: true,
+					importErrorMessages: {
+						primaryText: __(
+							'Required plugins could not be verified.',
+							'ai-builder'
+						),
+						tryAgain: true,
+						errorText: response?.data?.error,
+					},
+				} );
 			}
 		} );
 };
@@ -213,7 +227,7 @@ export const activateAstra = ( dispatch ) => {
 					importError: true,
 					importErrorMessages: {
 						primaryText: __(
-							'Astra theme installation failed.',
+							'Astra theme activation failed.',
 							'ai-builder'
 						),
 						secondaryText: '',
@@ -234,8 +248,12 @@ export const activateAstra = ( dispatch ) => {
 export const installAstra = ( importPercent, dispatch ) => {
 	const themeSlug = 'astra';
 	let percentage = importPercent;
-
 	if ( 'not-installed' === themeStatus ) {
+		percentage += 5;
+		dispatch( {
+			importPercent: percentage,
+			importStatus: __( 'Installing Astra Theme…', 'ai-builder' ),
+		} );
 		if (
 			wp.updates.shouldRequestFilesystemCredentials &&
 			! wp.updates.ajaxLocked
@@ -243,18 +261,24 @@ export const installAstra = ( importPercent, dispatch ) => {
 			wp.updates.requestFilesystemCredentials();
 		}
 
-		percentage += 5;
-		dispatch( {
-			importPercent: percentage,
-			importStatus: __( 'Installing Astra Theme…', 'ai-builder' ),
-		} );
+		wp.updates
+			.installTheme( {
+				slug: themeSlug,
+				ajax_nonce: aiBuilderVars._ajax_nonce,
+			} )
+			.catch( ( error ) => {
+				console.log( error );
+				dispatch( {
+					importError: true,
+					importErrorMessages: {
+						primaryText:
+							error?.errorMessage ??
+							__( 'Theme installation failed.', 'ai-builder' ),
+						tryAgain: true,
+					},
+				} );
+			} );
 
-		wp.updates.installTheme( {
-			slug: themeSlug,
-			ajax_nonce: aiBuilderVars._ajax_nonce,
-		} );
-
-		// eslint-disable-next-line no-undef
 		jQuery( document ).on( 'wp-theme-install-success', function () {
 			dispatch( {
 				importStatus: __( 'Astra Theme Installed.', 'ai-builder' ),
@@ -275,6 +299,12 @@ export const installAstra = ( importPercent, dispatch ) => {
 	}
 };
 
+export const showErrorToast = ( title = '', error = {} ) => {
+	toast.error(
+		toastBody( { title, message: JSON.stringify( error, null, 4 ) } )
+	);
+};
+
 export const setSiteLogo = async ( logo ) => {
 	if ( '' === logo.id ) {
 		return;
@@ -289,7 +319,9 @@ export const setSiteLogo = async ( logo ) => {
 	await fetch( ajaxurl, {
 		method: 'post',
 		body: data,
-	} );
+	} ).catch( ( e ) =>
+		showErrorToast( __( 'Failed to save Site Logo', 'ai-builder' ), e )
+	);
 };
 
 export const setColorPalettes = async ( palette ) => {
@@ -306,7 +338,9 @@ export const setColorPalettes = async ( palette ) => {
 	await fetch( ajaxurl, {
 		method: 'post',
 		body: data,
-	} );
+	} ).catch( ( e ) =>
+		showErrorToast( __( 'Failed to save Color Palletes', 'ai-builder' ), e )
+	);
 };
 
 export const setSiteTitle = async ( businessName, showSiteTitle ) => {
@@ -324,7 +358,9 @@ export const setSiteTitle = async ( businessName, showSiteTitle ) => {
 	await fetch( ajaxurl, {
 		method: 'post',
 		body: data,
-	} );
+	} ).catch( ( e ) =>
+		showErrorToast( __( 'Failed to save Color Palletes', 'ai-builder' ), e )
+	);
 };
 
 export const saveTypography = async ( selectedValue ) => {
@@ -337,7 +373,9 @@ export const saveTypography = async ( selectedValue ) => {
 	await fetch( ajaxurl, {
 		method: 'post',
 		body: data,
-	} );
+	} ).catch( ( e ) =>
+		showErrorToast( __( 'Failed to save Typography', 'ai-builder' ), e )
+	);
 };
 
 export const divideIntoChunks = ( chunkSize, inputArray ) => {
@@ -355,28 +393,27 @@ export const divideIntoChunks = ( chunkSize, inputArray ) => {
 		counter++;
 	}
 	final.push( portion );
-
 	return final;
 };
 
 export const checkFileSystemPermissions = async ( dispatch ) => {
-	try {
-		const formData = new FormData();
-		formData.append( 'action', 'astra-sites-filesystem_permission' );
-		formData.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
-		const response = await fetch( aiBuilderVars.ajax_url, {
-			method: 'POST',
-			body: formData,
-		} );
-		const data = await response.json();
-
-		dispatch( {
-			fileSystemPermissions: data.data,
-		} );
-	} catch ( error ) {
-		/* eslint-disable-next-line no-console -- We are displaying errors in the console. */
-		console.error( error );
-	}
+	const formData = new FormData();
+	formData.append( 'action', 'astra-sites-filesystem_permission' );
+	formData.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+	const data = await fetch( aiBuilderVars.ajax_url, {
+		method: 'POST',
+		body: formData,
+	} )
+		.then( ( res ) => res.json )
+		.catch( ( e ) =>
+			showErrorToast(
+				__( 'Failed to check File Permissions', 'ai-builder' ),
+				e
+			)
+		);
+	dispatch( {
+		fileSystemPermissions: data.data,
+	} );
 };
 
 export const setSiteLanguage = async ( siteLanguage = 'en_US' ) => {
@@ -392,5 +429,7 @@ export const setSiteLanguage = async ( siteLanguage = 'en_US' ) => {
 	await fetch( ajaxurl, {
 		method: 'post',
 		body: data,
-	} );
+	} ).catch( ( e ) =>
+		showErrorToast( __( 'Failed to save Site Language', 'ai-builder' ), e )
+	);
 };

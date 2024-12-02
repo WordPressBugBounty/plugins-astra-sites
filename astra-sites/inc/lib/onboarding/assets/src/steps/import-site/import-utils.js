@@ -8,7 +8,7 @@ export const getDemo = async ( id, storedState ) => {
 	const generateData = new FormData();
 	generateData.append( 'action', 'astra-sites-api-request' );
 	generateData.append( 'url', 'astra-sites/' + id );
-	generateData.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	generateData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
 	await fetch( ajaxurl, {
 		method: 'post',
@@ -43,7 +43,7 @@ export const getDemo = async ( id, storedState ) => {
 						case '404':
 							errorMessages = {
 								primaryText:
-									astraSitesVars.server_import_primary_error,
+									astraSitesVars?.server_import_primary_error,
 								secondaryText: '',
 								errorCode: code,
 								errorText: response.data.message,
@@ -54,12 +54,12 @@ export const getDemo = async ( id, storedState ) => {
 						case '500':
 							errorMessages = {
 								primaryText:
-									astraSitesVars.server_import_primary_error,
+									astraSitesVars?.server_import_primary_error,
 								secondaryText: '',
 								errorCode: code,
 								errorText: response.data.message,
 								solutionText:
-									astraSitesVars.ajax_request_failed_secondary,
+									astraSitesVars?.ajax_request_failed_secondary,
 								tryAgain: true,
 							};
 							break;
@@ -67,7 +67,7 @@ export const getDemo = async ( id, storedState ) => {
 						case 'WP_Error':
 							errorMessages = {
 								primaryText:
-									astraSitesVars.client_import_primary_error,
+									astraSitesVars?.client_import_primary_error,
 								secondaryText: '',
 								errorCode: code,
 								errorText: response.data.message,
@@ -79,7 +79,7 @@ export const getDemo = async ( id, storedState ) => {
 						case 'Cloudflare':
 							errorMessages = {
 								primaryText:
-									astraSitesVars.cloudflare_import_primary_error,
+									astraSitesVars?.cloudflare_import_primary_error,
 								secondaryText: '',
 								errorCode: code,
 								errorText: response.data.message,
@@ -98,7 +98,7 @@ export const getDemo = async ( id, storedState ) => {
 								errorCode: '',
 								errorText: response.data,
 								solutionText:
-									astraSitesVars.ajax_request_failed_secondary,
+									astraSitesVars?.ajax_request_failed_secondary,
 								tryAgain: false,
 							};
 							break;
@@ -123,7 +123,8 @@ export const getDemo = async ( id, storedState ) => {
 						'Fetching related demo failed.',
 						'astra-sites'
 					),
-					secondaryText: astraSitesVars.ajax_request_failed_secondary,
+					secondaryText:
+						astraSitesVars?.ajax_request_failed_secondary,
 					errorCode: '',
 					errorText: error,
 					solutionText: '',
@@ -184,7 +185,7 @@ export const checkRequiredPlugins = async ( storedState ) => {
 		storedState;
 	const reqPlugins = new FormData();
 	reqPlugins.append( 'action', 'astra-sites-required_plugins' );
-	reqPlugins.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	reqPlugins.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 	if ( enabledFeatureIds.length !== 0 ) {
 		const featurePlugins = getFeaturePluginList(
 			enabledFeatureIds,
@@ -294,7 +295,7 @@ export const activateAstra = ( storedState ) => {
 
 	const data = new FormData();
 	data.append( 'action', 'astra-sites-activate_theme' );
-	data.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	data.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
 	fetch( ajaxurl, {
 		method: 'post',
@@ -354,7 +355,7 @@ export const installAstra = ( storedState ) => {
 
 		wp.updates.installTheme( {
 			slug: themeSlug,
-			ajax_nonce: astraSitesVars._ajax_nonce,
+			ajax_nonce: astraSitesVars?._ajax_nonce,
 		} );
 
 		// eslint-disable-next-line no-undef
@@ -389,7 +390,7 @@ export const setSiteLogo = async ( logo ) => {
 	data.append( 'param', 'site-logo' );
 	data.append( 'logo', logo.id );
 	data.append( 'logo-width', logo.width );
-	data.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	data.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
 	await fetch( ajaxurl, {
 		method: 'post',
@@ -406,7 +407,7 @@ export const setColorPalettes = async ( palette ) => {
 	data.append( 'action', 'astra-sites-set_site_data' );
 	data.append( 'param', 'site-colors' );
 	data.append( 'palette', palette );
-	data.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	data.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
 	await fetch( ajaxurl, {
 		method: 'post',
@@ -423,7 +424,7 @@ export const setSiteTitle = async ( businessName ) => {
 	data.append( 'action', 'astra-sites-set_site_data' );
 	data.append( 'param', 'site-title' );
 	data.append( 'business-name', businessName );
-	data.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	data.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
 	await fetch( ajaxurl, {
 		method: 'post',
@@ -439,7 +440,7 @@ export const setSiteLanguage = async ( siteLanguage = 'en_US' ) => {
 	const data = new FormData();
 	data.append( 'action', 'astra-sites-site-language' );
 	data.append( 'language', siteLanguage );
-	data.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	data.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
 	await fetch( ajaxurl, {
 		method: 'post',
@@ -452,7 +453,7 @@ export const saveTypography = async ( selectedValue ) => {
 	data.append( 'action', 'astra-sites-set_site_data' );
 	data.append( 'param', 'site-typography' );
 	data.append( 'typography', JSON.stringify( selectedValue ) );
-	data.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	data.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
 	await fetch( ajaxurl, {
 		method: 'post',
@@ -483,8 +484,8 @@ export const checkFileSystemPermissions = async ( [ , dispatch ] ) => {
 	try {
 		const formData = new FormData();
 		formData.append( 'action', 'astra-sites-filesystem_permission' );
-		formData.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
-		const response = await fetch( astraSitesVars.ajaxurl, {
+		formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+		const response = await fetch( astraSitesVars?.ajaxurl, {
 			method: 'POST',
 			body: formData,
 		} );
@@ -513,7 +514,7 @@ export const generateAnalyticsLead = async (
 	importContent.append( 'try-again-count', tryAgainCount );
 	importContent.append( 'type', 'astra-sites' );
 	importContent.append( 'page-builder', builder );
-	importContent.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	importContent.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 	await fetch( ajaxurl, {
 		method: 'post',
 		body: importContent,

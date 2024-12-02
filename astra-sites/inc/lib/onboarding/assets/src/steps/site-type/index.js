@@ -92,7 +92,7 @@ const SiteType = () => {
 		}
 		const content = new FormData();
 		content.append( 'action', 'astra-sites-change-page-builder' );
-		content.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+		content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 		content.append( 'page_builder', 'ai-builder' );
 		fetch( ajaxurl, {
 			method: 'post',
@@ -100,7 +100,7 @@ const SiteType = () => {
 		} );
 
 		window.location.href =
-			astraSitesVars.adminURL + 'themes.php?page=ai-builder';
+			astraSitesVars?.adminURL + 'themes.php?page=ai-builder';
 	};
 
 	useEffect( () => {

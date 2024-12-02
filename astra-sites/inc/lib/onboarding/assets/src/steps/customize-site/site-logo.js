@@ -81,7 +81,7 @@ const SiteLogo = () => {
 	// };
 
 	useEffect( () => {
-		if ( !! astraSitesVars.isRTLEnabled ) {
+		if ( !! astraSitesVars?.isRTLEnabled ) {
 			const rangeControl = document.querySelector(
 				'.components-range-control__wrapper'
 			);

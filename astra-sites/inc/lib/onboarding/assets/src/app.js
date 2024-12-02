@@ -8,7 +8,7 @@ const App = () => {
 		<Router>
 			<div
 				className={ `starter-templates-ai-steps ${
-					!! astraSitesVars.isRTLEnabled ? 'st-rtl' : ''
+					!! astraSitesVars?.isRTLEnabled ? 'st-rtl' : ''
 				}` }
 			>
 				<Steps />

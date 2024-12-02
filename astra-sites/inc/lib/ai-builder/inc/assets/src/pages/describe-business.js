@@ -119,7 +119,7 @@ const DescribeBusiness = () => {
 		let { businessDetails: description } = data;
 		// if description too short, show modal
 		if ( description.length < 200 ) {
-			setFocus( 'description' );
+			setFocus( 'businessDetails' );
 			description = await improveUsingAiModal.show( {
 				handleFetchSuggestion,
 			} );

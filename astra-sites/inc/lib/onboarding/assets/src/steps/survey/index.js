@@ -124,7 +124,7 @@ const Survey = () => {
 
 	const [ skipPlugins, setSkipPlugins ] = useState( isThirtPartyPlugins );
 
-	const compatibilities = astraSitesVars.compatibilities;
+	const compatibilities = astraSitesVars?.compatibilities;
 	const requirementsErrors = compatibilities.errors;
 	let requirementWarning = compatibilities.warnings;
 
@@ -144,7 +144,7 @@ const Survey = () => {
 		output.push( '</ul>' );
 
 		const tooltipString =
-			astraSitesVars.compatibilities_data[ 'update-available' ];
+			astraSitesVars?.compatibilities_data[ 'update-available' ];
 		tooltipString.tooltip = tooltipString.tooltip.replace(
 			'##LIST##',
 			output.join( '' )
@@ -181,7 +181,7 @@ const Survey = () => {
 	const setStartFlag = () => {
 		const content = new FormData();
 		content.append( 'action', 'astra-sites-set_start_flag' );
-		content.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+		content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 		content.append( 'template_type', 'classic' );
 
 		fetch( ajaxurl, {
@@ -210,7 +210,10 @@ const Survey = () => {
 				const answer = analyticsFlag ? 'yes' : 'no';
 				const optinAnswer = new FormData();
 				optinAnswer.append( 'action', 'astra-sites-update-analytics' );
-				optinAnswer.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+				optinAnswer.append(
+					'_ajax_nonce',
+					astraSitesVars?._ajax_nonce
+				);
 				optinAnswer.append( 'data', answer );
 
 				fetch( ajaxurl, {
@@ -225,7 +228,7 @@ const Survey = () => {
 					} );
 			}
 
-			if ( astraSitesVars.subscribed === 'yes' ) {
+			if ( astraSitesVars?.subscribed === 'yes' ) {
 				dispatch( {
 					type: 'set',
 					user_subscribed: true,
@@ -248,7 +251,7 @@ const Survey = () => {
 
 			const content = new FormData();
 			content.append( 'action', 'astra-sites-update-subscription' );
-			content.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+			content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 			content.append( 'data', JSON.stringify( subscriptionFields ) );
 
 			fetch( ajaxurl, {
@@ -277,7 +280,7 @@ const Survey = () => {
 	const surveyForm = () => {
 		return (
 			<form className="survey-form" onSubmit={ handleSurveyFormSubmit }>
-				{ astraSitesVars.subscribed !== 'yes' && (
+				{ astraSitesVars?.subscribed !== 'yes' && (
 					<SurveyForm
 						formDetails={ formDetails }
 						updateFormDetails={ updateFormDetails }

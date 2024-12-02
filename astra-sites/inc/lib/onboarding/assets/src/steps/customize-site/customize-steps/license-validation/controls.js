@@ -75,9 +75,9 @@ const LicenseValidationControls = () => {
 
 	if (
 		premiumTemplate &&
-		'' !== astraSitesVars.license_page_builder &&
+		'' !== astraSitesVars?.license_page_builder &&
 		templateResponse[ 'astra-site-page-builder' ] !==
-			astraSitesVars.license_page_builder &&
+			astraSitesVars?.license_page_builder &&
 		'brizy' !== templateResponse[ 'astra-site-page-builder' ] &&
 		'gutenberg' !== templateResponse[ 'astra-site-page-builder' ]
 	) {

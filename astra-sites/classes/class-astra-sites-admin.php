@@ -33,7 +33,7 @@ if ( ! class_exists( 'Astra_Sites_Admin' ) ) :
 		 * @return object Class object.
 		 */
 		public static function get_instance() {
-			if ( ! isset( self::$instance ) ) {
+			if ( null === self::$instance ) {
 				self::$instance = new self();
 			}
 
@@ -53,13 +53,13 @@ if ( ! class_exists( 'Astra_Sites_Admin' ) ) :
 		}
 
 		/**
-		 * Change quick links
+		 * Change quick links.
 		 *
 		 * @since 2.6.18
-		 * @param array $links  All quick links.
-		 * @return array
+		 * @param array<string, array<string, mixed>> $links All quick links.
+		 * @return array<string, array<string, mixed>>
 		 */
-		public function change_quick_links( $links = array() ) {
+		public function change_quick_links( array $links = array() ) {
 
 			if ( ! isset( $links['links']['upgrade'] ) ) {
 				return $links;
@@ -73,33 +73,39 @@ if ( ! class_exists( 'Astra_Sites_Admin' ) ) :
 
 		/**
 		 * Admin Assets
+		 *
+		 * @return void
 		 */
 		public function admin_assets() {
 			$current_screen = get_current_screen();
 
-			if ( 'appearance_page_starter-templates' !== $current_screen->id ) {
+			if ( null !== $current_screen && 'appearance_page_starter-templates' !== $current_screen->id ) {
 				return;
 			}
 
-			if ( Astra_Sites_White_Label::get_instance()->is_white_labeled() ) {
+			$white_label = Astra_Sites_White_Label::get_instance();
+			if ( $white_label instanceof Astra_Sites_White_Label && $white_label->is_white_labeled() ) {
 				return;
 			}
 
-			wp_enqueue_style( 'astra-sites-admin-page', ASTRA_SITES_URI . 'assets/css/admin.css', ASTRA_SITES_VER, true );
+			wp_enqueue_style( 'astra-sites-admin-page', ASTRA_SITES_URI . 'assets/css/admin.css', array(), ASTRA_SITES_VER );
 			wp_enqueue_script( 'astra-sites-admin-js', ASTRA_SITES_URI . 'assets/js/admin.js', array( 'astra-sites-admin-page', 'jquery' ), ASTRA_SITES_VER, true );
 		}
 
 		/**
 		 * Add Custom CTA Infobar.
+		 *
+		 * @return void
 		 */
 		public function custom_upgrade_cta() {
 			$current_screen = get_current_screen();
 
-			if ( 'appearance_page_starter-templates' !== $current_screen->id ) {
+			if ( null !== $current_screen && 'appearance_page_starter-templates' !== $current_screen->id ) {
 				return;
 			}
 
-			if ( Astra_Sites_White_Label::get_instance()->is_white_labeled() ) {
+			$white_label = Astra_Sites_White_Label::get_instance();
+			if ( $white_label instanceof Astra_Sites_White_Label && $white_label->is_white_labeled() ) {
 				return;
 			}
 

@@ -2,10 +2,10 @@
 Contributors: brainstormforce
 Donate link: https://wpastra.com/pro/
 Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
-Requires at least: 4.4
+Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.4.8
+Stable tag: 4.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -246,6 +246,19 @@ Once your website is generated, you have complete control over its content and l
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.9 - 02-December-2024
+- Improvements:
+    - AI Builder: Enhanced error handling in the import process with clearer error messages.
+    - AI Builder: Upgrade plan popup UI enhancements for a better user experience.
+    - AI Builder: Added import success action to trigger custom actions after successful site import.
+    - Design Kit: Improved business description screen for better user experience.
+    - Design Kit: UI enhancements for better usability.
+    - Design Kit: Improved code quality for enhanced performance and maintainability.
+    - UI/UX optimizations for a smoother Classic Templates Builder experience.
+    - SureCart template is now the default selection for eCommerce templates.
+- Fixes:
+    - Free Images: Removed garbage CSS conflicting with other plugins.
 
 v4.4.8 - 15-November-2024
 - Improvements:

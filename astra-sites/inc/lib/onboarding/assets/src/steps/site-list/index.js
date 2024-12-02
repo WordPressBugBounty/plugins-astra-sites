@@ -173,7 +173,7 @@ const SiteList = () => {
 		try {
 			const formData = new FormData();
 			formData.append( 'action', 'astra-sites-update-library' );
-			formData.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+			formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 			const response = await fetch( ajaxurl, {
 				method: 'post',
 				body: formData,
@@ -404,7 +404,7 @@ const SiteList = () => {
 								className="st-access-btn"
 								onClick={ () =>
 									window.open(
-										astraSitesVars.cta_links[ builder ]
+										astraSitesVars?.cta_links[ builder ]
 									)
 								}
 							>

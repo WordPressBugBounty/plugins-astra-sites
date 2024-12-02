@@ -58,7 +58,7 @@ const PageBuilderDropdown = () => {
 					</div>
 					<ChevronDownIcon className="w-5 h-5 text-zip-body-text" />
 				</DropdownList.Button>
-				<DropdownList.Options className="mt-0 p-0 rounded-t-none bg-white shadow-[1px_2px_5px_1px_rgba(0,0,0,0.15)]">
+				<DropdownList.Options className="mt-0.5 p-0 rounded-t-none bg-white shadow-[1px_2px_5px_1px_rgba(0,0,0,0.15)]">
 					{ buildersList.map( ( builder ) => (
 						<DropdownList.Option
 							key={ builder.id }

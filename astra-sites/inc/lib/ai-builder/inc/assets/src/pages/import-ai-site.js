@@ -16,6 +16,7 @@ import {
 	setSiteTitle,
 	saveTypography,
 	setSiteLanguage,
+	showErrorToast,
 } from '../utils/import-site/import-utils';
 const { migrateSvg, reportError } = aiBuilderVars;
 let sendReportFlag = reportError;
@@ -271,6 +272,7 @@ const ImportAiSite = () => {
 		let finalStepStatus = false;
 		let gtReplaceBatch = false;
 		let imagesReplaceBatch = false;
+		let setSiteOptions = false;
 
 		optionsStatus = await importSiteOptions();
 
@@ -291,8 +293,35 @@ const ImportAiSite = () => {
 		}
 
 		if ( finalStepStatus ) {
-			await waitForFullMigration();
+			setSiteOptions = await waitForFullMigration();
 		}
+
+		if ( setSiteOptions ) {
+			await importSuccess();
+		}
+	};
+
+	/**
+	 * Import Success.
+	 */
+	const importSuccess = async () => {
+		const data = new FormData();
+		data.append( 'action', 'astra-sites-import_success' );
+		data.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+
+		const status = await fetch( ajaxurl, {
+			method: 'post',
+			body: data,
+		} )
+			.then( ( response ) => response.json() )
+			.then( async ( response ) => {
+				if ( response.success ) {
+					return true;
+				}
+				return false;
+			} );
+
+		return status;
 	};
 
 	/**
@@ -463,12 +492,13 @@ const ImportAiSite = () => {
 						error,
 						'',
 						sprintf(
-							// translators: Support article URL.
+							// translators: %1$s is the opening <a> tag with the URL, %2$s is the closing </a> tag.
 							__(
-								'<a href="%1$s">Read article</a> to resolve the issue and continue importing template.',
+								'%1$sRead article%2$s to resolve the issue and continue importing the template.',
 								'ai-builder'
 							),
-							'https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging'
+							'<a href="https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging" target="_blank">',
+							'</a>'
 						),
 						text
 					);
@@ -497,12 +527,13 @@ const ImportAiSite = () => {
 					error?.data?.message,
 					'',
 					sprintf(
-						// translators: Support article URL.
+						// translators: %1$s is the opening <a> tag, %2$s is the closing </a> tag.
 						__(
-							'<a href="%1$s">Read article</a> to resolve the issue and continue importing template.',
+							'%1$sRead article%2$s to resolve the issue and continue importing the template.',
 							'ai-builder'
 						),
-						'https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging'
+						'<a href="https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging" target="_blank">',
+						'</a>'
 					),
 					error
 				);
@@ -976,7 +1007,10 @@ const ImportAiSite = () => {
 				importStatus: __( 'Resetting posts done.', 'ai-builder' ),
 			} );
 		} else {
-			report( __( 'Resetting posts failed.', 'ai-builder' ), '', err );
+			showErrorToast(
+				__( 'Resetting posts failed.', 'ai-builder' ),
+				err
+			);
 		}
 		return status;
 	};
@@ -1074,9 +1108,8 @@ const ImportAiSite = () => {
 					);
 				}
 			} catch ( error ) {
-				report(
+				showErrorToast(
 					__( 'Downloading images failed.', 'ai-builder' ),
-					'',
 					error
 				);
 			}
@@ -1113,6 +1146,12 @@ const ImportAiSite = () => {
 		} );
 		if ( wxr.success ) {
 			importXML( wxr.data );
+		} else {
+			report(
+				'Importing Site Content Failed.',
+				'',
+				JSON.stringify( wxr.data ?? wxr, null, 4 )
+			);
 		}
 
 		return true;

@@ -10,7 +10,7 @@ import './style.scss';
 import { initialState } from '../../../../store/reducer';
 import { getStepIndex } from '../../../../utils/functions';
 
-const MyFavorite = () => {
+const MyFavorite = ( { isDisabled } ) => {
 	const [ stateValue, dispatch ] = useStateValue();
 	const { onMyFavorite } = stateValue;
 
@@ -36,8 +36,10 @@ const MyFavorite = () => {
 
 	return (
 		<div
-			className={ `st-my-favorite ${ onMyFavorite ? 'active' : '' }` }
-			onClick={ handleClick }
+			className={ `st-my-favorite relative ${
+				onMyFavorite ? 'active' : ''
+			}` }
+			onClick={ ! isDisabled && handleClick }
 		>
 			<Tooltip
 				content={ __( 'My Favorite', 'astra-sites' ) }
@@ -45,6 +47,9 @@ const MyFavorite = () => {
 			>
 				{ ICONS.favorite }
 			</Tooltip>
+			{ isDisabled && (
+				<div className="w-full absolute h-full top-0 bg-white/75 cursor-not-allowed"></div>
+			) }
 		</div>
 	);
 };

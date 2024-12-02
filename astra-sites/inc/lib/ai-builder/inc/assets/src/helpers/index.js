@@ -143,17 +143,29 @@ export const getPercent = ( num, den ) => {
 	return ( num / den ) * 100;
 };
 
-export const toastBody = ( { title, message } ) => {
+export const toastBody = ( error ) => {
+	let { title, message, code } = error;
+
+	if ( 'internal_server_error' === code ) {
+		message = error?.data?.error?.message || message;
+	}
+
+	const cleanMessage = message?.replace( /<\/?p>/g, '' );
+
 	return !! title && !! message ? (
 		<div className="min-w-[224px]">
 			<p className="text-sm font-semibold text-white leading-5">
 				{ title }
 			</p>
-			<p className="mt-1 text-sm font-normal text-white leading-5">
-				{ message }
-			</p>
+			<p
+				className="mt-1 text-sm font-normal text-white leading-5"
+				dangerouslySetInnerHTML={ { __html: cleanMessage } }
+			></p>
 		</div>
 	) : (
-		<span className="text-white text-sm min-w-[224px]">{ message }</span>
+		<span
+			className="!text-white text-sm min-w-[224px]"
+			dangerouslySetInnerHTML={ { __html: cleanMessage } }
+		></span>
 	);
 };

@@ -418,6 +418,44 @@ const ICONS = {
 			</defs>
 		</svg>
 	),
+	reloadIcon: (
+		<svg
+			width="20"
+			height="20"
+			viewBox="0 0 20 20"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<path
+				d="M17.5 1.6665V6.6665H12.5"
+				stroke="#2563EB"
+				strokeWidth="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+			<path
+				d="M2.5 10C2.50132 8.55277 2.92133 7.13682 3.70938 5.92295C4.49743 4.70909 5.61985 3.74914 6.94126 3.15891C8.26267 2.56868 9.72662 2.37338 11.1566 2.59655C12.5865 2.81973 13.9213 3.45185 15 4.41667L17.5 6.66667"
+				stroke="#2563EB"
+				strokeWidth="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+			<path
+				d="M2.5 18.3335V13.3335H7.5"
+				stroke="#2563EB"
+				strokeWidth="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+			<path
+				d="M17.5 10C17.4987 11.4472 17.0787 12.8632 16.2906 14.0771C15.5026 15.2909 14.3802 16.2509 13.0587 16.8411C11.7373 17.4313 10.2734 17.6266 8.84345 17.4035C7.41352 17.1803 6.07871 16.5482 5 15.5833L2.5 13.3333"
+				stroke="#2563EB"
+				strokeWidth="2"
+				strokeLinecap="round"
+				strokeLinejoin="round"
+			/>
+		</svg>
+	),
 };
 
 export default ICONS;

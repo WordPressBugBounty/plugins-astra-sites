@@ -9,18 +9,18 @@ import './style.scss';
 import { classNames, getStepIndex } from '../../../../utils/functions';
 
 const SyncLibrary = () => {
-	const [ { currentIndex, bgSyncInProgress }, dispatch ] = useStateValue();
+	const [ { currentIndex, bgSyncInProgress, sitesSyncing }, dispatch ] =
+		useStateValue();
 
 	const [ syncState, setSyncState ] = useState( {
-		isLoading: false,
 		updatedData: null,
 		syncStatus: null,
 	} );
 
-	const { isLoading, updatedData, syncStatus } = syncState;
+	const { updatedData, syncStatus } = syncState;
 
 	useEffect( () => {
-		if ( isLoading ) {
+		if ( sitesSyncing ) {
 			window.onbeforeunload = () => {
 				return true;
 			};
@@ -29,7 +29,7 @@ const SyncLibrary = () => {
 				window.onbeforeunload = null;
 			};
 		}
-	}, [ isLoading ] );
+	}, [ sitesSyncing ] );
 
 	if (
 		getStepIndex( 'page-builder' ) === currentIndex ||
@@ -57,16 +57,22 @@ const SyncLibrary = () => {
 	const handleClick = async ( event ) => {
 		event.stopPropagation();
 
-		if ( isLoading || bgSyncInProgress ) {
+		if ( sitesSyncing || bgSyncInProgress ) {
 			return;
 		}
 
-		setSyncState( { ...syncState, isLoading: true } );
+		dispatch( {
+			type: 'set',
+			sitesSyncing: true,
+		} );
 		const newData = await SyncStart();
 		setSyncState( {
-			isLoading: false,
 			updatedData: newData,
 			syncStatus: isSyncSuccess(),
+		} );
+		dispatch( {
+			type: 'set',
+			sitesSyncing: false,
 		} );
 	};
 
@@ -75,7 +81,7 @@ const SyncLibrary = () => {
 			<div
 				className={ classNames(
 					'relative st-sync-library',
-					isLoading && 'loading',
+					sitesSyncing && 'loading',
 					bgSyncInProgress && 'cursor-not-allowed'
 				) }
 				onClick={ handleClick }
@@ -102,7 +108,7 @@ const SyncLibrary = () => {
 					</div>
 				</Tooltip>
 			</div>
-			{ ! isLoading && syncStatus === true && (
+			{ ! sitesSyncing && syncStatus === true && (
 				<Toaster
 					type="success"
 					message={ __(
@@ -113,7 +119,7 @@ const SyncLibrary = () => {
 					bottomRight={ true }
 				/>
 			) }
-			{ ! isLoading && syncStatus === false && (
+			{ ! sitesSyncing && syncStatus === false && (
 				<Toaster
 					type="error"
 					message={ __( 'Library refreshed failed!', 'astra-sites' ) }

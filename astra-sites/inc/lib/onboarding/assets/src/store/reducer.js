@@ -5,12 +5,12 @@ import { __ } from '@wordpress/i18n';
 let currentIndexKey = 0;
 let builderKey = 'gutenberg';
 
-if ( astraSitesVars.default_page_builder ) {
+if ( astraSitesVars?.default_page_builder ) {
 	currentIndexKey = 0;
 	builderKey =
-		astraSitesVars.default_page_builder === 'brizy'
+		astraSitesVars?.default_page_builder === 'brizy'
 			? 'gutenberg'
-			: astraSitesVars.default_page_builder;
+			: astraSitesVars?.default_page_builder;
 }
 
 export const siteLogoDefault = {
@@ -125,9 +125,9 @@ export const initialState = {
 	},
 	selectedEcommercePlugin: '',
 	isEcommerce: false,
-	allSitesData: astraSitesVars.all_sites || {},
-	allCategories: astraSitesVars.allCategories || [],
-	allCategoriesAndTags: astraSitesVars.allCategoriesAndTags || [],
+	allSitesData: astraSitesVars?.all_sites || {},
+	allCategories: astraSitesVars?.allCategories || [],
+	allCategoriesAndTags: astraSitesVars?.allCategoriesAndTags || [],
 	aiActivePallette: null,
 	aiActiveTypography: null,
 	aiSiteLogo: siteLogoDefault,
@@ -188,9 +188,9 @@ export const initialState = {
 	importTimeTaken: {},
 
 	customizerImportFlag:
-		astraSitesVars.default_page_builder === 'fse' ? false : true,
+		astraSitesVars?.default_page_builder === 'fse' ? false : true,
 	themeActivateFlag:
-		astraSitesVars.default_page_builder === 'fse' ? false : true,
+		astraSitesVars?.default_page_builder === 'fse' ? false : true,
 	widgetImportFlag: true,
 	contentImportFlag: true,
 	analyticsFlag: starterTemplates.analytics !== 'yes' ? true : false,
@@ -200,26 +200,27 @@ export const initialState = {
 	onMyFavorite: false,
 
 	// All Sites and Favorites
-	favoriteSiteIDs: Object.values( astraSitesVars.favorite_data ) || [],
+	favoriteSiteIDs: Object.values( astraSitesVars?.favorite_data ) || [],
 
 	// License.
-	licenseStatus: astraSitesVars.license_status,
+	licenseStatus: astraSitesVars?.license_status,
 	validateLicenseStatus: false,
 
 	// Staging connected.
 	stagingConnected:
-		astraSitesVars.staging_connected !== 'yes'
+		astraSitesVars?.staging_connected !== 'yes'
 			? ''
-			: '&draft=' + astraSitesVars.staging_connected,
+			: '&draft=' + astraSitesVars?.staging_connected,
 
 	// Search.
 	searchTerms: [],
 	searchTermsWithCount: [],
 	enabledFeatureIds: [],
-	dismissAINotice: astraSitesVars.dismiss_ai_notice,
+	dismissAINotice: astraSitesVars?.dismiss_ai_notice,
 
 	// Sync Library.
-	bgSyncInProgress: !! astraSitesVars.bgSyncInProgress,
+	bgSyncInProgress: !! astraSitesVars?.bgSyncInProgress,
+	sitesSyncing: false,
 
 	// Limit exceed modal for AI-Builder.
 	limitExceedModal: {

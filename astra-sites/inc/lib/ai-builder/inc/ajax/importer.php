@@ -110,6 +110,7 @@ class Importer extends AjaxBase {
 			'image_replacement_batch',
 			'import_end',
 			'set_site_data',
+			'import_success',
 			// Import Part 2 End.
 		);
 
@@ -148,6 +149,28 @@ class Importer extends AjaxBase {
 		if ( wp_doing_ajax() ) {
 			wp_send_json_success();
 		}
+	}
+
+	/**
+	 * Import Success.
+	 *
+	 * @return void
+	 *
+	 * @since 1.2.15
+	 */
+	public function import_success() {
+		if ( wp_doing_ajax() ) {
+			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
+			}
+		}
+
+		do_action( 'astra_sites_import_success' );
+
+		wp_send_json_success();
+
 	}
 
 	/**
