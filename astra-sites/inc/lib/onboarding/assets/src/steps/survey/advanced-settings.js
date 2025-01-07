@@ -138,9 +138,9 @@ const AdvancedSettings = () => {
 				</div>
 			) }
 			{ 'yes' === firstImportStatus ? (
-				<div className="flex items-center rounded-md p-4 border-solid border gap-6 border-[#FB7E0A1F] bg-[#FB7E0A0F]">
+				<div className="flex items-center rounded-md p-4 border-solid border gap-6 border-[#FB7E0A1F] bg-[#FB7E0A0F] max-sm:flex-col">
 					<div className="mb-1">
-						<p className="text-sm text-body-text !leading-6">
+						<p className="text-sm text-body-text !leading-6 max-sm:text-center">
 							{ __(
 								'It looks like you already have a website created with Starter Templates. Check this box to keep your existing content and images.',
 								'astra-sites'
@@ -183,9 +183,9 @@ const AdvancedSettings = () => {
 					</div>
 				</div>
 			) : (
-				<div className="flex items-center rounded-md p-4 border-solid border gap-6 border-[#FB7E0A1F] bg-[#FB7E0A0F]">
+				<div className="flex items-center rounded-md p-4 border-solid border gap-6 border-[#FB7E0A1F] bg-[#FB7E0A0F] max-sm:flex-col">
 					<div className="mb-1">
-						<p className="text-sm text-body-text !leading-6">
+						<p className="text-sm text-body-text !leading-6 max-sm:text-center">
 							{ __(
 								'This will overwrite your site settings and add new content. You might want to backup your site before proceeding.',
 								'astra-sites'

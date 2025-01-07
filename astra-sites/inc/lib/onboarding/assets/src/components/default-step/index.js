@@ -67,7 +67,7 @@ const DefaultStep = ( { preview, content, controls, actions, stepName } ) => {
 					} }
 				>
 					<div
-						className={ `content-wrapper
+						className={ `content-wrapper pb-14 sm:pb-0
 					${
 						currentIndex === getStepIndex( 'customizer' )
 							? 'flex flex-col items-start h-full'

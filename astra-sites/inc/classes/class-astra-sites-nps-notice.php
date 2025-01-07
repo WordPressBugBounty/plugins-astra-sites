@@ -62,6 +62,8 @@ if ( ! class_exists( 'Astra_Sites_Nps_Notice' ) ) :
 			if ( class_exists( 'Astra_Sites_White_Label' ) && is_callable( 'Astra_Sites_White_Label::get_instance' ) && Astra_Sites_White_Label::get_instance()->is_white_labeled() ) {
 				return;
 			}
+
+			$allowed_screens = array( 'appearance_page_starter-templates', 'appearance_page_ai-builder' );
 			
 			Nps_Survey::show_nps_notice(
 				'nps-survey-astra-sites',
@@ -70,6 +72,7 @@ if ( ! class_exists( 'Astra_Sites_Nps_Notice' ) ) :
 					'dismiss_timespan' => 2 * WEEK_IN_SECONDS,
 					'display_after' => 0,
 					'plugin_slug' => 'astra-sites',
+					'show_on_screens' => $allowed_screens,
 					'message' => array(
 
 						// Step 1 i.e rating input.

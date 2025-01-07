@@ -13,10 +13,10 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: astra-sites.php
-#: astra-sites.php:36
-#: astra-sites.php:107
-#: inc/classes/class-astra-sites-nps-notice.php:77
-#: inc/classes/class-astra-sites.php:2455
+#: astra-sites.php:38
+#: astra-sites.php:111
+#: inc/classes/class-astra-sites-nps-notice.php:80
+#: inc/classes/class-astra-sites.php:2490
 #: inc/lib/onboarding/class-onboarding-loader.php:83
 #: inc/lib/ai-builder/inc/assets/build/main.js:190
 #: inc/lib/onboarding/assets/dist/main.js:73
@@ -47,7 +47,7 @@ msgstr ""
 #. translators: %s product name
 #: admin/bsf-analytics/class-bsf-analytics.php:216
 msgid "Want to help make <strong>%1s</strong> even more awesome? Allow us to collect non-sensitive diagnostic data and usage information. "
-msgstr "Quer ajudar a tornar o <strong>%1s</strong> ainda mais incrível? Permita-nos coletar dados de diagnóstico não sensíveis e informações de uso. "
+msgstr "Quer ajudar a tornar o <strong>%1s</strong> ainda mais incrível? Permita-nos coletar dados de diagnóstico não sensíveis e informações de uso."
 
 #: admin/bsf-analytics/class-bsf-analytics.php:219
 msgid "This will be applicable for all sites from the network."
@@ -77,17 +77,17 @@ msgstr "Permitir que os produtos %s rastreiem dados de uso não sensíveis."
 
 #: admin/bsf-analytics/class-bsf-analytics.php:417
 msgid " This will be applicable for all sites from the network."
-msgstr " Isso será aplicável para todos os sites da rede."
+msgstr "Isso será aplicável para todos os sites da rede."
 
 #: admin/bsf-analytics/class-bsf-analytics.php:422
 msgid "Learn More."
 msgstr "Saiba mais."
 
-#: classes/class-astra-sites-admin.php:109
+#: classes/class-astra-sites-admin.php:115
 msgid "Get unlimited access to all premium Starter Templates and more, at a single low cost!"
 msgstr "Obtenha acesso ilimitado a todos os Modelos Iniciais premium e mais, por um único custo baixo!"
 
-#: classes/class-astra-sites-admin.php:110
+#: classes/class-astra-sites-admin.php:116
 #: inc/lib/onboarding/assets/dist/main.js:84
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:144
 msgid "Get Essential Toolkit"
@@ -164,12 +164,13 @@ msgstr "Atualmente, você não tem eventos cron agendados."
 #: inc/classes/class-astra-sites.php:1344
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:967
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:985
-#: inc/lib/ai-builder/inc/ajax/importer.php:140
-#: inc/lib/ai-builder/inc/ajax/importer.php:196
+#: inc/lib/ai-builder/inc/ajax/importer.php:141
+#: inc/lib/ai-builder/inc/ajax/importer.php:166
 #: inc/lib/ai-builder/inc/ajax/importer.php:219
-#: inc/lib/ai-builder/inc/ajax/importer.php:358
-#: inc/lib/ai-builder/inc/ajax/importer.php:410
-#: inc/lib/ai-builder/inc/ajax/importer.php:442
+#: inc/lib/ai-builder/inc/ajax/importer.php:242
+#: inc/lib/ai-builder/inc/ajax/importer.php:381
+#: inc/lib/ai-builder/inc/ajax/importer.php:433
+#: inc/lib/ai-builder/inc/ajax/importer.php:465
 #: inc/lib/ai-builder/inc/ajax/plugin.php:120
 #: inc/lib/ai-builder/inc/ajax/plugin.php:335
 #: inc/lib/ai-builder/inc/ajax/plugin.php:364
@@ -181,21 +182,21 @@ msgstr "Atualmente, você não tem eventos cron agendados."
 #: inc/lib/ai-builder/inc/traits/helper.php:742
 #: inc/lib/ai-builder/inc/traits/helper.php:776
 #: inc/lib/ai-builder/inc/traits/helper.php:812
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:244
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:292
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:336
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:360
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:450
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:798
-#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:319
-#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:446
-#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:471
-#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:514
-#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:805
-#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:840
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:245
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:293
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:337
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:361
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:461
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:811
+#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:320
+#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:447
+#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:472
+#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:515
+#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:809
+#: inc/lib/gutenberg-templates/inc/importer/sync-library.php:844
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:43
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:109
-#: inc/lib/gutenberg-templates/inc/traits/upgrade.php:33
+#: inc/lib/gutenberg-templates/inc/traits/upgrade.php:35
 #: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:68
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:263
 msgid "You are not allowed to perform this action"
@@ -228,23 +229,23 @@ msgstr "Houve um erro ao baixar o arquivo de fluxos do CartFlows."
 msgid "Empty file for CartFlows flows"
 msgstr "Arquivo vazio para fluxos do CartFlows"
 
-#: inc/classes/class-astra-sites-nps-notice.php:78
+#: inc/classes/class-astra-sites-nps-notice.php:81
 msgid "How likely are you to recommend #pluginname to your friends or colleagues?"
 msgstr "Qual a probabilidade de você recomendar o #pluginname aos seus amigos ou colegas?"
 
-#: inc/classes/class-astra-sites-nps-notice.php:81
+#: inc/classes/class-astra-sites-nps-notice.php:84
 msgid "Thanks a lot for your feedback! 😍"
 msgstr "Muito obrigado pelo seu feedback! 😍"
 
-#: inc/classes/class-astra-sites-nps-notice.php:82
+#: inc/classes/class-astra-sites-nps-notice.php:85
 msgid "Could you please do us a favor and give us a 5-star rating on WordPress? It would help others choose Starter Templates with confidence. Thank you!"
 msgstr "Poderia nos fazer um favor e nos dar uma avaliação de 5 estrelas no WordPress? Isso ajudaria outros a escolherem os Starter Templates com confiança. Obrigado!"
 
-#: inc/classes/class-astra-sites-nps-notice.php:86
+#: inc/classes/class-astra-sites-nps-notice.php:89
 msgid "Thank you for your feedback"
 msgstr "Obrigado pelo seu feedback"
 
-#: inc/classes/class-astra-sites-nps-notice.php:87
+#: inc/classes/class-astra-sites-nps-notice.php:90
 msgid "We value your input. How can we improve your experience?"
 msgstr "Valorizamos a sua opinião. Como podemos melhorar a sua experiência?"
 
@@ -602,11 +603,12 @@ msgid "Could not download the image."
 msgstr "Não foi possível baixar a imagem."
 
 #: inc/classes/class-astra-sites.php:1436
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Get Started"
 msgstr "Começar"
 
 #: inc/classes/class-astra-sites.php:1646
-#: inc/classes/class-astra-sites.php:2093
+#: inc/classes/class-astra-sites.php:2128
 #: inc/includes/templates.php:321
 msgid "Get Access!"
 msgstr "Obtenha Acesso!"
@@ -724,11 +726,6 @@ msgstr "%1$sNão conseguimos concluir o processo de importação devido a uma so
 msgid "%1$sPlease report this <a href=\"%2$s\" target=\"_blank\">here</a>.%3$s"
 msgstr "%1$sPor favor, reporte isso <a href=\"%2$s\" target=\"_blank\">aqui</a>.%3$s"
 
-#. translators: %s Anchor link to support URL.
-#: inc/classes/class-astra-sites.php:1727
-msgid "Please report this error %1$shere%2$s, so we can fix it."
-msgstr "Por favor, reporte este erro %1$saqui%2$s, para que possamos corrigi-lo."
-
 #: inc/classes/class-astra-sites.php:1944
 msgid "XMLReader Support Missing"
 msgstr "Suporte para XMLReader ausente"
@@ -822,70 +819,69 @@ msgid "The Flexbox Container widget is disabled on your website. With this disab
 msgstr "O widget Flexbox Container está desativado no seu site. Com isso desativado, o processo de importação será afetado. Por favor, ative-o para continuar importando o Modelo Inicial."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2060
+#: inc/classes/class-astra-sites.php:2095
 msgid "This is a premium template available with Essential and Business Toolkits. you can purchase it from <a href=\"%s\" target=\"_blank\">here</a>."
 msgstr "Este é um modelo premium disponível com os Kits de Ferramentas Essenciais e Empresariais. você pode comprá-lo <a href=\"%s\" target=\"_blank\">aqui</a>."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2064
+#: inc/classes/class-astra-sites.php:2099
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">Validate Your License</a> Key to import this template."
 msgstr "Este é um modelo premium disponível com os Toolkits Essencial e Empresarial. <a href=\"%s\" target=\"_blank\">Valide sua chave de licença</a> para importar este modelo."
 
-#: inc/classes/class-astra-sites.php:2097
+#: inc/classes/class-astra-sites.php:2132
 msgid "Template"
 msgstr "Modelo"
 
-#: inc/classes/class-astra-sites.php:2098
+#: inc/classes/class-astra-sites.php:2133
 msgid "Block"
 msgstr "Bloquear"
 
-#: inc/classes/class-astra-sites.php:2099
+#: inc/classes/class-astra-sites.php:2134
 #: inc/includes/templates.php:78
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Dismiss"
 msgstr "Dispensar"
 
-#: inc/classes/class-astra-sites.php:2100
+#: inc/classes/class-astra-sites.php:2135
 #: inc/lib/onboarding/assets/dist/main.js:83
 msgid "Install Required Plugins"
 msgstr "Instalar Plugins Necessários"
 
-#: inc/classes/class-astra-sites.php:2104
+#: inc/classes/class-astra-sites.php:2139
 msgid "You can locate <strong>Starter Templates Settings</strong> under the <strong>Page Settings</strong> of the Style Tab."
 msgstr "Você pode localizar <strong>Configurações de Modelos Iniciais</strong> em <strong>Configurações de Página</strong> na guia Estilo."
 
-#: inc/classes/class-astra-sites.php:2106
+#: inc/classes/class-astra-sites.php:2141
 msgid "Read More →"
 msgstr "Leia mais →"
 
-#: inc/classes/class-astra-sites.php:2383
+#: inc/classes/class-astra-sites.php:2418
 msgid "Template library refreshed!"
 msgstr "Biblioteca de modelos atualizada!"
 
-#: inc/classes/class-astra-sites.php:2457
+#: inc/classes/class-astra-sites.php:2492
 msgid "Build Your Dream Site in Minutes With AI"
 msgstr "Construa o seu site dos sonhos em minutos com IA"
 
-#: inc/classes/class-astra-sites.php:2458
+#: inc/classes/class-astra-sites.php:2493
 msgid "Say goodbye to the days of spending weeks designing and building your website.<br/> You can now create professional-grade websites in minutes."
 msgstr "Diga adeus aos dias de passar semanas a desenhar e construir o seu site.<br/> Agora pode criar sites de nível profissional em minutos."
 
-#: inc/classes/class-astra-sites.php:2460
+#: inc/classes/class-astra-sites.php:2495
 msgid "Let’s Get Started"
 msgstr "Vamos começar"
 
-#: inc/classes/class-astra-sites.php:2461
+#: inc/classes/class-astra-sites.php:2496
 msgid "I want to build this website from scratch"
 msgstr "Quero construir este site do zero"
 
-#: inc/classes/class-astra-sites.php:2495
+#: inc/classes/class-astra-sites.php:2530
 msgid "Required WP_Filesystem Permissions to import the templates from Starter Templates are missing."
 msgstr "As permissões WP_Filesystem necessárias para importar os modelos dos Modelos Iniciais estão ausentes."
 
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:974
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:992
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:767
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:780
 msgid "You are not allowed to perform this action."
 msgstr "Você não tem permissão para realizar esta ação."
 
@@ -997,6 +993,7 @@ msgstr "Blocos"
 #: inc/includes/templates.php:144
 #: inc/includes/templates.php:145
 #: inc/lib/ai-builder/inc/assets/build/main.js:190
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Close"
 msgstr "Fechar"
 
@@ -1049,17 +1046,17 @@ msgstr "Pular e Importar"
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
 #: inc/lib/gutenberg-templates/dist/main.js:2
 #: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: inc/includes/templates.php:556
 msgid "Import "
-msgstr "Importar "
+msgstr "Importar"
 
 #: inc/includes/templates.php:557
 msgid "Save "
-msgstr "Salvar "
+msgstr "Salvar"
 
 #: inc/includes/white-label.php:29
 msgid "Plugin Name:"
@@ -1126,32 +1123,32 @@ msgstr "A validação do nonce falhou"
 msgid "Sorry, something went wrong."
 msgstr "Desculpe, algo deu errado."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:322
+#: inc/lib/ai-builder/inc/ajax/importer.php:345
 #: inc/lib/ai-builder/inc/traits/helper.php:253
 #: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:138
 msgid "Permission Denied!"
 msgstr "Permissão negada!"
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:346
+#: inc/lib/ai-builder/inc/ajax/importer.php:369
 msgid "There was an error importing the Spectra settings."
 msgstr "Houve um erro ao importar as configurações do Spectra."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:370
+#: inc/lib/ai-builder/inc/ajax/importer.php:393
 msgid "There was an error cloning the surecart store."
 msgstr "Houve um erro ao clonar a loja surecart."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:416
-#: inc/lib/ai-builder/inc/ajax/importer.php:448
+#: inc/lib/ai-builder/inc/ajax/importer.php:439
+#: inc/lib/ai-builder/inc/ajax/importer.php:471
 #: inc/lib/ai-builder/inc/ajax/plugin.php:130
 msgid "Required function not found"
 msgstr "Função necessária não encontrada"
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:489
+#: inc/lib/ai-builder/inc/ajax/importer.php:512
 #: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-fse-importer.php:44
 msgid "You are not authorized to perform this action."
 msgstr "Você não está autorizado a realizar esta ação."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:499
+#: inc/lib/ai-builder/inc/ajax/importer.php:522
 #: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-fse-importer.php:54
 msgid "Received empty parameters."
 msgstr "Recebidos parâmetros vazios."
@@ -1184,9 +1181,9 @@ msgstr "Falha ao definir o idioma do site."
 #: inc/lib/gutenberg-templates/inc/api/settings.php:92
 #: inc/lib/gutenberg-templates/inc/api/sites.php:70
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-zipwp-api.php:77
-#: inc/lib/nps-survey/classes/nps-survey-script.php:217
+#: inc/lib/nps-survey/classes/nps-survey-script.php:252
 #: inc/lib/onboarding/classes/class-astra-sites-zipwp-api.php:80
-#: inc/lib/onboarding/classes/class-astra-sites-zipwp-integration.php:50
+#: inc/lib/onboarding/classes/class-astra-sites-zipwp-integration.php:49
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:92
 msgid "Sorry, you are not allowed to do that."
 msgstr "Desculpe, você não tem permissão para fazer isso."
@@ -1222,8 +1219,8 @@ msgstr "Desculpe, você não tem permissão para fazer isso."
 #: inc/lib/gutenberg-templates/inc/api/sites.php:93
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-zipwp-api.php:138
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-zipwp-api.php:197
-#: inc/lib/nps-survey/classes/nps-survey-script.php:238
-#: inc/lib/nps-survey/classes/nps-survey-script.php:319
+#: inc/lib/nps-survey/classes/nps-survey-script.php:273
+#: inc/lib/nps-survey/classes/nps-survey-script.php:354
 #: inc/lib/onboarding/classes/class-astra-sites-zipwp-api.php:163
 #: inc/lib/onboarding/classes/class-astra-sites-zipwp-api.php:236
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:169
@@ -1293,11 +1290,11 @@ msgstr "Nonce do WordPress não validado."
 msgid "Quick Links"
 msgstr "Links Rápidos"
 
-#: inc/lib/gutenberg-templates/inc/api/favorite.php:178
+#: inc/lib/gutenberg-templates/inc/api/favorite.php:181
 msgid "Action Completed"
 msgstr "Ação Concluída"
 
-#: inc/lib/gutenberg-templates/inc/api/favorite.php:178
+#: inc/lib/gutenberg-templates/inc/api/favorite.php:181
 msgid "Action failed"
 msgstr "Ação falhou"
 
@@ -1311,45 +1308,45 @@ msgstr "Permissões de Arquivo Necessárias - Importar padrões, páginas e mode
 
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-notices.php:57
 msgid "Doc: "
-msgstr "Doc: "
+msgstr "Doc:"
 
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-notices.php:57
 msgid "Resolve file permission issue"
 msgstr "Resolver problema de permissão de arquivo"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:269
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:273
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:436
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:250
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:270
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:274
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:445
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:255
 #: inc/lib/ai-builder/inc/assets/build/main.js:183
 msgid "Something went wrong"
 msgstr "Algo deu errado"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:810
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:823
 msgid "Something wrong"
 msgstr "Algo errado"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:992
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1004
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Design Library"
 msgstr "Biblioteca de Design"
 
-#: inc/lib/gutenberg-templates/inc/traits/helper.php:222
+#: inc/lib/gutenberg-templates/inc/traits/helper.php:225
 #: inc/lib/zip-ai/classes/helper.php:151
 msgid "The Zip AI Endpoint was not declared"
 msgstr "O Endpoint Zip AI não foi declarado"
 
-#: inc/lib/gutenberg-templates/inc/traits/helper.php:232
+#: inc/lib/gutenberg-templates/inc/traits/helper.php:235
 #: inc/lib/zip-ai/classes/helper.php:161
 msgid "The Zip AI Auth Token is not set."
 msgstr "O Token de Autenticação do Zip AI não está definido."
 
-#: inc/lib/gutenberg-templates/inc/traits/helper.php:254
+#: inc/lib/gutenberg-templates/inc/traits/helper.php:257
 #: inc/lib/zip-ai/classes/helper.php:196
 msgid "The Zip AI Middleware is not responding."
 msgstr "O Middleware Zip AI não está respondendo."
 
-#: inc/lib/gutenberg-templates/inc/traits/helper.php:264
+#: inc/lib/gutenberg-templates/inc/traits/helper.php:267
 #: inc/lib/zip-ai/classes/helper.php:206
 msgid "The Zip AI Middleware encountered an error."
 msgstr "O Middleware Zip AI encontrou um erro."
@@ -1648,7 +1645,7 @@ msgstr "O comentário %1$d foi importado com o autor %2$d, mas não pôde ser en
 msgid "Could not update comment #%d with mapped data"
 msgstr "Não foi possível atualizar o comentário #%d com os dados mapeados"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:833
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:835
 msgid "Import complete!"
 msgstr "Importação concluída!"
 
@@ -1673,15 +1670,15 @@ msgstr "O servidor da API ZipWP não está respondendo."
 msgid "The ZipWP API server encountered an error."
 msgstr "O servidor da API ZipWP encontrou um erro."
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:185
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:187
 msgid "The message array was not supplied"
 msgstr "O array de mensagens não foi fornecido"
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:264
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:269
 msgid "Invalid auth token."
 msgstr "Token de autenticação inválido."
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:265
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:270
 msgid "You have no credits left."
 msgstr "Você não tem créditos restantes."
 
@@ -1945,6 +1942,7 @@ msgstr "Comece a Construir"
 #: inc/lib/ai-builder/inc/assets/build/main.js:174
 #: inc/lib/ai-builder/inc/assets/build/main.js:190
 #: inc/lib/ai-builder/inc/assets/build/main.js:194
+#: inc/lib/nps-survey/dist/main.js:1
 #: inc/lib/onboarding/assets/dist/main.js:73
 #: inc/lib/onboarding/assets/dist/main.js:77
 #: inc/lib/onboarding/assets/dist/main.js:83
@@ -2000,7 +1998,7 @@ msgstr "Se você prosseguir sem corrigir esses problemas, poderá encontrar os m
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:180
 msgid "Created On: "
-msgstr "Criado em: "
+msgstr "Criado em:"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:180
 msgid "Importing saved sites won’t be exhausting your AI site generation count."
@@ -2211,11 +2209,6 @@ msgstr "10 Sites de Blueprint"
 #: inc/lib/ai-builder/inc/assets/build/main.js:187
 msgid "Great Start! Congratulations.."
 msgstr "Ótimo começo! Parabéns.."
-
-#. translators: %1$s: Number of AI sites used, %2$s: Current plan name, %2$s: Suggested Plan
-#: inc/lib/ai-builder/inc/assets/build/main.js:190
-msgid "You've successfully generated %1$s AI sites with your %2$s Plan account. You can do much more with the %3$s Plan:"
-msgstr "Você gerou com sucesso %1$s sites de IA com sua conta do Plano %2$s. Você pode fazer muito mais com o Plano %3$s:"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:190
 #: inc/lib/onboarding/assets/dist/main.js:73
@@ -2459,7 +2452,6 @@ msgstr "Falha ao buscar a demonstração relacionada."
 msgid "Astra Theme Installed."
 msgstr "Tema Astra Instalado."
 
-#: inc/lib/ai-builder/inc/assets/build/main.js:194
 #: inc/lib/onboarding/assets/dist/main.js:73
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 msgid "Astra theme installation failed."
@@ -2668,7 +2660,7 @@ msgstr "A melhor maneira de descrever qualquer coisa é respondendo a algumas pe
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:203
 msgid "Characters: "
-msgstr "Caracteres: "
+msgstr "Caracteres:"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:203
 msgid "E.g. Mantra Minds is a yoga studio located in Chino Hills, California. The studio offers a variety of classes such as Hatha yoga, Vinyasa flow, and Restorative yoga. The studio is led by Jane, an experienced and certified yoga instructor with over 10 years of teaching expertise. The welcoming atmosphere and personalized Jane make it a favorite among yoga enthusiasts in the area."
@@ -3160,8 +3152,6 @@ msgid "JSON_Error: Could not activate the required plugin - %1$s."
 msgstr "Erro_JSON: Não foi possível ativar o plugin necessário - %1$s."
 
 #. translators: Support article URL.
-#: inc/lib/ai-builder/inc/assets/build/main.js:231
-#: inc/lib/ai-builder/inc/assets/build/main.js:237
 #: inc/lib/onboarding/assets/dist/main.js:98
 #: inc/lib/onboarding/assets/dist/main.js:102
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:168
@@ -3374,7 +3364,7 @@ msgstr "Créditos de IA restantes"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Color Styles: "
-msgstr "Estilos de Cor: "
+msgstr "Estilos de Cor:"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Did you know, you can personalize this design library with content and images tailored to your website project?"
@@ -3548,7 +3538,7 @@ msgstr "Por favor, insira um e-mail válido"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "How can people get in touch with "
-msgstr "Como as pessoas podem entrar em contato com "
+msgstr "Como as pessoas podem entrar em contato com"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Please provide the contact information details below. These will be used on the website."
@@ -3672,7 +3662,6 @@ msgid "SureCart"
 msgstr "SureCart"
 
 #: inc/lib/onboarding/assets/dist/main.js:73
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 msgid "A simple yet powerful e-commerce platform designed to grow your business with effortlessly selling online."
 msgstr "Uma plataforma de e-commerce simples, mas poderosa, projetada para expandir seu negócio com vendas online sem esforço."
 
@@ -3682,7 +3671,6 @@ msgid "WooCommerce"
 msgstr ""
 
 #: inc/lib/onboarding/assets/dist/main.js:73
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 msgid "WooCommerce is an open-source e-commerce plugin for WordPress. It is designed for small to large-sized online merchants using WordPress."
 msgstr "WooCommerce é um plugin de e-commerce de código aberto para WordPress. É projetado para comerciantes online de pequeno a grande porte que utilizam WordPress."
 
@@ -4190,18 +4178,9 @@ msgstr "Parabéns"
 msgid "Hot!"
 msgstr "Quente!"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
-msgid "Have you tried the new AI WordPress Website Builder?"
-msgstr "Você já experimentou o novo construtor de sites WordPress com IA?"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Experience the future of website building. We offer AI features powered by ZipWP to help you build your website 10x faster."
 msgstr "Experimente o futuro da criação de sites. Oferecemos recursos de IA impulsionados pelo ZipWP para ajudá-lo a construir seu site 10 vezes mais rápido."
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
-msgid "Try the New AI Builder"
-msgstr "Experimente o Novo Criador de IA"
 
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 msgid "What's New?"
@@ -4451,7 +4430,9 @@ msgid "Get more Credits"
 msgstr "Obtenha mais Créditos"
 
 #. translators: %s: number of words
+#. translators: %s the total amount of credits to this account, with comma separators.
 #: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
 msgid "of %s"
 msgstr "de %s"
 
@@ -4487,373 +4468,325 @@ msgstr "Rota padrão de fallback"
 msgid "Zip - Your AI Assistant"
 msgstr "Zip - Seu Assistente de IA"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
-msgid "Content:"
-msgstr "Conteúdo:"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
-msgid "You:"
-msgstr "Você:"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
-msgid "Edit"
-msgstr "Editar"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
-msgid "AI Assistant:"
-msgstr "Assistente de IA:"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
-msgid "Use This"
-msgstr "Use isto"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
 msgid "Copy & Close"
 msgstr "Copiar e Fechar"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
 msgid "Copy"
 msgstr "Copiar"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
 msgid "Regenerate"
 msgstr "Regenerar"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
 msgid "Update"
 msgstr "Atualizar"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
 msgid "Note: All subsequent messages will be deleted after you update."
 msgstr "Aviso: Todas as mensagens subsequentes serão apagadas após a atualização."
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
 msgid "Click Here"
 msgstr "Clique Aqui"
 
-#. translators: %1$d is the current page, %2$d is the total number of pages.
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
-msgid "%1$d / %2$d"
-msgstr "%1$d / %2$d"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
 msgid "Generating…"
 msgstr "Gerando…"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
 msgid "How can I help you?"
 msgstr "Como posso ajudá-lo?"
 
 #. Translators: %1$s is the opening link tag, %2$s is the closing link tag.
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
 msgid "AI Assistant can make mistakes. Want to %1$sdisable it?%2$s"
 msgstr "O Assistente de IA pode cometer erros. Deseja %1$sdesativá-lo?%2$s"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
 msgid "AI Assistant can make mistakes."
 msgstr "O Assistente de IA pode cometer erros."
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
-msgid "Write for me"
-msgstr "Escreva para mim"
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
 msgid "Clear Chat"
 msgstr "Limpar Chat"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Arabic"
 msgstr "Árabe"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Azerbaijani"
 msgstr "Azerbaijano"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Bengali"
 msgstr "Bengali"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Belarusian"
 msgstr "Bielorrusso"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Bulgarian"
 msgstr "Búlgaro"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Chinese (Simplified)"
 msgstr "Chinês (Simplificado)"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Croatian"
 msgstr "Croata"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Czech"
 msgstr "Tcheco"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Danish"
 msgstr "Dinamarquês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Dutch"
 msgstr "Holandês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "English"
 msgstr "Inglês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Estonian"
 msgstr "Estoniano"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Finnish"
 msgstr "Finlandês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Filipino"
 msgstr "Filipino"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "French"
 msgstr "Francês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Georgian"
 msgstr "Georgiano"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "German"
 msgstr "Alemão"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Greek"
 msgstr "Grego"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Hebrew"
 msgstr "Hebraico"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Hindi"
 msgstr "Hindi"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Hungarian"
 msgstr "Húngaro"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Indonesian"
 msgstr "Indonésio"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Italian"
 msgstr "Italiano"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Japanese"
 msgstr "Japonês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Kazakh"
 msgstr "Cazaque"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Korean"
 msgstr "Coreano"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Latvian"
 msgstr "Letão"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Lithuanian"
 msgstr "Lituano"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Macedonian"
 msgstr "Macedônio"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Malay"
 msgstr "Malaio"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Norwegian"
 msgstr "Norueguês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Polish"
 msgstr "Polonês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Portuguese"
 msgstr "Português"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Romanian"
 msgstr "Romeno"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Russian"
 msgstr "Russo"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Serbian"
 msgstr "Sérvio"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Slovak"
 msgstr "Eslovaco"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Slovenian"
 msgstr "Esloveno"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Spanish"
 msgstr "Espanhol"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Swahili"
 msgstr "Swahili"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Swedish"
 msgstr "Sueco"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Thai"
 msgstr "Tailandês"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Turkish"
 msgstr "Turco"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Ukrainian"
 msgstr "Ucraniano"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Urdu"
 msgstr "Urdu"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Vietnamese"
 msgstr "Vietnamita"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Friendly"
 msgstr "Amigável"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Formal"
 msgstr "Formal"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Casual"
 msgstr "Casual"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Professional"
 msgstr "Profissional"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Informative"
 msgstr "Informativo"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Playful"
 msgstr "Brincalhão"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Serious"
 msgstr "Sério"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Humorous"
 msgstr "Humorístico"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Polite"
 msgstr "Educado"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Emotional"
 msgstr "Emocional"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Fix any grammatical mistakes."
 msgstr "Corrija quaisquer erros gramaticais."
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Make it longer."
 msgstr "Faça isso mais longo."
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Make it shorter."
 msgstr "Faça mais curto."
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
 msgid "Change tone to %s."
 msgstr "Altere o tom para %s."
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
 msgid "Rephrase"
 msgstr "Reformular"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
 msgid "Draft with AI"
 msgstr "Rascunho com IA"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-msgid "Write an attractive heading about…"
-msgstr "Escreva um título atraente sobre…"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-msgid "Write an attractive heading about "
-msgstr ""
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-msgid "Write a sub-heading for…"
-msgstr "Escreva um subtítulo para…"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-msgid "Write a sub-heading for "
-msgstr "Escreva um subtítulo para "
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
 msgid "Fix Grammar"
 msgstr "Corrigir gramática"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
 msgid "Make Longer"
 msgstr "Faça mais longo"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
 msgid "Make Shorter"
 msgstr "Faça mais curto"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
-msgid "Tone"
-msgstr "Tom"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
 msgid "Translate"
 msgstr "Traduzir"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
 msgid "Translate to %s."
 msgstr "Traduzir para %s."
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
 msgid "Paste from clipboard"
 msgstr "Colar da área de transferência"
 
@@ -4938,20 +4871,17 @@ msgid "Hi there! I'm here to assist you."
 msgstr "Olá! Estou aqui para ajudá-lo."
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
-msgid "Choose a prompt bellow or write on your own. Ask me about what you need."
-msgstr "Escolha um prompt abaixo ou escreva o seu próprio. Pergunte-me sobre o que você precisa."
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:16
 msgid "AI Assistant"
 msgstr "Assistente de IA"
 
 #. translators: %s: lastUsedTone label
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:16
 msgid "Change Tone to %s"
 msgstr "Alterar tom para %s"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:16
 msgid "Something Else"
 msgstr "Algo Mais"
 
@@ -5055,6 +4985,281 @@ msgstr "Escolha um tamanho:"
 #: inc/lib/zipwp-images/dist/main.js:4
 msgid "Back to All Images"
 msgstr "Voltar para Todas as Imagens"
+
+#. translators: %s Anchor link to support URL.
+#: inc/classes/class-astra-sites.php:1727
+msgid "Please report this error%1$s here %2$s, so we can fix it."
+msgstr "Por favor, reporte este erro%1$s aqui %2$s, para que possamos corrigi-lo."
+
+#: inc/classes/class-astra-sites.php:1977
+msgid "Missing plugin installation permission"
+msgstr "Permissão de instalação de plugin ausente"
+
+#. translators: %s doc link.
+#: inc/classes/class-astra-sites.php:1979
+msgid "You do not have permission to install the required plugin. You must have install permissions to proceed with the required plugin."
+msgstr "Você não tem permissão para instalar o plugin necessário. Você deve ter permissões de instalação para prosseguir com o plugin necessário."
+
+#: inc/classes/class-astra-sites.php:1982
+msgid "Missing plugin activation permission"
+msgstr "Permissão de ativação de plugin ausente"
+
+#. translators: %s doc link.
+#: inc/classes/class-astra-sites.php:1984
+msgid "You do not have permission to activate the required plugin. You must have activate permissions to proceed with the required plugin."
+msgstr "Você não tem permissão para ativar o plugin necessário. Você deve ter permissões de ativação para prosseguir com o plugin necessário."
+
+#: inc/classes/class-astra-sites.php:1987
+msgid "Insufficient Memory Limit"
+msgstr "Limite de Memória Insuficiente"
+
+#. translators: %s doc link.
+#: inc/classes/class-astra-sites.php:1989
+msgid "The memory limit of your site is below the recommended 256MB. While you can proceed, increasing the memory limit is advised for a seamless import experience."
+msgstr "O limite de memória do seu site está abaixo dos 256MB recomendados. Embora você possa prosseguir, é aconselhável aumentar o limite de memória para uma experiência de importação sem problemas."
+
+#. translators: %1$s: Number of AI sites used, %2$s: Current plan name, %3$s: Suggested Plan
+#: inc/lib/ai-builder/inc/assets/build/main.js:190
+msgid "You've successfully generated %1$s AI sites with your %2$s account. Do much more with the %3$s Plan:"
+msgstr "Você gerou com sucesso %1$s sites de IA com sua conta %2$s. Faça muito mais com o Plano %3$s:"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:194
+msgid "Required plugins could not be verified."
+msgstr "Os plugins necessários não puderam ser verificados."
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:194
+msgid "Astra theme activation failed."
+msgstr "A ativação do tema Astra falhou."
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:194
+msgid "Theme installation failed."
+msgstr "A instalação do tema falhou."
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:194
+msgid "Failed to check File Permissions"
+msgstr "Falha ao verificar as permissões do arquivo"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:210
+msgid "Failed to save Site Logo"
+msgstr "Falha ao salvar o logotipo do site"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:210
+msgid "Failed to save Color Palletes"
+msgstr "Falha ao salvar Paletas de Cores"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:210
+msgid "Failed to save Typography"
+msgstr "Falha ao salvar Tipografia"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:210
+msgid "Failed to save Site Language"
+msgstr "Falha ao salvar o idioma do site"
+
+#. translators: %1$s is the opening <a> tag with the URL, %2$s is the closing </a> tag.
+#. translators: %1$s is the opening <a> tag, %2$s is the closing </a> tag.
+#: inc/lib/ai-builder/inc/assets/build/main.js:231
+#: inc/lib/ai-builder/inc/assets/build/main.js:237
+msgid "%1$sRead article%2$s to resolve the issue and continue importing the template."
+msgstr "%1$sLeia o artigo%2$s para resolver o problema e continuar importando o modelo."
+
+#: inc/lib/nps-survey/dist/main.js:1
+msgid "Very unlikely"
+msgstr "Muito improvável"
+
+#: inc/lib/nps-survey/dist/main.js:1
+msgid "Very likely"
+msgstr "Muito provavelmente"
+
+#: inc/lib/nps-survey/dist/main.js:1
+msgid "Submit"
+msgstr "Enviar"
+
+#: inc/lib/nps-survey/dist/main.js:1
+msgid "I already did!"
+msgstr "Eu já fiz!"
+
+#: inc/lib/nps-survey/dist/main.js:1
+msgid "Rate the Plugin"
+msgstr "Avalie o Plugin"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:73
+msgid "Syncing Templates Library…"
+msgstr "Sincronizando a Biblioteca de Modelos…"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:73
+msgid "Updating the library to include all the latest templates."
+msgstr "Atualizando a biblioteca para incluir todos os modelos mais recentes."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Build website 10x faster!"
+msgstr "Construa sites 10 vezes mais rápido!"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Experience the future of website building."
+msgstr "Experimente o futuro da criação de sites."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Try AI Builder"
+msgstr "Experimente o AI Builder"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Maybe Later"
+msgstr "Talvez mais tarde"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Seamless all-in-one ecommerce platform for selling physical, digital, or subscription, products."
+msgstr "Plataforma de comércio eletrônico tudo-em-um perfeita para vender produtos físicos, digitais ou por assinatura."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Open source e-commerce plugin for WordPress."
+msgstr "Plugin de e-commerce de código aberto para WordPress."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Choose E-commerce template"
+msgstr "Escolha o modelo de E-commerce"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Recommended"
+msgstr "Recomendado"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Create with AI"
+msgstr "Criar com IA"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Write a short description"
+msgstr "Escreva uma breve descrição"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "for this product"
+msgstr "para este produto"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Write a short description."
+msgstr "Escreva uma breve descrição."
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Write a long description"
+msgstr "Escreva uma descrição longa"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Write a long description."
+msgstr "Escreva uma descrição longa."
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Give me an idea"
+msgstr "Dê-me uma ideia"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "for an attractive heading about"
+msgstr "para um título atraente sobre"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Give me an idea for "
+msgstr "Dê-me uma ideia para "
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Show me a code snippet"
+msgstr "Mostre-me um trecho de código"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "of blur-on-hover CSS"
+msgstr "de desfoque ao passar o mouse CSS"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Show me a code snippet of "
+msgstr ""
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Write me a description"
+msgstr "Escreva-me uma descrição"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "about a product for"
+msgstr "sobre um produto para"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Write me a description about "
+msgstr ""
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "and chat from there"
+msgstr "e converse de lá"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+msgid "Change Tone"
+msgstr "Mudar Tom"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
+msgid "Edit Message"
+msgstr "Editar Mensagem"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
+msgid "Replace Richtext"
+msgstr "Substituir Richtext"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
+msgid "It looks like I've encountered an error…"
+msgstr "Parece que encontrei um erro…"
+
+#. translators: %1$d is the current page, %2$d is the total number of pages.
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+msgid "%1$d/%2$d"
+msgstr "%1$d/%2$d"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+msgid "Something went wrong while I was generating a response."
+msgstr "Algo deu errado enquanto eu estava gerando uma resposta."
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+msgid "Ask AI"
+msgstr "Pergunte à IA"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+msgid "Choose a prompt bellow or write on your own."
+msgstr "Escolha um prompt abaixo ou escreva o seu próprio."
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+msgid "Ask me about what you need."
+msgstr "Pergunte-me sobre o que você precisa."
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
+msgid "Login"
+msgstr "Entrar"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+msgid "Login to use the AI Assistant!"
+msgstr "Faça login para usar o Assistente de IA!"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+msgid "Credit Usage"
+msgstr "Uso de Crédito"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+msgid "Get More Credits"
+msgstr "Obtenha mais créditos"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
+msgid "Logging in"
+msgstr "Iniciando sessão"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
+msgid "Logged in"
+msgstr "Conectado"
+
+#. Translators: %1$s is the opening link tag, %2$s is the closing link tag.
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
+msgid "Continue logging in from %1$shere%2$s."
+msgstr "Continue a fazer login a partir de %1$saqui%2$s."
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
+msgid "Logged in!"
+msgstr "Conectado!"
+
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
+msgid "Something went wrong, please login again."
+msgstr "Algo deu errado, por favor faça login novamente."
 
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
 #: inc/classes/class-astra-sites-importer-log.php:302

@@ -323,7 +323,9 @@ class ST_WXR_Importer {
 				 * Note: We have not check the post is created with Gutenberg or not. We have imported other sites
 				 * and confirm that this works for every other page builders too.
 				 */
-				$data['post_content'] = wp_slash( $data['post_content'] );
+				if ( 'sureforms_form' !== $data['post_type'] ) {
+					$data['post_content'] = wp_slash( $data['post_content'] );
+				}
 			}
 		}
 

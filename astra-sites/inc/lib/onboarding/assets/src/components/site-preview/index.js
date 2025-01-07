@@ -43,12 +43,15 @@ const SitePreview = () => {
 			return;
 		}
 
-		const iframe = container.children[ 1 ];
-		const containerWidth = container.clientWidth;
-		const containerHeight = container.clientHeight - 44;
+		const iframe =
+			container.querySelector( 'iframe' ) ?? container.children[ 1 ];
+		const containerWidth = document.body.clientWidth;
+		const containerHeight = document.body.clientHeight - 44;
 		const iframeWidth = iframe.clientWidth;
+		const iframeHeight = iframe.clientHeight;
 		const scaleX = containerWidth / iframeWidth;
-		const scaleValue = scaleX;
+		const scaleY = containerHeight / iframeHeight;
+		const scaleValue = Math.min( scaleX, scaleY );
 
 		// Set the scale for both width and height
 		iframe.style.transform = `scale(${ scaleValue })`;
@@ -117,16 +120,16 @@ const SitePreview = () => {
 		<>
 			{ loading ? <SiteSkeleton /> : null }
 			{ previewUrl !== '' && (
-				<div className="w-full h-full p-8">
+				<div className="w-full h-full p-4">
 					<div
 						ref={ previewContainer }
 						className="h-full relative overflow-hidden shadow-template-preview w-full mx-auto"
 					>
 						{ renderBrowserFrame() }
-						<div className="w-[1700px] h-full">
+						<div className="w-full h-full">
 							<iframe
 								id="astra-starter-templates-preview"
-								className="w-[1700px] h-full"
+								className="w-full h-full"
 								title="Website Preview"
 								height="100%"
 								width="100%"

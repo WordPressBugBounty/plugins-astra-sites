@@ -105,7 +105,7 @@ const ClassicPreview = () => {
 					</div>
 				) }
 			</div>
-			<div className="w-full flex flex-col gap-4 mt-auto px-6">
+			<div className="w-full flex flex-col gap-4 mt-auto px-6 sm:pb-0 pb-14">
 				{ ! licenseStatus && 'free' !== selectedTemplateType && (
 					<LicenseValidation setErrorCB={ setErrorCallback } />
 				) }

@@ -3,7 +3,6 @@ import Tooltip from '../../components/tooltip/tooltip';
 import { __, sprintf } from '@wordpress/i18n';
 import { PreviousStepLink, DefaultStep } from '../../components/index';
 import ICONS from '../../../icons';
-import { renderToString } from 'react-dom/server';
 import { useStateValue } from '../../store/store';
 import { checkRequiredPlugins } from '../../steps/import-site/import-utils';
 import SurveyForm from './survey';
@@ -314,8 +313,8 @@ const Survey = () => {
 								'By continuing you agree to our %1$s and %2$s.',
 								'astra-sites'
 							),
-							renderToString( terms ),
-							renderToString( privacyPolicy )
+							terms,
+							privacyPolicy
 						),
 					} }
 				></p>
@@ -379,7 +378,9 @@ const Survey = () => {
 	const hardRequirement = () => {
 		return (
 			<div className="requirement-check-wrap">
-				<h1>{ __( "We're Almost There!", 'astra-sites' ) }</h1>
+				<h1 className="text-3xl font-bold text-zip-app-heading max-md:!text-3xl max-sm:!text-2xl">
+					{ __( "We're Almost There!", 'astra-sites' ) }
+				</h1>
 
 				<p>
 					{ __(
@@ -412,7 +413,9 @@ const Survey = () => {
 	const optionalRequirement = () => {
 		return (
 			<div className="requirement-check-wrap">
-				<h1>{ __( "We're Almost There!", 'astra-sites' ) }</h1>
+				<h1 className="text-3xl font-bold text-zip-app-heading max-md:!text-3xl max-sm:!text-2xl !text-center">
+					{ __( "We're Almost There!", 'astra-sites' ) }
+				</h1>
 
 				<p>
 					{ __(
@@ -595,8 +598,8 @@ const Survey = () => {
 		<DefaultStep
 			content={
 				<>
-					<div className="mb-4">
-						<h1 className="mb-4 text-3xl font-bold text-zip-app-heading">
+					<div className="my-4">
+						<h1 className="mb-4 text-3xl font-bold text-zip-app-heading max-md:!text-3xl max-sm:!text-2xl">
 							{ __( 'Okay, just one last step…', 'astra-sites' ) }
 						</h1>
 					</div>

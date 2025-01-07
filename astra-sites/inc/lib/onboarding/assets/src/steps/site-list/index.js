@@ -122,8 +122,12 @@ const SiteList = () => {
 	const backStep = () => {
 		dispatch( {
 			type: 'set',
+			siteSearchTerm: '', // Reset the search term on back
+			siteBusinessType: '', // Reset the business type on back
 			currentIndex: builder === 'fse' ? 0 : 1,
 		} );
+		const urlParam = setURLParmsValue( 's' );
+		history( `?${ urlParam }` );
 	};
 
 	const handleClickBackToTop = () => {
@@ -239,13 +243,15 @@ const SiteList = () => {
 						}` }
 					>
 						<SiteListSkeleton />
-						<div className="site-list-screen-wrap">
-							<h1>
-								{ __(
-									'What type of website are you building?',
-									'astra-sites'
-								) }
-							</h1>
+						<div className="site-list-screen-wrap flex flex-col gap-6 mx-auto">
+							<div>
+								<h3 className="site-list-title">
+									{ __(
+										'What type of website are you building?',
+										'astra-sites'
+									) }
+								</h3>
+							</div>
 
 							<div className="site-list-content">
 								<SiteSearch setSiteData={ setSiteData } />

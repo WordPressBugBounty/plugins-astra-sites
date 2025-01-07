@@ -1973,6 +1973,21 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					/* translators: %s doc link. */
 					'tooltip' => '<p>' . esc_html__( 'The Flexbox Container widget is disabled on your website. With this disabled, the import process will be affected. Kindly enable it to continue importing the Starter Template.', 'astra-sites' ) . '</p><p>' . sprintf( __( 'Read an article <a href="%s" target="_blank">here</a> to resolve the issue.', 'astra-sites' ), 'https://wpastra.com/docs/enable-flexbox-container-from-elementor' ) . '</p>',
 				),
+				'install-plugin-permission'         => array(
+					'title'   => esc_html__( 'Missing plugin installation permission', 'astra-sites' ),
+					/* translators: %s doc link. */
+					'tooltip' => '<p>' . esc_html__( 'You do not have permission to install the required plugin. You must have install permissions to proceed with the required plugin.', 'astra-sites' ) . '</p>',
+				),
+				'activate-plugin-permission'         => array(
+					'title'   => esc_html__( 'Missing plugin activation permission', 'astra-sites' ),
+					/* translators: %s doc link. */
+					'tooltip' => '<p>' . esc_html__( 'You do not have permission to activate the required plugin. You must have activate permissions to proceed with the required plugin.', 'astra-sites' ) . '</p>',
+				),
+				'wp-memory-limit'         => array(
+					'title'   => esc_html__( 'Insufficient Memory Limit', 'astra-sites' ),
+					/* translators: %s doc link. */
+					'tooltip' => '<p>' . esc_html__( 'The memory limit of your site is below the recommended 256MB. While you can proceed, increasing the memory limit is advised for a seamless import experience.', 'astra-sites' ) . '</p>',
+				),
 			);
 		}
 
@@ -2008,6 +2023,26 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			// Check if the value is 'inactive'.
 			if ( 'inactive' === $flexbox_container ) {
 				$compatibilities['warnings']['flexbox-container'] = $data['flexbox-container'];
+			}
+
+			$memory_limit = ini_get( 'memory_limit' );
+
+			// Convert memory limit to bytes for comparison.
+			$memory_limit_in_bytes = wp_convert_hr_to_bytes( $memory_limit );
+		
+			// 256MB in bytes.
+			$required_memory_limit = 256 * 1024 * 1024;
+
+			if ( $memory_limit_in_bytes < $required_memory_limit ) {
+				$compatibilities['warnings']['wp-memory-limit'] = $data['wp-memory-limit'];
+			}
+
+			if ( ! current_user_can( 'install_plugins' ) ) {
+				$compatibilities['errors']['install-plugin-permission'] = $data['install-plugin-permission'];
+			}
+
+			if ( ! current_user_can( 'activate_plugins' ) ) {
+				$compatibilities['errors']['activate-plugin-permission'] = $data['activate-plugin-permission'];
 			}
 
 			return $compatibilities;

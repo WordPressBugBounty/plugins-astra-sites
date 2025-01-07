@@ -120,7 +120,7 @@ const SiteType = () => {
 	return (
 		<DefaultStep
 			content={
-				<div className="flex-1 flex flex-col justify-center items-center pb-10 lg:pb-0">
+				<div className="flex-1 flex flex-col justify-center items-center pb-14 sm:pb-10 lg:pb-0">
 					<div className="w-full flex justify-center">
 						<h1 className="w-[390px]">
 							{ __(

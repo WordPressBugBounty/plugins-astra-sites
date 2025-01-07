@@ -66,7 +66,7 @@ const PageBuilder = () => {
 							'astra-sites'
 						) }
 					</p>
-					<div className="page-builder-wrap ist-fadeinUp">
+					<div className="flex items-center justify-center gap-4 max-sm:flex-col max-sm:gap-3">
 						<div
 							className="page-builder-item d-flex-center-align"
 							onClick={ () => {

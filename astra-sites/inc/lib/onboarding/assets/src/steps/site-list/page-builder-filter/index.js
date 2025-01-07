@@ -147,15 +147,15 @@ const PageBuilder = ( { placement = 'bottom-end', isDisabled } ) => {
 				render={ ( attrs ) =>
 					currentIndex === getStepIndex( 'site-list' ) && (
 						<motion.div
-							className="flex flex-col items-start gap-5 min-w-[304px] bg-white rounded-lg shadow-lg p-4 border border-button-disabled"
+							className="flex flex-col items-start gap-5 min-w-[250px] sm:min-w-[304px] bg-white rounded-lg shadow-lg p-4 border border-button-disabled"
 							{ ...attrs }
 						>
 							<div
-								className="flex-col flex bg-white text-left relative rounded-xl max-w-[356px]"
+								className="flex-row sm:flex-col flex-wrap flex bg-white text-left relative rounded-xl max-w-[356px]"
 								tabIndex="0"
 							>
 								<AILogoIcon />
-								<div className="mt-2 mb-1 text-heading-text flex gap-2">
+								<div className="mt-0 sm:mt-2 ml-2 sm:ml-0 mb-1 text-heading-text flex gap-2">
 									<span className="text-base font-semibold leading-1">
 										{ __(
 											'Build website 10x faster!',
@@ -163,14 +163,14 @@ const PageBuilder = ( { placement = 'bottom-end', isDisabled } ) => {
 										) }
 									</span>
 								</div>
-								<div className="zw-sm-normal text-body-text">
+								<div className="zw-sm-normal text-body-text sm:block hidden">
 									{ ' ' }
 									{ __(
 										'Experience the future of website building.',
 										'astra-sites'
 									) }{ ' ' }
 								</div>
-								<div className="pt-4 mt-auto flex gap-5 items-center">
+								<div className="pt-2 sm:pt-4 mt-auto flex gap-5 items-center">
 									<Button
 										className="!p-2 !px-3"
 										onClick={ handleBuildWithAIPress }

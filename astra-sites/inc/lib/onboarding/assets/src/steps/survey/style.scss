@@ -7,6 +7,12 @@
 	margin: 0 auto 40px;
 	text-align: left;
 
+	@media ( max-width: 640px ) {
+		display: flex;
+		max-width: fit-content;
+		gap: 15px;
+	}
+
 	input[type="checkbox"]:checked {
 		&:before {
 			content: url( "data:image/svg+xml;utf8,<svg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27><path%20d%3D%27M14.83%204.89l1.34.94-5.81%208.38H9.02L5.78%209.67l1.34-1.25%202.57%202.4z%27%20fill%3D%27%232563EB%27%2F><%2Fsvg>" );
@@ -45,6 +51,10 @@
 		grid-template-columns: 1fr 1fr;
 		grid-gap: 15px;
 		margin-bottom: 20px;
+		@media ( max-width: 640px ) {
+			display: flex;
+			flex-direction: column;
+		}
 	}
 	.survey-text-input {
 		background: var( --st-background-primary );
