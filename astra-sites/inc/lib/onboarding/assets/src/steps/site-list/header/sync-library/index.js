@@ -4,7 +4,13 @@ import Tooltip from '../../../../components/tooltip/tooltip';
 import { __ } from '@wordpress/i18n';
 import ICONS from '../../../../../icons';
 import { useStateValue } from '../../../../store/store';
-import { isSyncSuccess, SyncStart } from './utils';
+import {
+	isSyncSuccess,
+	isSyncUptoDate,
+	fetchSitesPageCount,
+	fetchPagedSites,
+	fetchCategoriesAndTags,
+} from './utils';
 import './style.scss';
 import { classNames, getStepIndex } from '../../../../utils/functions';
 
@@ -64,16 +70,62 @@ const SyncLibrary = () => {
 		dispatch( {
 			type: 'set',
 			sitesSyncing: true,
+			syncPageCount: 0,
+			syncPageInProgress: 0,
 		} );
-		const newData = await SyncStart();
-		setSyncState( {
-			updatedData: newData,
-			syncStatus: isSyncSuccess(),
-		} );
+
+		const syncUptoDate = await isSyncUptoDate();
+		if ( syncUptoDate ) {
+			setSyncState( {
+				updatedData: {
+					allSitesData: null,
+					categories: null,
+					categoriesAndTags: null,
+				},
+				syncStatus: isSyncSuccess(),
+			} );
+			dispatch( {
+				type: 'set',
+				sitesSyncing: false,
+			} );
+		} else {
+			const sites = await syncSites();
+			const { categories, tags } = await fetchCategoriesAndTags();
+			setSyncState( {
+				updatedData: {
+					allSitesData: sites,
+					categories,
+					categoriesAndTags: tags,
+				},
+				syncStatus: isSyncSuccess(),
+			} );
+			dispatch( {
+				type: 'set',
+				sitesSyncing: false,
+			} );
+		}
+	};
+
+	const syncSites = async () => {
+		// const newData = await SyncStart();
+		const pageCount = await fetchSitesPageCount();
 		dispatch( {
 			type: 'set',
-			sitesSyncing: false,
+			syncPageCount: pageCount,
 		} );
+
+		const sites = [];
+		for ( let i = 0; i < pageCount; i++ ) {
+			sites.push( await fetchPagedSites( i + 1 ) );
+			dispatch( {
+				type: 'set',
+				syncPageInProgress: i + 1,
+			} );
+		}
+		if ( sites.length > 0 ) {
+			return sites;
+		}
+		return null;
 	};
 
 	return (

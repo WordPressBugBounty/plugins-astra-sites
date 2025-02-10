@@ -67,6 +67,59 @@ export const SyncStart = async () => {
 	}
 };
 
+export const isSyncUptoDate = async () => {
+	try {
+		const formData = new FormData();
+		formData.append( 'action', 'astra-sites-update-library' );
+		formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+		const response = await fetch( ajaxurl, {
+			method: 'post',
+			body: formData,
+		} );
+		const jsonData = await response.json();
+		const data = await jsonData.data;
+
+		if ( data === 'updated' ) {
+			syncStatus.push( true );
+			syncEnded = true;
+			return true;
+		}
+		return false;
+	} catch ( error ) {
+		syncStatus.push( false );
+		syncEnded = true;
+		return true; // prevent fetching categories
+	}
+};
+
+export const fetchCategoriesAndTags = async () => {
+	// Sync Start.
+	try {
+		let categories = null;
+		let tags = null;
+		syncStatus = [];
+
+		syncStatus.push( await SyncAllCategoriesAndTags() );
+		syncStatus.push( await SyncAllCategories() );
+		syncStatus.push( await SyncPageBuilders() );
+		syncStatus.push( await SyncBlocks() );
+		syncStatus.push( await SyncBlockCategories() );
+		syncStatus.push( await SyncLibraryComplete() );
+		categories = await SyncAndGetAllCategories();
+		tags = await SyncAndGetAllCategoriesAndTags();
+		syncEnded = true;
+
+		return {
+			categories,
+			tags,
+		};
+	} catch ( error ) {
+		syncStatus.push( false );
+		syncEnded = true;
+		return false;
+	}
+};
+
 export const SyncLibraryComplete = async () => {
 	// Sync complete.
 	try {
@@ -255,6 +308,44 @@ export const SyncImportAllSites = async () => {
 			return result;
 		}
 		return null;
+	} catch ( error ) {
+		return null;
+	}
+};
+
+export const fetchSitesPageCount = async () => {
+	try {
+		const totalRequest = await post( {
+			action: 'astra-sites-get-sites-request-count',
+			_ajax_nonce: astraSitesVars?._ajax_nonce,
+		} );
+
+		return totalRequest ?? 0;
+	} catch ( error ) {
+		return 0;
+	}
+};
+
+export const fetchPagedSites = async ( pageNo ) => {
+	let sites = [];
+	try {
+		const formData = new FormData();
+		formData.append( 'action', 'astra-sites-import-sites' );
+		formData.append( 'page_no', pageNo );
+		formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+
+		const response = await fetch( ajaxurl, {
+			method: 'post',
+			body: formData,
+		} );
+
+		if ( ! response.ok ) {
+			throw new Error( 'Error fetching templates' );
+		}
+
+		const data = await response.json();
+		sites = Object.values( data.data );
+		return sites;
 	} catch ( error ) {
 		return null;
 	}

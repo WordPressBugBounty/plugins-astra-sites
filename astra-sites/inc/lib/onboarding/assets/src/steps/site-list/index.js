@@ -32,7 +32,9 @@ import { ChevronUpIcon } from '@heroicons/react/24/outline';
 import {
 	SyncAndGetAllCategories,
 	SyncAndGetAllCategoriesAndTags,
-	SyncImportAllSites,
+	isSyncUptoDate,
+	fetchSitesPageCount,
+	fetchPagedSites,
 } from './header/sync-library/utils';
 
 export const useFilteredSites = () => {
@@ -173,20 +175,83 @@ const SiteList = () => {
 		}
 	};
 
+	// const fetchSitesAndCategories = async () => {
+	// 	try {
+	// 		const formData = new FormData();
+	// 		formData.append( 'action', 'astra-sites-update-library' );
+	// 		formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+	// 		const response = await fetch( ajaxurl, {
+	// 			method: 'post',
+	// 			body: formData,
+	// 		} );
+	// 		const jsonData = await response.json();
+	// 		if (
+	// 			jsonData.data === 'updated' &&
+	// 			Object.keys( storedState.allSitesData ).length !== 0
+	// 		) {
+	// 			dispatch( {
+	// 				type: 'set',
+	// 				bgSyncInProgress: false,
+	// 			} );
+	// 			return;
+	// 		}
+
+	// 		const sites = await SyncImportAllSites();
+	// 		const categories = await SyncAndGetAllCategories();
+	// 		const categoriesAndTags = await SyncAndGetAllCategoriesAndTags();
+	// 		console.log( typeof dispatch );
+	// 		dispatch( {
+	// 			type: 'set',
+	// 			bgSyncInProgress: false,
+	// 			allSitesData: sites,
+	// 			categories,
+	// 			categoriesAndTags,
+	// 		} );
+
+	// 		// await fetchSitesAndCategories();
+	// 	} catch ( error ) {
+	// 		console.error( error );
+	// 	}
+	// };
+
+	const syncSites = async () => {
+		// const newData = await SyncStart();
+		const pageCount = await fetchSitesPageCount();
+
+		dispatch( {
+			type: 'set',
+			syncPageCount: pageCount,
+		} );
+
+		const sites = [];
+		for ( let i = 0; i < pageCount; i++ ) {
+			const sitesData = await fetchPagedSites( i + 1 );
+			sitesData.forEach( ( siteItem ) => {
+				sites.push( siteItem );
+			} );
+			dispatch( {
+				type: 'set',
+				syncPageInProgress: i + 1,
+			} );
+		}
+
+		if ( sites.length > 0 ) {
+			return sites;
+		}
+		return null;
+	};
+
 	const fetchSitesAndCategories = async () => {
 		try {
-			const formData = new FormData();
-			formData.append( 'action', 'astra-sites-update-library' );
-			formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
-			const response = await fetch( ajaxurl, {
-				method: 'post',
-				body: formData,
+			const syncUptoDate = await isSyncUptoDate();
+
+			dispatch( {
+				type: 'set',
+				syncPageInProgress: 0,
+				syncPageCount: 0,
 			} );
-			const jsonData = await response.json();
-			if (
-				jsonData.data === 'updated' &&
-				Object.keys( storedState.allSitesData ).length !== 0
-			) {
+
+			if ( syncUptoDate ) {
 				dispatch( {
 					type: 'set',
 					bgSyncInProgress: false,
@@ -194,16 +259,27 @@ const SiteList = () => {
 				return;
 			}
 
-			const sites = await SyncImportAllSites();
+			const sites = await syncSites();
 			const categories = await SyncAndGetAllCategories();
 			const categoriesAndTags = await SyncAndGetAllCategoriesAndTags();
-			dispatch( {
+
+			const updatedState = {
 				type: 'set',
 				bgSyncInProgress: false,
-				allSitesData: sites,
-				categories,
-				categoriesAndTags,
-			} );
+				syncPageInProgress: 0,
+				syncPageCount: 0,
+			};
+
+			if ( ! sites || ! categories || ! categoriesAndTags ) {
+				updatedState.allSitesData = sites ?? null;
+				updatedState.categories = categories ?? null;
+				updatedState.categoriesAndTags = categoriesAndTags ?? null;
+			} else {
+				updatedState.allSitesData = sites;
+				updatedState.categories = categories;
+				updatedState.categoriesAndTags = categories;
+			}
+			dispatch( updatedState );
 
 			// await fetchSitesAndCategories();
 		} catch ( error ) {
@@ -393,7 +469,7 @@ const SiteList = () => {
 				</>
 			}
 			actions={
-				<>
+				<div className="step-action-wrapper">
 					<PreviousStepLink before onClick={ backStep }>
 						{ __( 'Back', 'astra-sites' ) }
 					</PreviousStepLink>
@@ -418,7 +494,7 @@ const SiteList = () => {
 							</Button>
 						</div>
 					) }
-				</>
+				</div>
 			}
 		/>
 	);

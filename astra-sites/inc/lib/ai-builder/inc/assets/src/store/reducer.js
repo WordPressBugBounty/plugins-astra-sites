@@ -18,7 +18,7 @@ const { selectedImages } = getFromSessionStorage( SESSION_STORAGE_KEY, {} );
 export const defaultOnboardingAIState = {
 	stepData: {
 		tokenExists: aiBuilderVars?.zip_token_exists || '',
-		businessType: '',
+		businessType: aiBuilderVars?.default_business_type,
 		siteLanguage: aiBuilderVars?.default_website_language,
 		businessName: '',
 		businessDetails: '',
@@ -108,7 +108,9 @@ updatedInitialValue = {
 	...updatedInitialValue,
 	stepData: {
 		tokenExists: aiBuilderVars?.zip_token_exists || '',
-		businessType: aiStepValues?.business_category_name || '',
+		businessType:
+			aiStepValues?.business_category_name ||
+			aiBuilderVars?.default_business_type,
 		siteLanguage:
 			aiStepValues?.language || aiBuilderVars?.default_website_language,
 		businessName: aiStepValues?.business_name || '',

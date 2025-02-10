@@ -465,12 +465,14 @@ class Helper {
 	 * @param  string               $plugin_init        Plugin Init File.
 	 * @param  array<string, mixed> $options            Site Options.
 	 * @param  array<string, mixed> $enabled_extensions Enabled Extensions.
+	 * @param string               $plugin_slug Plugin slug.
 	 * @return void
 	 */
-	public static function after_plugin_activate( $plugin_init = '', $options = array(), $enabled_extensions = array() ) {
+	public static function after_plugin_activate( $plugin_init = '', $options = array(), $enabled_extensions = array(), $plugin_slug = '' ) {
 		$data = array(
 			'astra_site_options' => $options,
 			'enabled_extensions' => $enabled_extensions,
+			'plugin_slug'        => $plugin_slug,
 		);
 
 		do_action( 'astra_sites_after_plugin_activation', $plugin_init, $data );
@@ -504,6 +506,7 @@ class Helper {
 		Ai_Builder_Error_Handler::Instance()->start_error_handler();
 
 		$plugin_init = ( isset( $_POST['init'] ) ) ? esc_attr( sanitize_text_field( $_POST['init'] ) ) : $init;
+		$plugin_slug = ( isset( $_POST['slug'] ) ) ? esc_attr( sanitize_text_field( $_POST['slug'] ) ) : '';
 
 		/**
 		 * Disabled redirection to plugin page after activation.
@@ -532,7 +535,7 @@ class Helper {
 		$options            = (array) astra_get_site_data( 'astra-site-options-data' );
 		$enabled_extensions = (array) astra_get_site_data( 'astra-enabled-extensions' );
 
-		self::after_plugin_activate( $plugin_init, $options, $enabled_extensions );
+		self::after_plugin_activate( $plugin_init, $options, $enabled_extensions, $plugin_slug );
 
 		if ( defined( 'WP_CLI' ) ) {
 			\WP_CLI::line( 'Plugin Activated!' );

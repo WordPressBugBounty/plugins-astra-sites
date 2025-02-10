@@ -221,6 +221,8 @@ export const initialState = {
 	// Sync Library.
 	bgSyncInProgress: !! astraSitesVars?.bgSyncInProgress,
 	sitesSyncing: false,
+	syncPageCount: 0,
+	syncPageInProgress: 0,
 
 	// Limit exceed modal for AI-Builder.
 	limitExceedModal: {

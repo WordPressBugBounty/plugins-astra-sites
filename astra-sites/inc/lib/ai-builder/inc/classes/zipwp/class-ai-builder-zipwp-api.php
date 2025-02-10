@@ -1980,8 +1980,22 @@ class Ai_Builder_ZipWP_Api {
 		$keyword      = $request['keyword'];
 		$api_endpoint = $this->get_api_domain() . '/sites/business/search?q=' . $keyword;
 
+		$headers = $this->get_api_headers();
+
+		$locale = get_locale();
+
+		if ( 'en_US' !== $locale ) {
+
+			// Getting translation codes.
+			$iso_locale = $locale;
+			if ( strpos( $iso_locale, '_' ) !== false ) {
+				$iso_locale = strstr( $locale, '_', true );
+			}
+			$headers['X-Zip-Locale'] = $iso_locale ? $iso_locale : 'en';
+		}
+
 		$request_args = array(
-			'headers' => $this->get_api_headers(),
+			'headers' => $headers,
 			'timeout' => 100,
 		);
 		$response     = wp_safe_remote_get( $api_endpoint, $request_args );

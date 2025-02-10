@@ -328,6 +328,7 @@ const ImportSite = () => {
 			'_ajax_nonce',
 			astraSitesVars?._ajax_nonce
 		);
+		activatePluginOptions.append( 'slug', plugin.slug );
 		fetch( ajaxurl, {
 			method: 'post',
 			body: activatePluginOptions,

@@ -276,6 +276,16 @@ const Survey = () => {
 		e.preventDefault();
 		checkRequiredPlugins( storedState );
 	};
+
+	const agrText = sprintf(
+		// translators: %1$s is a terms link, %2$s is a privacy policy link
+		__( 'By continuing, you agree to our %1$s and %2$s.', 'astra-sites' ),
+		'_terms_',
+		'_privacy_'
+	);
+	const [ beforeTerms, afterTerms ] = agrText.split( '_terms_' );
+	const [ beforePrivacy, afterPrivacy ] = afterTerms.split( '_privacy_' );
+
 	const surveyForm = () => {
 		return (
 			<form className="survey-form" onSubmit={ handleSurveyFormSubmit }>
@@ -304,20 +314,13 @@ const Survey = () => {
 						? ICONS.arrowRightDisabled
 						: ICONS.arrowRight }
 				</button>
-				<p
-					className="!text-zip-app-inactive-icon subscription-agreement-text text-center mt-4"
-					dangerouslySetInnerHTML={ {
-						__html: sprintf(
-							// translators: %s: support link
-							__(
-								'By continuing you agree to our %1$s and %2$s.',
-								'astra-sites'
-							),
-							terms,
-							privacyPolicy
-						),
-					} }
-				></p>
+				<p className="!text-zip-app-inactive-icon subscription-agreement-text text-center mt-4">
+					{ beforeTerms }
+					{ terms }
+					{ beforePrivacy }
+					{ privacyPolicy }
+					{ afterPrivacy }
+				</p>
 			</form>
 		);
 	};

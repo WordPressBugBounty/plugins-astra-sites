@@ -445,6 +445,7 @@ const ImportAiSite = () => {
 			'_ajax_nonce',
 			aiBuilderVars._ajax_nonce
 		);
+		activatePluginOptions.append( 'slug', plugin.slug );
 		fetch( ajaxurl, {
 			method: 'post',
 			body: activatePluginOptions,

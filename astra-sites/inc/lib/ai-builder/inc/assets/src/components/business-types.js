@@ -84,9 +84,7 @@ const BusinessTypes = () => {
 				method: 'POST',
 				data: { keyword },
 				headers: {
-					'content-type': 'application/json',
 					'X-WP-Nonce': aiBuilderVars.rest_api_nonce,
-					_ajax_nonce: aiBuilderVars._ajax_nonce,
 				},
 				signal: reqAbort.current.signal,
 			} );

@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.4.11
+Stable tag: 4.4.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ Leverage the Starter Templates AI website builder to generate websites with:
 
 Say goodbye to spending days or weeks designing and building a website. With Starter Templates, you can build websites faster than ever with AI.
 
-[Try this plugin on a demo site](https://bsf.io/starter-templates-demo)
+[Try the live demo of Starter Templates](https://bsf.io/starter-templates-demo)
 
 = HIGHLIGHTS =
 
@@ -246,6 +246,18 @@ Once your website is generated, you have complete control over its content and l
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.12 - 10-February-2025
+- New: 
+    - AI Builder: Added filter to update the default business type.
+    - Added translations for the Estonian language.
+- Improvements:
+    - AI Builder: Added translation support to the Business Category API.
+    - Introduced a progress bar to provide real-time updates during template syncing.
+    - Reduced the likelihood of import failures caused by low memory availability.
+    - Improved mobile responsiveness for the Classic Builder templates.
+- Fixes:
+    - AI Builder: Removed unnecessary API request headers to improve compatibility.
 
 v4.4.11 - 07-January-2025
 - Improvements:
