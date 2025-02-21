@@ -177,6 +177,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_filter( 'zip_ai_modules', array( $this, 'enable_zip_ai_copilot' ), 20, 1 );
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'plugin_activation_utm_event' ), 10, 2 );
 			add_filter( 'plugins_api_args', array( $this, 'raise_memory_for_plugins_install' ), 1, 1 );
+			add_filter( 'bsf_core_stats', array( $this, 'add_astra_sites_analytics_data' ), 10, 1 );
 		}
 
 		/**
@@ -304,13 +305,33 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 * @since 4.4.12
 		 *
 		 * @param array $args plugin array.
-		 * @return array
+		 * @return array 
 		 */
 		public function raise_memory_for_plugins_install( $args ) {
 			if ( 'yes' === get_option( 'astra_sites_import_started' ) ) {
 				wp_raise_memory_limit( 'admin' );
 			}
 			return $args;
+		}
+
+
+		/**
+		 * Add astra sites analytics data.
+		 *
+		 * @param array $stats stats array.
+		 * @return array
+		 */
+		public function add_astra_sites_analytics_data( $stats ) {
+			$stats['plugin_data']['astra_sites'] = array(
+				'version'        => defined( 'ASTRA_PRO_SITES_NAME' ) ? 'premium' : 'free',
+				'site_language'  => get_locale(),
+				'page_builder'   => Astra_Sites_Page::get_instance()->get_setting( 'page_builder' ),
+				'boolean_values' => array(
+					'import_complete' => 'yes' === get_option( 'astra_sites_import_complete' ),
+				),
+			);
+
+			return $stats;
 		}
 
 		/**

@@ -39,10 +39,20 @@ import {
 
 export const useFilteredSites = () => {
 	const [ { builder, siteType, siteOrder, allSitesData } ] = useStateValue();
-	const allSites = !! Object.keys( allSitesData ).length
+	let allSites = !! Object.keys( allSitesData ).length
 		? allSitesData
 		: getAllSites();
 	let sites = [];
+
+	// Fallback array check for Chrome browser.
+	if ( Array.isArray( allSites ) ) {
+		allSites = allSitesData.reduce( ( acc, site ) => {
+			if ( site.id ) {
+				acc[ `id-${ site.id }` ] = site;
+			}
+			return acc;
+		}, {} );
+	}
 
 	if ( builder ) {
 		for ( const siteId in allSites ) {

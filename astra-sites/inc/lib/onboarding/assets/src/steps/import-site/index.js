@@ -145,6 +145,7 @@ const ImportSite = () => {
 	const importPart1 = async () => {
 		let resetStatus = false;
 		let cfStatus = false;
+		let latepointStatus = false;
 		let formsStatus = false;
 		let customizerStatus = false;
 		let spectraStatus = false;
@@ -155,8 +156,11 @@ const ImportSite = () => {
 		if ( resetStatus ) {
 			cfStatus = await importCartflowsFlows();
 		}
-
 		if ( cfStatus ) {
+			latepointStatus = await importLatepointTables();
+		}
+
+		if ( latepointStatus ) {
 			formsStatus = await importForms();
 		}
 
@@ -968,6 +972,66 @@ const ImportSite = () => {
 			.catch( ( error ) => {
 				report(
 					__( 'Importing CartFlows flows Failed.', 'astra-sites' ),
+					'',
+					error
+				);
+				return false;
+			} );
+		return status;
+	};
+
+	const importLatepointTables = async () => {
+		const latepointUrl =
+			encodeURI( templateResponse[ 'astra-site-latepoint-path' ] ) || '';
+
+		if ( '' === latepointUrl || 'null' === latepointUrl ) {
+			return true;
+		}
+
+		dispatch( {
+			type: 'set',
+			importStatus: __( 'Importing LatePoint data.', 'astra-sites' ),
+		} );
+
+		const bodyData = new FormData();
+		bodyData.append( 'action', 'astra-sites-import-latepoint' );
+		bodyData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+
+		const status = await fetch( ajaxurl, {
+			method: 'post',
+			body: bodyData,
+		} )
+			.then( ( response ) => response.text() )
+			.then( ( text ) => {
+				try {
+					const data = JSON.parse( text );
+					if ( data.success ) {
+						percentage += 2;
+						dispatch( {
+							type: 'set',
+							importPercent: percentage,
+						} );
+						return true;
+					}
+					throw data.data;
+				} catch ( error ) {
+					report(
+						__(
+							'Importing LatePoint data failed due to parse JSON error.',
+							'astra-sites'
+						),
+						'',
+						error,
+						'',
+						'',
+						text
+					);
+					return false;
+				}
+			} )
+			.catch( ( error ) => {
+				report(
+					__( 'Importing LatePoint data Failed.', 'astra-sites' ),
 					'',
 					error
 				);

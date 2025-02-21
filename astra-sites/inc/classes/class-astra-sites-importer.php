@@ -59,6 +59,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 			// Hooks in AJAX.
 			add_action( 'wp_ajax_astra-sites-import-wpforms', array( $this, 'import_wpforms' ) );
 			add_action( 'wp_ajax_astra-sites-import-cartflows', array( $this, 'import_cartflows' ) );
+			add_action( 'wp_ajax_astra-sites-import-latepoint', array( $this, 'import_latepoint' ) );
 			add_action( 'astra_sites_import_complete', array( $this, 'clear_related_cache' ) );
 
 			require_once ASTRA_SITES_DIR . 'inc/importers/batch-processing/class-astra-sites-batch-processing.php';
@@ -471,6 +472,63 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 				}
 			} else {
 				wp_send_json_error( __( 'Empty file for CartFlows flows', 'astra-sites' ) );
+			}
+
+			if ( defined( 'WP_CLI' ) ) {
+				WP_CLI::line( 'Imported from ' . $url );
+			} elseif ( wp_doing_ajax() ) {
+				wp_send_json_success( $url );
+			}
+		}
+
+		/**
+		 * Import LatePoint
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param  string $url LatePoint JSON file URL.
+		 * @return void
+		 */
+		public function import_latepoint( $url = '' ) {
+
+			if ( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) {
+				// Verify Nonce.
+				check_ajax_referer( 'astra-sites', '_ajax_nonce' );
+
+				if ( ! current_user_can( 'edit_posts' ) ) {
+					wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
+				}
+			}
+
+
+			$url = astra_get_site_data( 'astra-site-latepoint-path' );
+			if ( ! empty( $url ) && class_exists( 'OsSettingsHelper' ) ) {
+
+				// Download JSON file.
+				$file_path = ST_WXR_Importer::download_file( $url );
+
+				if ( $file_path['success'] ) {
+					if ( isset( $file_path['data']['file'] ) ) {
+
+						$ext = strtolower( pathinfo( $file_path['data']['file'], PATHINFO_EXTENSION ) );
+
+						if ( 'json' === $ext ) {
+							$content = Astra_Sites::get_instance()->get_filesystem()->get_contents( $file_path['data']['file'] );
+
+							if ( ! empty( $content ) && is_callable( 'OsSettingsHelper::import_data' ) ) {
+								OsSettingsHelper::import_data( $content );
+							}
+						} else {
+							wp_send_json_error( __( 'Invalid file for Latepoint tables', 'astra-sites' ) );
+						}
+					} else {
+						wp_send_json_error( __( 'There was an error downloading the Latepoint tables file.', 'astra-sites' ) );
+					}
+				} else {
+					wp_send_json_error( __( 'There was an error downloading the Latepoint tables file.', 'astra-sites' ) );
+				}
+			} else {
+				wp_send_json_error( __( 'Empty file for Latepoint tables', 'astra-sites' ) );
 			}
 
 			if ( defined( 'WP_CLI' ) ) {

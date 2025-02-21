@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.4.12
+Stable tag: 4.4.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -246,6 +246,13 @@ Once your website is generated, you have complete control over its content and l
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.13 - 21-February-2025
+- New:
+    - Introduced LatePoint Integration with the Wellness Coach template.
+- Fixes:
+    - Fixed template search issue in Chrome browser.
+    - Free Images: Editors can now search for free images.
 
 v4.4.12 - 10-February-2025
 - New: 
