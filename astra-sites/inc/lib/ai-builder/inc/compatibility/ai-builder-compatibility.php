@@ -61,6 +61,9 @@ if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) :
 
 			// Plugin - SureForms.
 			require_once AI_BUILDER_DIR . 'inc/compatibility/sureforms/ai-builder-compatibility-sureforms.php';
+
+			// Plugin - SureMail.
+			require_once AI_BUILDER_DIR . 'inc/compatibility/suremail/ai-builder-compatibility-suremail.php';
 		}
 
 	}
