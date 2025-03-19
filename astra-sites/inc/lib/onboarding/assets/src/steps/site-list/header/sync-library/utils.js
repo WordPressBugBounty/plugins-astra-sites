@@ -79,7 +79,7 @@ export const isSyncUptoDate = async () => {
 		const jsonData = await response.json();
 		const data = await jsonData.data;
 
-		if ( data === 'updated' ) {
+		if ( data === 'updated' && ! astraSitesVars?.bgSyncInProgress ) {
 			syncStatus.push( true );
 			syncEnded = true;
 			return true;

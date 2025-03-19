@@ -341,6 +341,14 @@ class Plugin extends AjaxBase {
 
 		Ai_Builder_Error_Handler::Instance()->stop_error_handler();
 
+		/**
+		 * Fires after the theme activation.
+		 *
+		 * @param string $theme_slug The slug of the theme that was activated.
+		 * @since 1.2.29
+		 */
+		do_action( 'astra_sites_after_theme_activation', 'astra' );
+
 		wp_send_json_success(
 			array(
 				'success' => true,

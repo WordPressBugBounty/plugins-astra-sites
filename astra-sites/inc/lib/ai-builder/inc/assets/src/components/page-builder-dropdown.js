@@ -3,7 +3,8 @@ import { __ } from '@wordpress/i18n';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import DropdownList from './dropdown-list';
 
-const imageDir = aiBuilderVars.imageDir;
+const { imageDir, isBeaverBuilderDisabled, isElementorDisabled } =
+	aiBuilderVars;
 
 const PageBuilderDropdown = () => {
 	const buildersList = [
@@ -12,22 +13,30 @@ const PageBuilderDropdown = () => {
 			title: __( 'Block Editor', 'ai-builder' ),
 			image: `${ imageDir }block-editor.svg`,
 		},
-		{
+	];
+
+	if ( ! isElementorDisabled ) {
+		buildersList.push( {
 			id: 'elementor',
 			title: __( 'Elementor', 'ai-builder' ),
 			image: `${ imageDir }elementor.svg`,
-		},
-		{
+		} );
+	}
+
+	if ( ! isBeaverBuilderDisabled ) {
+		buildersList.push( {
 			id: 'beaver-builder',
 			title: __( 'Beaver Builder', 'ai-builder' ),
 			image: `${ imageDir }beaver-builder.svg`,
-		},
-		{
-			id: 'ai-builder',
-			title: __( 'AI Website Builder', 'ai-builder' ),
-			image: `${ imageDir }ai-builder.svg`,
-		},
-	];
+		} );
+	}
+
+	buildersList.push( {
+		id: 'ai-builder',
+		title: __( 'AI Website Builder', 'ai-builder' ),
+		image: `${ imageDir }ai-builder.svg`,
+	} );
+
 	const [ selectedBuilder, setSelectedBuilder ] = useState(
 		buildersList.at( -1 )
 	);

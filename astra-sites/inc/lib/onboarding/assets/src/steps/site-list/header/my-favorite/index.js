@@ -23,6 +23,12 @@ const MyFavorite = ( { isDisabled } ) => {
 
 	const handleClick = ( event ) => {
 		event.stopPropagation();
+
+		// Bail early if the button is disabled.
+		if ( isDisabled ) {
+			return;
+		}
+
 		dispatch( {
 			type: 'set',
 			onMyFavorite: ! onMyFavorite,
@@ -39,7 +45,7 @@ const MyFavorite = ( { isDisabled } ) => {
 			className={ `st-my-favorite relative ${
 				onMyFavorite ? 'active' : ''
 			}` }
-			onClick={ ! isDisabled && handleClick }
+			onClick={ handleClick }
 		>
 			<Tooltip
 				content={ __( 'My Favorite', 'astra-sites' ) }

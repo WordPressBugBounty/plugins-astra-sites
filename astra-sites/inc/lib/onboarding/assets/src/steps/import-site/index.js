@@ -281,6 +281,16 @@ const ImportSite = () => {
 								errText = err.errorCode + ': ' + errText;
 							}
 						}
+						// Showing the memory error message instead of json response
+						if ( err && undefined !== err.responseJSON ) {
+							const json = err.responseJSON;
+							if (
+								undefined !== json.data &&
+								undefined !== json.data.message
+							) {
+								errText = json.data.message;
+							}
+						}
 						report(
 							sprintf(
 								// translators: Plugin Name.

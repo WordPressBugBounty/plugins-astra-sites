@@ -175,6 +175,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_filter( 'ast_block_templates_authorization_url_param', array( $this, 'add_auth_url_param' ) );
 			add_action( 'admin_head', array( $this, 'add_custom_admin_css' ) );
 			add_filter( 'zip_ai_modules', array( $this, 'enable_zip_ai_copilot' ), 20, 1 );
+			add_action( 'astra_sites_after_theme_activation', array( $this, 'theme_activation_utm_event' ) );
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'plugin_activation_utm_event' ), 10, 2 );
 			add_filter( 'plugins_api_args', array( $this, 'raise_memory_for_plugins_install' ), 1, 1 );
 			add_filter( 'bsf_core_stats', array( $this, 'add_astra_sites_analytics_data' ), 10, 1 );
@@ -256,6 +257,24 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		}
 
 		/**
+		 * Theme product activation utm event.
+		 * 
+		 * @param string $theme_slug Theme slug.
+		 * @return void
+		 *
+		 * @since 4.4.16
+		 */
+		public function theme_activation_utm_event( $theme_slug ) {
+			if ( ! $theme_slug && ! is_string( $theme_slug ) ) {
+				return;
+			}
+			if ( class_exists( 'BSF_UTM_Analytics' ) && is_callable( array( 'BSF_UTM_Analytics', 'update_referer' ) ) ) {
+				// If the plugin is found and the update_referer function is callable, update the referer with the corresponding product slug.
+				BSF_UTM_Analytics::update_referer( 'astra-sites', 'astra' );
+			}
+		}
+
+		/**
 		 * Plugin product activation utm event.
 		 * 
 		 * @param string $plugin_init plugin init file.
@@ -266,9 +285,9 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			if ( ! isset( $data['plugin_slug'] ) || '' === $data['plugin_slug'] ) {
 				return;
 			}
-			if ( is_callable( '\BSF_UTM_Analytics\Inc\Utils::update_referer' ) ) {
+			if ( class_exists( 'BSF_UTM_Analytics' ) && is_callable( array( 'BSF_UTM_Analytics', 'update_referer' ) ) ) {
 				// If the plugin is found and the update_referer function is callable, update the referer with the corresponding product slug.
-				\BSF_UTM_Analytics\Inc\Utils::update_referer( 'astra-sites', $data['plugin_slug'] );
+				BSF_UTM_Analytics::update_referer( 'astra-sites', $data['plugin_slug'] );
 			}
 		}
 
@@ -2116,7 +2135,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				$compatibilities['warnings']['flexbox-container'] = $data['flexbox-container'];
 			}
 
-			$memory_limit = ini_get( 'memory_limit' );
+			$memory_limit = $this->get_original_memory_limit();
 
 			// Convert memory limit to bytes for comparison.
 			$memory_limit_in_bytes = wp_convert_hr_to_bytes( $memory_limit );
@@ -2137,6 +2156,27 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 
 			return $compatibilities;
+		}
+
+
+		/**
+		 * Retrieves the original memory limit from the PHP configuration (php.ini) file.
+		 *
+		 * This is necessary because WordPress automatically increases the memory limit for admin requests,
+		 * so we need to fetch the original value from the PHP configuration file to check if it's sufficient.
+		 * 
+		 * @since 4.4.16
+		 */
+		public function get_original_memory_limit() {
+			// This will fetch the original memory_limit from the server (php.ini).
+			$memory_limit = get_cfg_var( 'memory_limit' );
+		
+			// If get_cfg_var() fails, try accessing PHP configuration directly.
+			if ( ! $memory_limit ) {
+				$memory_limit = ini_get( 'memory_limit' );
+			}
+		
+			return $memory_limit;
 		}
 
 		/**
@@ -2337,7 +2377,6 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			require_once ASTRA_SITES_DIR . 'inc/lib/class-astra-sites-zip-ai.php';
 			require_once ASTRA_SITES_DIR . 'inc/lib/class-astra-sites-zipwp-images.php';
 			require_once ASTRA_SITES_DIR . 'inc/lib/class-astra-sites-nps-survey.php';
-			require_once ASTRA_SITES_DIR . 'inc/lib/class-astra-sites-utm-analytics.php';
 		}
 
 		/**

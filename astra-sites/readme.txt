@@ -1,11 +1,11 @@
-=== Starter Templates — Elementor, WordPress & Beaver Builder Templates ===
+=== Starter Templates — Elementor & WordPress Templates ===
 Contributors: brainstormforce
 Donate link: https://wpastra.com/pro/
 Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.7.2
-Stable tag: 4.4.15
+Stable tag: 4.4.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,7 +37,7 @@ Say goodbye to spending days or weeks designing and building a website. With Sta
 ★ Large library of Elementor templates
 ★ Hundreds of WordPress block editor (Gutenberg) templates
 ★ 200+ Sections and block patterns
-★ Supported page builders: Spectra, Elementor, Beaver Builder, WordPress editor
+★ Supported page builders: Spectra, Elementor, WordPress editor
 ★ Fully customizable websites
 
 = How Does Starter Template AI Website Builder Work? =
@@ -102,7 +102,7 @@ No matter your industry or niche, we have a template that perfectly aligns with 
 
 Whether you're a small business owner, freelancer, or nonprofit organization, there's a template that suits your needs. Templates are carefully crafted to provide a polished and attractive look for your website.
 
-The cherry on top? Starter Template supports multiple page builders, including Elementor, Spectra, Gutenberg, and Beaver Builder.
+The cherry on top? Starter Template supports multiple page builders, including Elementor, Spectra and Gutenberg.
 
 You have the flexibility to customize your website your way.
 
@@ -141,12 +141,6 @@ A fan of Elementor? Look no further! Starter Templates offers a vast collection 
 You can effortlessly import entire websites crafted with Elementor, individual pages, or even specific blocks to enhance your site's functionality and aesthetic appeal.
 
 Then just drag, drop, customize, and launch your website!
-
-= Beaver Builder Templates =
-
-Explore the incredible library of professionally-designed Beaver Builder templates. Whether you're building a complete website or just need some inspiration, we've got you covered.
-
-You can save hours of design time compared to building your website from scratch!
 
 = WordPress Block Editor Templates =
 
@@ -204,7 +198,7 @@ Please note: To access templates and AI features, you’ll need a ZipWP account.
 ➜ A devoted team full-time designers keep the design library up to date.
 ➜ Our plugin offers more than 100 free Elementor templates.
 ➜ You can import a complete website, individual page, or section of a page in seconds.
-➜ We support 3 page builders: Spectra, Elementor, and Beaver Builder as well as the WordPress editor
+➜ We support 2 page builders: Spectra and Elementor as well as the WordPress editor
 ➜ "eCommerce" is the most searched keyword in our library.
 
 = The Starter Templates Plugin Works With... =
@@ -213,7 +207,6 @@ Please note: To access templates and AI features, you’ll need a ZipWP account.
 ➜ Spectra website builder
 ➜ WordPress block editor/Gutenberg
 ➜ Elementor page builder
-➜ Beaver Builder
 ➜ WooCommerce
 ➜ WPForms
 ➜ Sitekit
@@ -246,6 +239,15 @@ Once your website is generated, you have complete control over its content and l
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.16 - 19-March-2025
+- New:
+    - Deprecated Beaver Builder starter templates, enable with `astra_sites_enable_legacy_beaver_builder_support` filter to continue using them - https://startertemplates.com/docs/sunsetting-beaver-builder-support/
+- Improvement:
+    - Improved memory error handling for Classic Template import by detecting memory limits and showing user-friendly messages.
+- Fix:
+    - Resolved an issue where Elementor templates and the sync progress modal were not loading initially on a fresh site.
+    - Resolved an `Undefined array key "id"` warning from Astra Notices library.
 
 v4.4.15 - 11-March-2025
 - New:

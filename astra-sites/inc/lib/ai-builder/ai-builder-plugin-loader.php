@@ -373,6 +373,23 @@ class Ai_Builder_Plugin_Loader {
 		return true;
 	}
 
+	/**
+	 * Checks if legacy Beaver Builder support is enabled.
+	 *
+	 * @since 1.2.28
+	 * @return bool Returns `true` if legacy Beaver Builder support is enabled, `false` otherwise.
+	 */
+	public static function is_legacy_beaver_builder_enabled() {
+		/**
+		 * Filter to enable legacy Beaver Builder support.
+		 *
+		 * @param bool $enabled Default value indicating if Beaver Builder support is enabled. Default to `false`.
+		 *
+		 * @since 1.2.28
+		 * @return bool Returns `true` if Beaver Builder support is enabled, `false` otherwise.
+		 */
+		return boolval( apply_filters( 'astra_sites_enable_legacy_beaver_builder_support', false ) );
+	}
 
 	/**
 	 * Get localize variable.
@@ -449,6 +466,9 @@ class Ai_Builder_Plugin_Loader {
 			'default_business_type'    => apply_filters( 'ai_builder_default_business_type', '' ),
 			'show_zip_plan'            => apply_filters( 'ai_builder_show_zip_plan_details', true ),
 			'hide_site_features'       => apply_filters( 'ai_builder_hidden_site_features', array() ),
+			'hideDashboardButton'      => 'yes' === apply_filters( 'ai_builder_hide_visit_dashboard_button', 'no' ),
+			'isElementorDisabled'      => get_option( 'st-elementor-builder-flag' ),
+			'isBeaverBuilderDisabled'  => get_option( 'st-beaver-builder-flag' ) || ! self::is_legacy_beaver_builder_enabled(),
 		);
 	}
 

@@ -39,13 +39,14 @@ import {
 
 export const useFilteredSites = () => {
 	const [ { builder, siteType, siteOrder, allSitesData } ] = useStateValue();
-	let allSites = !! Object.keys( allSitesData ).length
-		? allSitesData
-		: getAllSites();
+	let allSites =
+		allSitesData && !! Object.keys( allSitesData ).length
+			? allSitesData
+			: getAllSites();
 	let sites = [];
 
 	// Fallback array check for Chrome browser.
-	if ( Array.isArray( allSites ) ) {
+	if ( allSitesData && Array.isArray( allSites ) ) {
 		allSites = allSitesData.reduce( ( acc, site ) => {
 			if ( site.id ) {
 				acc[ `id-${ site.id }` ] = site;
@@ -290,6 +291,7 @@ const SiteList = () => {
 				updatedState.categoriesAndTags = categories;
 			}
 			dispatch( updatedState );
+			astraSitesVars.bgSyncInProgress = false;
 
 			// await fetchSitesAndCategories();
 		} catch ( error ) {

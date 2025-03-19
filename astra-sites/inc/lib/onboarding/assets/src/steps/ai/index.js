@@ -5,7 +5,7 @@ import { DefaultStep, PreviousStepLink } from '../../components/index';
 import { useStateValue } from '../../store/store';
 import ZipWPAuthorize from '../../components/zipwp-auth/index';
 
-const { imageDir } = starterTemplates;
+const { imageDir, isBeaverBuilderDisabled } = starterTemplates;
 
 const PageBuilder = () => {
 	const [ { currentIndex }, dispatch ] = useStateValue();
@@ -80,27 +80,29 @@ const PageBuilder = () => {
 							</div>
 							<h6>{ __( 'AI Site', 'astra-sites' ) }</h6>
 						</div>
-						<div
-							className="page-builder-item d-flex-center-align"
-							onClick={ () => {
-								update( 'legacy' );
-							} }
-							tabIndex="0"
-							onKeyDown={ ( event ) =>
-								handleKeyPress( event, 'legacy' )
-							}
-						>
-							<div className="beaver-builder-image-wrap image-wrap">
-								<img
-									src={ `${ imageDir }beaver-builder.svg` }
-									alt={ __(
-										'Beaver Builder',
-										'astra-sites'
-									) }
-								/>
+						{ ! isBeaverBuilderDisabled && (
+							<div
+								className="page-builder-item d-flex-center-align"
+								onClick={ () => {
+									update( 'legacy' );
+								} }
+								tabIndex="0"
+								onKeyDown={ ( event ) =>
+									handleKeyPress( event, 'legacy' )
+								}
+							>
+								<div className="beaver-builder-image-wrap image-wrap">
+									<img
+										src={ `${ imageDir }beaver-builder.svg` }
+										alt={ __(
+											'Beaver Builder',
+											'astra-sites'
+										) }
+									/>
+								</div>
+								<h6>{ __( 'Legacy', 'astra-sites' ) }</h6>
 							</div>
-							<h6>{ __( 'Legacy', 'astra-sites' ) }</h6>
-						</div>
+						) }
 					</div>
 					<div className="zipwp-authorize-wrap">
 						{ <ZipWPAuthorize /> }

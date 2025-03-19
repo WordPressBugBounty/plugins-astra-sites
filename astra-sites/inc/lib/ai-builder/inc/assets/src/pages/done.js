@@ -5,7 +5,7 @@ import Confetti from '../components/confetti-firework';
 import { removeLocalStorageItem } from '../helpers';
 import { USER_KEYWORD } from './select-template';
 
-const { adminUrl, siteUrl } = aiBuilderVars;
+const { adminUrl, siteUrl, hideDashboardButton } = aiBuilderVars;
 
 const BuildDone = () => {
 	const handleClickVisitDashboard = () => {
@@ -71,16 +71,18 @@ const BuildDone = () => {
 								{ __( 'See Your Website', 'ai-builder' ) }
 							</span>
 						</Button>
-						<Button
-							onClick={ handleClickVisitDashboard }
-							variant="blank"
-							size="l"
-							className="w-full min-w-fit py-0 text-accent-st"
-						>
-							<span>
-								{ __( 'Visit Dashboard', 'ai-builder' ) }
-							</span>
-						</Button>
+						{ ! hideDashboardButton && (
+							<Button
+								onClick={ handleClickVisitDashboard }
+								variant="blank"
+								size="l"
+								className="w-full min-w-fit py-0 text-accent-st"
+							>
+								<span>
+									{ __( 'Visit Dashboard', 'ai-builder' ) }
+								</span>
+							</Button>
+						) }
 					</div>
 				</div>
 				{ /* Confetti firework */ }
