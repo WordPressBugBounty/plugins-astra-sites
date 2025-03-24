@@ -17,6 +17,7 @@ import {
 	ArrowLongRightIcon,
 	ChevronUpIcon,
 	EnvelopeIcon,
+	CalendarIcon,
 } from '@heroicons/react/24/outline';
 import { classNames } from '../../utils/functions';
 import { checkRequiredPlugins } from '../import-site/import-utils';
@@ -35,6 +36,7 @@ const ICON_SET = {
 	blog: Squares2X2Icon,
 	ecommerce: ShoppingCartIcon,
 	envelope: EnvelopeIcon,
+	calendar: CalendarIcon,
 };
 
 const getPluginProps = ( id ) => {

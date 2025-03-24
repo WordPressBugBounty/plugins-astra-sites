@@ -282,6 +282,13 @@ function getFeaturePluginList( features, selectedEcommercePlugin ) {
 					init: 'presto-player/presto-player.php',
 				} );
 				break;
+			case 'appointment-bookings':
+				requiredPlugins.push( {
+					name: 'Latepoint',
+					slug: 'latepoint',
+					init: 'latepoint/latepoint.php',
+				} );
+				break;
 			case 'live-chat':
 				requiredPlugins.push( {
 					name: 'WP Live Chat Support',

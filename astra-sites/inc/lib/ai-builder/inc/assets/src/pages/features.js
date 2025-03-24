@@ -13,6 +13,7 @@ import {
 	ShoppingCartIcon,
 	ChevronUpIcon,
 	EnvelopeIcon,
+	CalendarIcon,
 } from '@heroicons/react/24/outline';
 import { __ } from '@wordpress/i18n';
 import { useDispatch, useSelect } from '@wordpress/data';
@@ -144,6 +145,7 @@ const ICON_SET = {
 	blog: Squares2X2Icon,
 	ecommerce: ShoppingCartIcon,
 	envelope: EnvelopeIcon,
+	calendar: CalendarIcon,
 };
 
 const Features = ( { handleClickStartBuilding, isInProgress } ) => {

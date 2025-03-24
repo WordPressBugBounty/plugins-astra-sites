@@ -116,6 +116,17 @@ export const initialState = {
 			icon: 'play-circle',
 		},
 		{
+			title: __( 'Appointment & Bookings', 'astra-sites' ),
+			id: 'appointment-bookings',
+			description: __(
+				'Easily manage bookings for your services',
+				'astra-sites'
+			),
+			enabled: false,
+			compulsory: false,
+			icon: 'calendar',
+		},
+		{
 			title: __( 'Free Live Chat', 'astra-sites' ),
 			id: 'live-chat',
 			description: __(

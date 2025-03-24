@@ -64,6 +64,9 @@ if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) :
 
 			// Plugin - SureMail.
 			require_once AI_BUILDER_DIR . 'inc/compatibility/suremail/ai-builder-compatibility-suremail.php';
+
+			// Plugin - Latepoint.
+			require_once AI_BUILDER_DIR . 'inc/compatibility/latepoint/ai-builder-compatibility-latepoint.php';
 		}
 
 	}
