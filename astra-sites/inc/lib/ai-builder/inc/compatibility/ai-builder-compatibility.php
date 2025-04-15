@@ -6,7 +6,7 @@
  * @since 1.0.11
  */
 
-if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) :
+if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) {
 
 	/**
 	 * AI Builder Compatibility
@@ -14,7 +14,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) :
 	 * @since 1.0.11
 	 */
 	class Ai_Builder_Compatibility {
-
 		/**
 		 * Instance
 		 *
@@ -23,19 +22,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) :
 		 * @since 1.0.11
 		 */
 		private static $instance = null;
-
-		/**
-		 * Initiator
-		 *
-		 * @since 1.0.11
-		 * @return object initialized object of class.
-		 */
-		public static function instance() {
-			if ( null === self::$instance ) {
-				self::$instance = new self();
-			}
-			return self::$instance;
-		}
 
 		/**
 		 * Constructor
@@ -69,6 +55,19 @@ if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) :
 			require_once AI_BUILDER_DIR . 'inc/compatibility/latepoint/ai-builder-compatibility-latepoint.php';
 		}
 
+		/**
+		 * Initiator
+		 *
+		 * @since 1.0.11
+		 * @return object initialized object of class.
+		 */
+		public static function instance() {
+			if ( null === self::$instance ) {
+				self::$instance = new self();
+			}
+			return self::$instance;
+		}
+
 	}
 
 	/**
@@ -76,6 +75,4 @@ if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) :
 	 */
 	Ai_Builder_Compatibility::instance();
 
-endif;
-
-
+}

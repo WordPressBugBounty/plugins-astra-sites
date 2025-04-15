@@ -151,6 +151,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 
 			// Post content.
 			$content = get_post_field( 'post_content', $post_id );
+
 			// Empty mapping? Then return.
 			if ( ! empty( $ids_mapping ) ) {
 				// Replace ID's.
@@ -159,9 +160,6 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 					$content = str_replace( '{\"formId\":\"' . $old_id . '\"}', '{\"formId\":\"' . $new_id . '\"}', $content );
 				}
 			}
-
-			// Replace SureForm ID's.
-			$content = $this->replace_sureforms_ids( $content );
 
 			// This replaces the category ID in UAG Post blocks.
 			$site_options = ST_Importer_File_System::get_instance()->get_demo_content();
@@ -191,6 +189,18 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 				}
 			}
 
+			// Replace SureForm ID's.
+			$content = $this->replace_sureforms_ids( $content );
+			$content = $this->replace_surecart_forms_ids( $content );
+
+			wp_update_post(
+				array(
+					'ID'           => $post_id,
+					'post_content' => $content,
+					'post_excerpt' => '',
+				)
+			);
+
 			// # Tweak
 			// Gutenberg break block markup from render. Because the '&' is updated in database with '&amp;' and it
 			// expects as 'u0026amp;'. So, Converted '&amp;' with 'u0026amp;'.
@@ -206,6 +216,28 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 					'post_excerpt' => '',
 				)
 			);
+		}
+
+		/**
+		 * Replace SureCart Forms IDs in content.
+		 *
+		 * @since 1.1.9
+		 *
+		 * @param string $content Post content.
+		 * @return string
+		 */
+		public function replace_surecart_forms_ids( $content ) {
+			$surecart_id_map = get_option( 'astra_sites_surecart_forms_id_map', array() );
+
+			if ( empty( $surecart_id_map ) ) {
+				return $content;
+			}
+
+			foreach ( $surecart_id_map as $old_id => $new_id ) {
+				$content = str_replace( '[sc_form id="' . $old_id . '"]', '[sc_form id="' . $new_id . '"]', $content );
+			}
+
+			return $content;
 		}
 
 		/**

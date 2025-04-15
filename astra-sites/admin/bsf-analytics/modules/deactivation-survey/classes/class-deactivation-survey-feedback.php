@@ -151,8 +151,8 @@ if ( ! class_exists( 'Deactivation_Survey_Feedback' ) ) {
 							</fieldset>
 
 							<div class="uds-feedback-form-sumbit--actions">
-								<button class="button button-primary uds-feedback-submit" data-action="submit"><?php esc_html_e( 'Submit & Deactivate', 'astra-sites' ); ?></button>
-								<button class="button button-secondary uds-feedback-skip" data-action="skip"><?php esc_html_e( 'Skip & Deactivate', 'astra-sites' ); ?></button>
+							<button class="button button-primary uds-feedback-submit" data-action="submit"><?php esc_html_e( 'Submit & Deactivate', 'astra-sites' ); ?></button>
+							<button class="button button-secondary uds-feedback-skip" data-action="skip"><?php esc_html_e( 'Skip & Deactivate', 'astra-sites' ); ?></button>
 								<input type="hidden" name="referer" value="<?php echo esc_url( get_site_url() ); ?>">
 								<input type="hidden" name="version" value="<?php echo esc_attr( $args['plugin_version'] ); ?>">
 								<input type="hidden" name="source" value="<?php echo esc_attr( $args['plugin_slug'] ); ?>">

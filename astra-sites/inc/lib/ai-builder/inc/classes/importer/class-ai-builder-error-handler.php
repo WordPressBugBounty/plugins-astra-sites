@@ -8,10 +8,10 @@
 
 namespace AiBuilder\Inc\Classes\Importer;
 
-use AiBuilder\Inc\Traits\Instance;
 use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
-use Throwable;
+use AiBuilder\Inc\Traits\Instance;
 use Exception;
+use Throwable;
 
 define( 'ST_ERROR_FATALS', E_ERROR | E_PARSE | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR );
 
@@ -19,7 +19,6 @@ define( 'ST_ERROR_FATALS', E_ERROR | E_PARSE | E_COMPILE_ERROR | E_USER_ERROR | 
  * Ai_Builder_Error_Handler
  */
 class Ai_Builder_Error_Handler {
-
 	use Instance;
 
 	/**
@@ -149,6 +148,6 @@ class Ai_Builder_Error_Handler {
 }
 
 /**
-* Kicking this off by calling 'get_instance()' method
-*/
+ * Kicking this off by calling 'get_instance()' method
+ */
 Ai_Builder_Error_Handler::Instance();

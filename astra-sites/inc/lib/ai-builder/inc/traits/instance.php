@@ -12,7 +12,6 @@ namespace AiBuilder\Inc\Traits;
  * Trait Instance.
  */
 trait Instance {
-
 	/**
 	 * Instance object.
 	 *
@@ -33,4 +32,3 @@ trait Instance {
 		return self::$instance;
 	}
 }
-

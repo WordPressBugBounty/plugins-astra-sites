@@ -2,6 +2,7 @@ import { Fragment, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import DropdownList from './dropdown-list';
+import { classNames } from '../helpers';
 
 const { imageDir, isBeaverBuilderDisabled, isElementorDisabled } =
 	aiBuilderVars;
@@ -88,6 +89,100 @@ const PageBuilderDropdown = () => {
 				</DropdownList.Options>
 			</div>
 		</DropdownList>
+	);
+};
+
+export const SelectTemplatePageBuilderDropdown = ( {
+	selectedBuilder,
+	onChange,
+} ) => {
+	const buildersList = [
+		{
+			id: 'spectra',
+			title: __( 'Block Editor', 'ai-builder' ),
+			image: `${ imageDir }block-editor.svg`,
+		},
+		{
+			id: 'elementor',
+			title: __( 'Elementor (Beta)', 'ai-builder' ),
+			image: `${ imageDir }elementor.svg`,
+		},
+	];
+
+	return (
+		<>
+			<DropdownList
+				by="id"
+				value={ buildersList.find(
+					( builder ) => builder.id === selectedBuilder
+				) }
+				onChange={ onChange }
+			>
+				<div className="relative">
+					<DropdownList.Button
+						className={ classNames(
+							'w-[200px] h-12 border-none right-0 shadow-none  justify-between flex rounded-none items-center pl-4 pr-3 text-sm font-semibold leading-5  hover:bg-[#F4F7FB] rounded-l-md cursor-pointer'
+						) }
+					>
+						<div className="flex items-center gap-2">
+							<img
+								className="w-5 h-5"
+								src={
+									buildersList.find(
+										( builder ) =>
+											builder.id === selectedBuilder
+									)?.image
+								}
+								alt={
+									buildersList.find(
+										( builder ) =>
+											builder.id === selectedBuilder
+									)?.title
+								}
+							/>
+							<span className="truncate">
+								{
+									buildersList.find(
+										( builder ) =>
+											builder.id === selectedBuilder
+									)?.title
+								}
+							</span>
+						</div>
+						<ChevronDownIcon className="w-5 h-5 text-zip-body-text" />
+					</DropdownList.Button>
+					<DropdownList.Options className="py-2 px-3 gap-2 space-y-1 w-[200px]">
+						{ buildersList.map( ( builder ) => (
+							<DropdownList.Option
+								key={ builder.id }
+								as={ Fragment }
+								value={ builder }
+								className={
+									'p-2 hover:bg-[#F9FAFB] cursor-pointer'
+								}
+							>
+								<div className="flex items-center gap-2 text-sm font-normal">
+									<img
+										className="w-5 h-5"
+										src={ builder.image }
+										alt={ builder.title }
+									/>
+									<span
+										className={
+											selectedBuilder === builder.id
+												? 'text-app-heading font-semibold'
+												: 'text-app-text group-hover:text-app-heading'
+										}
+									>
+										{ builder.title }
+									</span>
+								</div>
+							</DropdownList.Option>
+						) ) }
+					</DropdownList.Options>
+				</div>
+			</DropdownList>
+		</>
 	);
 };
 

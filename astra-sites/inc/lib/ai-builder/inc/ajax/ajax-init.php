@@ -18,8 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Admin_Init.
  */
 class AjaxInit {
-
-
 	use Instance;
 
 	/**
@@ -32,6 +30,16 @@ class AjaxInit {
 	private static $ajax_instance = null;
 
 	/**
+	 * Constructor
+	 *
+	 * @since 1.0.0
+	 */
+	public function __construct() {
+
+		$this->initialize_hooks();
+	}
+
+	/**
 	 * Initiator
 	 *
 	 * @since 1.0.42
@@ -42,16 +50,6 @@ class AjaxInit {
 			self::$ajax_instance = new self();
 		}
 		return self::$ajax_instance;
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @since 1.0.0
-	 */
-	public function __construct() {
-
-		$this->initialize_hooks();
 	}
 
 	/**

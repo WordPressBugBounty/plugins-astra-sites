@@ -12,26 +12,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use AiBuilder\Inc\Ajax\AjaxBase;
-use AiBuilder\Inc\Traits\Instance;
 use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
-use AiBuilder\Inc\Classes\Zipwp\Ai_Builder_ZipWP_Integration;
-use AiBuilder\Inc\Classes\Importer\Ai_Builder_Site_Options_Import;
-use AiBuilder\Inc\Classes\Importer\Ai_Builder_Utils;
 use AiBuilder\Inc\Classes\Importer\Ai_Builder_Fse_Importer;
-
-use STImporter\Importer\ST_Importer_File_System;
-use STImporter\Importer\ST_Importer;
-use STImporter\Resetter\ST_Resetter;
-use STImporter\Importer\ST_Importer_Helper;
+use AiBuilder\Inc\Classes\Importer\Ai_Builder_Utils;
+use AiBuilder\Inc\Classes\Zipwp\Ai_Builder_ZipWP_Integration;
 use AiBuilder\Inc\Traits\Helper;
+use AiBuilder\Inc\Traits\Instance;
+use STImporter\Importer\Batch\ST_Batch_Processing_Elementor;
 use STImporter\Importer\Batch\ST_Batch_Processing_Gutenberg;
 use STImporter\Importer\Batch\ST_Batch_Processing_Misc;
+use STImporter\Importer\ST_Importer;
+use STImporter\Importer\ST_Importer_Helper;
+use STImporter\Resetter\ST_Resetter;
+
 /**
  * Class Flows.
  */
 class Importer extends AjaxBase {
-
 	use Instance;
 
 	/**
@@ -44,6 +41,13 @@ class Importer extends AjaxBase {
 	private static $ajax_instance = null;
 
 	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		add_action( 'astra_sites_import_complete', array( $this, 'update_required_options' ) );
+	}
+
+	/**
 	 * Initiator
 	 *
 	 * @since 1.0.42
@@ -54,13 +58,6 @@ class Importer extends AjaxBase {
 			self::$ajax_instance = new self();
 		}
 		return self::$ajax_instance;
-	}
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		add_action( 'astra_sites_import_complete', array( $this, 'update_required_options' ) );
 	}
 
 	/**
@@ -106,7 +103,7 @@ class Importer extends AjaxBase {
 			// Import Part 2 Start.
 			'import_options',
 			'import_widgets',
-			'gutenberg_batch',
+			'page_builder_batch',
 			'image_replacement_batch',
 			'import_end',
 			'set_site_data',
@@ -170,7 +167,6 @@ class Importer extends AjaxBase {
 		do_action( 'astra_sites_import_success' );
 
 		wp_send_json_success();
-
 	}
 
 	/**
@@ -423,7 +419,7 @@ class Importer extends AjaxBase {
 	 * @since 1.0.14
 	 * @return void
 	 */
-	public function gutenberg_batch() {
+	public function page_builder_batch() {
 
 		if ( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) {
 			// Verify Nonce.
@@ -434,10 +430,19 @@ class Importer extends AjaxBase {
 			}
 		}
 
-		$status = class_exists( 'STImporter\Importer\Batch\ST_Batch_Processing_Gutenberg' ) ? ST_Batch_Processing_Gutenberg::get_instance()->import() : array(
+		$required_plugins = (array) astra_get_site_data( 'required-plugins' );
+		$plugins_slug     = array_column( $required_plugins, 'slug' );
+
+		$status = array(
 			'status' => false,
 			'msg'    => __( 'Required function not found', 'astra-sites' ),
 		);
+
+		if ( in_array( 'elementor', $plugins_slug, true ) ) {
+			$status = class_exists( 'STImporter\Importer\Batch\ST_Batch_Processing_Elementor' ) ? ST_Batch_Processing_Elementor::get_instance()->import() : $status;
+		} else {
+			$status = class_exists( 'STImporter\Importer\Batch\ST_Batch_Processing_Gutenberg' ) ? ST_Batch_Processing_Gutenberg::get_instance()->import() : $status;
+		}
 
 		if ( wp_doing_ajax() ) {
 
@@ -449,12 +454,12 @@ class Importer extends AjaxBase {
 		}
 	}
 
-		/**
-		 * Processing GT batch.
-		 *
-		 * @since 1.0.14
-		 * @return void
-		 */
+	/**
+	 * Processing GT batch.
+	 *
+	 * @since 1.0.14
+	 * @return void
+	 */
 	public function image_replacement_batch() {
 
 		if ( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) {
@@ -669,6 +674,5 @@ class Importer extends AjaxBase {
 
 		wp_send_json_success();
 	}
-
 
 }

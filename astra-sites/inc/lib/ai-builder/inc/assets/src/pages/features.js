@@ -152,6 +152,10 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 	const { previousStep } = useNavigateSteps();
 	const disabledFeatures = aiBuilderVars?.hide_site_features;
 	const { setSiteFeatures, storeSiteFeatures } = useDispatch( STORE_KEY );
+	const { setSignupLoginModal } = useDispatch( STORE_KEY );
+
+	const authenticated = aiBuilderVars?.zip_token_exists;
+
 	const { siteFeatures, loadingNextStep } = useSelect( ( select ) => {
 		const { getSiteFeatures, getLoadingNextStep } = select( STORE_KEY );
 
@@ -231,6 +235,22 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 			  )
 			: [];
 	}, [ siteFeatures, disabledFeatures, isFetchingStatus ] );
+
+	const handleClickNext = ( skipFeature ) => {
+		if ( ! authenticated ) {
+			setSignupLoginModal( {
+				open: true,
+				type: 'register',
+				ask: 'register',
+				shouldResume: true,
+			} );
+			return;
+		}
+
+		// get the start building function from the parent component
+		const startBuilding = handleClickStartBuilding( skipFeature );
+		startBuilding();
+	};
 
 	return (
 		<Container className="grid grid-cols-1 gap-8 auto-rows-auto !max-w-[55rem] w-full mx-auto">
@@ -362,8 +382,8 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 			<NavigationButtons
 				continueButtonText={ __( 'Start Building', 'ai-builder' ) }
 				onClickPrevious={ previousStep }
-				onClickContinue={ handleClickStartBuilding() }
-				onClickSkip={ handleClickStartBuilding( true ) }
+				onClickContinue={ handleClickNext }
+				onClickSkip={ () => handleClickNext( true ) }
 				loading={ isInProgress }
 				skipButtonText={ __( 'Skip & Start Building', 'ai-builder' ) }
 			/>

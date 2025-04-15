@@ -82,18 +82,18 @@ class Zipwp_Images_Script {
 	public function load_script(): void {
 
 		// Introduces a filter to exclude certain post types from the plugin.
-		if ( ! is_customize_preview() && function_exists( 'get_current_screen' ) ) {
-			$exclude_post_types = apply_filters( 'zipwp_images_excluded_post_types', array( 'sureforms_form' ) );
-			$post_types         = array_diff( get_post_types( array( 'public' => true ), 'names' ), $exclude_post_types );
-			$current_screen     = get_current_screen();
+		$exclude_post_types = apply_filters( 'zipwp_images_excluded_post_types', array( 'sureforms_form' ) );
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/screen.php';
+		}
+		$current_screen = get_current_screen();
 
-			if ( ! is_object( $current_screen ) && is_null( $current_screen ) ) {
-				return;
-			}
+		if ( ! is_object( $current_screen ) ) {
+			return;
+		}
 
-			if ( 'site-editor' !== $current_screen->base && ! array_key_exists( $current_screen->post_type, $post_types ) ) {
-				return;
-			}
+		if ( in_array( $current_screen->post_type, $exclude_post_types, true ) ) {
+			return;
 		}
 
 		// Enqueue JS.

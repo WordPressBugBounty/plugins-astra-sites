@@ -12,13 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use AiBuilder\Inc\Ajax\AjaxErrors;
-
 /**
  * Class Admin_Menu.
  */
 abstract class AjaxBase {
-
 	/**
 	 * Ajax action prefix.
 	 *

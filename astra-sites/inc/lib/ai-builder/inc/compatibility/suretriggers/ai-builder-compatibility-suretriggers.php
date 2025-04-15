@@ -24,6 +24,13 @@ class Ai_Builder_Compatibility_Suretriggers {
 	private static $instance = null;
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		add_action( 'astra_sites_after_plugin_activation', array( $this, 'suretriggers_activation' ), 10 );
+	}
+
+	/**
 	 * Initiator
 	 *
 	 * @since 4.0.8
@@ -34,13 +41,6 @@ class Ai_Builder_Compatibility_Suretriggers {
 			self::$instance = new self();
 		}
 		return self::$instance;
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		add_action( 'astra_sites_after_plugin_activation', array( $this, 'suretriggers_activation' ), 10 );
 	}
 
 	/**

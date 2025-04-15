@@ -8,7 +8,7 @@
  * @since 1.2.30
  */
 
-if ( ! class_exists( 'Ai_Builder_Compatibility_LatePoint' ) ) :
+if ( ! class_exists( 'Ai_Builder_Compatibility_LatePoint' ) ) {
 
 	/**
 	 * LatePoint Compatibility
@@ -16,7 +16,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_LatePoint' ) ) :
 	 * @since 1.2.30
 	 */
 	class Ai_Builder_Compatibility_LatePoint {
-
 		/**
 		 * Instance
 		 *
@@ -25,6 +24,15 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_LatePoint' ) ) :
 		 * @since 1.2.30
 		 */
 		private static $instance;
+
+		/**
+		 * Constructor
+		 *
+		 * @since 1.2.30
+		 */
+		public function __construct() {
+			add_action( 'astra_sites_after_plugin_activation', array( $this, 'disable_latepoint_redirection' ) );
+		}
 
 		/**
 		 * Initiator
@@ -37,15 +45,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_LatePoint' ) ) :
 				self::$instance = new self();
 			}
 			return self::$instance;
-		}
-
-		/**
-		 * Constructor
-		 *
-		 * @since 1.2.30
-		 */
-		public function __construct() {
-			add_action( 'astra_sites_after_plugin_activation', array( $this, 'disable_latepoint_redirection' ) );
 		}
 
 		/**
@@ -69,4 +68,4 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_LatePoint' ) ) :
 	 */
 	Ai_Builder_Compatibility_LatePoint::instance();
 
-endif;
+}

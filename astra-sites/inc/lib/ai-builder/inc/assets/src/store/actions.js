@@ -51,6 +51,13 @@ const actions = {
 		};
 	},
 
+	setSignupLoginModal( signupLoginModal ) {
+		return {
+			type: actionsTypes.SET_SIGNUP_LOGIN_MODAL,
+			payload: signupLoginModal,
+		};
+	},
+
 	setWebsiteTypeAIStep( websiteType ) {
 		return {
 			type: actionsTypes.SET_WEBSITE_TYPE_AI_STEP,

@@ -336,10 +336,10 @@ const SocialMediaAdd = ( { list, onChange } ) => {
 
 			<div className="flex items-start gap-4 flex-wrap">
 				{ updatedList?.length > 0 && (
-					<div className="flex items-start gap-4 flex-wrap">
+					<div className="flex items-start gap-4 flex-wrap w-full sm:w-auto">
 						{ updatedList.map( ( sm ) => {
 							return (
-								<div key={ sm.id }>
+								<div key={ sm.id } className="w-full sm:w-auto">
 									<SocialMediaItem
 										socialMedia={ sm }
 										onRemove={ () => {

@@ -10,7 +10,7 @@
 
 namespace AiBuilder\Inc\Compatibility\SureCart;
 
-if ( ! class_exists( 'Ai_Builder_Compatibility_SureForms' ) ) :
+if ( ! class_exists( 'Ai_Builder_Compatibility_SureForms' ) ) {
 
 	/**
 	 * SureCart Compatibility
@@ -18,7 +18,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureForms' ) ) :
 	 * @since 1.2.9
 	 */
 	class Ai_Builder_Compatibility_SureForms {
-
 		/**
 		 * Instance
 		 *
@@ -27,6 +26,16 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureForms' ) ) :
 		 * @since 1.2.9
 		 */
 		private static $instance = null;
+
+		/**
+		 * Constructor
+		 *
+		 * @since 1.2.9
+		 */
+		public function __construct() {
+			add_action( 'astra_sites_after_plugin_activation', array( $this, 'activation' ), 10 );
+			add_filter( 'srfm_enable_redirect_activation', array( $this, 'redirect_compatibility' ), 10, 1 );
+		}
 
 		/**
 		 * Initiator
@@ -39,16 +48,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureForms' ) ) :
 				self::$instance = new self();
 			}
 			return self::$instance;
-		}
-
-		/**
-		 * Constructor
-		 *
-		 * @since 1.2.9
-		 */
-		public function __construct() {
-			add_action( 'astra_sites_after_plugin_activation', array( $this, 'activation' ), 10 );
-			add_filter( 'srfm_enable_redirect_activation', array( $this, 'redirect_compatibility' ), 10, 1 );
 		}
 
 		/**
@@ -83,4 +82,4 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureForms' ) ) :
 	 */
 	Ai_Builder_Compatibility_SureForms::instance();
 
-endif;
+}

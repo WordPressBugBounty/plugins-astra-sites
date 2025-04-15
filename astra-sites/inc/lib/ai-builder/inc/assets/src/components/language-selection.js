@@ -34,7 +34,7 @@ const LanguageSelection = () => {
 						( lang ) => lang.code === siteLanguage
 					) }
 					showLabel={ false }
-					classNameParent="w-[320px]"
+					classNameParent="w-full sm:w-[320px]"
 					classNameChild="py-2 pl-3 pr-8"
 				/>
 			) }

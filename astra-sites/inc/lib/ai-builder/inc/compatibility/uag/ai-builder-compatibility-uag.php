@@ -22,6 +22,13 @@ class Ai_Builder_Compatibility_UAG {
 	private static $instance = null;
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		add_action( 'astra_sites_after_plugin_activation', array( $this, 'uag_activation' ), 10 );
+	}
+
+	/**
 	 * Initiator
 	 *
 	 * @since 3.0.15
@@ -32,13 +39,6 @@ class Ai_Builder_Compatibility_UAG {
 			self::$instance = new self();
 		}
 		return self::$instance;
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		add_action( 'astra_sites_after_plugin_activation', array( $this, 'uag_activation' ), 10 );
 	}
 
 	/**

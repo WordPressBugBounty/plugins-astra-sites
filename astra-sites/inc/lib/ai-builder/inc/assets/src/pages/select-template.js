@@ -33,6 +33,7 @@ import LoadingSpinner from '../components/loading-spinner';
 import { __ } from '@wordpress/i18n';
 import toast from 'react-hot-toast';
 import Heading from '../components/heading';
+import { SelectTemplatePageBuilderDropdown } from '../components/page-builder-dropdown';
 export const USER_KEYWORD = 'st-template-search';
 
 const SelectTemplate = () => {
@@ -87,6 +88,7 @@ const SelectTemplate = () => {
 
 	const [ isFetching, setIsFetching ] = useState( false );
 	const [ backToTop, setBackToTop ] = useState( false );
+	const [ selectedBuilder, setSelectedBuilder ] = useState( 'spectra' );
 
 	const parentContainer = useRef( null );
 	const templatesContainer = useRef( null );
@@ -229,6 +231,7 @@ const SelectTemplate = () => {
 					data: {
 						keyword: keywordItem,
 						business_name: businessName,
+						page_builder: selectedBuilder,
 					},
 					signal: abortController.signal,
 				} );
@@ -276,12 +279,26 @@ const SelectTemplate = () => {
 				setWebsiteTemplatesAIStep( [ ...allTemplatesList ] );
 				setWebsiteTemplateSearchResultsAIStep( [ ...results ] );
 				setIsFetching( false );
-				setLoadMoreTemplates( { showLoadMore: true } );
+				const isEmptyResults = allTemplatesList.length === 0;
+				let showLoadMoreTemplates = true;
+
+				if ( isEmptyResults ) {
+					showLoadMoreTemplates = false;
+				}
+				setLoadMoreTemplates( { showLoadMore: showLoadMoreTemplates } );
 
 				return true;
 			} );
 
 			await Promise.all( promises );
+
+			if ( allTemplatesList.length < 4 ) {
+				fetchAllTemplatesByPage( 1, {
+					searchResults: results,
+					templateList: allTemplatesList,
+					showLoadMoreTemplates: loadMoreTemplates.showLoadMore,
+				} );
+			}
 		} catch ( error ) {
 			if ( error?.name === 'AbortError' ) {
 				return;
@@ -290,11 +307,19 @@ const SelectTemplate = () => {
 		}
 	};
 
-	const fetchAllTemplatesByPage = async ( page = 1 ) => {
+	const fetchAllTemplatesByPage = async (
+		page = 1,
+		{
+			searchResults = templateSearchResults,
+			templateList = allTemplates,
+			_showLoadMoreTemplates = loadMoreTemplates,
+		} = {}
+	) => {
 		try {
-			if ( loadMoreTemplates.loading ) {
+			if ( loadMoreTemplates.loading || ! _showLoadMoreTemplates ) {
 				return;
 			}
+
 			setLoadMoreTemplates( { loading: true } );
 
 			const response = await apiFetch( {
@@ -302,6 +327,7 @@ const SelectTemplate = () => {
 				method: 'POST',
 				data: {
 					business_name: businessName,
+					page_builder: selectedBuilder,
 					per_page: 9,
 					page,
 				},
@@ -322,10 +348,12 @@ const SelectTemplate = () => {
 			result = handleHiddenTemplates( result );
 
 			const updatedAllTemplates = [
-				...allTemplates,
+				...templateList,
 				...result.map( ( item ) => item.designs ).flat(),
 			];
-			const updatedSearchResults = [ ...templateSearchResults ];
+
+			const updatedSearchResults = [ ...searchResults ];
+
 			result.forEach( ( item ) => {
 				if ( ! item?.match ) {
 					return;
@@ -385,9 +413,10 @@ const SelectTemplate = () => {
 
 	useEffect( () => {
 		fetchTemplates(
-			debouncedKeyword ? debouncedKeyword : getInitialUserKeyword()
+			debouncedKeyword ? debouncedKeyword : getInitialUserKeyword(),
+			true
 		);
-	}, [ debouncedKeyword ] );
+	}, [ debouncedKeyword, selectedBuilder ] );
 
 	const handleSubmitKeyword = ( { keyword } ) => {
 		onChangeKeyword( keyword );
@@ -408,55 +437,61 @@ const SelectTemplate = () => {
 	};
 
 	const renderTemplates = useMemo( () => {
+		const recommendedTemplates = getTemplates( TEMPLATE_TYPE.RECOMMENDED );
+		const partialTemplates = getTemplates( TEMPLATE_TYPE.PARTIAL );
+		const genericTemplates = getTemplates( TEMPLATE_TYPE.GENERIC );
+
 		if (
-			! getTemplates( TEMPLATE_TYPE.RECOMMENDED )?.length &&
-			! getTemplates( TEMPLATE_TYPE.PARTIAL )?.length &&
-			! getTemplates( TEMPLATE_TYPE.GENERIC )?.length
+			! recommendedTemplates?.length &&
+			! partialTemplates?.length &&
+			! genericTemplates?.length
 		) {
 			return null;
 		}
 
+		const recommendedTemplateIdSet = new Set(
+			recommendedTemplates.map( ( { uuid } ) => uuid )
+		);
+		const partialTemplateIdSet = new Set(
+			partialTemplates.map( ( { uuid } ) => uuid )
+		);
+
+		const filteredGenericTemplates = genericTemplates.filter(
+			( { uuid } ) =>
+				! recommendedTemplateIdSet.has( uuid ) &&
+				! partialTemplateIdSet.has( uuid )
+		);
+
 		return (
 			<>
-				{ getTemplates( TEMPLATE_TYPE.RECOMMENDED )?.map(
-					( template, index ) => (
-						<ColumnItem
-							key={ template.uuid }
-							template={ template }
-							position={ index + 1 }
-						/>
-					)
-				) }
-				{ getTemplates( TEMPLATE_TYPE.PARTIAL )?.map(
-					( template, index ) => (
-						<ColumnItem
-							key={ template.uuid }
-							template={ template }
-							position={
-								index +
-								1 +
-								( getTemplates( TEMPLATE_TYPE.RECOMMENDED )
-									?.length || 0 )
-							}
-						/>
-					)
-				) }
-				{ getTemplates( TEMPLATE_TYPE.GENERIC )?.map(
-					( template, index ) => (
-						<ColumnItem
-							key={ template.uuid }
-							template={ template }
-							position={
-								index +
-								1 +
-								( ( getTemplates( TEMPLATE_TYPE.RECOMMENDED )
-									?.length || 0 ) +
-									( getTemplates( TEMPLATE_TYPE.PARTIAL )
-										?.length || 0 ) )
-							}
-						/>
-					)
-				) }
+				{ recommendedTemplates?.map( ( template, index ) => (
+					<ColumnItem
+						key={ template.uuid }
+						template={ template }
+						position={ index + 1 }
+					/>
+				) ) }
+				{ partialTemplates?.map( ( template, index ) => (
+					<ColumnItem
+						key={ template.uuid }
+						template={ template }
+						position={
+							index + 1 + ( recommendedTemplates?.length || 0 )
+						}
+					/>
+				) ) }
+				{ filteredGenericTemplates?.map( ( template, index ) => (
+					<ColumnItem
+						key={ template.uuid }
+						template={ template }
+						position={
+							index +
+							1 +
+							( ( recommendedTemplates?.length || 0 ) +
+								( partialTemplates?.length || 0 ) )
+						}
+					/>
+				) ) }
 			</>
 		);
 	}, [ getTemplates ] );
@@ -494,32 +529,46 @@ const SelectTemplate = () => {
 				className="px-5 md:px-10 lg:px-14 xl:px-15 pt-5 md:pt-10 lg:pt-8 xl:pt-8 max-w-fit mx-auto"
 			/>
 			<form
-				className="w-full pt-6 pb-14 max-w-[37.5rem] mx-auto"
+				className="w-full pt-4 pb-4  max-w-[37.5rem] mx-auto"
 				onSubmit={ handleSubmit( handleSubmitKeyword ) }
 			>
-				<Input
-					name="keyword"
-					inputClassName="pl-4"
-					register={ register }
-					placeholder={ __( 'Add a keyword', 'ai-builder' ) }
-					height="12"
-					error={ errors?.keyword }
-					suffixIcon={
-						<div className="absolute right-4 flex items-center">
-							<button
-								type="button"
-								className="w-auto h-auto p-0 flex items-center justify-center cursor-pointer bg-transparent border-0 focus:outline-none"
-								onClick={ handleClearSearch }
-							>
-								{ watchedKeyword ? (
-									<XMarkIcon className="w-5 h-5 text-zip-app-inactive-icon" />
-								) : (
-									<MagnifyingGlassIcon className="w-5 h-5 text-zip-app-inactive-icon" />
-								) }
-							</button>
-						</div>
-					}
-				/>
+				<div
+					className={ classNames(
+						'flex w-full bg-white gap-2 items-center rounded-md shadow-sm border border-border-tertiary flex-col-reverse md:flex-row'
+					) }
+				>
+					<SelectTemplatePageBuilderDropdown
+						selectedBuilder={ selectedBuilder }
+						onChange={ ( builder ) =>
+							setSelectedBuilder( builder.id )
+						}
+					/>
+					<Input
+						name="keyword"
+						inputClassName={ 'pr-11 pl-2' }
+						register={ register }
+						placeholder={ __( 'Add a keyword', 'ai-builder' ) }
+						height="12"
+						className="w-full h-12"
+						noBorder={ true }
+						error={ errors?.keyword }
+						suffixIcon={
+							<div className="absolute right-4 flex items-center">
+								<button
+									type="button"
+									className="w-auto h-auto p-0 flex items-center justify-center cursor-pointer bg-transparent border-0 focus:outline-none"
+									onClick={ handleClearSearch }
+								>
+									{ watchedKeyword ? (
+										<XMarkIcon className="w-5 h-5 text-zip-app-inactive-icon" />
+									) : (
+										<MagnifyingGlassIcon className="w-5 h-5 text-zip-app-inactive-icon" />
+									) }
+								</button>
+							</div>
+						}
+					/>
+				</div>
 			</form>
 
 			<div
@@ -534,7 +583,7 @@ const SelectTemplate = () => {
 				<div
 					ref={ templatesContainer }
 					className={ classNames(
-						'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-auto items-start justify-center gap-6 mb-10'
+						'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-auto items-start justify-center gap-4 sm:gap-6 mb-10'
 					) }
 				>
 					{ ! isFetching
@@ -546,7 +595,7 @@ const SelectTemplate = () => {
 			</div>
 
 			{ loadMoreTemplates.showLoadMore && (
-				<div className="align-center flex justify-center">
+				<div className="align-center flex justify-center sm:pb-0 pb-40">
 					<Button
 						className="min-w-[188px] min-h-[50px]"
 						variant="primary"
@@ -582,7 +631,7 @@ const SelectTemplate = () => {
 				</div>
 			) }
 
-			<div className="sticky bottom-0 bg-container-background py-4.75 px-5 md:px-10 lg:px-14 xl:px-15">
+			<div className="fixed sm:sticky bottom-0 w-full bg-container-background py-4.75 px-5 md:px-10 lg:px-14 xl:px-15">
 				<NavigationButtons
 					onClickPrevious={ previousStep }
 					hideContinue

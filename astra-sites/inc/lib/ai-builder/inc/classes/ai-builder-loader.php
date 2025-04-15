@@ -14,7 +14,6 @@ use AiBuilder\Inc\Traits\Instance;
  * Ai_Builder
  */
 class Ai_Builder_Loader {
-
 	use Instance;
 
 	/**
@@ -46,4 +45,3 @@ class Ai_Builder_Loader {
  * Kicking this off by calling 'get_instance()' method
  */
 Ai_Builder_Loader::Instance();
-

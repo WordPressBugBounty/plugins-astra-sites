@@ -19,8 +19,8 @@ const TemplateInfo = ( { template, position } ) => {
 	const isEcommerceEnabled = template?.features?.ecommerce === 'yes';
 
 	return (
-		<div className="absolute bottom-0  w-full h-14 flex items-center justify-between bg-white px-5 shadow-template-info border-t border-b-0 border-x-0 border-solid border-border-tertiary">
-			<div className="flex items-center justify-start gap-1.5 zw-base-semibold text-app-heading capitalize select-none">
+		<div className="absolute bottom-0  w-full h-14 flex items-center justify-between bg-white px-3 sm:px-5 shadow-template-info border-t border-b-0 border-x-0 border-solid border-border-tertiary">
+			<div className="flex items-center justify-start gap-1.5 !text-xs sm:!text-base zw-base-semibold text-app-heading capitalize select-none">
 				<span>
 					{ position
 						? sprintf(

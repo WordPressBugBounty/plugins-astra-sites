@@ -26,6 +26,13 @@ class Ai_Builder_Compatibility_Cpsw {
 	private static $instance = null;
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		add_action( 'astra_sites_after_plugin_activation', array( $this, 'checkout_plugins' ), 10, 2 );
+	}
+
+	/**
 	 * Initiator
 	 *
 	 * @since 3.0.23
@@ -36,13 +43,6 @@ class Ai_Builder_Compatibility_Cpsw {
 			self::$instance = new self();
 		}
 		return self::$instance;
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		add_action( 'astra_sites_after_plugin_activation', array( $this, 'checkout_plugins' ), 10, 2 );
 	}
 
 	/**

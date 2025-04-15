@@ -67,6 +67,7 @@ class ST_Importer {
 		}
 		do_action( 'st_before_start_import_process' );
 		update_option( 'astra_sites_import_started', 'yes' );
+		do_action( 'astra_sites_import_start' );
 
 		return array(
 			'status' => true,

@@ -12,18 +12,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use AiBuilder\Inc\Ajax\AjaxBase;
-use AiBuilder\Inc\Traits\Instance;
 use AiBuilder\Inc\Classes\Importer\Ai_Builder_Error_Handler;
-use STImporter\Importer\ST_Importer;
-use AiBuilder\Inc\Traits\Helper;
 use AiBuilder\Inc\Classes\Zipwp\Ai_Builder_ZipWP_Integration;
+use AiBuilder\Inc\Traits\Helper;
+use AiBuilder\Inc\Traits\Instance;
+use STImporter\Importer\ST_Importer;
 use STImporter\Importer\ST_Importer_Helper;
+
 /**
  * Class Flows.
  */
 class Plugin extends AjaxBase {
-
 	use Instance;
 
 	/**
@@ -129,7 +128,6 @@ class Plugin extends AjaxBase {
 		} else {
 			wp_send_json_error( __( 'Required function not found', 'astra-sites' ) );
 		}
-
 	}
 
 	/**
@@ -189,7 +187,6 @@ class Plugin extends AjaxBase {
 				'status' => true,
 			)
 		);
-
 	}
 
 	/**
@@ -224,10 +221,10 @@ class Plugin extends AjaxBase {
 			);
 		}
 
-		$id                = ( isset( $_POST['id'] ) ) ? intval( $_POST['id'] ) : 0;
+		$id                = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
 		$user_agent_string = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : '';
-		$error             = ( isset( $_POST['error'] ) ) ? json_decode( stripslashes( $_POST['error'] ), true ) : array();
-		$local_storage     = ( isset( $_POST['local_storage'] ) ) ? json_decode( stripslashes( $_POST['local_storage'] ), true ) : array();
+		$error             = isset( $_POST['error'] ) ? json_decode( stripslashes( $_POST['error'] ), true ) : array();
+		$local_storage     = isset( $_POST['local_storage'] ) ? json_decode( stripslashes( $_POST['local_storage'] ), true ) : array();
 
 		$ai_import_logger = get_option( 'ai_import_logger', array() );
 
@@ -278,7 +275,7 @@ class Plugin extends AjaxBase {
 		}
 
 		$uuids = array_map(
-			function( $site ) {
+			static function( $site ) {
 				return $site['uuid'];
 			},
 			$failed_sites

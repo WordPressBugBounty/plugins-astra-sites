@@ -58,6 +58,9 @@ export const defaultOnboardingAIState = {
 	continueProgressModal: {
 		open: false,
 	},
+	signupLoginModal: {
+		open: false,
+	},
 	planInformationModal: {
 		open: false,
 	},
@@ -203,6 +206,11 @@ const reducer = ( state = initialState, action ) => {
 			return {
 				...state,
 				continueProgressModal: action.payload,
+			};
+		case actionTypes.SET_SIGNUP_LOGIN_MODAL:
+			return {
+				...state,
+				signupLoginModal: action.payload,
 			};
 		case actionTypes.SET_WEBSITE_TYPE_AI_STEP:
 			return {

@@ -6,10 +6,10 @@
  * @package Astra Sites
  */
 
-use STImporter\Importer\ST_Importer_Helper;
 use STImporter\Importer\ST_Importer_File_System;
+use STImporter\Importer\ST_Importer_Helper;
 
-if ( ! function_exists( 'astra_sites_error_log' ) ) :
+if ( ! function_exists( 'astra_sites_error_log' ) ) {
 
 	/**
 	 * Error Log
@@ -32,12 +32,10 @@ if ( ! function_exists( 'astra_sites_error_log' ) ) :
 			}
 		}
 	}
+}
 
-endif;
-
-if ( ! function_exists( 'astra_sites_get_suggestion_link' ) ) :
+if ( ! function_exists( 'astra_sites_get_suggestion_link' ) ) {
 	/**
-	 *
 	 * Get suggestion link.
 	 *
 	 * @since 2.6.1
@@ -50,9 +48,9 @@ if ( ! function_exists( 'astra_sites_get_suggestion_link' ) ) :
 
 		return apply_filters( 'astra_sites_suggestion_link', $white_label_link );
 	}
-endif;
+}
 
-if ( ! function_exists( 'astra_sites_is_valid_image' ) ) :
+if ( ! function_exists( 'astra_sites_is_valid_image' ) ) {
 	/**
 	 * Check for the valid image
 	 *
@@ -64,9 +62,9 @@ if ( ! function_exists( 'astra_sites_is_valid_image' ) ) :
 	function astra_sites_is_valid_image( $link = '' ) {
 		return preg_match( '/^((https?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?\/[\w\-\@]+\.(jpg|png|gif|jpeg|svg)\/?$/i', $link );
 	}
-endif;
+}
 
-if ( ! function_exists( 'astra_get_site_data' ) ) :
+if ( ! function_exists( 'astra_get_site_data' ) ) {
 	/**
 	 * Returns the value of the index for the Site Data
 	 *
@@ -87,8 +85,7 @@ if ( ! function_exists( 'astra_get_site_data' ) ) :
 		}
 		return '';
 	}
-endif;
-
+}
 
 /**
  * Get all the posts to be reset.
@@ -99,12 +96,8 @@ endif;
 function astra_sites_get_reset_post_data() {
 	global $wpdb;
 
-	$post_ids = $wpdb->get_col( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_astra_sites_imported_post'" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- We need this to get all the posts and pages. Traditional WP_Query would have been expensive here.
-
-	return $post_ids;
+	return $wpdb->get_col( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_astra_sites_imported_post'" );
 }
-
-
 
 /**
  * Get API params

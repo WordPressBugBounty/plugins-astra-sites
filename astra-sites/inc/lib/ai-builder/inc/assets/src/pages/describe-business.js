@@ -437,7 +437,7 @@ const DescribeBusiness = () => {
 					) }
 				>
 					{ __( 'Characters: ', 'ai-builder' ) }
-					<span>{ formBusinessDetails.length }</span> / 1000
+					<span>{ formBusinessDetails.length }</span> / 3000
 				</div>
 				<Textarea
 					ref={ textareaRef }
@@ -448,11 +448,11 @@ const DescribeBusiness = () => {
 						'ai-builder'
 					) }
 					name="businessDetails"
-					maxLength={ 1000 }
+					maxLength={ 3000 }
 					register={ register }
 					validations={ {
 						required: 'Details are required',
-						maxLength: 1000,
+						maxLength: 3000,
 					} }
 					error={ errors.businessDetails }
 					disabled={ isLoading || loadingNextStep }

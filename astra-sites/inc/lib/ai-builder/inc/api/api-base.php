@@ -14,7 +14,6 @@ namespace AiBuilder\Inc\Api;
  * @since 0.0.1
  */
 abstract class Api_Base extends \WP_REST_Controller {
-
 	/**
 	 * Endpoint namespace.
 	 *

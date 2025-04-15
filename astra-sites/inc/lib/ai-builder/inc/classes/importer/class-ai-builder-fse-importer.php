@@ -16,7 +16,6 @@ use AiBuilder\Inc\Traits\Instance;
  * @since  1.0.0
  */
 class Ai_Builder_Fse_Importer {
-
 	use Instance;
 
 	/**
@@ -229,7 +228,6 @@ class Ai_Builder_Fse_Importer {
 			// Update the post into the database.
 			wp_update_post( $update_post );
 		}
-
 	}
 
 }

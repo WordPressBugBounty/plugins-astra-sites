@@ -15,7 +15,6 @@ use STImporter\Importer\ST_Importer_File_System;
  * Ai_Builder
  */
 class Ai_Builder_Importer {
-
 	use Instance;
 
 	/**

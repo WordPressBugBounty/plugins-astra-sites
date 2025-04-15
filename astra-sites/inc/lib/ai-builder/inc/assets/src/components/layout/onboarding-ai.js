@@ -7,6 +7,7 @@ import {
 	useEffect,
 	useLayoutEffect,
 	Fragment,
+	useRef,
 } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -16,6 +17,7 @@ import {
 	classNames,
 	getLocalStorageItem,
 	setLocalStorageItem,
+	getScreenWidthBreakPoint,
 } from '../../helpers/index';
 import PreviewWebsite from '../../pages/preview';
 import { STORE_KEY } from '../../store';
@@ -30,6 +32,7 @@ import useEffectAfterMount from '../../hooks/use-effect-after-mount';
 import ApiErrorModel from '../api-error-model';
 import PlanInformationModal from '../plan-information-modal';
 import PlanUpgradePromoModal from '../plan-upgrade-promo';
+import SignupLoginModal from '../signup-login-modal';
 
 const { logoUrlLight } = aiBuilderVars;
 
@@ -43,6 +46,14 @@ const OnboardingAI = () => {
 
 	const authenticated = aiBuilderVars?.zip_token_exists,
 		isAuthScreen = currentStep === 0;
+
+	const urlParams = new URLSearchParams( window.location.search );
+
+	// catch the query params from the URL, we're using useRef to avoid
+	// re-rendering the component when the URL changes
+	const showContinueProgressModal = useRef(
+		! urlParams.get( 'should_resume' )
+	).current;
 
 	const { setContinueProgressModal } = useDispatch( STORE_KEY );
 	const { continueProgressModal } = useSelect( ( select ) => {
@@ -60,6 +71,9 @@ const OnboardingAI = () => {
 		{ loadingNextStep } = aiOnboardingDetails;
 
 	const [ initialRedirectDone, setInitialRedirectDone ] = useState( false );
+	const [ breakPoint, setBreakPoint ] = useState(
+		getScreenWidthBreakPoint()
+	);
 
 	useEffect( () => {
 		if ( initialRedirectDone ) {
@@ -69,17 +83,14 @@ const OnboardingAI = () => {
 		const savedData = getLocalStorageItem(
 			'ai-builder-onboarding-details'
 		);
-		if ( savedData?.lastVisitedStep && aiBuilderVars?.zip_token_exists ) {
+		if ( savedData?.lastVisitedStep ) {
 			navigateTo( {
 				to: savedData.lastVisitedStep,
 				replace: true,
 			} );
-			setContinueProgressModal( { open: true } );
-		} else if ( ! aiBuilderVars?.zip_token_exists ) {
-			navigateTo( {
-				to: '/',
-				replace: true,
-			} );
+			if ( showContinueProgressModal ) {
+				setContinueProgressModal( { open: true } );
+			}
 		} else {
 			navigateTo( {
 				to: redirectToStepURL,
@@ -87,11 +98,8 @@ const OnboardingAI = () => {
 			} );
 		}
 		setInitialRedirectDone( true );
-	}, [
-		initialRedirectDone,
-		aiBuilderVars?.zip_token_exists,
-		redirectToStepURL,
-	] );
+	}, [ initialRedirectDone, redirectToStepURL ] );
+
 	useEffectAfterMount( () => {
 		if (
 			! aiOnboardingDetails?.stepData?.businessType ||
@@ -111,7 +119,9 @@ const OnboardingAI = () => {
 		const savedAiOnboardingDetails = getLocalStorageItem(
 			'ai-builder-onboarding-details'
 		);
+
 		if (
+			showContinueProgressModal &&
 			savedAiOnboardingDetails?.stepData?.businessType &&
 			authenticated
 		) {
@@ -119,6 +129,14 @@ const OnboardingAI = () => {
 				open: true,
 			} );
 		}
+
+		const handleResize = () => {
+			setBreakPoint( getScreenWidthBreakPoint() );
+		};
+		window.addEventListener( 'resize', handleResize );
+		return () => {
+			window.removeEventListener( 'resize', handleResize );
+		};
 	}, [] );
 
 	const dynamicStepClassNames = ( step, stepIndex ) => {
@@ -127,6 +145,12 @@ const OnboardingAI = () => {
 		}
 		if ( step > stepIndex ) {
 			return 'bg-secondary-text text-white border-secondary-text border-solid';
+		}
+		if (
+			getScreenWidthBreakPoint() === 'sm' ||
+			getScreenWidthBreakPoint() === 'xs'
+		) {
+			return 'border-solid border-step-connector bg-inherit bg-step-connector';
 		}
 		return 'border-solid border-step-connector text-secondary-text';
 	};
@@ -141,7 +165,6 @@ const OnboardingAI = () => {
 		return 'bg-border-line-inactive';
 	};
 
-	const urlParams = new URLSearchParams( window.location.search );
 	useLayoutEffect( () => {
 		const token = urlParams.get( 'token' );
 		if ( token ) {
@@ -151,7 +174,8 @@ const OnboardingAI = () => {
 				'email',
 				'action',
 				'credit_token',
-				'security'
+				'security',
+				'should_resume'
 			);
 
 			window.onbeforeunload = null;
@@ -192,6 +216,20 @@ const OnboardingAI = () => {
 		show_zip_plan,
 	} = aiBuilderVars;
 
+	const renderStepContent = ( stepIdx, currStep, stepNumber ) => {
+		if ( currStep === stepIdx ) {
+			return stepNumber;
+		} else if ( currStep > stepIdx ) {
+			return <CheckIcon className="max-sm:hidden h-3 w-3" />;
+		} else if (
+			getScreenWidthBreakPoint() === 'sm' ||
+			getScreenWidthBreakPoint() === 'xs'
+		) {
+			return '';
+		}
+		return stepNumber;
+	};
+
 	return (
 		<>
 			<div
@@ -204,21 +242,21 @@ const OnboardingAI = () => {
 				{ ! isAuthScreen && (
 					<header
 						className={ classNames(
-							'w-full h-full grid grid-cols-[8rem_1fr_8rem] items-center justify-between md:justify-start z-[5] relative bg-white shadow',
+							'w-full h-full grid grid-cols-[5rem_1fr_8rem] sm:grid-cols-[8rem_1fr_8rem] items-center justify-between md:justify-start z-[5] relative bg-white shadow pl-3',
 							steps[ currentStep ]?.layoutConfig?.hideHeader &&
 								'justify-center md:justify-between'
 						) }
 					>
 						{ /* Brand logo */ }
 						<img
-							className="h-10 ml-3"
+							className="h-10"
 							src={ logoUrlLight }
 							alt={ __( 'Build with AI', 'ai-builder' ) }
 						/>
 
 						{ /* Steps/Navigation items */ }
 						{ ! steps[ currentStep ]?.layoutConfig?.hideHeader && (
-							<nav className="hidden md:flex items-center justify-center gap-4 flex-1 md:gap-2 lg:gap-4">
+							<nav className="flex items-center sm:justify-center gap-4 flex-1 md:gap-2 lg:gap-4 pl-3 sm:pl-0">
 								{ steps.map(
 									(
 										{
@@ -266,23 +304,21 @@ const OnboardingAI = () => {
 																dynamicStepClassNames(
 																	currentStep,
 																	stepIdx
-																)
+																),
+																currentStep !==
+																	stepIdx &&
+																	'max-sm:h-2 max-sm:w-2'
 															) }
 														>
-															{ currentStep >
-															stepIdx ? (
-																<CheckIcon className="h-3 w-3" />
-															) : (
-																<span>
-																	{
-																		stepNumber
-																	}
-																</span>
+															{ renderStepContent(
+																stepIdx,
+																currentStep,
+																stepNumber
 															) }
 														</div>
 														<div
 															className={ classNames(
-																'text-sm font-medium text-secondary-text md:text-xs lg:text-sm',
+																'hidden md:block text-sm font-medium text-secondary-text md:text-xs lg:text-sm',
 																currentStep ===
 																	stepIdx &&
 																	'text-accent-st'
@@ -293,6 +329,8 @@ const OnboardingAI = () => {
 													</div>
 												</div>
 												{ steps.length - 1 > stepIdx &&
+													breakPoint !== 'sm' &&
+													breakPoint !== 'xs' &&
 													! (
 														steps[ stepIdx + 1 ]
 															?.layoutConfig
@@ -323,7 +361,7 @@ const OnboardingAI = () => {
 							getStepIndex( '/building-website' ) !==
 								currentStep && (
 								<div className="[grid-area:1/3] !mr-5 flex items-center justify-center mx-auto">
-									{ show_zip_plan && (
+									{ show_zip_plan && authenticated && (
 										<>
 											<button
 												onClick={ () =>
@@ -367,6 +405,7 @@ const OnboardingAI = () => {
 				</main>
 				<LimitExceedModal />
 				<ContinueProgressModal />
+				<SignupLoginModal />
 				<ApiErrorModel />
 				<PlanInformationModal />
 				<PlanUpgradePromoModal />

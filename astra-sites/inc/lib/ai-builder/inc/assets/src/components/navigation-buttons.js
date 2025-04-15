@@ -55,7 +55,7 @@ const NavigationButtons = ( {
 	return (
 		<div
 			className={ classNames(
-				'w-full flex items-center gap-4 flex-wrap md:flex-nowrap',
+				'w-full flex flex-col sm:flex-row items-start sm:items-center gap-4 flex-wrap md:flex-nowrap',
 				className
 			) }
 		>
@@ -106,7 +106,7 @@ const NavigationButtons = ( {
 			{ typeof onClickSkip === 'function' && (
 				<Button
 					type="button"
-					className="mr-auto ml-0 md:mr-0 md:ml-auto text-secondary-text"
+					className="ml-0 md:mr-0 sm:ml-auto text-secondary-text !px-0 py-0 sm:py-3"
 					onClick={ handleOnClickSkip }
 					variant="blank"
 				>

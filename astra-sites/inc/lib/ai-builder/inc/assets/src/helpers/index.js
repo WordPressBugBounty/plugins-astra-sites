@@ -169,3 +169,33 @@ export const toastBody = ( error ) => {
 		></span>
 	);
 };
+
+export const getScreenWidthBreakPoint = () => {
+	const width = window.innerWidth;
+
+	/** Tailwind CSS breakpoints */
+	const breakpoints = {
+		/** ExtraSmall */
+		xs: 512,
+		/** Small */
+		sm: 640,
+		/** Medium */
+		md: 768,
+		/** Large */
+		lg: 1024,
+		/** Extra Large */
+		xl: 1280,
+		/** 2x Extra Large */
+		'2xl': 1536,
+	};
+
+	/**
+	 *  Iterate through the breakpoints and return the first one
+	 *  where the width is less than or equal to the breakpoint.
+	 */
+	for ( const breakpoint in breakpoints ) {
+		if ( width <= breakpoints[ breakpoint ] ) {
+			return breakpoint;
+		}
+	}
+};

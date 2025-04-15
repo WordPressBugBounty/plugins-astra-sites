@@ -16,7 +16,6 @@ use AiBuilder\Inc\Traits\Instance;
  * @since  1.0.0
  */
 class Ai_Builder_Site_Options_Import {
-
 	use Instance;
 
 }

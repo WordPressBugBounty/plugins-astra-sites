@@ -91,6 +91,12 @@ class ST_WXR_Importer {
 			$sureforms_id_map[ $original_id ] = $post_id;
 			update_option( 'astra_sites_sureforms_id_map', $sureforms_id_map );
 		}
+
+		if ( 'sc_form' === get_post_type( $post_id ) ) {
+			$sureforms_id_map                 = get_option( 'astra_sites_surecart_forms_id_map', array() );
+			$sureforms_id_map[ $original_id ] = $post_id;
+			update_option( 'astra_sites_surecart_forms_id_map', $sureforms_id_map );
+		}
 	}
 
 	/**

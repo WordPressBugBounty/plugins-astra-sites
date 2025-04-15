@@ -23,10 +23,10 @@ const AISitesNotice = ( { className, ...props } ) => {
 					) }
 					{ ...props }
 				>
-					<span className="self-center">
+					<span className="self-start mt-1">
 						<LightningIcon />
 					</span>
-					<div className="w-full flex gap-1 justify-between">
+					<div className="w-full flex flex-col md:flex-row gap-1 justify-between">
 						<p className="text-body-text text-sm">
 							<span className="font-semibold pr-1">
 								{ __(
@@ -45,7 +45,7 @@ const AISitesNotice = ( { className, ...props } ) => {
 							rel="noreferrer"
 							className="no-underline"
 						>
-							<div className="p-0 font-semibold  text-sm text-blue-crayola min-w-fit">
+							<div className="p-0 font-semibold  text-sm text-blue-crayola min-w-fit w-max">
 								{ __( 'Buy Add-ons', 'ai-builder' ) }
 							</div>
 						</a>

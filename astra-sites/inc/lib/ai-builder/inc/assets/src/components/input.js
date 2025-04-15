@@ -81,7 +81,7 @@ const Input = (
 							`h-${ height }`,
 							label ? 'mt-2' : '',
 							noBorder
-								? 'bg-transparent'
+								? 'bg-transparent border-none shadow-none'
 								: 'px-3 border border-solid focus:!ring-1 focus:ring-accent-st',
 							enableAutoGrow && 'absolute left-0 min-w-[50px]',
 							disabled ? 'cursor-not-allowed' : '',
@@ -95,7 +95,7 @@ const Input = (
 							boxShadow:
 								error && ! noBorder
 									? '0px 1px 1px 0px #EF4444, 0px 0px 0px 1px #EF4444'
-									: '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
+									: '0px 1px 2px 0px rgba(0, 0, 0, 0.00)',
 						} }
 						onChange={
 							enableDebounce

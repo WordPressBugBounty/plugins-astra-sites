@@ -201,7 +201,7 @@ const WebsiteBuilding = () => {
 	return (
 		<>
 			<div className="flex flex-1 flex-col items-center justify-center gap-y-4 w-full pb-10">
-				<div className="flex items-center justify-center gap-x-6">
+				<div className="flex flex-col sm:flex-row items-center justify-center gap-6">
 					{ showProgressBar && (
 						<CircularProgressBar
 							colorCircle="#3d45921a"
@@ -225,12 +225,12 @@ const WebsiteBuilding = () => {
 						<ExclamationTriangleIcon className="w-16 h-16 mt-2 cursor-pointer text-alert-error" />
 					) }
 					<div className="flex flex-col">
-						<h4 className="text-xl">
+						<h4 className="text-xl sm:text-left text-center">
 							{ status === 'error'
 								? 'Something went wrong'
 								: 'We are building your website...' }
 						</h4>
-						<p className="zw-sm-normal text-app-text w-[350px]">
+						<p className="zw-sm-normal text-app-text w-[350px] sm:text-left text-center">
 							{ statusText }
 						</p>
 					</div>

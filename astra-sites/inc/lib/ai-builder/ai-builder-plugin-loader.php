@@ -8,11 +8,11 @@
 
 namespace AiBuilder;
 
-use AiBuilder\Inc\Api\ApiInit;
 use AiBuilder\Inc\Ajax\AjaxInit;
+use AiBuilder\Inc\Api\ApiInit;
 use AiBuilder\Inc\Classes\Zipwp\Ai_Builder_ZipWP_Api;
-use AiBuilder\Inc\Traits\Helper;
 use AiBuilder\Inc\Classes\Zipwp\Ai_Builder_ZipWP_Integration;
+use AiBuilder\Inc\Traits\Helper;
 use STImporter\Importer\ST_Importer_Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Ai_Builder_Plugin_Loader {
-
 	/**
 	 * Instance
 	 *
@@ -47,6 +46,26 @@ class Ai_Builder_Plugin_Loader {
 		'epizy',
 		'ezyro',
 	);
+
+	/**
+	 * Constructor
+	 *
+	 * @since 1.0.0
+	 */
+	public function __construct() {
+
+		spl_autoload_register( [ $this, 'autoload' ] );
+		add_action( 'plugins_loaded', array( $this, 'load_plugin' ), 99 );
+
+		/*
+			// add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
+		*/
+		add_action( 'admin_menu', [ $this, 'add_theme_page' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		add_filter( 'admin_body_class', [ $this, 'admin_body_class' ] );
+		$this->define_constants();
+		$this->setup_classes();
+	}
 
 	/**
 	 * Initiator
@@ -92,26 +111,6 @@ class Ai_Builder_Plugin_Loader {
 	}
 
 	/**
-	 * Constructor
-	 *
-	 * @since 1.0.0
-	 */
-	public function __construct() {
-
-		spl_autoload_register( [ $this, 'autoload' ] );
-		add_action( 'plugins_loaded', array( $this, 'load_plugin' ), 99 );
-
-		/*
-			// add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
-		*/
-		add_action( 'admin_menu', [ $this, 'add_theme_page' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-		add_filter( 'admin_body_class', [ $this, 'admin_body_class' ] );
-		$this->define_constants();
-		$this->setup_classes();
-	}
-
-	/**
 	 * Load plugin files.
 	 *
 	 * @since 1.0.0
@@ -136,6 +135,10 @@ class Ai_Builder_Plugin_Loader {
 
 		if ( ! defined( 'ZIPWP_API' ) ) {
 			define( 'ZIPWP_API', apply_filters( 'ai_builder_templates_zip_api_url', 'https://api.zipwp.com/api' ) );
+		}
+
+		if ( ! defined( 'ZIPWP_API_V1' ) ) {
+			define( 'ZIPWP_API_V1', apply_filters( 'ai_builder_templates_zip_api_url', 'https://api.zipwp.com/api/v1' ) );
 		}
 	}
 
@@ -296,7 +299,7 @@ class Ai_Builder_Plugin_Loader {
 			'wpApiSettings',
 			array(
 				'root'       => esc_url_raw( get_rest_url() ),
-				'nonce'      => ( wp_installing() && ! is_multisite() ) ? '' : wp_create_nonce( 'wp_rest' ),
+				'nonce'      => wp_installing() && ! is_multisite() ? '' : wp_create_nonce( 'wp_rest' ),
 				'zipwp_auth' => $zipwp_auth,
 			)
 		);
@@ -323,7 +326,7 @@ class Ai_Builder_Plugin_Loader {
 	 * @since 1.0.0
 	 */
 	public function admin_body_class( $classes ) {
-		$ai_builder_class_name = isset( $_GET['page'] ) && 'ai-builder' === $_GET['page'] ? 'ai-builder' : ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended 
+		$ai_builder_class_name = isset( $_GET['page'] ) && 'ai-builder' === $_GET['page'] ? 'ai-builder' : ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		$classes .= ' ' . $ai_builder_class_name;
 		return $classes;
@@ -348,9 +351,7 @@ class Ai_Builder_Plugin_Loader {
 			'subset' => rawurlencode( 'latin,latin-ext' ),
 		);
 
-		$fonts_url = add_query_arg( $query_args, '//fonts.googleapis.com/css' );
-
-		return $fonts_url;
+		return add_query_arg( $query_args, '//fonts.googleapis.com/css' );
 	}
 
 	/**
@@ -358,7 +359,7 @@ class Ai_Builder_Plugin_Loader {
 	 * Skipping error reporting for a few hosting providers.
 	 *
 	 * @since 1.0.0
-	 * @return boolean
+	 * @return bool
 	 */
 	public function should_report_error() {
 
@@ -427,7 +428,7 @@ class Ai_Builder_Plugin_Loader {
 			'installing'               => __( 'Installing...', 'astra-sites' ),
 			'logoUrlDark'              => apply_filters( 'st_ai_onboarding_logo_dark', AI_BUILDER_URL . 'inc/assets/images/build-with-ai/st-logo-dark.svg' ),
 			'logoUrlLight'             => apply_filters( 'st_ai_onboarding_logo_light', AI_BUILDER_URL . 'inc/assets/images/logo.svg' ),
-			'zip_plans'                => ( $plans && isset( $plans['data'] ) ) ? $plans['data'] : array(),
+			'zip_plans'                => $plans && isset( $plans['data'] ) ? $plans['data'] : array(),
 			'dashboard_url'            => admin_url(),
 			'migrateSvg'               => apply_filters( 'ai_builder_migrate_svg', AI_BUILDER_URL . 'inc/assets/images/build-with-ai/migrate.svg' ),
 			'business_details'         => Ai_Builder_ZipWP_Integration::get_business_details(),

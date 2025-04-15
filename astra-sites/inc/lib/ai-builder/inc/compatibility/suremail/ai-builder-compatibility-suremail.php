@@ -10,7 +10,7 @@
 
 namespace AiBuilder\Inc\Compatibility\SureCart;
 
-if ( ! class_exists( 'Ai_Builder_Compatibility_SureMail' ) ) :
+if ( ! class_exists( 'Ai_Builder_Compatibility_SureMail' ) ) {
 
 	/**
 	 * SureMail Compatibility
@@ -18,7 +18,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureMail' ) ) :
 	 * @since 1.2.26
 	 */
 	class Ai_Builder_Compatibility_SureMail {
-
 		/**
 		 * Instance
 		 *
@@ -27,6 +26,15 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureMail' ) ) :
 		 * @since 1.2.26
 		 */
 		private static $instance = null;
+
+		/**
+		 * Constructor
+		 *
+		 * @since 1.2.26
+		 */
+		public function __construct() {
+			add_action( 'astra_sites_after_plugin_activation', array( $this, 'activation' ), 10 );
+		}
 
 		/**
 		 * Initiator
@@ -39,15 +47,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureMail' ) ) :
 				self::$instance = new self();
 			}
 			return self::$instance;
-		}
-
-		/**
-		 * Constructor
-		 *
-		 * @since 1.2.26
-		 */
-		public function __construct() {
-			add_action( 'astra_sites_after_plugin_activation', array( $this, 'activation' ), 10 );
 		}
 
 		/**
@@ -69,4 +68,4 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureMail' ) ) :
 	 */
 	Ai_Builder_Compatibility_SureMail::instance();
 
-endif;
+}

@@ -18,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class AjaxErrors
  */
 class AjaxErrors {
-
 	use Instance;
 
 	/**

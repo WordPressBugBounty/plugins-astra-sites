@@ -1165,7 +1165,11 @@ const ImportAiSite = () => {
 		const spectraSettings =
 			templateResponse[ 'astra-site-spectra-options' ] || '';
 
-		if ( '' === spectraSettings || 'null' === spectraSettings ) {
+		if (
+			'' === spectraSettings ||
+			'null' === spectraSettings ||
+			spectraSettings?.length === 0
+		) {
 			return true;
 		}
 
@@ -1503,7 +1507,7 @@ const ImportAiSite = () => {
 		} );
 
 		const finalSteps = new FormData();
-		finalSteps.append( 'action', 'astra-sites-gutenberg_batch' );
+		finalSteps.append( 'action', 'astra-sites-page_builder_batch' );
 		finalSteps.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
 
 		const status = await fetch( ajaxurl, {
@@ -1533,7 +1537,7 @@ const ImportAiSite = () => {
 					throw data.data;
 				} catch ( error ) {
 					report(
-						__( 'Gutenberg batch failed.', 'ai-builder' ),
+						__( 'Batch process failed.', 'ai-builder' ),
 						'',
 						error,
 						'',
@@ -1555,7 +1559,7 @@ const ImportAiSite = () => {
 			} )
 			.catch( ( error ) => {
 				report(
-					__( 'Gutenberg Batch Failed.', 'ai-builder' ),
+					__( 'Batch process failed.', 'ai-builder' ),
 					'',
 					error
 				);
@@ -2090,7 +2094,7 @@ const ImportAiSite = () => {
 	return (
 		<>
 			<div className="flex flex-1 flex-col items-center justify-center w-full gap-y-4 pb-10">
-				<div className="flex items-center justify-center gap-x-6">
+				<div className="flex flex-col sm:flex-row items-center justify-center gap-6">
 					{ showProgressBar && ! importError && (
 						<CircularProgressBar
 							colorCircle="rgba(var(--zip-blue-crayola) / var(--zip-circle-bg-opacity, 0.102))"
@@ -2119,7 +2123,7 @@ const ImportAiSite = () => {
 					) }
 					<div className="flex flex-col">
 						{ ! importEnd && ! importError && (
-							<h4 className="text-xl">
+							<h4 className="text-xl sm:text-left text-center">
 								{ __(
 									'We are building your website…',
 									'ai-builder'
@@ -2135,7 +2139,7 @@ const ImportAiSite = () => {
 				</div>
 				{ ! importError && (
 					<>
-						<div className="relative flex items-center justify-center px-10 py-6 h-120 w-120 bg-loading-website-grid-texture">
+						<div className="relative flex items-center justify-center px-0 sm:px-10 py-6 h-120 w-120 bg-loading-website-grid-texture">
 							<img
 								className="w-[30rem] h-[20.875rem]"
 								src={ migrateSvg }

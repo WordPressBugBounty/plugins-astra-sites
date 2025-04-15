@@ -10,11 +10,10 @@ namespace AiBuilder\Inc\Classes\Importer;
 
 use AiBuilder\Inc\Traits\Instance;
 
-	/**
-	 * Ai_Builder_Utils
-	 */
+/**
+ * Ai_Builder_Utils
+ */
 class Ai_Builder_Utils {
-
 	use Instance;
 
 	/**

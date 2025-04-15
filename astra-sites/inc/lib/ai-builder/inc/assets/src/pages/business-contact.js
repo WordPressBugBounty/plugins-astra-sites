@@ -159,9 +159,9 @@ const BusinessContact = () => {
 			/>
 
 			<div className="space-y-5">
-				<div className="flex justify-between gap-x-8 items-start w-full h-[76px]">
+				<div className="block sm:flex justify-between gap-x-8 items-start w-full">
 					<Input
-						className="w-full h-[48px] text-zip-app-heading"
+						className="w-full min-h-[48px] text-zip-app-heading"
 						type="email"
 						name="email"
 						id="email"
@@ -178,10 +178,10 @@ const BusinessContact = () => {
 								),
 							},
 						} }
-						height="[48px]"
+						height="12"
 					/>
 					<Input
-						className="w-full h-[48px] text-zip-app-heading"
+						className="w-full min-h-[48px] text-zip-app-heading mt-8 sm:mt-0"
 						type="text"
 						name="phone"
 						id="phone"
@@ -189,7 +189,7 @@ const BusinessContact = () => {
 						placeholder={ __( 'Your phone number', 'ai-builder' ) }
 						register={ register }
 						error={ errors.phone }
-						height="[48px]"
+						height="12"
 					/>
 				</div>
 				<Textarea

@@ -29,7 +29,7 @@ import SuggestedKeywords from '../components/suggested-keywords';
 import Tile from '../components/tile';
 import UploadImage from '../components/upload-image';
 
-import { classNames, toastBody } from '../helpers';
+import { classNames, getScreenWidthBreakPoint, toastBody } from '../helpers';
 import { useDebounce, useDebounceWithCancel } from '../hooks/use-debounce';
 import usePopper from '../hooks/use-popper';
 import { useNavigateSteps } from '../router';
@@ -60,6 +60,7 @@ const TABS = [
 	},
 	{
 		label: __( 'Upload Your Images', 'ai-builder' ),
+		mobileLabel: __( 'Upload', 'ai-builder' ),
 		value: 'upload',
 	},
 	{
@@ -261,6 +262,9 @@ const Images = () => {
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ backToTop, setBackToTop ] = useState( false );
 	const [ activeTab, setActiveTab ] = useState( 'all' );
+	const [ breakpoint, setBreakpoint ] = useState(
+		getScreenWidthBreakPoint()
+	);
 
 	const [ openSuggestedKeywords, setOpenSuggestedKeywords ] =
 		useState( false );
@@ -723,13 +727,23 @@ const Images = () => {
 		}
 	};
 
+	useEffect( () => {
+		const handleResize = () => {
+			setBreakpoint( getScreenWidthBreakPoint() );
+		};
+		window.addEventListener( 'resize', handleResize );
+		return () => {
+			window.removeEventListener( 'resize', handleResize );
+		};
+	}, [] );
+
 	return (
 		<div
 			className="w-full flex flex-col flex-auto h-full overflow-y-auto"
 			ref={ scrollContainerRef }
 			onScroll={ handleScroll }
 		>
-			<div className="w-full space-y-6">
+			<div className="w-full space-y-6 px-5 md:px-10 lg:px-14 xl:px-15">
 				<Heading
 					heading={ __( 'Select the Images', 'ai-builder' ) }
 					className="px-5 md:px-10 lg:px-14 xl:px-15 pt-5 md:pt-10 lg:pt-8 xl:pt-8 max-w-fit mx-auto"
@@ -819,14 +833,14 @@ const Images = () => {
 			</div>
 			<div className="sticky top-0 pt-4 space-y-6 z-[1] bg-container-background px-5 md:px-10 lg:px-14 xl:px-15">
 				<div className=" rounded-t-lg py-4">
-					<div className="flex items-center justify-between">
-						<div className="flex items-center gap-1 text-sm font-normal leading-[21px]">
+					<div className="flex sm:flex-row flex-col items-start sm:items-center justify-between">
+						<div className="flex items-center gap-1 text-sm font-normal leading-[21px] sm:mb-0 mb-5 w-full">
 							{ /* Tabs */ }
 							<div className="flex items-center justify-start gap-3">
 								{ TABS.map( ( tab ) => (
 									<button
 										className={ classNames(
-											'before:content-[attr(data-title)] before:block before:font-bold before:text-sm before:invisible before:h-0',
+											'before:content-[""] before:block before:font-bold before:text-sm before:invisible before:h-0',
 											'pb-3 px-0 pt-0 !border-x-0 !border-t-0 border-b-2 border-solid !border-b-accent-st bg-transparent text-sm font-semibold text-accent-st cursor-pointer focus-visible:outline-none focus:outline-none',
 											tab.value !== activeTab &&
 												'border-0 font-normal text-body-text'
@@ -839,7 +853,10 @@ const Images = () => {
 										data-title={ tab.label }
 										disabled={ loadingNextStep }
 									>
-										{ tab.label }
+										{ tab.value === TABS[ 1 ].value &&
+										breakpoint === 'xs'
+											? tab.mobileLabel
+											: tab.label }
 										{ tab.value === TABS[ 2 ].value &&
 											!! getSelectedImages(
 												selectedImages
@@ -867,7 +884,7 @@ const Images = () => {
 								placement="right"
 								trigger={
 									<div
-										className="flex items-center gap-2 min-w-[100px] py-3 pl-4 pr-3 cursor-pointer border border-border-primary rounded-md"
+										className="flex items-center gap-2 min-w-[100px] w-[160px] py-3 pl-4 pr-3 cursor-pointer border border-border-primary rounded-md"
 										data-disabled={ loadingNextStep }
 									>
 										<span className="text-sm font-normal text-body-text leading-[150%]">
@@ -912,10 +929,11 @@ const Images = () => {
 							!! selectedImages?.length && (
 								<button
 									onClick={ handleClearImageSelection }
-									className="px-1 py-px bg-transparent border border-solid border-border-primary rounded text-xs leading-4 text-body-text cursor-pointer"
+									className="flex border px-2.5 py-2 font-semibold border-blue-crayola text-xs rounded text-blue-crayola bg-white w-24"
 									disabled={ loadingNextStep }
 								>
-									{ __( 'Clear', 'ai-builder' ) }
+									<XMarkIcon className="w-4 h-4 block mr-1 text-zip-body-text" />
+									{ __( 'Clear all', 'ai-builder' ) }
 								</button>
 							) }
 						{ activeTab === TABS[ 1 ].value && (
@@ -923,7 +941,7 @@ const Images = () => {
 								render={ ( { open } ) => (
 									<button
 										ref={ uploadImagesBtn }
-										className="px-0 bg-transparent border-none rounded text-xs leading-5 font-semibold text-accent-st cursor-pointer inline-flex items-center justify-end gap-2"
+										className="px-0 bg-transparent border-none rounded text-xs leading-5 font-semibold text-accent-st cursor-pointer inline-flex items-center justify-end gap-2 w-auto sm:w-44"
 										onClick={ open }
 										disabled={ loadingNextStep }
 									>
@@ -958,14 +976,18 @@ const Images = () => {
 					>
 						<input { ...getInputProps() } />
 						<ArrowUpTrayIcon className="w-6 h-6 text-zip-app-inactive-icon" />
-						<p className="text-zip-body-text text-base">
+						<p className="text-zip-body-text text-base text-center">
 							<span className="text-accent-st min-w-fit break-keep text-nowrap whitespace-nowrap font-semibold mr-1">
 								{ __( 'Upload images', 'ai-builder' ) }
 							</span>
-							{ __(
-								'or drop your images here (Max 20)',
-								'ai-builder'
-							) }
+							<span>
+								{ __(
+									'or drop your images here',
+									'ai-builder'
+								) }
+								<br />
+								{ __( '(Max 20)', 'ai-builder' ) }
+							</span>
 						</p>
 						<p className="text-zip-body-text text-base">
 							{ __( 'PNG, JPG, JPEG', 'ai-builder' ) }
@@ -988,10 +1010,10 @@ const Images = () => {
 				<AnimatePresence>
 					{ renderImages?.length > 0 && (
 						<Masonry
-							className="gap-6 [&>div]:gap-6"
+							className="gap-4 sm:gap-6 [&>div]:gap-6"
 							columns={ {
 								default: 1,
-								220: 1,
+								640: 2,
 								767: 3,
 								1024: 3,
 								1280: 5,

@@ -10,7 +10,7 @@
 
 namespace AiBuilder\Inc\Compatibility\SureCart;
 
-if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
+if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) {
 
 	/**
 	 * SureCart Compatibility
@@ -18,7 +18,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 	 * @since 3.3.0
 	 */
 	class Ai_Builder_Compatibility_SureCart {
-
 		/**
 		 * Instance
 		 *
@@ -27,6 +26,17 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 		 * @since 3.3.0
 		 */
 		private static $instance = null;
+
+		/**
+		 * Constructor
+		 *
+		 * @since 3.3.0
+		 */
+		public function __construct() {
+			add_action( 'init', array( $this, 'disable_default_surecart_pages_creation' ), 2 );
+			add_action( 'astra_sites_import_complete', array( $this, 'get_all_pages' ), 10 );
+			add_action( 'astra_sites_after_plugin_activation', array( $this, 'activation' ), 10 );
+		}
 
 		/**
 		 * Initiator
@@ -39,17 +49,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 				self::$instance = new self();
 			}
 			return self::$instance;
-		}
-
-		/**
-		 * Constructor
-		 *
-		 * @since 3.3.0
-		 */
-		public function __construct() {
-			add_action( 'init', array( $this, 'disable_default_surecart_pages_creation' ), 2 );
-			add_action( 'astra_sites_import_complete', array( $this, 'get_all_pages' ), 10 );
-			add_action( 'astra_sites_after_plugin_activation', array( $this, 'activation' ), 10 );
 		}
 
 		/**
@@ -83,7 +82,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 					$this->check_page_types_and_update_options( $page_id, $page_content );
 				}
 			}
-
 		}
 
 		/**
@@ -134,4 +132,4 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 	 */
 	Ai_Builder_Compatibility_SureCart::instance();
 
-endif;
+}

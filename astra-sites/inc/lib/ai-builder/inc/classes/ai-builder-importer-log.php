@@ -14,7 +14,6 @@ use AiBuilder\Inc\Traits\Instance;
  * Astra Sites Importer
  */
 class Ai_Builder_Importer_Log {
-
 	use Instance;
 
 	/**
@@ -36,7 +35,6 @@ class Ai_Builder_Importer_Log {
 		if ( current_user_can( 'edit_posts' ) ) {
 			add_action( 'admin_init', array( $this, 'has_file_read_write' ) );
 		}
-
 	}
 
 	/**
@@ -155,7 +153,6 @@ class Ai_Builder_Importer_Log {
 		self::add( 'WHY IMPORT PROCESS CAN FAIL? READ THIS - ' );
 		self::add( 'https://wpastra.com/docs/?p=1314&utm_source=demo-import-panel&utm_campaign=import-error&utm_medium=wp-dashboard' . PHP_EOL );
 		self::add( '---' . PHP_EOL );
-
 	}
 
 	/**
@@ -271,7 +268,6 @@ class Ai_Builder_Importer_Log {
 		if ( method_exists( self::get_filesystem(), 'put_contents' ) ) {
 			self::get_filesystem()->put_contents( $log_file, $existing_data . $separator . $content, FS_CHMOD_FILE );
 		}
-
 	}
 
 	/**
@@ -462,7 +458,7 @@ class Ai_Builder_Importer_Log {
 			$transient_timeout = $wpdb->get_col(
 				$wpdb->prepare(
 					"SELECT option_value
-				FROM $wpdb->options
+				FROM {$wpdb->options}
 				WHERE option_name
 				LIKE %s",
 					'%_transient_timeout_' . $transient . '%'
@@ -540,4 +536,3 @@ class Ai_Builder_Importer_Log {
  * Kicking this off by calling 'get_instance()' method
  */
 Ai_Builder_Importer_Log::Instance();
-

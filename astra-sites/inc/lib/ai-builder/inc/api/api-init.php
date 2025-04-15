@@ -16,7 +16,6 @@ use AiBuilder\Inc\Traits\Instance;
  * @since 0.0.1
  */
 class ApiInit {
-
 	use Instance;
 
 	/**

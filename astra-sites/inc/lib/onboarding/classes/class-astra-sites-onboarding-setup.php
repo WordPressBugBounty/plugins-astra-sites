@@ -51,6 +51,7 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 			add_action( 'st_before_sending_error_report', array( $this, 'delete_transient_for_import_process' ) );
 			add_action( 'st_before_sending_error_report', array( $this, 'temporary_cache_errors' ), 10, 1 );
 			add_action( 'wp_ajax_astra-sites-import_prepare_xml', array( $this, 'import_prepare_xml' ) );
+			add_action( 'wp_ajax_bsf_analytics_optin_status', array( $this, 'bsf_analytics_optin_status' ) );
 		}
 
 	/**
@@ -67,6 +68,8 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 		if ( ! current_user_can( 'customize' ) ) {
 			wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 		}
+
+		do_action( 'astra_sites_before_import_prepare_xml' );
 
 		if ( ! class_exists( 'XMLReader' ) ) {
 			wp_send_json_error( __( 'The XMLReader library is not available. This library is required to import the content for the website.', 'astra-sites' ) );
@@ -92,6 +95,31 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 			);
 		}
 	}
+
+		/**
+		 * BSF Analytics Opt-in.
+		 *
+		 * @return void
+		 * @since 4.4.19
+		 */
+		public function bsf_analytics_optin_status() {
+			// Verify Nonce.
+			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
+
+			if ( ! current_user_can( 'customize' ) ) {
+				wp_send_json_error( esc_html__( 'You are not allowed to perform this action', 'astra-sites' ) );
+			}
+
+			if ( empty( $_POST ) || ! isset( $_POST['bsfUsageTracking'] ) ) {
+				wp_send_json_error( esc_html__( 'Missing required parameter.', 'astra-sites' ) );
+			}
+
+			$opt_in = filter_input( INPUT_POST, 'bsfUsageTracking', FILTER_VALIDATE_BOOLEAN ) ? 'yes' : 'no';
+
+			update_site_option( 'bsf_analytics_optin', $opt_in );
+
+			wp_send_json_success( esc_html__( 'Usage tracking updated successfully.', 'astra-sites' ) );
+		}
 
 		/**
 		 * Delete transient for import process.

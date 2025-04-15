@@ -115,7 +115,7 @@ const BusinessDetails = () => {
 						height="12"
 					/>
 				</div>
-				<div className="w-full flex items-start justify-start flex-wrap lg:flex-nowrap gap-8">
+				<div className="w-full flex flex-col sm:flex-row items-stretch sm:items-start justify-start flex-wrap lg:flex-nowrap gap-8">
 					<div className="flex-1 min-h-[48px] min-w-[calc(100%_/_2)] md:min-w-0 !space-y-2">
 						<h5 className="text-sm flex font-medium leading-5 items-center">
 							{ __( 'This website is for:', 'ai-builder' ) }

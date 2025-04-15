@@ -61,12 +61,12 @@ const ContinueProgressModal = () => {
 							'ai-builder'
 						) }
 					</div>
-					<div className="flex items-center gap-3 justify-center mt-8">
+					<div className="flex items-center gap-3 justify-center mt-8 flex-col xs:flex-row">
 						<Button
 							type="submit"
 							variant="primary"
 							size="medium"
-							className="min-w-[206px] text-sm font-semibold leading-5 px-5"
+							className="min-w-[206px] text-sm font-semibold leading-5 px-5 w-full xs:w-auto"
 							onClick={ handleContinue }
 						>
 							{ __( 'Resume Previous Session', 'ai-builder' ) }
@@ -75,7 +75,7 @@ const ContinueProgressModal = () => {
 							variant="white"
 							size="medium"
 							onClick={ handleStartOver }
-							className="min-w-[206px] text-sm font-semibold leading-5"
+							className="min-w-[206px] text-sm font-semibold leading-5 w-full xs:w-auto"
 						>
 							{ __( 'Start Over', 'ai-builder' ) }
 						</Button>

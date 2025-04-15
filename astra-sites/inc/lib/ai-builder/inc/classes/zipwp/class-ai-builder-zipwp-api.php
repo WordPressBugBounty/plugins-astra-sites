@@ -8,12 +8,11 @@
 
 namespace AiBuilder\Inc\Classes\Zipwp;
 
+use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
 use AiBuilder\Inc\Traits\Helper;
 use AiBuilder\Inc\Traits\Instance;
-use AiBuilder\Inc\Classes\Zipwp\Ai_Builder_ZipWP_Integration;
-use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
-use STImporter\Importer\WXR_Importer\ST_WXR_Importer;
 use STImporter\Importer\ST_Importer_File_System;
+use STImporter\Importer\WXR_Importer\ST_WXR_Importer;
 
 /**
  * Class ZipWP API
@@ -21,7 +20,6 @@ use STImporter\Importer\ST_Importer_File_System;
  * @since 1.0.0
  */
 class Ai_Builder_ZipWP_Api {
-
 	use Instance;
 	/**
 	 * Constructor
@@ -32,16 +30,19 @@ class Ai_Builder_ZipWP_Api {
 		add_action( 'rest_api_init', array( $this, 'register_route' ) );
 	}
 
-
-
 	/**
 	 * Get api domain
 	 *
 	 * @since 4.0.0
+	 * @param bool $v1 Check for V1.
 	 * @return string
 	 */
-	public function get_api_domain() {
-		return ( defined( 'ZIPWP_API' ) ? ZIPWP_API : 'https://api.zipwp.com/api/' );
+	public function get_api_domain( $v1 = true ) {
+		if ( $v1 ) {
+			return defined( 'ZIPWP_API_V1' ) ? ZIPWP_API_V1 : 'https://api.zipwp.com/api/v1/';
+		}
+
+		return defined( 'ZIPWP_API' ) ? ZIPWP_API : 'https://api.zipwp.com/api/';
 	}
 
 	/**
@@ -72,7 +73,7 @@ class Ai_Builder_ZipWP_Api {
 	 * Check whether a given request has permission to read notes.
 	 *
 	 * @param  object $request WP_REST_Request Full details about the request.
-	 * @return object|boolean
+	 * @return object|bool
 	 */
 	public function get_item_permissions_check( $request ) {
 
@@ -338,6 +339,11 @@ class Ai_Builder_ZipWP_Api {
 							'sanitize_callback' => 'sanitize_text_field',
 							'required'          => false,
 						),
+						'page_builder'  => array(
+							'type'              => 'string',
+							'sanitize_callback' => 'sanitize_text_field',
+							'required'          => false,
+						),
 					),
 				),
 			)
@@ -364,6 +370,11 @@ class Ai_Builder_ZipWP_Api {
 						'page'          => array(
 							'type'     => 'integer',
 							'required' => true,
+						),
+						'page_builder'  => array(
+							'type'              => 'string',
+							'sanitize_callback' => 'sanitize_text_field',
+							'required'          => false,
 						),
 					),
 				),
@@ -691,7 +702,7 @@ class Ai_Builder_ZipWP_Api {
 	 * @return array<string, mixed>
 	 */
 	public function get_zip_plans() {
-		$api_endpoint = $this->get_api_domain() . '/plan/current-plan';
+		$api_endpoint = $this->get_api_domain( false ) . '/plan/current-plan';
 
 		$request_args = array(
 			'headers'   => $this->get_api_headers(),
@@ -706,29 +717,27 @@ class Ai_Builder_ZipWP_Api {
 				'data'   => 'Failed ' . $response->get_error_message(),
 				'status' => false,
 			);
-		} else {
+		}
 			$response_code = wp_remote_retrieve_response_code( $response );
 			$response_body = wp_remote_retrieve_body( $response );
-			if ( 200 === $response_code ) {
-				$response_data = json_decode( $response_body, true );
-				if ( $response_data ) {
-					return array(
-						'data'   => $response_data,
-						'status' => true,
-					);
-				} else {
-					return array(
-						'data'   => $response_data,
-						'status' => false,
-					);
-				}
-			} else {
+		if ( 200 === $response_code ) {
+			$response_data = json_decode( $response_body, true );
+			if ( $response_data ) {
+				return array(
+					'data'   => $response_data,
+					'status' => true,
+				);
+			}
+				return array(
+					'data'   => $response_data,
+					'status' => false,
+				);
+
+		}
 				return array(
 					'data'   => 'Failed',
 					'status' => false,
 				);
-			}
-		}
 	}
 
 	/**
@@ -751,7 +760,7 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 
-		$api_endpoint = $this->get_api_domain() . '/starter-templates/site/';
+		$api_endpoint = $this->get_api_domain( false ) . '/starter-templates/site/';
 
 		$post_data = array(
 			'template'               => isset( $request['template'] ) ? sanitize_text_field( $request['template'] ) : '',
@@ -822,7 +831,6 @@ class Ai_Builder_ZipWP_Api {
 				)
 			);
 		}
-
 	}
 
 	/**
@@ -845,7 +853,7 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 
-		$api_endpoint = $this->get_api_domain() . '/starter-templates/wxr/';
+		$api_endpoint = $this->get_api_domain( false ) . '/starter-templates/wxr/';
 
 		$post_data    = array(
 			'template'      => isset( $request['template'] ) ? sanitize_text_field( $request['template'] ) : '',
@@ -931,7 +939,6 @@ class Ai_Builder_ZipWP_Api {
 				)
 			);
 		}
-
 	}
 
 	/**
@@ -954,7 +961,7 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 
-		$api_endpoint = $this->get_api_domain() . '/starter-templates/export/' . sanitize_text_field( $request['uuid'] );
+		$api_endpoint = $this->get_api_domain( false ) . '/starter-templates/export/' . sanitize_text_field( $request['uuid'] );
 
 		$post_data    = array(
 			'template'      => isset( $request['template'] ) ? sanitize_text_field( $request['template'] ) : '',
@@ -1023,7 +1030,6 @@ class Ai_Builder_ZipWP_Api {
 				)
 			);
 		}
-
 	}
 
 	/**
@@ -1048,7 +1054,7 @@ class Ai_Builder_ZipWP_Api {
 
 		$email = $this->get_zip_user_email();
 
-		$api_endpoint = $this->get_api_domain() . '/sites/generate-user-cache/';
+		$api_endpoint = $this->get_api_domain() . '/sites/generate-cache/';
 
 		$business_details = array(
 			'business_description'   => isset( $request['business_description'] ) ? sanitize_text_field( $request['business_description'] ) : '',
@@ -1217,7 +1223,7 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 
-		$api_endpoint = $this->get_api_domain() . '/images/';
+		$api_endpoint = $this->get_api_domain() . '/sites/images/';
 
 		$post_data = array(
 			'keywords'    => isset( $request['keywords'] ) ? [ $request['keywords'] ] : [],
@@ -1288,7 +1294,7 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 
-		$api_endpoint = $this->get_api_domain() . '/images/keyword/';
+		$api_endpoint = $this->get_api_domain() . '/sites/images/keywords/';
 
 		$post_data = array(
 			'business_desc' => isset( $request['business_description'] ) ? sanitize_text_field( $request['business_description'] ) : '',
@@ -1364,7 +1370,7 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 
-		$api_endpoint = $this->get_api_domain() . '/templates-keywords/';
+		$api_endpoint = $this->get_api_domain() . '/sites/templates/keywords';
 
 		$post_data = array(
 			'business_desc'          => isset( $request['business_description'] ) ? sanitize_text_field( $request['business_description'] ) : '',
@@ -1446,10 +1452,11 @@ class Ai_Builder_ZipWP_Api {
 
 		$keyword = isset( $request['keyword'] ) ? sanitize_text_field( $request['keyword'] ) : 'multipurpose';
 
-		$api_endpoint = $this->get_api_domain() . '/templates-search?query=' . $keyword;
+		$api_endpoint = $this->get_api_domain() . '/sites/templates/search?query=' . $keyword;
 
 		$post_data = array(
 			'business_name' => isset( $request['business_name'] ) ? sanitize_text_field( $request['business_name'] ) : '',
+			'page_builder'  => isset( $request['page_builder'] ) ? sanitize_text_field( $request['page_builder'] ) : 'spectra',
 			'email'         => $this->get_zip_user_email(),
 		);
 
@@ -1527,10 +1534,11 @@ class Ai_Builder_ZipWP_Api {
 		$per_page = isset( $request['per_page'] ) ? intval( $request['per_page'] ) : 9;
 		$page     = isset( $request['page'] ) ? intval( $request['page'] ) : 1;
 
-		$api_endpoint = $this->get_api_domain() . '/all-templates';
+		$api_endpoint = $this->get_api_domain() . '/sites/templates/all';
 
 		$post_data = array(
 			'business_name' => isset( $request['business_name'] ) ? sanitize_text_field( $request['business_name'] ) : '',
+			'page_builder'  => isset( $request['page_builder'] ) ? sanitize_text_field( $request['page_builder'] ) : 'spectra',
 			'email'         => $this->get_zip_user_email(),
 			'per_page'      => $per_page,
 			'page'          => $page,
@@ -1662,7 +1670,6 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 	}
-
 
 	/**
 	 * Get ZipWP Features list.
@@ -1839,7 +1846,7 @@ class Ai_Builder_ZipWP_Api {
 				$credit_details               = array();
 				$credit_details['used']       = ! empty( $response_data['total_used_credits'] ) ? $response_data['total_used_credits'] : 0;
 				$credit_details['total']      = $response_data['total_credits'];
-				$credit_details['percentage'] = intval( ( $credit_details['used'] / $credit_details['total'] ) * 100 );
+				$credit_details['percentage'] = intval( $credit_details['used'] / $credit_details['total'] * 100 );
 				$credit_details['free_user']  = $response_data['free_user'];
 				wp_send_json_success(
 					array(
@@ -1886,7 +1893,7 @@ class Ai_Builder_ZipWP_Api {
 
 		$site         = get_option( 'zipwp_import_site_details', array() );
 		$uuid         = is_array( $site ) ? $site['uuid'] : '';
-		$api_endpoint = $this->get_api_domain() . '/sites/import-status/' . $uuid . '/';
+		$api_endpoint = $this->get_api_domain( false ) . '/sites/import-status/' . $uuid . '/';
 		$request_args = array(
 			'headers' => $this->get_api_headers(),
 			'timeout' => 100,

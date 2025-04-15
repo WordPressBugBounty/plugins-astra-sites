@@ -872,17 +872,18 @@ class Plugin {
 		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
 			return;
 		}
-		
-		$exclude_post_types = apply_filters( 'ast_block_templates_exclude_post_types', array() );
-		$post_types = array_diff( get_post_types( array( 'public' => true ), 'names' ), $exclude_post_types );
 
+		$exclude_post_types = apply_filters( 'ast_block_templates_exclude_post_types', array( 'sureforms_form' ) );
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/screen.php';
+		}
 		$current_screen = get_current_screen();
 
 		if ( ! is_object( $current_screen ) && is_null( $current_screen ) ) {
 			return;
 		}
 
-		if ( 'site-editor' !== $current_screen->base && ! array_key_exists( $current_screen->post_type, $post_types ) ) {
+		if ( 'site-editor' !== $current_screen->base && in_array( $current_screen->post_type, $exclude_post_types, true ) ) {
 			return;
 		}
 

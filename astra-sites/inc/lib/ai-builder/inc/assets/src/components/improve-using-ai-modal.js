@@ -73,7 +73,7 @@ const ImproveUsingAiModal = ( { handleFetchSuggestion } ) => {
 			) }
 
 			<div className="flex flex-col pt-2 !mt-5 gap-y-5">
-				<div className="flex gap-4 items-center space-x-3">
+				<div className="flex gap-4 items-center space-x-3 flex-col xs:flex-row">
 					<Button
 						className="w-full h-10 text-sm"
 						variant="primary"

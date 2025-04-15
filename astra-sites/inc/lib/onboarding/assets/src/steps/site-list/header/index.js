@@ -7,6 +7,7 @@ import Logo from '../../../components/logo';
 import PageBuilder from '../page-builder-filter';
 import ExitToDashboard from '../../../components/exist-to-dashboard';
 import MyFavorite from './my-favorite';
+import TrackingOption from './tracking-option';
 import SyncLibrary from './sync-library';
 import useWhatsNewRSS from 'whats-new-rss';
 import { __ } from '@wordpress/i18n';
@@ -56,6 +57,7 @@ const SiteListHeader = () => {
 				<Logo />
 			</div>
 			<div className="st-header-right">
+				<TrackingOption />
 				<div className="relative">
 					<Tooltip content={ __( "What's New", 'astra-sites' ) }>
 						<div id="st-whats-new"></div>

@@ -1813,6 +1813,11 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 				$key = array_search( $child->tagName, $tag_name ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase, WordPress.PHP.StrictInArray.MissingTrueStrict -- 3rd party library.
 				if ( $key ) {
 					$data[ $key ] = $child->textContent; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- 3rd party library.
+				} elseif ( 'wp:termmeta' === $child->tagName ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- 3rd party library.
+					$meta_item = $this->parse_meta_node( $child );
+					if ( ! empty( $meta_item ) ) {
+						$meta[] = $meta_item;
+					}
 				}
 			}
 
@@ -1950,6 +1955,7 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 				)
 			);
 
+			$this->process_term_meta( $meta, $term_id, $data );
 			do_action( 'wp_import_insert_term', $term_id, $data );
 
 			/**
@@ -1959,6 +1965,51 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 			 * @param array $data Raw data imported for the term.
 			 */
 			do_action( 'wxr_importer.processed.term', $term_id, $data ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores -- 3rd party library.
+		}
+
+		/**
+		 * Process and import term meta items.
+		 *
+		 * @param array $meta List of meta data arrays.
+		 * @param int   $term_id Term ID to associate with.
+		 * @param array $term Term data.
+		 * @return int|bool Number of meta items imported on success, false otherwise.
+		 */
+		protected function process_term_meta( $meta, $term_id, $term ) {
+			if ( ! is_array( $meta ) || empty( $meta ) ) {
+				return true;
+			}
+
+			foreach ( $meta as $meta_item ) {
+				/**
+				 * Pre-process term meta data.
+				 *
+				 * @param array $meta_item Meta data. (Return empty to skip.)
+				 * @param int $term_id Term the meta is attached to.
+				 */
+				$meta_item = apply_filters( 'wxr_importer.pre_process.term_meta', $meta_item, $term_id ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores -- 3rd party library.
+				if ( empty( $meta_item ) ) {
+					continue;
+				}
+
+				if ( ! isset( $meta_item['key'] ) || ! isset( $meta_item['value'] ) ) {
+					continue;
+				}
+
+				$key = apply_filters( 'import_term_meta_key', $meta_item['key'], $term_id, $term );
+
+				if ( ! $key ) {
+					continue;
+				}
+
+				// export gets meta straight from the DB so could have a serialized string.
+				$value = maybe_unserialize( $meta_item['value'] );
+
+				add_term_meta( $term_id, $key, $value );
+				do_action( 'import_term_meta', $term_id, $key, $value );
+			}
+
+			return true;
 		}
 
 		/**

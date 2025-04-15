@@ -179,6 +179,40 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'plugin_activation_utm_event' ), 10, 2 );
 			add_filter( 'plugins_api_args', array( $this, 'raise_memory_for_plugins_install' ), 1, 1 );
 			add_filter( 'bsf_core_stats', array( $this, 'add_astra_sites_analytics_data' ), 10, 1 );
+			add_filter( 'wp_import_insert_term', array( $this, 'store_original_term_id' ), 10, 2 );
+		}
+
+		/**
+		 * Store original term id.
+		 * 
+		 * @param int   $term_id Term ID.
+		 * @param array $data Term data.
+		 * @return int
+		 * @since 4.4.19
+		 */
+		public function store_original_term_id( $term_id, $data ) {
+			// Validate term_id.
+			if ( ! is_numeric( $term_id ) || $term_id <= 0 ) {
+				return $term_id;
+			}
+
+			// Validate data structure.
+			if ( ! is_array( $data ) ) {
+				return $term_id;
+			}
+
+			// Validate required data fields are not null.
+			if ( ! isset( $data['taxonomy'], $data['id'] ) || null === $data['taxonomy'] || null === $data['id'] ) {
+				return $term_id;
+			}
+
+			// Validate taxonomy exists.
+			if ( ! taxonomy_exists( $data['taxonomy'] ) ) {
+				return $term_id;
+			}
+
+			update_term_meta( $term_id, $data['taxonomy'] . '_id', $data['id'] );
+			return $term_id;
 		}
 
 		/**

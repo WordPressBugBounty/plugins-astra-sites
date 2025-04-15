@@ -8,27 +8,24 @@
 
 namespace AiBuilder\Inc\Traits;
 
-use AiBuilder\Inc\Traits\Instance;
-use STImporter\Resetter\ST_Resetter;
-use STImporter\Importer\ST_Importer;
-use AiBuilder\Inc\Classes\Importer\Ai_Builder_Error_Handler;
-use STImporter\Importer\ST_Importer_File_System;
 use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
-use STImporter\Importer\ST_Option_Importer;
+use AiBuilder\Inc\Classes\Importer\Ai_Builder_Error_Handler;
+use STImporter\Importer\ST_Importer;
+use STImporter\Importer\ST_Importer_File_System;
+use STImporter\Resetter\ST_Resetter;
 
 /**
  * Trait Instance.
  */
 class Helper {
-
 	use Instance;
 
 	/**
 	 * Get an option from the database.
 	 *
-	 * @param string  $key              The option key.
-	 * @param mixed   $default          The option default value if option is not available.
-	 * @param boolean $network_override Whether to allow the network admin setting to be overridden on subsites.
+	 * @param string $key              The option key.
+	 * @param mixed  $default          The option default value if option is not available.
+	 * @param bool   $network_override Whether to allow the network admin setting to be overridden on subsites.
 	 * @since 1.0.0
 	 * @return mixed  The option value.
 	 */
@@ -40,8 +37,8 @@ class Helper {
 	/**
 	 * Delete an option from the database for.
 	 *
-	 * @param string  $key              The option key.
-	 * @param boolean $network_override Whether to allow the network admin setting to be overridden on subsites.
+	 * @param string $key              The option key.
+	 * @param bool   $network_override Whether to allow the network admin setting to be overridden on subsites.
 	 * @since 1.0.0
 	 * @return void
 	 */
@@ -104,13 +101,13 @@ class Helper {
 		return is_array( $token_details ) && isset( $token_details['zip_token'] ) ? self::decrypt( $token_details['zip_token'] ) : '';
 	}
 
-		/**
-		 * Decrypt data using base64.
-		 *
-		 * @param string $input The input string which needs to be decrypted.
-		 * @since 4.0.0
-		 * @return string The decrypted string.
-		 */
+	/**
+	 * Decrypt data using base64.
+	 *
+	 * @param string $input The input string which needs to be decrypted.
+	 * @since 4.0.0
+	 * @return string The decrypted string.
+	 */
 	public static function decrypt( $input ) {
 		// If the input is empty or not a string, then abandon ship.
 		if ( empty( $input ) || ! is_string( $input ) ) {
@@ -119,8 +116,7 @@ class Helper {
 
 		// Decrypt the input and return it.
 		$base_64 = $input . str_repeat( '=', strlen( $input ) % 4 );
-		$decode  = base64_decode( $base_64 ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
-		return $decode;
+		return base64_decode( $base_64 ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 	}
 
 	/**
@@ -447,14 +443,12 @@ class Helper {
 			wp_send_json_error( $markup );
 		}
 
-		$data = array(
+		return array(
 			'required_plugins'             => $response,
 			'third_party_required_plugins' => $third_party_required_plugins,
 			'update_avilable_plugins'      => $update_avilable_plugins,
 			'incompatible_plugins'         => $incompatible_plugins,
 		);
-
-		return $data;
 	}
 
 	/**
@@ -505,15 +499,15 @@ class Helper {
 
 		Ai_Builder_Error_Handler::Instance()->start_error_handler();
 
-		$plugin_init = ( isset( $_POST['init'] ) ) ? esc_attr( sanitize_text_field( $_POST['init'] ) ) : $init;
-		$plugin_slug = ( isset( $_POST['slug'] ) ) ? esc_attr( sanitize_text_field( $_POST['slug'] ) ) : '';
+		$plugin_init = isset( $_POST['init'] ) ? esc_attr( sanitize_text_field( $_POST['init'] ) ) : $init;
+		$plugin_slug = isset( $_POST['slug'] ) ? esc_attr( sanitize_text_field( $_POST['slug'] ) ) : '';
 
 		/**
 		 * Disabled redirection to plugin page after activation.
 		 * Silecing the callback for WP Live Chat plugin.
 		 */
 		add_filter( 'wp_redirect', '__return_false' );
-		$silent = ( 'wp-live-chat-support/wp-live-chat-support.php' === $plugin_init ) ? true : false;
+		$silent = 'wp-live-chat-support/wp-live-chat-support.php' === $plugin_init ? true : false;
 
 		$activate = activate_plugin( $plugin_init, '', false, $silent );
 
@@ -839,4 +833,3 @@ class Helper {
 		wp_send_json_success();
 	}
 }
-

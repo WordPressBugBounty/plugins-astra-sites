@@ -246,13 +246,28 @@ class Sidebar_Configurations {
 				}
 				$message = ! empty( $message ) ? $message : $response['error'];
 			}
-			wp_send_json_error( array( 'message' => $message ) );
+			wp_send_json_error(
+				array(
+					'message' => $message,
+					'code'    => $response['code'],
+				)
+			);
 		} elseif ( is_array( $response['choices'] ) && ! empty( $response['choices'][0]['message']['content'] ) ) {
 			// If the message was sent successfully, send it successfully.
-			wp_send_json_success( array( 'message' => $response['choices'][0]['message']['content'] ) );
+			wp_send_json_success(
+				array(
+					'message' => $response['choices'][0]['message']['content'],
+					'code'    => $response['code'],
+				)
+			);
 		} else {
 			// If you've reached here, then something has definitely gone amuck. Abandon ship.
-			wp_send_json_error( array( 'message' => __( 'Something went wrong', 'astra-sites' ) ) );
+			wp_send_json_error(
+				array(
+					'message' => __( 'Something went wrong', 'astra-sites' ),
+					'code'    => $response['code'],
+				)
+			);
 		}//end if
 	}
 
@@ -266,10 +281,17 @@ class Sidebar_Configurations {
 	 */
 	private function custom_message( $code ) {
 		$message_array = array(
-			'no_auth'              => __( 'Invalid auth token.', 'astra-sites' ),
-			'insufficient_credits' => __( 'You have no credits left.', 'astra-sites' ),
+			'no_auth'              => __( 'Authentication failed. Invalid or missing bearer token.', 'astra-sites' ),
+			'insufficient_credits' => array(
+				'title'          => __( 'You’ve run out of credits.', 'astra-sites' ),
+				'type'           => 'assemble-error',
+				'content'        => __( 'To continue using the assistant and access its full features, please purchase more credits.', 'astra-sites' ),
+				'button_content' => array(
+					'text' => __( 'Buy more credits', 'astra-sites' ),
+					'url'  => 'https://app.zipwp.com/credits-pricing?source=spectra',
+				),
+			),
 		);
-
 		return isset( $message_array[ $code ] ) ? $message_array[ $code ] : '';
 	}
 

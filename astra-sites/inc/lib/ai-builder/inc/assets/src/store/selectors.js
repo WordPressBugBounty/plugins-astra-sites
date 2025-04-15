@@ -36,6 +36,9 @@ const selectors = {
 	getContinueProgressModalInfo( { continueProgressModal } ) {
 		return continueProgressModal;
 	},
+	getSignupLoginModalInfo( { signupLoginModal } ) {
+		return signupLoginModal;
+	},
 	getPlanInfoModalInfo( { planInformationModal } ) {
 		return planInformationModal;
 	},

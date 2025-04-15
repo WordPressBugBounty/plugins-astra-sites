@@ -264,6 +264,7 @@ class Intelligent_Starter_Templates_Loader {
 			'analytics' => get_site_option( 'bsf_analytics_optin', false ),
 			'phpVersion' => PHP_VERSION,
 			'reportError' => $this->should_report_error(),
+			'bsfUsageTracking' => get_site_option( 'bsf_analytics_optin', 'no' ) === 'yes',
 		);
 
 		return apply_filters( 'starter_templates_onboarding_localize_vars', $data );
@@ -334,7 +335,7 @@ class Intelligent_Starter_Templates_Loader {
 		$beaver_builder_value = get_option( 'st-beaver-builder-flag');
 		ob_start();
 		?>
-			<div style="display:flex;flex-direction:column;gap:15px;padding:10px;">
+			<div style="display:flex;flex-direction:column;gap:15px;">
 				<label>
 					<input id='st-elementor-builder-flag' type='checkbox' name='st-elementor-builder-flag' value='1' <?php checked(1, $elementor_value, true); ?>>
 					<?php _e('Disable Elementor Page Builder Templates in Starter Templates','astra-sites'); ?>

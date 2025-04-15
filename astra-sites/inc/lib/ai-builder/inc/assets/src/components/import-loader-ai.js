@@ -50,7 +50,7 @@ const ImportLoaderAi = ( { onClickNext } ) => {
 			<div className="ist-import-progress-info my-0">
 				<div className={ `ist-import-progress-info-text` }>
 					<span className="import-status-string">
-						<p className="text-sm font-normal">
+						<p className="text-sm font-normal sm:text-left text-center">
 							{ importStatus + decodeEntities( '&nbsp;' ) }
 						</p>
 					</span>
