@@ -138,12 +138,11 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 				return;
 			}
 
-			$is_elementor_page      = get_post_meta( $post_id, '_elementor_version', true );
-			$is_beaver_builder_page = get_post_meta( $post_id, '_fl_builder_enabled', true );
-			$is_brizy_page          = get_post_meta( $post_id, 'brizy_post_uid', true );
+			$required_plugins = (array) astra_get_site_data( 'required-plugins' );
+			$plugins_slug     = array_column( $required_plugins, 'slug' );
 
-			// If page contain Elementor, Brizy or Beaver Builder meta then skip this page.
-			if ( $is_elementor_page || $is_beaver_builder_page || $is_brizy_page ) {
+			// If template is built with Spectra.
+			if ( ! in_array( 'ultimate-addons-for-gutenberg', $plugins_slug, true ) ) {
 				return;
 			}
 

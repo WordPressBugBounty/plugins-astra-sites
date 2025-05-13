@@ -75,45 +75,12 @@ export const initialState = {
 			icon: 'envelope',
 		},
 		{
-			title: __( 'Donations', 'astra-sites' ),
-			id: 'donations',
-			description: __(
-				'Collect donations online from your website',
-				'astra-sites'
-			),
-			enabled: false,
-			compulsory: false,
-			icon: 'heart',
-		},
-		{
 			title: __( 'Automation & Integrations', 'astra-sites' ),
 			id: 'automation-integrations',
 			description: __( 'Automate your website & tasks', 'astra-sites' ),
 			enabled: false,
 			compulsory: false,
 			icon: 'squares-plus',
-		},
-		{
-			title: __( 'Sales Funnels', 'astra-sites' ),
-			id: 'sales-funnels',
-			description: __(
-				'Boost your sales & maximize your profits',
-				'astra-sites'
-			),
-			enabled: false,
-			compulsory: false,
-			icon: 'funnel',
-		},
-		{
-			title: __( 'Video Player', 'astra-sites' ),
-			id: 'video-player',
-			description: __(
-				'Showcase your videos on your website',
-				'astra-sites'
-			),
-			enabled: false,
-			compulsory: false,
-			icon: 'play-circle',
 		},
 		{
 			title: __( 'Appointment & Bookings', 'astra-sites' ),

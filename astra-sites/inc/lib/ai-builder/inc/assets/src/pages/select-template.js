@@ -34,7 +34,12 @@ import { __ } from '@wordpress/i18n';
 import toast from 'react-hot-toast';
 import Heading from '../components/heading';
 import { SelectTemplatePageBuilderDropdown } from '../components/page-builder-dropdown';
+import { debounce } from 'lodash';
 export const USER_KEYWORD = 'st-template-search';
+export const getRandomUniqueId = () =>
+	Math.random().toString( 16 ).substring( 3 );
+
+const DESIGN_LOAD_BATCH_COUNT = 4; // how many templates to load at once
 
 const SelectTemplate = () => {
 	const { previousStep } = useNavigateSteps();
@@ -93,6 +98,14 @@ const SelectTemplate = () => {
 	const parentContainer = useRef( null );
 	const templatesContainer = useRef( null );
 	const abortRequest = useRef( [] );
+
+	// Batch template loading state
+	const [ designLoadState, setDesignLoadState ] = useState( {
+		toLoad: [],
+		loaded: [],
+	} );
+
+	const designToLoadList = designLoadState.toLoad;
 
 	const [ loadMoreTemplates, setLoadMoreTemplates ] = useReducer(
 		( state, updatedState ) => {
@@ -196,7 +209,43 @@ const SelectTemplate = () => {
 		return result;
 	};
 
-	const fetchTemplates = async ( keyword = getInitialUserKeyword() ) => {
+	// Called when an iframe (template preview) finishes loading
+	const onIframeLoaded = ( uniqueId ) => {
+		setDesignLoadState( ( state ) => {
+			const updatedToLoad = state.toLoad.filter(
+				( id ) => id !== uniqueId
+			);
+			const updatedLoaded = [ ...state.loaded, uniqueId ];
+
+			// Load next batch if current batch is fully loaded
+			if ( updatedToLoad.length === 0 ) {
+				const remainingToLoad = allTemplates
+					.filter(
+						( template ) =>
+							! updatedLoaded.includes( template.uniqueId ) &&
+							template.uniqueId !== uniqueId
+					)
+					.map( ( template ) => template.uniqueId )
+					.slice( 0, DESIGN_LOAD_BATCH_COUNT );
+
+				return {
+					toLoad: remainingToLoad,
+					loaded: updatedLoaded,
+				};
+			}
+
+			return {
+				toLoad: updatedToLoad,
+				loaded: updatedLoaded,
+			};
+		} );
+	};
+
+	const fetchTemplates = async (
+		keyword = getInitialUserKeyword(),
+		isPageBuilderChanged = false,
+		_selectedBuilder = selectedBuilder
+	) => {
 		if ( ! keyword ) {
 			return;
 		}
@@ -209,6 +258,7 @@ const SelectTemplate = () => {
 				} );
 				abortRequest.current = [];
 			}
+
 			setWebsiteTemplatesAIStep( [] );
 
 			const finalKeywords = [
@@ -222,75 +272,83 @@ const SelectTemplate = () => {
 			let results = [];
 			const allTemplatesList = [];
 
-			const promises = finalKeywords.map( async ( keywordItem ) => {
-				const abortController = new AbortController();
-				abortRequest.current.push( abortController );
-				const response = await apiFetch( {
-					path: 'zipwp/v1/templates',
-					method: 'POST',
-					data: {
-						keyword: keywordItem,
-						business_name: businessName,
-						page_builder: selectedBuilder,
-					},
-					signal: abortController.signal,
-				} );
-				let result = response?.data?.data || [];
+			// Create a single abort controller for the combined request
+			const abortController = new AbortController();
+			abortRequest.current.push( abortController );
 
-				// Filter out Hidden templates based on the settings.
-				result = handleHiddenTemplates( result );
-
-				if ( results.length === 0 ) {
-					results = result;
-				} else {
-					result.forEach( ( item, indx ) => {
-						if ( item?.designs?.length > 0 ) {
-							results[ indx ].designs = [
-								...results[ indx ].designs,
-								...item.designs.filter(
-									( template ) =>
-										! results[ indx ].designs.find(
-											( existingTemplate ) =>
-												existingTemplate.uuid ===
-												template.uuid
-										)
-								),
-							];
-						}
-					} );
-				}
-
-				// Get the the designs in sequence
-				result.forEach( ( item ) => {
-					if ( Array.isArray( item.designs ) ) {
-						allTemplatesList.push(
-							...item.designs.filter(
-								( template ) =>
-									! allTemplatesList.find(
-										( existingTemplate ) =>
-											existingTemplate.uuid ===
-											template.uuid
-									)
-							)
-						);
-					}
-				} );
-
-				setWebsiteTemplatesAIStep( [ ...allTemplatesList ] );
-				setWebsiteTemplateSearchResultsAIStep( [ ...results ] );
-				setIsFetching( false );
-				const isEmptyResults = allTemplatesList.length === 0;
-				let showLoadMoreTemplates = true;
-
-				if ( isEmptyResults ) {
-					showLoadMoreTemplates = false;
-				}
-				setLoadMoreTemplates( { showLoadMore: showLoadMoreTemplates } );
-
-				return true;
+			// Send all keywords in a single request
+			const response = await apiFetch( {
+				path: 'zipwp/v1/templates',
+				method: 'POST',
+				data: {
+					keywords: finalKeywords, // Send array of keywords
+					business_name: businessName,
+					page_builder: _selectedBuilder,
+				},
+				signal: abortController.signal,
 			} );
 
-			await Promise.all( promises );
+			let result = response?.data?.data || [];
+
+			// Filter out Hidden templates based on the settings.
+			result = handleHiddenTemplates( result );
+
+			results = result.map( ( item ) => {
+				if ( Array.isArray( item.designs ) ) {
+					item.designs = item.designs.map( ( design ) => ( {
+						...design,
+						uniqueId: getRandomUniqueId(),
+					} ) );
+					return item;
+				}
+				return {
+					...item,
+					designs: [],
+				};
+			} );
+
+			// Get the designs in sequence
+			result.forEach( ( item ) => {
+				if ( Array.isArray( item.designs ) ) {
+					allTemplatesList.push(
+						...item.designs.filter(
+							( template ) =>
+								! allTemplatesList.find(
+									( existingTemplate ) =>
+										existingTemplate.uuid === template.uuid
+								)
+						)
+					);
+				}
+			} );
+
+			setWebsiteTemplatesAIStep( [ ...allTemplatesList ] );
+			setWebsiteTemplateSearchResultsAIStep( [ ...results ] );
+			setIsFetching( false );
+			const isEmptyResults = allTemplatesList.length === 0;
+
+			let showLoadMoreTemplates = true;
+
+			if ( isEmptyResults ) {
+				showLoadMoreTemplates = false;
+			}
+			setLoadMoreTemplates( {
+				showLoadMore: showLoadMoreTemplates,
+				page: 1,
+			} );
+
+			// Add templates to load list
+			const templateIdList = allTemplatesList.map(
+				( { uniqueId } ) => uniqueId
+			);
+
+			setDesignLoadState( ( state ) => {
+				return {
+					...state,
+					loaded: isPageBuilderChanged ? [] : state.loaded,
+					toLoad: templateIdList.slice( 0, DESIGN_LOAD_BATCH_COUNT ),
+				};
+			} );
 
 			if ( allTemplatesList.length < 4 ) {
 				fetchAllTemplatesByPage( 1, {
@@ -347,42 +405,97 @@ const SelectTemplate = () => {
 
 			result = handleHiddenTemplates( result );
 
-			const updatedAllTemplates = [
-				...templateList,
-				...result.map( ( item ) => item.designs ).flat(),
-			];
+			// Get the the designs in sequence
+			const allTemplatesList = templateList ? [ ...templateList ] : [];
+			const newSearchResults = searchResults ? [ ...searchResults ] : [];
 
-			const updatedSearchResults = [ ...searchResults ];
+			const allTemplatesListUUID = allTemplatesList.map(
+				( template ) => template.uuid
+			);
 
-			result.forEach( ( item ) => {
-				if ( ! item?.match ) {
-					return;
+			// There might be duplicates with same uuid, so add a uniqueId for each
+			result = result.map( ( item ) => {
+				if ( Array.isArray( item.designs ) ) {
+					item.designs = item.designs.map( ( design ) => {
+						if ( allTemplatesListUUID.includes( design.uuid ) ) {
+							return false;
+						}
+
+						// else return the design with a uniqueId
+						return {
+							...design,
+							uniqueId: getRandomUniqueId(),
+						};
+					} );
+
+					item.designs = item.designs.filter( ( design ) => design );
+					return item;
 				}
-				const indx = updatedSearchResults.findIndex(
-					( searchResult ) => searchResult?.match === item?.match
-				);
-				if ( indx !== -1 ) {
-					const existingDesigns = updatedSearchResults[
-						indx
-					].designs.map( ( design ) => design.uuid );
-					const newDesigns = item.designs.filter(
-						( designItem ) =>
-							! existingDesigns.includes( designItem.uuid )
-					);
-					updatedSearchResults[ indx ].designs = [
-						...updatedSearchResults[ indx ].designs,
-						...newDesigns,
-					];
-				}
+
+				return {
+					...item,
+					designs: [],
+				};
 			} );
 
-			setWebsiteTemplatesAIStep( updatedAllTemplates );
-			setWebsiteTemplateSearchResultsAIStep( updatedSearchResults );
+			result.forEach( ( item ) => {
+				if ( Array.isArray( item.designs ) ) {
+					allTemplatesList.push( ...item.designs );
+				}
+				newSearchResults.map( ( searchResult, ind ) => {
+					if ( searchResult.match === item.match ) {
+						searchResult.designs = [
+							...searchResult.designs,
+							...item.designs.filter(
+								( itm ) =>
+									! searchResult.designs.some(
+										( existingItem ) =>
+											existingItem.uuid === itm.uuid
+									)
+							),
+						];
+					}
+					newSearchResults[ ind ] = searchResult;
+					return searchResult;
+				} );
+			} );
 
-			if ( page === lastPage ) {
+			setWebsiteTemplatesAIStep( allTemplatesList );
+			setWebsiteTemplateSearchResultsAIStep( newSearchResults );
+
+			const templateIdList = allTemplatesList.map(
+				( { uniqueId } ) => uniqueId
+			);
+			// If toLoad list is empty, add new templates to load
+			setDesignLoadState( ( state ) => {
+				const newLoadList = templateIdList
+					.filter(
+						( uniqueId ) => ! state.loaded.includes( uniqueId )
+					)
+					.slice( 0, DESIGN_LOAD_BATCH_COUNT );
+
+				const isToLoadListEmpty = state.toLoad.length === 0;
+				const toLoad = isToLoadListEmpty ? newLoadList : state.toLoad;
+				return {
+					...state,
+					toLoad,
+				};
+			} );
+
+			const isEmptyResults = result.every(
+				( item ) => item.designs.length === 0
+			);
+
+			if ( page === lastPage || isEmptyResults ) {
 				setLoadMoreTemplates( { showLoadMore: false } );
 			}
+			setIsFetching( false );
+
+			setLoadMoreTemplates( {
+				page: loadMoreTemplates.page + 1,
+			} );
 		} catch ( error ) {
+			setIsFetching( false );
 			toast.error(
 				toastBody( {
 					message: error?.message?.toString(),
@@ -411,12 +524,35 @@ const SelectTemplate = () => {
 		};
 	}, [] );
 
-	useEffect( () => {
+	const resetState = () => {
+		// clear the state before calling the API
+		setLoadMoreTemplates( {
+			page: 1,
+			loading: false,
+			showLoadMore: false,
+		} );
+		setDesignLoadState( {
+			toLoad: [],
+			loaded: [],
+		} );
+		setWebsiteTemplatesAIStep( [] );
+		setWebsiteTemplateSearchResultsAIStep( [] );
+		setSelectedTemplateIsPremium( '' );
+		setWebsiteSelectedTemplateAIStep( '' );
+		setBackToTop( false );
+	};
+
+	const fetchNewTemplates = ( isPageBuilderChanged = false ) => {
+		resetState();
 		fetchTemplates(
 			debouncedKeyword ? debouncedKeyword : getInitialUserKeyword(),
-			true
+			isPageBuilderChanged
 		);
-	}, [ debouncedKeyword, selectedBuilder ] );
+	};
+
+	useEffect( () => {
+		fetchNewTemplates( false );
+	}, [ debouncedKeyword ] );
 
 	const handleSubmitKeyword = ( { keyword } ) => {
 		onChangeKeyword( keyword );
@@ -431,9 +567,8 @@ const SelectTemplate = () => {
 	};
 
 	const onChangeKeyword = ( value = '' ) => {
+		resetState();
 		fetchTemplates( value );
-		setWebsiteSelectedTemplateAIStep( '' );
-		setSelectedTemplateIsPremium( '' );
 	};
 
 	const renderTemplates = useMemo( () => {
@@ -466,23 +601,31 @@ const SelectTemplate = () => {
 			<>
 				{ recommendedTemplates?.map( ( template, index ) => (
 					<ColumnItem
-						key={ template.uuid }
+						key={ template.uniqueId }
 						template={ template }
 						position={ index + 1 }
+						onIframeLoaded={ onIframeLoaded } // callback to track load
+						shouldLoad={ designToLoadList.includes(
+							template.uniqueId
+						) }
 					/>
 				) ) }
 				{ partialTemplates?.map( ( template, index ) => (
 					<ColumnItem
-						key={ template.uuid }
+						key={ template.uniqueId }
 						template={ template }
 						position={
 							index + 1 + ( recommendedTemplates?.length || 0 )
 						}
+						onIframeLoaded={ onIframeLoaded } // callback to track load
+						shouldLoad={ designToLoadList.includes(
+							template.uniqueId
+						) }
 					/>
 				) ) }
 				{ filteredGenericTemplates?.map( ( template, index ) => (
 					<ColumnItem
-						key={ template.uuid }
+						key={ template.uniqueId }
 						template={ template }
 						position={
 							index +
@@ -490,13 +633,78 @@ const SelectTemplate = () => {
 							( ( recommendedTemplates?.length || 0 ) +
 								( partialTemplates?.length || 0 ) )
 						}
+						onIframeLoaded={ onIframeLoaded } // callback to track load
+						shouldLoad={ designToLoadList.includes(
+							template.uniqueId
+						) }
 					/>
 				) ) }
 			</>
 		);
-	}, [ getTemplates ] );
+	}, [ getTemplates, designToLoadList ] );
 
-	const handleShowBackToTop = ( event ) => {
+	const handleClickBackToTop = () => {
+		parentContainer.current.scrollTo( {
+			top: 0,
+			behavior: 'smooth',
+		} );
+	};
+
+	const lastVisibleTemplateCheckTop = useRef( 0 );
+	const checkForVisibleTemplates = ( target ) => {
+		const { scrollTop, clientHeight } = target;
+
+		if ( lastVisibleTemplateCheckTop.current === scrollTop ) {
+			return;
+		}
+		lastVisibleTemplateCheckTop.current = scrollTop;
+
+		const designs = target.querySelectorAll( '.design-template' );
+
+		const TOP_SEARCHBAR_HEIGHT = 80;
+		const BOTTOM_NAVBAR_HEIGHT = 80;
+
+		const actualClientHeight = clientHeight - TOP_SEARCHBAR_HEIGHT;
+		const actualScrollTop = scrollTop - TOP_SEARCHBAR_HEIGHT;
+		const actualScrollBottom =
+			actualScrollTop + actualClientHeight - BOTTOM_NAVBAR_HEIGHT;
+
+		const designList = Array.from( designs ).map( ( design ) => ( {
+			middlePoint: design.offsetTop + design.clientHeight / 2,
+			uniqueId: design.getAttribute( 'data-template-unique-id' ),
+		} ) );
+
+		const visibleTemplateIdList = designList
+			.filter( ( design ) => {
+				return (
+					design.middlePoint >= actualScrollTop &&
+					design.middlePoint <= actualScrollBottom // Middle point is within the range
+				);
+			} )
+			.map( ( { uniqueId } ) => uniqueId );
+
+		setDesignLoadState( ( state ) => {
+			const filterVisibleList = visibleTemplateIdList.filter(
+				( uniqueId ) =>
+					! (
+						state.loaded.includes( uniqueId ) &&
+						! state.toLoad.includes( uniqueId )
+					)
+			);
+
+			return {
+				...state,
+				toLoad: [ ...state.toLoad, ...filterVisibleList ],
+			};
+		} );
+	};
+
+	// Wait X amount of time after user scrolls and then checkForVisibleTemplates
+	const debouncedCheckForVisibleTemplates = debounce( ( target ) => {
+		checkForVisibleTemplates( target );
+	}, 2000 );
+
+	const handleScroll = ( event ) => {
 		const SCROLL_THRESHOLD = 100;
 		const { scrollTop } = event.target;
 
@@ -506,13 +714,8 @@ const SelectTemplate = () => {
 		if ( scrollTop <= SCROLL_THRESHOLD && backToTop ) {
 			setBackToTop( false );
 		}
-	};
 
-	const handleClickBackToTop = () => {
-		parentContainer.current.scrollTo( {
-			top: 0,
-			behavior: 'smooth',
-		} );
+		debouncedCheckForVisibleTemplates( event.target );
 	};
 
 	return (
@@ -522,7 +725,7 @@ const SelectTemplate = () => {
 				`mx-auto flex flex-col overflow-x-hidden`,
 				'w-full'
 			) }
-			onScroll={ handleShowBackToTop }
+			onScroll={ handleScroll }
 		>
 			<Heading
 				heading={ __( 'Choose the Design', 'ai-builder' ) }
@@ -539,9 +742,16 @@ const SelectTemplate = () => {
 				>
 					<SelectTemplatePageBuilderDropdown
 						selectedBuilder={ selectedBuilder }
-						onChange={ ( builder ) =>
-							setSelectedBuilder( builder.id )
-						}
+						onChange={ ( builder ) => {
+							setSelectedBuilder( builder.id );
+							fetchTemplates(
+								watchedKeyword
+									? watchedKeyword
+									: getInitialUserKeyword(),
+								true,
+								builder.id
+							);
+						} }
 					/>
 					<Input
 						name="keyword"
@@ -604,9 +814,6 @@ const SelectTemplate = () => {
 								return;
 							}
 							fetchAllTemplatesByPage( loadMoreTemplates.page );
-							setLoadMoreTemplates( {
-								page: loadMoreTemplates.page + 1,
-							} );
 						} }
 						disabled={ loadMoreTemplates.loading }
 					>

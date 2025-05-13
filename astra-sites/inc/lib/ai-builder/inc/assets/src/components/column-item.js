@@ -8,8 +8,14 @@ import TemplateInfo from './template-info';
 import DotsLoader from './dots-loader';
 import { siteLogoDefault } from '../store/reducer';
 import { GemIcon } from '../ui/icons';
+import { useState } from 'react';
 
-export const ColumnItem = ( { template, position } ) => {
+export const ColumnItem = ( {
+	template,
+	position,
+	onIframeLoaded,
+	shouldLoad,
+} ) => {
 	const { businessName, selectedImages, templateList, businessContact } =
 		useSelect( ( select ) => {
 			const { getAIStepData } = select( STORE_KEY );
@@ -28,6 +34,9 @@ export const ColumnItem = ( { template, position } ) => {
 	const loadingSkeleton = useRef( null );
 
 	const url = template.domain + '?preview_demo=yes';
+
+	const [ isLoaded, setIsLoaded ] = useState( false );
+	const [ isLoading, setIsLoading ] = useState( false );
 
 	const handleScaling = () => {
 		if ( ! containerRef.current ) {
@@ -127,11 +136,21 @@ export const ColumnItem = ( { template, position } ) => {
 
 	const hoverScrollTimeout = useRef( null );
 
+	const renderIframe = shouldLoad || isLoaded || isLoading;
+
+	useEffect( () => {
+		if ( shouldLoad && ! isLoaded ) {
+			setIsLoading( true );
+		}
+	}, [ shouldLoad, isLoaded ] );
+
 	return (
 		<div
 			className={ classNames(
 				'w-full border border-border-tertiary border-solid rounded-lg overflow-hidden'
 			) }
+			data-template-uuid={ template.uuid }
+			data-template-unique-id={ template.uniqueId }
 		>
 			<div
 				className={ classNames(
@@ -144,17 +163,24 @@ export const ColumnItem = ( { template, position } ) => {
 					className="w-full aspect-[164/179] relative overflow-hidden bg-neutral-300"
 				>
 					<div className="scale-[0.33] w-[1440px] h-full absolute left-0 top-0 origin-top-left">
-						<iframe
-							title={ template?.domain }
-							className="absolute w-[1440px] h-full"
-							src={ addHttps( url ) }
-							onLoad={ () =>
-								handleRemoveLoadingSkeleton( template.uuid )
-							}
-							frameBorder="0"
-							scrolling="no"
-							id={ template.uuid }
-						/>
+						{ renderIframe && (
+							<iframe
+								title={ template?.domain }
+								className="absolute w-[1440px] h-full"
+								src={ addHttps( url ) }
+								onLoad={ () => {
+									handleRemoveLoadingSkeleton(
+										template.uuid
+									);
+									setIsLoaded( true );
+									setIsLoading( false );
+									onIframeLoaded( template.uniqueId );
+								} }
+								frameBorder="0"
+								scrolling="no"
+								id={ template.uuid }
+							/>
+						) }
 					</div>
 					{ template.is_premium &&
 					aiBuilderVars?.show_premium_badge ? (

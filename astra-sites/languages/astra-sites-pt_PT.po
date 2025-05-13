@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: gpt-po v1.1.1\n"
+"Last-Translator: gpt-po v1.2.3\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -15,7 +15,7 @@ msgstr ""
 #: astra-sites.php
 #: astra-sites.php:123
 #: inc/classes/class-astra-sites-nps-notice.php:80
-#: inc/classes/class-astra-sites.php:2621
+#: inc/classes/class-astra-sites.php:2655
 #: inc/lib/onboarding/class-onboarding-loader.php:105
 #: inc/lib/ai-builder/inc/assets/build/main.js:190
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
@@ -42,37 +42,38 @@ msgstr "Brainstorm Force"
 msgid "https://www.brainstormforce.com"
 msgstr "https://www.brainstormforce.com"
 
-#: admin/bsf-analytics/class-bsf-analytics.php:231
+#: admin/bsf-analytics/class-bsf-analytics.php:244
 msgid "This will be applicable for all sites from the network."
 msgstr "Isso será aplicável para todos os sites da rede."
 
 #. translators: %s usage doc link
-#: admin/bsf-analytics/class-bsf-analytics.php:255
+#: admin/bsf-analytics/class-bsf-analytics.php:268
 msgid " Know More."
 msgstr "Saiba mais."
 
-#: admin/bsf-analytics/class-bsf-analytics.php:265
+#: admin/bsf-analytics/class-bsf-analytics.php:278
 msgid "Yes! Allow it"
 msgstr "Sim! Permita isso"
 
-#: admin/bsf-analytics/class-bsf-analytics.php:276
+#: admin/bsf-analytics/class-bsf-analytics.php:289
 msgid "No Thanks"
 msgstr "Não, obrigado"
 
-#: admin/bsf-analytics/class-bsf-analytics.php:387
+#: admin/bsf-analytics/class-bsf-analytics.php:414
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 msgid "Usage Tracking"
 msgstr "Rastreamento de Uso"
 
 #. translators: %s Product title
-#: admin/bsf-analytics/class-bsf-analytics.php:431
+#: admin/bsf-analytics/class-bsf-analytics.php:458
 msgid "Allow %s products to track non-sensitive usage tracking data."
 msgstr "Permitir que os produtos %s rastreiem dados de uso não sensíveis."
 
-#: admin/bsf-analytics/class-bsf-analytics.php:434
+#: admin/bsf-analytics/class-bsf-analytics.php:461
 msgid " This will be applicable for all sites from the network."
 msgstr "Isso será aplicável para todos os sites da rede."
 
-#: admin/bsf-analytics/class-bsf-analytics.php:439
+#: admin/bsf-analytics/class-bsf-analytics.php:466
 msgid "Learn More."
 msgstr "Saiba mais."
 
@@ -86,59 +87,59 @@ msgid "Get Essential Toolkit"
 msgstr "Obtenha o Kit de Ferramentas Essencial"
 
 #: inc/classes/class-astra-sites-error-handler.php:110
-#: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-error-handler.php:98
+#: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-error-handler.php:97
 #: inc/lib/starter-templates-importer/resetter/st-resetter.php:314
 msgid "There was an error on your website."
 msgstr "Houve um erro no seu site."
 
 #: inc/classes/class-astra-sites-error-handler.php:150
-#: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-error-handler.php:140
+#: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-error-handler.php:139
 #: inc/lib/starter-templates-importer/resetter/st-resetter.php:283
 msgid "There was an error your website."
 msgstr "Houve um erro no seu site."
 
 #. translators: %1$s refers to the plugin name
 #: inc/classes/class-astra-sites-importer-log.php:102
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:80
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:78
 msgid "Required File Permissions to import the templates from %s are missing."
 msgstr "Faltam as permissões de arquivo necessárias para importar os modelos de %s."
 
 #: inc/classes/class-astra-sites-importer-log.php:107
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:85
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:83
 msgid "This is usually due to inconsistent file permissions."
 msgstr "Isso geralmente ocorre devido a permissões de arquivo inconsistentes."
 
 #: inc/classes/class-astra-sites-importer-log.php:110
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:88
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:86
 msgid "You can easily update permissions by adding the following code into the wp-config.php file."
 msgstr "Você pode facilmente atualizar as permissões adicionando o seguinte código no arquivo wp-config.php."
 
 #: inc/classes/class-astra-sites-importer-log.php:281
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:285
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:281
 msgid "Enabled"
 msgstr "Ativado"
 
 #: inc/classes/class-astra-sites-importer-log.php:284
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:288
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:284
 msgid "Disabled"
 msgstr "Desativado"
 
 #: inc/classes/class-astra-sites-importer-log.php:369
 #: inc/classes/class-astra-sites-importer-log.php:426
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:373
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:430
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:369
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:426
 msgid "Yes"
 msgstr "Sim"
 
 #: inc/classes/class-astra-sites-importer-log.php:372
 #: inc/classes/class-astra-sites-importer-log.php:429
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:376
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:433
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:372
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:429
 msgid "No"
 msgstr "Não"
 
 #: inc/classes/class-astra-sites-importer-log.php:444
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:448
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:444
 msgid "You currently have no scheduled cron events."
 msgstr "Atualmente, você não tem eventos cron agendados."
 
@@ -149,32 +150,32 @@ msgstr "Atualmente, você não tem eventos cron agendados."
 #: inc/classes/class-astra-sites-importer.php:434
 #: inc/classes/class-astra-sites-importer.php:499
 #: inc/classes/class-astra-sites-page.php:190
-#: inc/classes/class-astra-sites.php:238
-#: inc/classes/class-astra-sites.php:707
-#: inc/classes/class-astra-sites.php:1121
-#: inc/classes/class-astra-sites.php:1216
-#: inc/classes/class-astra-sites.php:1247
-#: inc/classes/class-astra-sites.php:1447
+#: inc/classes/class-astra-sites.php:272
+#: inc/classes/class-astra-sites.php:741
+#: inc/classes/class-astra-sites.php:1155
+#: inc/classes/class-astra-sites.php:1250
+#: inc/classes/class-astra-sites.php:1281
+#: inc/classes/class-astra-sites.php:1481
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:967
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:985
-#: inc/lib/ai-builder/inc/ajax/importer.php:141
-#: inc/lib/ai-builder/inc/ajax/importer.php:166
-#: inc/lib/ai-builder/inc/ajax/importer.php:219
-#: inc/lib/ai-builder/inc/ajax/importer.php:242
-#: inc/lib/ai-builder/inc/ajax/importer.php:381
-#: inc/lib/ai-builder/inc/ajax/importer.php:433
-#: inc/lib/ai-builder/inc/ajax/importer.php:465
-#: inc/lib/ai-builder/inc/ajax/plugin.php:120
-#: inc/lib/ai-builder/inc/ajax/plugin.php:335
-#: inc/lib/ai-builder/inc/ajax/plugin.php:372
-#: inc/lib/ai-builder/inc/ajax/plugin.php:377
-#: inc/lib/ai-builder/inc/traits/helper.php:596
-#: inc/lib/ai-builder/inc/traits/helper.php:640
-#: inc/lib/ai-builder/inc/traits/helper.php:680
-#: inc/lib/ai-builder/inc/traits/helper.php:713
-#: inc/lib/ai-builder/inc/traits/helper.php:745
-#: inc/lib/ai-builder/inc/traits/helper.php:779
-#: inc/lib/ai-builder/inc/traits/helper.php:815
+#: inc/lib/ai-builder/inc/ajax/importer.php:138
+#: inc/lib/ai-builder/inc/ajax/importer.php:163
+#: inc/lib/ai-builder/inc/ajax/importer.php:215
+#: inc/lib/ai-builder/inc/ajax/importer.php:238
+#: inc/lib/ai-builder/inc/ajax/importer.php:377
+#: inc/lib/ai-builder/inc/ajax/importer.php:429
+#: inc/lib/ai-builder/inc/ajax/importer.php:470
+#: inc/lib/ai-builder/inc/ajax/plugin.php:119
+#: inc/lib/ai-builder/inc/ajax/plugin.php:332
+#: inc/lib/ai-builder/inc/ajax/plugin.php:369
+#: inc/lib/ai-builder/inc/ajax/plugin.php:374
+#: inc/lib/ai-builder/inc/traits/helper.php:590
+#: inc/lib/ai-builder/inc/traits/helper.php:634
+#: inc/lib/ai-builder/inc/traits/helper.php:674
+#: inc/lib/ai-builder/inc/traits/helper.php:707
+#: inc/lib/ai-builder/inc/traits/helper.php:739
+#: inc/lib/ai-builder/inc/traits/helper.php:773
+#: inc/lib/ai-builder/inc/traits/helper.php:809
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:245
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:293
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:337
@@ -190,7 +191,8 @@ msgstr "Atualmente, você não tem eventos cron agendados."
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:43
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:109
 #: inc/lib/gutenberg-templates/inc/traits/upgrade.php:35
-#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:68
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:69
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:110
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:261
 msgid "You are not allowed to perform this action"
 msgstr "Você não tem permissão para realizar esta ação"
@@ -513,353 +515,352 @@ msgid "This site category does not exist. Please try a different site category."
 msgstr "Esta categoria de site não existe. Por favor, tente uma categoria de site diferente."
 
 #. Translators: %s Plugin Name.
-#: inc/classes/class-astra-sites.php:219
+#: inc/classes/class-astra-sites.php:253
 msgid "%s: XMLReader extension is missing! To import templates, please get in touch with your hosting provider to enable this extension."
 msgstr "%s: A extensão XMLReader está faltando! Para importar modelos, entre em contato com seu provedor de hospedagem para habilitar esta extensão."
 
 #. translators: %d is the Template ID.
-#: inc/classes/class-astra-sites.php:643
+#: inc/classes/class-astra-sites.php:677
 msgid "Invalid Template ID - %d"
 msgstr "ID de modelo inválido - %d"
 
-#: inc/classes/class-astra-sites.php:722
-#: inc/classes/class-astra-sites.php:1142
+#: inc/classes/class-astra-sites.php:756
+#: inc/classes/class-astra-sites.php:1176
 msgid "Invalid API URL."
 msgstr "URL de API inválida."
 
-#: inc/classes/class-astra-sites.php:734
+#: inc/classes/class-astra-sites.php:768
 msgid "Invalid Post Meta"
 msgstr "Meta de Postagem Inválida"
 
-#: inc/classes/class-astra-sites.php:741
+#: inc/classes/class-astra-sites.php:775
 msgid "Invalid Post ID or Elementor Meta"
 msgstr "ID de postagem inválido ou Meta do Elementor"
 
-#: inc/classes/class-astra-sites.php:785
+#: inc/classes/class-astra-sites.php:819
 msgid "Provided API URL is empty! Please try again!"
 msgstr "A URL da API fornecida está vazia! Por favor, tente novamente!"
 
 #. Translators: %s is API URL.
-#: inc/classes/class-astra-sites.php:804
+#: inc/classes/class-astra-sites.php:838
 msgid "Invalid API Request URL - %s"
 msgstr "URL de solicitação de API inválida - %s"
 
 #. translators: %s Error Message
-#: inc/classes/class-astra-sites.php:827
-#: inc/classes/class-astra-sites.php:943
+#: inc/classes/class-astra-sites.php:861
+#: inc/classes/class-astra-sites.php:977
 msgid "API Request could not be performed - %s"
 msgstr "Não foi possível realizar a solicitação da API - %s"
 
 #. translators: %s Error Message
-#: inc/classes/class-astra-sites.php:832
-#: inc/classes/class-astra-sites.php:948
+#: inc/classes/class-astra-sites.php:866
+#: inc/classes/class-astra-sites.php:982
 msgid "API Request has failed - %s"
 msgstr "Falha na solicitação da API - %s"
 
-#: inc/classes/class-astra-sites.php:862
-#: inc/classes/class-astra-sites.php:977
+#: inc/classes/class-astra-sites.php:896
+#: inc/classes/class-astra-sites.php:1011
 msgid "Internal Server Error."
 msgstr "Erro Interno do Servidor."
 
 #. translators: %s IP address.
-#: inc/classes/class-astra-sites.php:868
-#: inc/classes/class-astra-sites.php:983
+#: inc/classes/class-astra-sites.php:902
+#: inc/classes/class-astra-sites.php:1017
 msgid "Client IP: %1$s </br> Error code: %2$s"
 msgstr "IP do cliente: %1$s </br> Código de erro: %2$s"
 
-#: inc/classes/class-astra-sites.php:901
+#: inc/classes/class-astra-sites.php:935
 msgid "Provided API details are empty! Please try again!"
 msgstr "Os detalhes da API fornecidos estão vazios! Por favor, tente novamente!"
 
 #. Translators: %s is Request URL.
 #. Translators: %s is API URL.
-#: inc/classes/class-astra-sites.php:920
+#: inc/classes/class-astra-sites.php:954
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:56
 msgid "Invalid Request URL - %s"
 msgstr "URL de solicitação inválida - %s"
 
-#: inc/classes/class-astra-sites.php:1255
+#: inc/classes/class-astra-sites.php:1289
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:274
 msgid "Need to send URL of the image to be downloaded"
 msgstr "Preciso enviar o URL da imagem a ser baixada"
 
-#: inc/classes/class-astra-sites.php:1280
+#: inc/classes/class-astra-sites.php:1314
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:284
 msgid "Could not download the image."
 msgstr "Não foi possível baixar a imagem."
 
-#: inc/classes/class-astra-sites.php:1541
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/classes/class-astra-sites.php:1575
 msgid "Get Started"
 msgstr "Começar"
 
-#: inc/classes/class-astra-sites.php:1756
-#: inc/classes/class-astra-sites.php:2259
+#: inc/classes/class-astra-sites.php:1790
+#: inc/classes/class-astra-sites.php:2293
 #: inc/includes/templates.php:321
 msgid "Get Access!"
 msgstr "Obtenha Acesso!"
 
-#: inc/classes/class-astra-sites.php:1758
+#: inc/classes/class-astra-sites.php:1792
 msgid "Upgrade"
 msgstr "Atualizar"
 
-#: inc/classes/class-astra-sites.php:1762
+#: inc/classes/class-astra-sites.php:1796
 msgid "Syncing template library in the background. The process can take anywhere between 2 to 3 minutes. We will notify you once done."
 msgstr "Sincronizando a biblioteca de modelos em segundo plano. O processo pode levar entre 2 a 3 minutos. Nós o notificaremos assim que estiver concluído."
 
-#: inc/classes/class-astra-sites.php:1763
+#: inc/classes/class-astra-sites.php:1797
 msgid "Some of the files required during the import process are missing.<br/><br/>Please try again after some time."
 msgstr "Alguns dos arquivos necessários durante o processo de importação estão faltando.<br/><br/>Por favor, tente novamente depois de algum tempo."
 
-#: inc/classes/class-astra-sites.php:1764
+#: inc/classes/class-astra-sites.php:1798
 msgid "<p>WordPress debug mode is currently enabled on your website. This has interrupted the import process..</p><p>Kindly disable debug mode and try importing Starter Template again.</p><p>You can add the following code into the wp-config.php file to disable debug mode.</p><p><code>define('WP_DEBUG', false);</code></p>"
 msgstr "<p>O modo de depuração do WordPress está atualmente ativado no seu site. Isso interrompeu o processo de importação.</p><p>Por favor, desative o modo de depuração e tente importar o Modelo Inicial novamente.</p><p>Você pode adicionar o seguinte código no arquivo wp-config.php para desativar o modo de depuração.</p><p><code>define('WP_DEBUG', false);</code></p>"
 
 #. translators: %s is a documentation link.
-#: inc/classes/class-astra-sites.php:1766
+#: inc/classes/class-astra-sites.php:1800
 msgid "<p>We are facing a temporary issue in importing this template.</p><p>Read <a href=\"%s\" target=\"_blank\">article</a> to resolve the issue and continue importing template.</p>"
 msgstr "<p>Estamos enfrentando um problema temporário ao importar este modelo.</p><p>Leia o <a href=\"%s\" target=\"_blank\">artigo</a> para resolver o problema e continuar importando o modelo.</p>"
 
 #. translators: %s is a documentation link.
-#: inc/classes/class-astra-sites.php:1768
+#: inc/classes/class-astra-sites.php:1802
 msgid "<p>We are facing a temporary issue in installing the required plugins for this template.</p><p>Read&nbsp;<a href=\"%s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.</p>"
 msgstr "<p>Estamos enfrentando um problema temporário na instalação dos plugins necessários para este modelo.</p><p>Leia o&nbsp;<a href=\"%s\" target=\"_blank\">artigo</a>&nbsp;para resolver o problema e continuar importando o modelo.</p>"
 
 #. translators: %s are white label strings.
-#: inc/classes/class-astra-sites.php:1772
+#: inc/classes/class-astra-sites.php:1806
 msgid "Warning! %1$s Import process is not complete. Don't close the window until import process complete. Do you still want to leave the window?"
 msgstr "Aviso! %1$s O processo de importação não está completo. Não feche a janela até que o processo de importação esteja concluído. Ainda deseja sair da janela?"
 
-#: inc/classes/class-astra-sites.php:1773
+#: inc/classes/class-astra-sites.php:1807
 msgid "Done! View Site"
 msgstr "Concluído! Ver Site"
 
 #. translators: %s is a template name
-#: inc/classes/class-astra-sites.php:1776
+#: inc/classes/class-astra-sites.php:1810
 msgid "Import \"%s\" Template"
 msgstr "Importar modelo \"%s\""
 
-#: inc/classes/class-astra-sites.php:1779
+#: inc/classes/class-astra-sites.php:1813
 msgid "Installing Required Plugins.."
 msgstr "Instalando plugins necessários.."
 
 #. translators: %s are white label strings.
-#: inc/classes/class-astra-sites.php:1781
+#: inc/classes/class-astra-sites.php:1815
 msgid "Installing %1$s Theme.."
 msgstr "Instalando o tema %1$s.."
 
-#: inc/classes/class-astra-sites.php:1804
+#: inc/classes/class-astra-sites.php:1838
 msgid "Dismiss this notice."
 msgstr "Dispense este aviso."
 
-#: inc/classes/class-astra-sites.php:1806
+#: inc/classes/class-astra-sites.php:1840
 msgid "One Last Step.."
 msgstr "Um Último Passo.."
 
-#: inc/classes/class-astra-sites.php:1807
+#: inc/classes/class-astra-sites.php:1841
 msgid "Your Selected Website is Being Imported."
 msgstr "Seu site selecionado está sendo importado."
 
-#: inc/classes/class-astra-sites.php:1808
+#: inc/classes/class-astra-sites.php:1842
 msgid "Your Selected Template is Being Imported."
 msgstr "Seu modelo selecionado está sendo importado."
 
-#: inc/classes/class-astra-sites.php:1810
+#: inc/classes/class-astra-sites.php:1844
 msgid "We have sent you a surprise gift on your email address! Please check your inbox!"
 msgstr "Enviamos um presente surpresa para o seu endereço de e-mail! Por favor, verifique sua caixa de entrada!"
 
-#: inc/classes/class-astra-sites.php:1812
+#: inc/classes/class-astra-sites.php:1846
 msgid "Looks like the template you are importing is temporarily not available."
 msgstr "Parece que o modelo que você está importando está temporariamente indisponível."
 
-#: inc/classes/class-astra-sites.php:1813
+#: inc/classes/class-astra-sites.php:1847
 msgid "We could not start the import process and this is the message from WordPress:"
 msgstr "Não conseguimos iniciar o processo de importação e esta é a mensagem do WordPress:"
 
-#: inc/classes/class-astra-sites.php:1814
+#: inc/classes/class-astra-sites.php:1848
 msgid "There was an error connecting to the Starter Templates API."
 msgstr "Houve um erro ao conectar-se à API de Modelos Iniciais."
 
-#: inc/classes/class-astra-sites.php:1815
+#: inc/classes/class-astra-sites.php:1849
 msgid "There was an error while importing the content."
 msgstr "Houve um erro ao importar o conteúdo."
 
-#: inc/classes/class-astra-sites.php:1816
+#: inc/classes/class-astra-sites.php:1850
 msgid "To import content, WordPress needs to store XML file in /wp-content/ folder. Please get in touch with your hosting provider."
 msgstr "Para importar conteúdo, o WordPress precisa armazenar o arquivo XML na pasta /wp-content/. Por favor, entre em contato com seu provedor de hospedagem."
 
-#: inc/classes/class-astra-sites.php:1817
+#: inc/classes/class-astra-sites.php:1851
 msgid "Looks like your host probably could not store XML file in /wp-content/ folder."
 msgstr "Parece que seu host provavelmente não conseguiu armazenar o arquivo XML na pasta /wp-content/."
 
 #. translators: %s HTML tags
-#: inc/classes/class-astra-sites.php:1819
+#: inc/classes/class-astra-sites.php:1853
 msgid "%1$sWe could not start the import process due to failed AJAX request and this is the message from WordPress:%2$s"
 msgstr "%1$sNão conseguimos iniciar o processo de importação devido a uma solicitação AJAX falhada e esta é a mensagem do WordPress:%2$s"
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1821
+#: inc/classes/class-astra-sites.php:1855
 msgid "%1$sRead&nbsp;<a href=\"%2$s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.%3$s"
 msgstr "%1$sLeia&nbsp;<a href=\"%2$s\" target=\"_blank\">o artigo</a>&nbsp;para resolver o problema e continuar importando o modelo.%3$s"
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1830
+#: inc/classes/class-astra-sites.php:1864
 msgid "%1$sWe could not complete the import process due to failed AJAX request and this is the message:%2$s"
 msgstr "%1$sNão conseguimos concluir o processo de importação devido a uma solicitação AJAX falhada e esta é a mensagem:%2$s"
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1832
+#: inc/classes/class-astra-sites.php:1866
 msgid "%1$sPlease report this <a href=\"%2$s\" target=\"_blank\">here</a>.%3$s"
 msgstr "%1$sPor favor, reporte isso <a href=\"%2$s\" target=\"_blank\">aqui</a>.%3$s"
 
-#: inc/classes/class-astra-sites.php:2054
+#: inc/classes/class-astra-sites.php:2088
 msgid "XMLReader Support Missing"
 msgstr "Suporte para XMLReader ausente"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2056
+#: inc/classes/class-astra-sites.php:2090
 msgid "You're close to importing the template. To complete the process, enable XMLReader support on your website.."
 msgstr "Você está perto de importar o modelo. Para concluir o processo, ative o suporte XMLReader no seu site."
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2056
-#: inc/classes/class-astra-sites.php:2061
-#: inc/classes/class-astra-sites.php:2066
-#: inc/classes/class-astra-sites.php:2084
+#: inc/classes/class-astra-sites.php:2090
+#: inc/classes/class-astra-sites.php:2095
+#: inc/classes/class-astra-sites.php:2100
+#: inc/classes/class-astra-sites.php:2118
 msgid "Read an article <a href=\"%s\" target=\"_blank\">here</a> to resolve the issue."
 msgstr "Leia um artigo <a href=\"%s\" target=\"_blank\">aqui</a> para resolver o problema."
 
-#: inc/classes/class-astra-sites.php:2059
+#: inc/classes/class-astra-sites.php:2093
 msgid "cURL Support Missing"
 msgstr "Suporte cURL Ausente"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2061
+#: inc/classes/class-astra-sites.php:2095
 msgid "To run a smooth import, kindly enable cURL support on your website."
 msgstr "Para realizar uma importação sem problemas, ative o suporte cURL no seu site."
 
-#: inc/classes/class-astra-sites.php:2064
+#: inc/classes/class-astra-sites.php:2098
 msgid "Disable Debug Mode"
 msgstr "Desativar o Modo de Depuração"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2066
+#: inc/classes/class-astra-sites.php:2100
 msgid "WordPress debug mode is currently enabled on your website. With this, any errors from third-party plugins might affect the import process."
 msgstr "O modo de depuração do WordPress está atualmente ativado no seu site. Com isso, quaisquer erros de plugins de terceiros podem afetar o processo de importação."
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2066
+#: inc/classes/class-astra-sites.php:2100
 msgid "Kindly disable it to continue importing the Starter Template. To do so, you can add the following code into the wp-config.php file."
 msgstr "Por favor, desative-o para continuar importando o Modelo Inicial. Para isso, você pode adicionar o seguinte código no arquivo wp-config.php."
 
-#: inc/classes/class-astra-sites.php:2069
+#: inc/classes/class-astra-sites.php:2103
 msgid "Update Plugin"
 msgstr "Atualizar Plugin"
 
 #. translators: %s update page link.
-#: inc/classes/class-astra-sites.php:2071
+#: inc/classes/class-astra-sites.php:2105
 msgid "Updates are available for plugins used in this starter template."
 msgstr "Atualizações estão disponíveis para os plugins usados neste modelo inicial."
 
 #. translators: %s update page link.
-#: inc/classes/class-astra-sites.php:2071
+#: inc/classes/class-astra-sites.php:2105
 msgid "Kindly <a href=\"%s\" target=\"_blank\">update</a> them for a successful import. Skipping this step might break the template design/feature."
 msgstr "Por favor, <a href=\"%s\" target=\"_blank\">atualize</a> para um importação bem-sucedida. Pular esta etapa pode comprometer o design/funcionalidade do modelo."
 
-#: inc/classes/class-astra-sites.php:2074
+#: inc/classes/class-astra-sites.php:2108
 #: inc/includes/templates.php:468
 msgid "Required Plugins Missing"
 msgstr "Plugins Necessários Ausentes"
 
-#: inc/classes/class-astra-sites.php:2075
+#: inc/classes/class-astra-sites.php:2109
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:147
 msgid "This starter template requires premium plugins. As these are third party premium plugins, you'll need to purchase, install and activate them first."
 msgstr "Este modelo inicial requer plugins premium. Como são plugins premium de terceiros, você precisará comprá-los, instalá-los e ativá-los primeiro."
 
-#: inc/classes/class-astra-sites.php:2078
+#: inc/classes/class-astra-sites.php:2112
 msgid "Dynamic Page"
 msgstr "Página Dinâmica"
 
-#: inc/classes/class-astra-sites.php:2079
+#: inc/classes/class-astra-sites.php:2113
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "The page template you are about to import contains a dynamic widget/module. Please note this dynamic data will not be available with the imported page."
 msgstr "O modelo de página que você está prestes a importar contém um widget/módulo dinâmico. Observe que esses dados dinâmicos não estarão disponíveis na página importada."
 
-#: inc/classes/class-astra-sites.php:2079
+#: inc/classes/class-astra-sites.php:2113
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "You will need to add it manually on the page."
 msgstr "Você precisará adicioná-lo manualmente na página."
 
-#: inc/classes/class-astra-sites.php:2079
+#: inc/classes/class-astra-sites.php:2113
 msgid "This dynamic content will be available when you import the entire site."
 msgstr "Este conteúdo dinâmico estará disponível quando você importar o site inteiro."
 
-#: inc/classes/class-astra-sites.php:2082
+#: inc/classes/class-astra-sites.php:2116
 msgid "Enable Flexbox Container from Elementor"
 msgstr "Ativar Contêiner Flexbox no Elementor"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2084
+#: inc/classes/class-astra-sites.php:2118
 msgid "The Flexbox Container widget is disabled on your website. With this disabled, the import process will be affected. Kindly enable it to continue importing the Starter Template."
 msgstr "O widget Flexbox Container está desativado no seu site. Com isso desativado, o processo de importação será afetado. Por favor, ative-o para continuar importando o Modelo Inicial."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2226
+#: inc/classes/class-astra-sites.php:2260
 msgid "This is a premium template available with Essential and Business Toolkits. you can purchase it from <a href=\"%s\" target=\"_blank\">here</a>."
 msgstr "Este é um modelo premium disponível com os Kits de Ferramentas Essenciais e Empresariais. você pode comprá-lo <a href=\"%s\" target=\"_blank\">aqui</a>."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2230
+#: inc/classes/class-astra-sites.php:2264
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">Validate Your License</a> Key to import this template."
 msgstr "Este é um modelo premium disponível com os Toolkits Essencial e Empresarial. <a href=\"%s\" target=\"_blank\">Valide sua chave de licença</a> para importar este modelo."
 
-#: inc/classes/class-astra-sites.php:2263
+#: inc/classes/class-astra-sites.php:2297
 msgid "Template"
 msgstr "Modelo"
 
-#: inc/classes/class-astra-sites.php:2264
+#: inc/classes/class-astra-sites.php:2298
 msgid "Block"
 msgstr "Bloquear"
 
-#: inc/classes/class-astra-sites.php:2265
+#: inc/classes/class-astra-sites.php:2299
 #: inc/includes/templates.php:78
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Dismiss"
 msgstr "Dispensar"
 
-#: inc/classes/class-astra-sites.php:2266
+#: inc/classes/class-astra-sites.php:2300
 msgid "Install Required Plugins"
 msgstr "Instalar Plugins Necessários"
 
-#: inc/classes/class-astra-sites.php:2270
+#: inc/classes/class-astra-sites.php:2304
 msgid "You can locate <strong>Starter Templates Settings</strong> under the <strong>Page Settings</strong> of the Style Tab."
 msgstr "Você pode localizar <strong>Configurações de Modelos Iniciais</strong> em <strong>Configurações de Página</strong> na guia Estilo."
 
-#: inc/classes/class-astra-sites.php:2272
+#: inc/classes/class-astra-sites.php:2306
 msgid "Read More →"
 msgstr "Leia mais →"
 
-#: inc/classes/class-astra-sites.php:2549
+#: inc/classes/class-astra-sites.php:2583
 msgid "Template library refreshed!"
 msgstr "Biblioteca de modelos atualizada!"
 
-#: inc/classes/class-astra-sites.php:2623
+#: inc/classes/class-astra-sites.php:2657
 msgid "Build Your Dream Site in Minutes With AI"
 msgstr "Construa o seu site dos sonhos em minutos com IA"
 
-#: inc/classes/class-astra-sites.php:2624
+#: inc/classes/class-astra-sites.php:2658
 msgid "Say goodbye to the days of spending weeks designing and building your website.<br/> You can now create professional-grade websites in minutes."
 msgstr "Diga adeus aos dias de passar semanas a desenhar e construir o seu site.<br/> Agora pode criar sites de nível profissional em minutos."
 
-#: inc/classes/class-astra-sites.php:2626
+#: inc/classes/class-astra-sites.php:2660
 msgid "Let’s Get Started"
 msgstr "Vamos começar"
 
-#: inc/classes/class-astra-sites.php:2627
+#: inc/classes/class-astra-sites.php:2661
 msgid "I want to build this website from scratch"
 msgstr "Quero construir este site do zero"
 
-#: inc/classes/class-astra-sites.php:2661
+#: inc/classes/class-astra-sites.php:2695
 msgid "Required WP_Filesystem Permissions to import the templates from Starter Templates are missing."
 msgstr "As permissões WP_Filesystem necessárias para importar os modelos dos Modelos Iniciais estão ausentes."
 
@@ -1049,108 +1050,108 @@ msgstr "Nome do Plugin:"
 msgid "Plugin Description:"
 msgstr "Descrição do Plugin:"
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:215
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:216
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:218
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:219
 msgid "AI Builder"
 msgstr "Construtor de IA"
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:424
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:425
 msgid "Installed! Activating.."
 msgstr "Instalado! Ativando.."
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:425
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:426
 msgid "Activating..."
 msgstr "Ativando..."
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:426
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:427
 msgid "Activated!"
 msgstr "Ativado!"
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:427
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:428
 msgid "Installing..."
 msgstr "Instalando..."
 
 #. translators: %1$s: team name, %2$s: plan name
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:444
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:445
 msgid "Your current active organization is %1$s, which is on the %2$s plan. You have reached the maximum number of sites allowed to be created on %2$s plan."
 msgstr "Sua organização ativa atual é %1$s, que está no plano %2$s. Você atingiu o número máximo de sites permitidos para serem criados no plano %2$s."
 
 #. translators: %1$s: team name
 #. translators: %s: team name
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:453
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:454
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Please upgrade the plan for %s in order to create more sites."
 msgstr "Por favor, atualize o plano para %s a fim de criar mais sites."
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:459
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:460
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Unlock Full Power"
 msgstr "Desbloquear Potência Total"
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:462
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:463
 #: inc/lib/ai-builder/inc/assets/build/main.js:194
 msgid "Contact Support"
 msgstr "Contactar Suporte"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:224
-#: inc/lib/ai-builder/inc/ajax/ajax-errors.php:41
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:229
+#: inc/lib/ai-builder/inc/ajax/ajax-errors.php:40
 msgid "Sorry, you are not allowed to do this operation."
 msgstr "Desculpe, você não tem permissão para realizar esta operação."
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:237
-#: inc/lib/ai-builder/inc/ajax/ajax-errors.php:42
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:242
+#: inc/lib/ai-builder/inc/ajax/ajax-errors.php:41
 msgid "Nonce validation failed"
 msgstr "A validação do nonce falhou"
 
-#: inc/lib/ai-builder/inc/ajax/ajax-errors.php:43
+#: inc/lib/ai-builder/inc/ajax/ajax-errors.php:42
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:138
 msgid "Sorry, something went wrong."
 msgstr "Desculpe, algo deu errado."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:345
-#: inc/lib/ai-builder/inc/traits/helper.php:253
-#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:138
+#: inc/lib/ai-builder/inc/ajax/importer.php:341
+#: inc/lib/ai-builder/inc/traits/helper.php:249
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:144
 msgid "Permission Denied!"
 msgstr "Permissão negada!"
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:369
+#: inc/lib/ai-builder/inc/ajax/importer.php:365
 msgid "There was an error importing the Spectra settings."
 msgstr "Houve um erro ao importar as configurações do Spectra."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:393
+#: inc/lib/ai-builder/inc/ajax/importer.php:389
 msgid "There was an error cloning the surecart store."
 msgstr "Houve um erro ao clonar a loja surecart."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:439
-#: inc/lib/ai-builder/inc/ajax/importer.php:471
-#: inc/lib/ai-builder/inc/ajax/plugin.php:130
+#: inc/lib/ai-builder/inc/ajax/importer.php:438
+#: inc/lib/ai-builder/inc/ajax/importer.php:476
+#: inc/lib/ai-builder/inc/ajax/plugin.php:129
 msgid "Required function not found"
 msgstr "Função necessária não encontrada"
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:512
-#: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-fse-importer.php:44
+#: inc/lib/ai-builder/inc/ajax/importer.php:517
+#: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-fse-importer.php:43
 msgid "You are not authorized to perform this action."
 msgstr "Você não está autorizado a realizar esta ação."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:522
-#: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-fse-importer.php:54
+#: inc/lib/ai-builder/inc/ajax/importer.php:527
+#: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-fse-importer.php:53
 msgid "Received empty parameters."
 msgstr "Recebidos parâmetros vazios."
 
 #. Translators: %s is URL.
-#: inc/lib/ai-builder/inc/ajax/plugin.php:221
+#: inc/lib/ai-builder/inc/ajax/plugin.php:218
 msgid "Invalid URL - %s"
 msgstr "URL inválido - %s"
 
-#: inc/lib/ai-builder/inc/ajax/plugin.php:355
+#: inc/lib/ai-builder/inc/ajax/plugin.php:352
 msgid "Theme Activated"
 msgstr "Tema Ativado"
 
-#: inc/lib/ai-builder/inc/ajax/plugin.php:384
+#: inc/lib/ai-builder/inc/ajax/plugin.php:381
 msgid "Failed to set the site language."
 msgstr "Falha ao definir o idioma do site."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:82
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:83
 #: inc/lib/gutenberg-templates/inc/api/blocks.php:70
 #: inc/lib/gutenberg-templates/inc/api/category.php:70
 #: inc/lib/gutenberg-templates/inc/api/description.php:92
@@ -1172,25 +1173,25 @@ msgstr "Falha ao definir o idioma do site."
 msgid "Sorry, you are not allowed to do that."
 msgstr "Desculpe, você não tem permissão para fazer isso."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:611
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:653
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:747
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:841
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:950
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1042
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1134
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1213
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1284
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1360
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1440
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1520
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1602
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1679
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1744
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1809
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1880
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1946
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1973
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:622
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:664
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:756
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:849
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:957
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1048
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1140
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1219
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1290
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1366
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1446
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1527
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1610
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1686
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1751
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1816
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1887
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1953
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1980
 #: inc/lib/gutenberg-templates/inc/api/blocks.php:93
 #: inc/lib/gutenberg-templates/inc/api/category.php:93
 #: inc/lib/gutenberg-templates/inc/api/description.php:112
@@ -1211,57 +1212,58 @@ msgstr "Desculpe, você não tem permissão para fazer isso."
 msgid "Nonce verification failed."
 msgstr "A verificação do nonce falhou."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:901
-#: inc/lib/starter-templates-importer/importer/st-importer.php:241
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:909
+#: inc/lib/starter-templates-importer/importer/st-importer.php:242
 msgid "There was an error downloading the XML file."
 msgstr "Houve um erro ao baixar o arquivo XML."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:913
-#: inc/lib/ai-builder/inc/traits/helper.php:568
-#: inc/lib/ai-builder/inc/traits/helper.php:604
-#: inc/lib/ai-builder/inc/traits/helper.php:647
-#: inc/lib/ai-builder/inc/traits/helper.php:685
-#: inc/lib/ai-builder/inc/traits/helper.php:720
-#: inc/lib/ai-builder/inc/traits/helper.php:754
-#: inc/lib/ai-builder/inc/traits/helper.php:787
-#: inc/lib/ai-builder/inc/traits/helper.php:830
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:921
+#: inc/lib/ai-builder/inc/traits/helper.php:562
+#: inc/lib/ai-builder/inc/traits/helper.php:598
+#: inc/lib/ai-builder/inc/traits/helper.php:641
+#: inc/lib/ai-builder/inc/traits/helper.php:679
+#: inc/lib/ai-builder/inc/traits/helper.php:714
+#: inc/lib/ai-builder/inc/traits/helper.php:748
+#: inc/lib/ai-builder/inc/traits/helper.php:781
+#: inc/lib/ai-builder/inc/traits/helper.php:824
 msgid "Required class not found."
 msgstr "Classe necessária não encontrada."
 
-#: inc/lib/ai-builder/inc/traits/helper.php:203
+#: inc/lib/ai-builder/inc/traits/helper.php:199
+#: inc/lib/zip-ai/classes/helper.php:216
 msgid "You do not have permission to perform this action."
 msgstr "Você não tem permissão para realizar esta ação."
 
-#: inc/lib/ai-builder/inc/traits/helper.php:223
+#: inc/lib/ai-builder/inc/traits/helper.php:219
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:147
 msgid "Please contact the hosting service provider to help you update the permissions so that you can successfully import a complete template."
 msgstr "Por favor, entre em contato com o provedor de serviços de hospedagem para ajudá-lo a atualizar as permissões, para que você possa importar com sucesso um modelo completo."
 
-#: inc/lib/ai-builder/inc/traits/helper.php:438
+#: inc/lib/ai-builder/inc/traits/helper.php:434
 msgid "Insufficient Permission. Please contact your Super Admin to allow the install required plugin permissions."
 msgstr "Permissão insuficiente. Por favor, entre em contato com seu Super Admin para permitir as permissões necessárias para instalar o plugin."
 
-#: inc/lib/ai-builder/inc/traits/helper.php:500
+#: inc/lib/ai-builder/inc/traits/helper.php:494
 msgid "Error: You don't have the required permissions to install plugins."
 msgstr "Erro: Você não tem as permissões necessárias para instalar plugins."
 
-#: inc/lib/ai-builder/inc/traits/helper.php:546
+#: inc/lib/ai-builder/inc/traits/helper.php:540
 msgid "Plugin Activated"
 msgstr "Plugin Ativado"
 
-#: inc/lib/ai-builder/inc/traits/helper.php:563
+#: inc/lib/ai-builder/inc/traits/helper.php:557
 msgid "User does not have permission!"
 msgstr "O usuário não tem permissão!"
 
-#: inc/lib/ai-builder/inc/traits/helper.php:620
+#: inc/lib/ai-builder/inc/traits/helper.php:614
 msgid "Site options Imported!"
 msgstr "Opções do site importadas!"
 
-#: inc/lib/ai-builder/inc/traits/helper.php:795
+#: inc/lib/ai-builder/inc/traits/helper.php:789
 msgid "Deleted Widgets!"
 msgstr "Widgets excluídos!"
 
-#: inc/lib/ai-builder/inc/traits/helper.php:826
+#: inc/lib/ai-builder/inc/traits/helper.php:820
 msgid "Customizer data is empty!"
 msgstr "Os dados do personalizador estão vazios!"
 
@@ -1300,7 +1302,7 @@ msgstr "Resolver problema de permissão de arquivo"
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:270
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:274
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:445
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:255
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:268
 #: inc/lib/ai-builder/inc/assets/build/main.js:183
 msgid "Something went wrong"
 msgstr "Algo deu errado"
@@ -1309,7 +1311,7 @@ msgstr "Algo deu errado"
 msgid "Something wrong"
 msgstr "Algo errado"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1004
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1005
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Design Library"
 msgstr "Biblioteca de Design"
@@ -1325,27 +1327,26 @@ msgid "The Zip AI Auth Token is not set."
 msgstr "O Token de Autenticação do Zip AI não está definido."
 
 #: inc/lib/gutenberg-templates/inc/traits/helper.php:257
-#: inc/lib/zip-ai/classes/helper.php:196
 msgid "The Zip AI Middleware is not responding."
 msgstr "O Middleware Zip AI não está respondendo."
 
 #: inc/lib/gutenberg-templates/inc/traits/helper.php:267
-#: inc/lib/zip-ai/classes/helper.php:206
 msgid "The Zip AI Middleware encountered an error."
 msgstr "O Middleware Zip AI encontrou um erro."
 
-#: inc/lib/onboarding/class-onboarding-loader.php:340
+#: inc/lib/onboarding/class-onboarding-loader.php:341
 msgid "Disable Elementor Page Builder Templates in Starter Templates"
 msgstr "Desativar modelos do Elementor Page Builder nos Modelos Iniciais"
 
-#: inc/lib/onboarding/class-onboarding-loader.php:347
+#: inc/lib/onboarding/class-onboarding-loader.php:348
 msgid "Disable Beaver Builder Page Builder Templates in Starter Templates"
 msgstr "Desativar os Modelos do Beaver Builder Page Builder nos Modelos Iniciais"
 
-#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:72
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:75
 msgid "The XMLReader library is not available. This library is required to import the content for the website."
 msgstr "A biblioteca XMLReader não está disponível. Esta biblioteca é necessária para importar o conteúdo para o site."
 
+#: inc/lib/starter-templates-importer/importer/batch/st-batch-processing-elementor.php:76
 #: inc/lib/starter-templates-importer/importer/batch/st-batch-processing-gutenberg.php:108
 msgid "Post ids are empty"
 msgstr "Os IDs de postagem estão vazios"
@@ -1362,27 +1363,27 @@ msgstr "O tipo de modelo não é uma IA."
 msgid "Required flags are not set."
 msgstr "As bandeiras necessárias não estão definidas."
 
-#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:104
+#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:97
 msgid "Astra functions not available"
 msgstr "Funções Astra não disponíveis"
 
-#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:133
+#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:126
 msgid "Image Replacement completed."
 msgstr "Substituição de imagem concluída."
 
-#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:152
+#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:145
 msgid "Posts are empty. Nothing to process."
 msgstr "As postagens estão vazias. Nada para processar."
 
-#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:165
+#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:158
 msgid "Posts are replaced"
 msgstr "Os posts são substituídos"
 
-#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:473
+#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:467
 msgid "Pages are empty"
 msgstr "As páginas estão vazias"
 
-#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:500
+#: inc/lib/starter-templates-importer/importer/batch/st-replace-images.php:498
 msgid "Pages are replaced"
 msgstr "Páginas são substituídas"
 
@@ -1399,60 +1400,60 @@ msgstr "A cada %d minutos"
 msgid "uuid is empty."
 msgstr "uuid está vazio."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:73
+#: inc/lib/starter-templates-importer/importer/st-importer.php:74
 msgid "Import process start flof set successfully."
 msgstr "O processo de importação foi iniciado com sucesso."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:90
+#: inc/lib/starter-templates-importer/importer/st-importer.php:91
 msgid "Can't import Spectra Settings. Spectra Plugin is not activated."
 msgstr "Não é possível importar as Configurações do Spectra. O Plugin Spectra não está ativado."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:97
+#: inc/lib/starter-templates-importer/importer/st-importer.php:98
 msgid "Spectra settings are empty."
 msgstr "As configurações de espectro estão vazias."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:105
+#: inc/lib/starter-templates-importer/importer/st-importer.php:106
 msgid "Spectra settings imported successfully."
 msgstr "Configurações do Spectra importadas com sucesso."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:123
+#: inc/lib/starter-templates-importer/importer/st-importer.php:124
 msgid "SureCart\\Models\\ProvisionalAccount::create function is not callable."
 msgstr "A função SureCart\\Models\\ProvisionalAccount::create não pode ser chamada."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:144
+#: inc/lib/starter-templates-importer/importer/st-importer.php:145
 msgid "Id is empty."
 msgstr "O ID está vazio."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:156
+#: inc/lib/starter-templates-importer/importer/st-importer.php:157
 msgid "Account is already created."
 msgstr "A conta já está criada."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:179
+#: inc/lib/starter-templates-importer/importer/st-importer.php:180
 msgid "Customizer data is empty."
 msgstr "Os dados do personalizador estão vazios."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:197
+#: inc/lib/starter-templates-importer/importer/st-importer.php:198
 msgid "Customizer data imported successfully."
 msgstr "Dados do personalizador importados com sucesso."
 
 #. Translators: %s is WXR URL.
-#: inc/lib/starter-templates-importer/importer/st-importer.php:216
+#: inc/lib/starter-templates-importer/importer/st-importer.php:217
 msgid "Invalid WXR Request URL - %s"
 msgstr "URL de solicitação WXR inválida - %s"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:276
+#: inc/lib/starter-templates-importer/importer/st-importer.php:277
 msgid "Site options are empty!"
 msgstr "As opções do site estão vazias!"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:321
+#: inc/lib/starter-templates-importer/importer/st-importer.php:322
 msgid "Options imported successfully."
 msgstr "Opções importadas com sucesso."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:354
+#: inc/lib/starter-templates-importer/importer/st-importer.php:355
 msgid "Widget data is empty!"
 msgstr "Os dados do widget estão vazios!"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:363
+#: inc/lib/starter-templates-importer/importer/st-importer.php:364
 msgid "Widgets imported successfully."
 msgstr "Widgets importados com sucesso."
 
@@ -1502,7 +1503,7 @@ msgstr "Falha ao importar \"%1$s\" (%2$s)"
 #. translators: %1$s is the post title, %2$s is post type.
 #. translators: %1$s is the taxonomy name, %2$s is taxonomy.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1052
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1939
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1944
 msgid "Imported \"%1$s\" (%2$s)"
 msgstr "Importado \"%1$s\" (%2$s)"
 
@@ -1531,104 +1532,104 @@ msgid "User %1$d remapped to %2$d"
 msgstr "Usuário %1$d remapeado para %2$d"
 
 #. translators: %1$s is the taxonomy, %2$s is taxonomy name.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1912
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1917
 msgid "Failed to import %1$s %2$s"
 msgstr "Falha ao importar %1$s %2$s"
 
 #. translators: %1$s is term original id, %2$s is term id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1947
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1952
 msgid "Term %1$d remapped to %2$d"
 msgstr "Termo %1$d remapeado para %2$d"
 
 #. translators: %1$s is error code, %2$s is error code header, %3$s is url.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2005
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2056
 msgid "Remote server returned %1$d %2$s for %3$s"
 msgstr "O servidor remoto retornou %1$d %2$s para %3$s"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2018
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2069
 msgid "Remote file is incorrect size"
 msgstr "O arquivo remoto está com tamanho incorreto"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2023
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2074
 msgid "Zero size file downloaded"
 msgstr "Arquivo de tamanho zero baixado"
 
 #. translators: %s max file size.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2030
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2081
 msgid "Remote file is too large, limit is %s"
 msgstr "O arquivo remoto é muito grande, o limite é %s"
 
 #. translators: %d is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2063
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2114
 msgid "Running post-processing for post %d"
 msgstr "Executando pós-processamento para o post %d"
 
 #. translators: %1$s is post title, %2$s is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2079
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2130
 msgid "Could not find the post parent for \"%1$s\" (post #%2$d)"
 msgstr "Não foi possível encontrar o pai do post para \"%1$s\" (post #%2$d)"
 
 #. translators: %1$d is post id, %2$d is parent post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2087
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2138
 msgid "Post %1$d was imported with parent %2$d, but could not be found"
 msgstr "O post %1$d foi importado com o pai %2$d, mas não pôde ser encontrado"
 
 #. translators: %1$s is the post title, %2$s is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2104
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2155
 msgid "Could not find the author for \"%1$s\" (post #%2$d)"
 msgstr "Não foi possível encontrar o autor para \"%1$s\" (post #%2$d)"
 
 #. translators: %1$d is post id, %2$s is author slug.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2112
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2163
 msgid "Post %1$d was imported with author \"%2$s\", but could not be found"
 msgstr "O post %1$d foi importado com o autor \"%2$s\", mas não pôde ser encontrado"
 
 #. translators: %d is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2141
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2192
 msgid "Post %d was marked for post-processing, but none was required."
 msgstr "O post %d foi marcado para pós-processamento, mas nenhum foi necessário."
 
 #. translators: %1$s is the post title, %2$s is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2158
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2209
 msgid "Could not update \"%1$s\" (post #%2$d) with mapped data"
 msgstr "Não foi possível atualizar \"%1$s\" (postagem #%2$d) com os dados mapeados"
 
 #. translators: %1$s is the post title, %2$s is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2212
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2263
 msgid "Could not find the menu object for \"%1$s\" (post #%2$d)"
 msgstr "Não foi possível encontrar o objeto de menu para \"%1$s\" (post #%2$d)"
 
 #. translators: %1$s is post id, %2$s is post object id, %3$s is menu type.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2220
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2271
 msgid "Post %1$d was imported with object \"%2$d\" of type \"%3$s\", but could not be found"
 msgstr "O post %1$d foi importado com o objeto \"%2$d\" do tipo \"%3$s\", mas não pôde ser encontrado"
 
 #. translators: %d is comment id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2251
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2302
 msgid "Could not find the comment parent for comment #%d"
 msgstr "Não foi possível encontrar o comentário pai para o comentário #%d"
 
 #. translators: %1$s is comment id, %2$s is parent comment id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2258
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2309
 msgid "Comment %1$d was imported with parent %2$d, but could not be found"
 msgstr "O comentário %1$d foi importado com o pai %2$d, mas não pôde ser encontrado"
 
 #. translators: %d is comment id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2275
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2326
 msgid "Could not find the author for comment #%d"
 msgstr "Não foi possível encontrar o autor para o comentário #%d"
 
 #. translators: %1$d is comment id, %2$d is author id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2282
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2333
 msgid "Comment %1$d was imported with author %2$d, but could not be found"
 msgstr "O comentário %1$d foi importado com o autor %2$d, mas não pôde ser encontrado"
 
 #. translators: %d is comment id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2302
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2353
 msgid "Could not update comment #%d with mapped data"
 msgstr "Não foi possível atualizar o comentário #%d com os dados mapeados"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:835
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:841
 msgid "Import complete!"
 msgstr "Importação concluída!"
 
@@ -1637,33 +1638,25 @@ msgstr "Importação concluída!"
 msgid "Thank you for using %1$sZip AI.%2$s"
 msgstr "Obrigado por usar %1$sZip AI.%2$s"
 
-#: inc/lib/zip-ai/classes/helper.php:225
+#: inc/lib/zip-ai/classes/helper.php:251
 msgid "The ZipWP Endpoint was not declared"
 msgstr "O Endpoint ZipWP não foi declarado"
 
-#: inc/lib/zip-ai/classes/helper.php:235
+#: inc/lib/zip-ai/classes/helper.php:261
 msgid "The ZipWP Token is not set."
 msgstr "O Token ZipWP não está definido."
 
-#: inc/lib/zip-ai/classes/helper.php:259
+#: inc/lib/zip-ai/classes/helper.php:285
 msgid "The ZipWP API server is not responding."
 msgstr "O servidor da API ZipWP não está respondendo."
 
-#: inc/lib/zip-ai/classes/helper.php:269
+#: inc/lib/zip-ai/classes/helper.php:295
 msgid "The ZipWP API server encountered an error."
 msgstr "O servidor da API ZipWP encontrou um erro."
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:187
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:188
 msgid "The message array was not supplied"
 msgstr "O array de mensagens não foi fornecido"
-
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:269
-msgid "Invalid auth token."
-msgstr "Token de autenticação inválido."
-
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:270
-msgid "You have no credits left."
-msgstr "Você não tem créditos restantes."
 
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:270
 msgid "Need to send photo ID"
@@ -1804,7 +1797,7 @@ msgid "Font Pair"
 msgstr "Par de Fontes"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:138
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 msgid "Use setting"
 msgstr "Usar configuração"
 
@@ -2694,13 +2687,11 @@ msgstr "Adicione mais palavras-chave relevantes…"
 msgid "Suggested Keywords"
 msgstr "Palavras-chave sugeridas"
 
-#: inc/lib/ai-builder/inc/assets/build/main.js:207
 #: inc/lib/gutenberg-templates/dist/main.js:2
 #: inc/lib/zipwp-images/dist/main.js:1
 msgid "Clear"
 msgstr "Claro"
 
-#: inc/lib/ai-builder/inc/assets/build/main.js:207
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "or drop your images here (Max 20)"
 msgstr "ou solte suas imagens aqui (Máximo 20)"
@@ -3018,14 +3009,6 @@ msgstr "Falha na importação de widgets."
 #: inc/lib/ai-builder/inc/assets/build/main.js:219
 msgid "Processing content for pages."
 msgstr "Processando conteúdo para páginas."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:219
-msgid "Gutenberg batch failed."
-msgstr "O lote Gutenberg falhou."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:219
-msgid "Gutenberg Batch Failed."
-msgstr "Falha no Lote Gutenberg."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:219
 msgid "Processing images."
@@ -3705,6 +3688,7 @@ msgstr "Compartilhar Dados Não Sensíveis"
 msgid "Help our developers build better templates and products for you by sharing anonymous and non-sensitive data about your website."
 msgstr "Ajude nossos desenvolvedores a criar melhores modelos e produtos para você, compartilhando dados anônimos e não sensíveis sobre o seu site."
 
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:138
 msgid "Learn More"
 msgstr "Saiba Mais"
@@ -3987,36 +3971,12 @@ msgid "Sell your products online"
 msgstr "Venda seus produtos online"
 
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:174
-msgid "Donations"
-msgstr "Doações"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
-msgid "Collect donations online from your website"
-msgstr "Recolha doações online a partir do seu site"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Automation & Integrations"
 msgstr "Automação e Integrações"
 
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Automate your website & tasks"
 msgstr "Automatize seu site e tarefas"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
-msgid "Sales Funnels"
-msgstr "Funis de Vendas"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
-msgid "Boost your sales & maximize your profits"
-msgstr "Aumente suas vendas e maximize seus lucros"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
-msgid "Video Player"
-msgstr "Reprodutor de Vídeo"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
-msgid "Showcase your videos on your website"
-msgstr "Exiba seus vídeos no seu site"
 
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Free Live Chat"
@@ -4109,9 +4069,7 @@ msgid "Get more Credits"
 msgstr "Obtenha mais Créditos"
 
 #. translators: %s: number of words
-#. translators: %s the total amount of credits to this account, with comma separators.
 #: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
 msgid "of %s"
 msgstr "de %s"
 
@@ -4434,7 +4392,7 @@ msgid "Change tone to %s."
 msgstr "Altere o tom para %s."
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Rephrase"
 msgstr "Reformular"
 
@@ -4443,17 +4401,17 @@ msgid "Draft with AI"
 msgstr "Rascunho com IA"
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Fix Grammar"
 msgstr "Corrigir gramática"
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Make Longer"
 msgstr "Faça mais longo"
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Make Shorter"
 msgstr "Faça mais curto"
 
@@ -4550,17 +4508,16 @@ msgid "Hi there! I'm here to assist you."
 msgstr "Olá! Estou aqui para ajudá-lo."
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:16
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
 msgid "AI Assistant"
 msgstr "Assistente de IA"
 
 #. translators: %s: lastUsedTone label
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:16
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
 msgid "Change Tone to %s"
 msgstr "Alterar tom para %s"
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:16
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
 msgid "Something Else"
 msgstr "Algo Mais"
 
@@ -4666,34 +4623,34 @@ msgid "Back to All Images"
 msgstr "Voltar para Todas as Imagens"
 
 #. translators: %s Anchor link to support URL.
-#: inc/classes/class-astra-sites.php:1837
+#: inc/classes/class-astra-sites.php:1871
 msgid "Please report this error%1$s here %2$s, so we can fix it."
 msgstr "Por favor, reporte este erro%1$s aqui %2$s, para que possamos corrigi-lo."
 
-#: inc/classes/class-astra-sites.php:2087
+#: inc/classes/class-astra-sites.php:2121
 msgid "Missing plugin installation permission"
 msgstr "Permissão de instalação de plugin ausente"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2089
+#: inc/classes/class-astra-sites.php:2123
 msgid "You do not have permission to install the required plugin. You must have install permissions to proceed with the required plugin."
 msgstr "Você não tem permissão para instalar o plugin necessário. Você deve ter permissões de instalação para prosseguir com o plugin necessário."
 
-#: inc/classes/class-astra-sites.php:2092
+#: inc/classes/class-astra-sites.php:2126
 msgid "Missing plugin activation permission"
 msgstr "Permissão de ativação de plugin ausente"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2094
+#: inc/classes/class-astra-sites.php:2128
 msgid "You do not have permission to activate the required plugin. You must have activate permissions to proceed with the required plugin."
 msgstr "Você não tem permissão para ativar o plugin necessário. Você deve ter permissões de ativação para prosseguir com o plugin necessário."
 
-#: inc/classes/class-astra-sites.php:2097
+#: inc/classes/class-astra-sites.php:2131
 msgid "Insufficient Memory Limit"
 msgstr "Limite de Memória Insuficiente"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2099
+#: inc/classes/class-astra-sites.php:2133
 msgid "The memory limit of your site is below the recommended 256MB. While you can proceed, increasing the memory limit is advised for a seamless import experience."
 msgstr "O limite de memória do seu site está abaixo dos 256MB recomendados. Embora você possa prosseguir, é aconselhável aumentar o limite de memória para uma experiência de importação sem problemas."
 
@@ -4903,47 +4860,8 @@ msgid "Ask me about what you need."
 msgstr "Pergunte-me sobre o que você precisa."
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
-msgid "Login"
-msgstr "Entrar"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
-msgid "Login to use the AI Assistant!"
-msgstr "Faça login para usar o Assistente de IA!"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
-msgid "Credit Usage"
-msgstr "Uso de Crédito"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Get More Credits"
 msgstr "Obtenha mais créditos"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
-msgid "Logging in"
-msgstr "Iniciando sessão"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
-msgid "Logged in"
-msgstr "Conectado"
-
-#. Translators: %1$s is the opening link tag, %2$s is the closing link tag.
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
-msgid "Continue logging in from %1$shere%2$s."
-msgstr "Continue a fazer login a partir de %1$saqui%2$s."
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
-msgid "Logged in!"
-msgstr "Conectado!"
-
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
-msgid "Something went wrong, please login again."
-msgstr "Algo deu errado, por favor faça login novamente."
-
-#. translators: %s product name
-#: admin/bsf-analytics/class-bsf-analytics.php:228
-msgid "Want to help make %1s even more awesome? Allow us to collect non-sensitive diagnostic data and usage information. "
-msgstr "Quer ajudar a tornar %1s ainda mais incrível? Permita-nos coletar dados de diagnóstico não sensíveis e informações de uso."
 
 #: admin/bsf-analytics/classes/class-bsf-analytics-helper.php:28
 msgid "Oops! Something went wrong. Please refresh the page and try again."
@@ -4958,61 +4876,61 @@ msgstr "Feedback Rápido"
 msgid "If you have a moment, please share why you are deactivating the plugin."
 msgstr "Se você tiver um momento, por favor, compartilhe por que está desativando o plugin."
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:109
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:112
 msgid "Icon"
 msgstr "Ícone"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:134
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:309
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:139
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:314
 msgid "Please tell us more details."
 msgstr "Por favor, conte-nos mais detalhes."
 
 #. translators: %1$s: link html start, %2$s: link html end
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:143
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:148
 msgid "Need help from our experts? %1$sClick here to contact us.%2$s"
 msgstr "Precisa de ajuda dos nossos especialistas? %1$sClique aqui para nos contatar.%2$s"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:154
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:159
 msgid "Submit & Deactivate"
 msgstr "Enviar e Desativar"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:155
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:160
 msgid "Skip & Deactivate"
 msgstr "Pular e desativar"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:284
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:289
 msgid "This is a temporary deactivation for testing."
 msgstr "Esta é uma desativação temporária para teste."
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:285
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:290
 msgid "How can we assist you?"
 msgstr "Como podemos ajudá-lo?"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:290
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:295
 msgid "The plugin isn't working properly."
 msgstr "O plugin não está funcionando corretamente."
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:291
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:296
 msgid "Please tell us more about what went wrong?"
 msgstr "Por favor, conte-nos mais sobre o que deu errado?"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:296
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:301
 msgid "I found a better alternative plugin."
 msgstr "Encontrei um plugin alternativo melhor."
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:297
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:302
 msgid "Could you please specify which plugin?"
 msgstr "Poderia especificar qual plugin?"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:302
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:307
 msgid "It's missing a specific feature."
 msgstr "Está faltando um recurso específico."
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:303
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:308
 msgid "Please tell us more about the feature."
 msgstr "Por favor, conte-nos mais sobre o recurso."
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:308
+#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:313
 msgid "Other"
 msgstr "Outro"
 
@@ -5033,11 +4951,11 @@ msgstr "Houve um erro ao baixar o arquivo de tabelas do Latepoint."
 msgid "Empty file for Latepoint tables"
 msgstr "Arquivo vazio para tabelas Latepoint"
 
-#: inc/classes/class-astra-sites.php:313
+#: inc/classes/class-astra-sites.php:347
 msgid "An error occurred due to insufficient memory. Please increase the memory limit on the server to resolve this issue"
 msgstr "Ocorreu um erro devido à memória insuficiente. Por favor, aumente o limite de memória no servidor para resolver este problema"
 
-#: inc/classes/class-astra-sites.php:1546
+#: inc/classes/class-astra-sites.php:1580
 msgid "Get Premium Templates "
 msgstr "Obtenha Modelos Premium"
 
@@ -5078,15 +4996,111 @@ msgstr "Compromissos e Reservas"
 msgid "Easily manage bookings for your services"
 msgstr "Gerencie facilmente as reservas dos seus serviços"
 
+#: admin/bsf-analytics/class-bsf-analytics.php:238
+msgid "Help us improve %1$s and our other products!<br><br>With your permission, we'd like to collect <strong>non-sensitive information</strong> from your website — like your PHP version and which features you use — so we can fix bugs faster, make smarter decisions, and build features that actually matter to you. <em>No personal info. Ever.</em>"
+msgstr "Ajude-nos a melhorar %1$s e nossos outros produtos!<br><br>Com sua permissão, gostaríamos de coletar <strong>informações não sensíveis</strong> do seu site — como sua versão do PHP e quais recursos você usa — para que possamos corrigir bugs mais rapidamente, tomar decisões mais inteligentes e desenvolver recursos que realmente importam para você. <em>Nenhuma informação pessoal. Nunca.</em>"
+
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:114
+msgid "Missing required parameter."
+msgstr "Parâmetro obrigatório ausente."
+
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:121
+msgid "Usage tracking updated successfully."
+msgstr "Rastreamento de uso atualizado com sucesso."
+
+#: inc/lib/starter-templates-importer/importer/batch/st-batch-processing-elementor.php:86
+msgid "Batch process completed."
+msgstr "Processo em lote concluído."
+
+#: inc/lib/zip-ai/classes/helper.php:195
+msgid "Empty response from API."
+msgstr "Resposta vazia da API."
+
+#: inc/lib/zip-ai/classes/helper.php:196
+msgid "empty_response"
+msgstr "resposta_vazia"
+
+#: inc/lib/zip-ai/classes/helper.php:227
+msgid "Encountered an error while processing your request. Please try again."
+msgstr "Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente."
+
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:285
+msgid "Authentication failed. Invalid or missing bearer token."
+msgstr "Falha na autenticação. Token de portador inválido ou ausente."
+
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:287
+msgid "You've run out of credits."
+msgstr "Você ficou sem créditos."
+
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:289
+msgid "To continue using the assistant and access its full features, please purchase more credits."
+msgstr "Para continuar usando o assistente e acessar todos os seus recursos, por favor, compre mais créditos."
+
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:291
+msgid "Buy more credits"
+msgstr "Compre mais créditos"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:190
+msgid "Sign up for a free ZipWP account to import and customize your website!"
+msgstr "Inscreva-se para uma conta gratuita no ZipWP para importar e personalizar seu site!"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:190
+msgid "Customize your website with ease"
+msgstr "Personalize seu site com facilidade"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:190
+msgid "Launch faster than ever"
+msgstr "Lance mais rápido do que nunca"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:190
+msgid "Need help? We're a message away"
+msgstr "Precisa de ajuda? Estamos a uma mensagem de distância"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:190
+msgid "Create ZipWP Account"
+msgstr "Criar Conta ZipWP"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:190
+msgid "Elementor (Beta)"
+msgstr "Elementor (Beta)"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:194
+msgid "Upload"
+msgstr "Carregar"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:207
+msgid "Clear all"
+msgstr "Limpar tudo"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:207
+msgid "or drop your images here"
+msgstr "ou solte suas imagens aqui"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:207
+msgid "(Max 20)"
+msgstr "(Máximo 20)"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:219
+msgid "Batch process failed."
+msgstr "Processo em lote falhou."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Enable Usage Tracking"
+msgstr "Ativar Rastreamento de Uso"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Allow Starter Templates and our other products to track non-sensitive usage tracking data."
+msgstr "Permita que o Starter Templates e nossos outros produtos rastreiem dados de uso não sensíveis."
+
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
 #: inc/classes/class-astra-sites-importer-log.php:302
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:306
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:302
 msgctxt "Recommended Memory Limit"
 msgid "Current memory limit %1$s. We recommend setting memory to at least %2$s."
 msgstr "Limite de memória atual %1$s. Recomendamos definir a memória para pelo menos %2$s."
 
 #: inc/classes/class-astra-sites-importer-log.php:383
-#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:387
+#: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:383
 msgctxt "PHP Version"
 msgid "We recommend to use php 5.4 or higher"
 msgstr "Recomendamos usar php 5.4 ou superior"

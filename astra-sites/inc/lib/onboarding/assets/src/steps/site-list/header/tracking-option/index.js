@@ -103,7 +103,7 @@ const TrackingOption = () => {
 
 						<p className="!text-xs">
 							{ __(
-								'Allow Starter Templates team to track non-sensitive usage tracking data.',
+								'Allow Starter Templates and our other products to track non-sensitive usage tracking data.',
 								'astra-sites'
 							) }{ ' ' }
 							<a
