@@ -95,7 +95,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 				\WP_CLI::line( 'Processing "Gutenberg" Batch Import' );
 			}
 
-			$post_types = apply_filters( 'astra_sites_gutenberg_batch_process_post_types', array( 'page', 'post', 'wp_block', 'wp_template', 'wp_navigation', 'wp_template_part', 'wp_global_styles', 'sc_form' ) );
+			$post_types = apply_filters( 'astra_sites_gutenberg_batch_process_post_types', array( 'page', 'post', 'wp_block', 'wp_template', 'wp_navigation', 'wp_template_part', 'wp_global_styles', 'sc_form', 'spectra-popup' ) );
 			if ( defined( 'WP_CLI' ) ) {
 				\WP_CLI::line( 'For post types: ' . implode( ', ', $post_types ) );
 			}

@@ -65,10 +65,22 @@ export const useFilteredSites = () => {
 
 	if ( siteType ) {
 		for ( const siteId in sites ) {
-			if ( 'free' !== sites[ siteId ][ 'astra-sites-type' ] ) {
-				sites[ siteId ] = sites[ siteId ];
-			} else {
-				delete sites[ siteId ];
+			const currentSiteType =
+				sites[ siteId ]?.[ 'astra-sites-type' ] || '';
+
+			switch ( siteType ) {
+				case 'signature':
+					if ( currentSiteType !== siteType ) {
+						delete sites[ siteId ];
+					}
+					break;
+				case 'agency-mini':
+					if ( 'agency-mini' !== currentSiteType ) {
+						delete sites[ siteId ];
+					}
+					break;
+				default:
+					break;
 			}
 		}
 	}

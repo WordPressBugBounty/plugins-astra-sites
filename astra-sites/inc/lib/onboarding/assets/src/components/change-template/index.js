@@ -41,7 +41,11 @@ const ChangeTemplate = () => {
 				<div className="flex gap-2 items-center">
 					<h5>{ decodeEntities( selectedTemplateName ) }</h5>
 					{ ! licenseStatus && 'free' !== selectedTemplateType && (
-						<span>{ ICONS.premiumIcon }</span>
+						<span>
+							{ selectedTemplateType === 'signature'
+								? ICONS.signatureIcon
+								: ICONS.premiumIcon }
+						</span>
 					) }
 				</div>
 			</div>

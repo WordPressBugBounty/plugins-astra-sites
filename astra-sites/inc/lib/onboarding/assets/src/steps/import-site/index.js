@@ -19,7 +19,6 @@ import {
 	generateAnalyticsLead,
 } from './import-utils';
 const { reportError } = starterTemplates;
-let sendReportFlag = reportError;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
 
 import './style.scss';
@@ -49,6 +48,7 @@ const ImportSite = () => {
 			tryAgainCount,
 			xmlImportDone,
 			templateId,
+			selectedTemplateType,
 			builder,
 			pluginInstallationAttempts,
 		},
@@ -110,14 +110,23 @@ const ImportSite = () => {
 		stack = ''
 	) => {
 		if ( tryAgainCount >= 2 ) {
-			generateAnalyticsLead( tryAgainCount, false, templateId, builder );
+			generateAnalyticsLead( tryAgainCount, false, {
+				id: templateId,
+				page_builder: builder,
+				template_type: selectedTemplateType,
+				failure_reason: primary,
+			} );
 		}
-		if ( ! sendReportFlag ) {
+		if ( ! reportError ) {
 			return;
 		}
 		const reportErr = new FormData();
 		reportErr.append( 'action', 'astra-sites-report_error' );
 		reportErr.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+		reportErr.append( 'type', 'classic' );
+		reportErr.append( 'page_builder', builder );
+		reportErr.append( 'template_type', selectedTemplateType );
+
 		reportErr.append(
 			'error',
 			JSON.stringify( {
@@ -205,7 +214,11 @@ const ImportSite = () => {
 		}
 
 		if ( finalStepStatus ) {
-			generateAnalyticsLead( tryAgainCount, true, templateId, builder );
+			generateAnalyticsLead( tryAgainCount, true, {
+				id: templateId,
+				page_builder: builder,
+				template_type: selectedTemplateType,
+			} );
 		}
 	};
 
@@ -1734,7 +1747,6 @@ const ImportSite = () => {
 				themeStatus: true,
 			} );
 		}
-		sendReportFlag = false;
 		installRequiredPlugins();
 	}, [ templateResponse ] );
 
@@ -1745,7 +1757,6 @@ const ImportSite = () => {
 	 */
 	useEffect( () => {
 		if ( requiredPluginsDone && themeStatus ) {
-			sendReportFlag = reportError;
 			importPart1();
 		}
 	}, [ requiredPluginsDone, themeStatus ] );

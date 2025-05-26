@@ -46,6 +46,7 @@ export const defaultOnboardingAIState = {
 		activeColorPalette: null,
 		activeTypography: null,
 		defaultColorPalette: null,
+		pageBuilder: '',
 	},
 	websiteInfo: aiStepValues?.websiteInfo || {},
 	websiteVersionList: [],
@@ -491,6 +492,14 @@ const reducer = ( state = initialState, action ) => {
 			return {
 				...state,
 				stepData: { ...action.payload.stepData },
+			};
+		case actionTypes.SET_SELECTED_PAGE_BUILDER:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					pageBuilder: action.payload,
+				},
 			};
 		default:
 			return state;

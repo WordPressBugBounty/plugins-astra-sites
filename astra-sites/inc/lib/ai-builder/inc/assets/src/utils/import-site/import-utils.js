@@ -433,3 +433,22 @@ export const setSiteLanguage = async ( siteLanguage = 'en_US' ) => {
 		showErrorToast( __( 'Failed to save Site Language', 'ai-builder' ), e )
 	);
 };
+
+export const generateAnalyticsLead = async ( tryAgainCount, status, data ) => {
+	const importContent = new FormData();
+	importContent.append( 'action', 'astra-sites-generate-analytics-lead' );
+	importContent.append( 'status', status );
+	importContent.append( 'try-again-count', tryAgainCount );
+	importContent.append( 'type', 'ai-builder' );
+	importContent.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+
+	// Append extra data.
+	Object.entries( data ).forEach( ( [ key, value ] ) =>
+		importContent.append( key, value )
+	);
+
+	await fetch( ajaxurl, {
+		method: 'post',
+		body: importContent,
+	} );
+};

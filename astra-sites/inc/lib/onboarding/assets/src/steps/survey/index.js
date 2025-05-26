@@ -19,6 +19,8 @@ const Survey = () => {
 			currentIndex,
 			builder,
 			requiredPlugins,
+			notInstalledList,
+			notActivatedList,
 			analyticsFlag,
 			shownRequirementOnce,
 			pluginInstallationAttempts,
@@ -239,6 +241,27 @@ const Survey = () => {
 				return;
 			}
 
+			const templatePlugins = requiredPlugins.required_plugins;
+
+			const pluginLists = [
+				templatePlugins?.active,
+				templatePlugins?.inactive,
+				templatePlugins?.notinstalled,
+				notInstalledList,
+				notActivatedList,
+			];
+
+			const uniqueFeatures = Array.from(
+				new Set(
+					pluginLists
+						.flatMap( ( list ) =>
+							Array.isArray( list ) ? list : []
+						)
+						.map( ( plugin ) => plugin?.slug )
+						.filter( Boolean )
+				)
+			);
+
 			const subscriptionFields = {
 				EMAIL: formDetails.email,
 				FIRSTNAME: formDetails.first_name,
@@ -246,6 +269,7 @@ const Survey = () => {
 				WP_USER_TYPE: formDetails.wp_user_type,
 				BUILD_WEBSITE_FOR: formDetails.build_website_for,
 				OPT_IN: formDetails.opt_in,
+				FEATURES: uniqueFeatures,
 			};
 
 			const content = new FormData();

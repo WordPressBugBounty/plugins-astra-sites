@@ -83,7 +83,12 @@ const OnboardingAI = () => {
 		const savedData = getLocalStorageItem(
 			'ai-builder-onboarding-details'
 		);
-		if ( savedData?.lastVisitedStep ) {
+
+		const shouldRedirectToLastStep =
+			! urlParams.get( 'skip_redirect_last_step' ) &&
+			savedData?.lastVisitedStep;
+
+		if ( shouldRedirectToLastStep ) {
 			navigateTo( {
 				to: savedData.lastVisitedStep,
 				replace: true,

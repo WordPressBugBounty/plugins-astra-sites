@@ -418,6 +418,187 @@ const ICONS = {
 			</defs>
 		</svg>
 	),
+	signatureIcon: (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="20"
+			height="20"
+			viewBox="0 0 27 27"
+			fill="none"
+		>
+			<circle
+				cx="13.5"
+				cy="13.5"
+				r="13.5"
+				fill="url(#paint0_linear_6_4)"
+			/>
+			<mask
+				id="mask0_6_4"
+				maskUnits="userSpaceOnUse"
+				x="8"
+				y="13"
+				width="6"
+				height="9"
+			>
+				<path
+					d="M8.45253 13.1124L13.1737 21.9088V13.1124H8.45253Z"
+					fill="white"
+				/>
+			</mask>
+			<g mask="url(#mask0_6_4)">
+				<path
+					d="M13.1737 13.1124H8.45253V21.9088H13.1737V13.1124Z"
+					fill="white"
+				/>
+			</g>
+			<mask
+				id="mask1_6_4"
+				maskUnits="userSpaceOnUse"
+				x="4"
+				y="13"
+				width="9"
+				height="9"
+			>
+				<path
+					d="M4.51796 13.1124L12.0278 21.1529L7.71256 13.1124H4.51796Z"
+					fill="white"
+				/>
+			</mask>
+			<g mask="url(#mask1_6_4)">
+				<path
+					d="M12.0278 13.1124H4.51796V21.1529H12.0278V13.1124Z"
+					fill="white"
+				/>
+			</g>
+			<mask
+				id="mask2_6_4"
+				maskUnits="userSpaceOnUse"
+				x="4"
+				y="8"
+				width="6"
+				height="5"
+			>
+				<path
+					d="M9.45087 8.64623H7.93509L4.50002 12.4588H7.69907L9.45087 8.64623Z"
+					fill="white"
+				/>
+			</mask>
+			<g mask="url(#mask2_6_4)">
+				<path
+					d="M9.45087 8.64623H4.50002V12.4588H9.45087V8.64623Z"
+					fill="white"
+				/>
+			</g>
+			<mask
+				id="mask3_6_4"
+				maskUnits="userSpaceOnUse"
+				x="8"
+				y="8"
+				width="6"
+				height="5"
+			>
+				<path
+					d="M13.1735 8.64622H10.1671L8.41516 12.4588H13.1735V8.64622Z"
+					fill="white"
+				/>
+			</mask>
+			<g mask="url(#mask3_6_4)">
+				<path
+					d="M13.1735 8.64622H8.41516V12.4588H13.1735V8.64622Z"
+					fill="white"
+				/>
+			</g>
+			<mask
+				id="mask4_6_4"
+				maskUnits="userSpaceOnUse"
+				x="13"
+				y="13"
+				width="6"
+				height="9"
+			>
+				<path
+					d="M13.8267 21.9088L18.5476 13.1124H13.8267V21.9088Z"
+					fill="white"
+				/>
+			</mask>
+			<g mask="url(#mask4_6_4)">
+				<path
+					d="M18.5475 13.1124H13.8267V21.9088H18.5475V13.1124Z"
+					fill="white"
+				/>
+			</g>
+			<mask
+				id="mask5_6_4"
+				maskUnits="userSpaceOnUse"
+				x="14"
+				y="13"
+				width="9"
+				height="9"
+			>
+				<path
+					d="M19.288 13.1124L14.9725 21.1529L22.4822 13.1124H19.288Z"
+					fill="white"
+				/>
+			</mask>
+			<g mask="url(#mask5_6_4)">
+				<path
+					d="M22.482 13.1124H14.9725V21.1529H22.482V13.1124Z"
+					fill="white"
+				/>
+			</g>
+			<mask
+				id="mask6_6_4"
+				maskUnits="userSpaceOnUse"
+				x="13"
+				y="8"
+				width="6"
+				height="5"
+			>
+				<path
+					d="M18.5848 12.4588L16.8328 8.64622H13.8267V12.4588H18.5848Z"
+					fill="white"
+				/>
+			</mask>
+			<g mask="url(#mask6_6_4)">
+				<path
+					d="M18.5848 8.64622H13.8267V12.4588H18.5848V8.64622Z"
+					fill="white"
+				/>
+			</g>
+			<mask
+				id="mask7_6_4"
+				maskUnits="userSpaceOnUse"
+				x="17"
+				y="8"
+				width="6"
+				height="5"
+			>
+				<path
+					d="M17.5496 8.64622L19.3012 12.4588H22.5002L19.0655 8.64622H17.5496Z"
+					fill="white"
+				/>
+			</mask>
+			<g mask="url(#mask7_6_4)">
+				<path
+					d="M22.5002 8.64622H17.5496V12.4588H22.5002V8.64622Z"
+					fill="white"
+				/>
+			</g>
+			<defs>
+				<linearGradient
+					id="paint0_linear_6_4"
+					x1="25.5"
+					y1="1.875"
+					x2="-1.125"
+					y2="24"
+					gradientUnits="userSpaceOnUse"
+				>
+					<stop stop-color="#AD38E2" />
+					<stop offset="1" stop-color="#492CDD" />
+				</linearGradient>
+			</defs>
+		</svg>
+	),
 	reloadIcon: (
 		<svg
 			width="20"

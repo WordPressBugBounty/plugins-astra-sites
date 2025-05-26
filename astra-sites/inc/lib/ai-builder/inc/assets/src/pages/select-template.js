@@ -49,6 +49,7 @@ const SelectTemplate = () => {
 		setWebsiteSelectedTemplateAIStep,
 		setWebsiteTemplateSearchResultsAIStep,
 		setSelectedTemplateIsPremium,
+		setSelectedPageBuilder,
 	} = useDispatch( STORE_KEY );
 
 	const {
@@ -94,6 +95,12 @@ const SelectTemplate = () => {
 	const [ isFetching, setIsFetching ] = useState( false );
 	const [ backToTop, setBackToTop ] = useState( false );
 	const [ selectedBuilder, setSelectedBuilder ] = useState( 'spectra' );
+
+	useEffect( () => {
+		setSelectedPageBuilder(
+			selectedBuilder === 'spectra' ? 'gutenberg' : selectedBuilder
+		);
+	}, [ selectedBuilder ] );
 
 	const parentContainer = useRef( null );
 	const templatesContainer = useRef( null );

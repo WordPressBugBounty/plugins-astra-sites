@@ -17,9 +17,9 @@ import {
 	saveTypography,
 	setSiteLanguage,
 	showErrorToast,
+	generateAnalyticsLead,
 } from '../utils/import-site/import-utils';
 const { migrateSvg, reportError } = aiBuilderVars;
-let sendReportFlag = reportError;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
 import { STORE_KEY } from '../store';
 import ErrorModel from '../components/error-model';
@@ -176,14 +176,28 @@ const ImportAiSite = () => {
 		stack = ''
 	) => {
 		if ( tryAgainCount >= 2 ) {
-			// generateAnalyticsLead( tryAgainCount, false, templateId, builder );
+			generateAnalyticsLead( tryAgainCount, false, {
+				id: templateId,
+				page_builder: stepsData?.pageBuilder,
+				template_type: stepsData?.selectedTemplateIsPremium
+					? 'premium'
+					: 'free',
+				failure_reason: primary,
+			} );
 		}
-		if ( ! sendReportFlag ) {
+		if ( ! reportError ) {
 			return;
 		}
 		const reportErr = new FormData();
 		reportErr.append( 'action', 'astra-sites-report_error' );
 		reportErr.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+		reportErr.append( 'type', 'ai-builder' );
+		reportErr.append( 'page_builder', stepsData?.pageBuilder );
+		reportErr.append(
+			'template_type',
+			stepsData?.selectedTemplateIsPremium ? 'premium' : 'free'
+		);
+
 		reportErr.append(
 			'local_storage',
 			JSON.stringify(
@@ -298,6 +312,14 @@ const ImportAiSite = () => {
 
 		if ( setSiteOptions ) {
 			await importSuccess();
+
+			generateAnalyticsLead( tryAgainCount, true, {
+				id: templateId,
+				page_builder: stepsData?.pageBuilder,
+				template_type: stepsData?.selectedTemplateIsPremium
+					? 'premium'
+					: 'free',
+			} );
 		}
 	};
 
@@ -1860,7 +1882,6 @@ const ImportAiSite = () => {
 				themeStatus: true,
 			} );
 		}
-		sendReportFlag = false;
 	};
 
 	const tryAainCallback = () => {
@@ -2031,7 +2052,6 @@ const ImportAiSite = () => {
 	 */
 	useEffect( () => {
 		if ( requiredPluginsDone && themeStatus ) {
-			sendReportFlag = reportError;
 			importPart1();
 		}
 	}, [ requiredPluginsDone, themeStatus ] );

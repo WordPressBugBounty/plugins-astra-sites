@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 4.4.20
+Stable tag: 4.4.21
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -239,6 +239,16 @@ Once your website is generated, you have complete control over its content and l
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.21 - 26-May-2025
+- New:
+    - Added compatibility with the Spectra Pro plugin.
+    - Introducing the compatibility for new Signature templates.
+- Improvement:
+    - Improved compatibility with Spectra Popup Builder post types.
+    - Displayed the "Show Other Builders" option in the Builders dropdown when any supported page builder is disabled.
+- Fix:
+    - AI Builder: Resolved an issue where the premium access box was not displaying correctly for disconnected ZipWP users.
 
 v4.4.20 - 13-May-2025
 - Improvement:

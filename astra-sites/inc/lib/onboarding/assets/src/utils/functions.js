@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { __ } from '@wordpress/i18n';
 import { decodeEntities } from '@wordpress/html-entities';
+import { ReactComponent as BlackDiamond } from '../../images/black-diamond.svg';
 import { STEPS } from '../steps/util';
 
 export const whiteLabelEnabled = () => {
@@ -182,14 +183,26 @@ export const getGridItem = ( site ) => {
 		}
 	}
 
+	let badge = '';
+	let type = 'free';
+	if ( site[ 'astra-sites-type' ] === 'signature' ) {
+		badge = (
+			<>
+				<BlackDiamond /> { __( 'Signature', 'astra-sites' ) }
+			</>
+		);
+		type = 'signature';
+	} else if ( site[ 'astra-sites-type' ] !== 'free' ) {
+		badge = <>{ __( 'Premium', 'astra-sites' ) }</>;
+		type = 'premium';
+	}
+
 	return {
 		id: site.id,
 		image: imageUrl,
 		title: decodeEntities( site.title ),
-		badge:
-			'free' !== site[ 'astra-sites-type' ]
-				? __( 'Premium', 'astra-sites' )
-				: '',
+		type,
+		badge,
 		...site,
 	};
 };

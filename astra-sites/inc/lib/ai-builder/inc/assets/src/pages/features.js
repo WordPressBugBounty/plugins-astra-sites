@@ -165,7 +165,11 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 		};
 	}, [] );
 	const {
-		stepsData: { selectedTemplate, templateList },
+		stepsData: {
+			selectedTemplate,
+			templateList,
+			selectedTemplateIsPremium,
+		},
 	} = useSelect( ( select ) => {
 		const { getAIStepData } = select( STORE_KEY );
 
@@ -176,6 +180,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 	const selectedTemplateData = templateList.find(
 		( item ) => item.uuid === selectedTemplate
 	);
+
 	// const enabledFeatures = siteFeatures
 	// 	.filter( ( feature ) => feature.enabled )
 	// 	.map( ( feature ) => feature.id );
@@ -243,6 +248,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 				type: 'register',
 				ask: 'register',
 				shouldResume: true,
+				isPremiumTemplate: selectedTemplateIsPremium,
 			} );
 			return;
 		}

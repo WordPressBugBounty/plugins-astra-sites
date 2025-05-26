@@ -243,14 +243,14 @@ class Plugin extends AjaxBase {
 			'timeout'  => 3,
 			'blocking' => true,
 			'body'     => array(
-				'url'        => esc_url( site_url() ),
-				'err'        => stripslashes( $_POST['error'] ),
-				'id'         => $_POST['id'],
-				'logfile'    => $this->get_log_file_path(),
-				'version'    => AI_BUILDER_VER,
-				'abspath'    => ABSPATH,
-				'user_agent' => $user_agent_string,
-				'server'     => array(
+				'url'           => esc_url( site_url() ),
+				'err'           => stripslashes( $_POST['error'] ),
+				'id'            => $_POST['id'],
+				'logfile'       => $this->get_log_file_path(),
+				'version'       => AI_BUILDER_VER,
+				'abspath'       => ABSPATH,
+				'user_agent'    => $user_agent_string,
+				'server'        => array(
 					'php_version'            => Helper::get_php_version(),
 					'php_post_max_size'      => ini_get( 'post_max_size' ),
 					'php_max_execution_time' => ini_get( 'max_execution_time' ),
@@ -258,6 +258,9 @@ class Plugin extends AjaxBase {
 					'php_memory_limit'       => ini_get( 'memory_limit' ),
 					'php_max_input_vars'     => ini_get( 'max_input_vars' ), // phpcs:ignore:PHPCompatibility.IniDirectives.NewIniDirectives.max_input_varsFound
 				),
+				'builder_type'  => isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : '',
+				'page_builder'  => isset( $_POST['page_builder'] ) ? sanitize_text_field( $_POST['page_builder'] ) : '',
+				'template_type' => isset( $_POST['template_type'] ) ? sanitize_text_field( $_POST['template_type'] ) : '',
 			),
 		);
 

@@ -258,6 +258,13 @@ const actions = {
 			payload,
 		};
 	},
+
+	setSelectedPageBuilder( payload ) {
+		return {
+			type: actionsTypes.SET_SELECTED_PAGE_BUILDER,
+			payload,
+		};
+	},
 };
 
 export default actions;

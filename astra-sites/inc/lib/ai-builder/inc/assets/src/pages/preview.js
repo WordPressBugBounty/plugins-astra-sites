@@ -119,7 +119,8 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 
 	const isTemplateRestricted =
 		selectedTemplateItem?.is_premium &&
-		aiBuilderVars?.zip_plans?.active_plan?.slug === 'free';
+		( ! aiBuilderVars?.zip_plans?.active_plan ||
+			aiBuilderVars?.zip_plans?.active_plan?.slug === 'free' );
 
 	const updateScaling = () => {
 		const container = previewContainer.current;
@@ -457,7 +458,8 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 							<></>
 						) }
 						<div className="mt-8 mb-5 space-y-5">
-							{ ! isTemplateRestricted && (
+							{ ( ! isTemplateRestricted ||
+								! aiBuilderVars?.zip_plans?.active_plan ) && (
 								<Button
 									className="h-10 w-full font-semibold text-sm leading-5"
 									onClick={

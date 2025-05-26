@@ -515,20 +515,19 @@ export const checkFileSystemPermissions = async ( [ , dispatch ] ) => {
 	}
 };
 
-export const generateAnalyticsLead = async (
-	tryAgainCount,
-	status,
-	templateId,
-	builder
-) => {
+export const generateAnalyticsLead = async ( tryAgainCount, status, data ) => {
 	const importContent = new FormData();
 	importContent.append( 'action', 'astra-sites-generate-analytics-lead' );
 	importContent.append( 'status', status );
-	importContent.append( 'id', templateId );
 	importContent.append( 'try-again-count', tryAgainCount );
 	importContent.append( 'type', 'astra-sites' );
-	importContent.append( 'page-builder', builder );
 	importContent.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+
+	// Append extra data.
+	Object.entries( data ).forEach( ( [ key, value ] ) =>
+		importContent.append( key, value )
+	);
+
 	await fetch( ajaxurl, {
 		method: 'post',
 		body: importContent,

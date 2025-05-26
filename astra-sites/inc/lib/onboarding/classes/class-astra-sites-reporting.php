@@ -20,7 +20,7 @@ class Astra_Sites_Reporting {
 	 *
 	 * @since 4.0.0
 	 * @access private
-	 * @var object Class object.
+	 * @var self Class object.
 	 */
     private static $instance = null;
 
@@ -28,7 +28,7 @@ class Astra_Sites_Reporting {
      * Initiator
      *
      * @since 4.0.0
-	 * @return mixed 
+	 * @return self
      */
     public static function get_instance() {
         if ( null === self::$instance ) {
@@ -56,8 +56,8 @@ class Astra_Sites_Reporting {
     public function schedule_reporting_event() {
         $has_sent_error_report = get_option( 'astra_sites_has_sent_error_report', 'no' );
         if ( 'no' === $has_sent_error_report ) {
-            // Schedule and event in next 20mins to send error report.
-            wp_schedule_single_event( time() + 1200, 'generate_analytics_lead' );
+            // Schedule and event in next 3mins to send error report.
+            wp_schedule_single_event( time() + 180, 'generate_analytics_lead' );
             update_option( 'astra_sites_has_sent_error_report', 'yes' );
         }
     }
@@ -85,10 +85,12 @@ class Astra_Sites_Reporting {
         $report_data = array(
             'id' => $id,
             'import_attempts' => isset( $data->tryAgainCount ) ? absint( $data->tryAgainCount ) : 0,
-            'import_status' => 'false',
-            'type' => 'astra-sites',
-            'page_builder' => Astra_Sites_Page::get_instance()->get_setting( 'page_builder' ),
-            'exit_intend' => 'true'
+            'import_status'   => 'false',
+            'exit_intend'     => 'true',
+            'type'            => isset( $cached_errors['type'] ) ? sanitize_text_field( $cached_errors['type'] ) : 'astra-sites',
+            'page_builder'    => isset( $cached_errors['page_builder'] ) ? sanitize_text_field( $cached_errors['page_builder'] ) : '',
+            'template_type'   => isset( $cached_errors['template_type'] ) ? sanitize_text_field( $cached_errors['template_type'] ) : '',
+            'failure_reason'  => is_object( $data ) && isset( $data->primaryText ) ? $data->primaryText : 'unknown',
         );
 
         $this->report( $report_data );
@@ -106,16 +108,18 @@ class Astra_Sites_Reporting {
      * @return array<string, mixed>
      */
     public function report( $data ) {
-        $id = isset( $data['id'] ) ? absint( $data['id'] ) : 0;
-        $import_attempts = isset( $data['import_attempts'] ) ? absint( $data['import_attempts'] ) : 0;
-        $import_status = isset( $data['import_status'] ) ? sanitize_text_field( $data['import_status'] ) : 'true';
-        $type = isset( $data['type'] ) ? sanitize_text_field( $data['type'] ) : 'astra-sites';
-        $page_builder = isset( $data['page_builder'] ) ? sanitize_text_field( $data['page_builder'] ) : 'gutenberg';
-        $exit_intend = isset( $data['exit_intend'] ) ? sanitize_text_field( $data['exit_intend'] ) : 'false';
+        $id = isset( $data['id'] ) ? $data['id'] : 0;
+        $import_attempts   = isset( $data['import_attempts'] ) ? absint( $data['import_attempts'] ) : 0;
+        $import_status     = isset( $data['import_status'] ) ? sanitize_text_field( $data['import_status'] ) : 'true';
+        $type              = isset( $data['type'] ) ? sanitize_text_field( $data['type'] ) : 'astra-sites';
+        $page_builder      = isset( $data['page_builder'] ) ? sanitize_text_field( $data['page_builder'] ) : 'gutenberg';
+        $exit_intend       = isset( $data['exit_intend'] ) ? sanitize_text_field( $data['exit_intend'] ) : 'false';
         $user_agent_string = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : '';
+        $template_type     = isset( $data['template_type'] ) ? sanitize_text_field( $data['template_type'] ) : '';
+        $failure_reason    = isset( $data['failure_reason'] ) ? sanitize_text_field( $data['failure_reason'] ) : '';
 
         $api_args = array(
-            'timeout'   => 3,
+            'timeout'   => 60,
             'blocking'  => true,
             'body'      => array(
                 'url'    => esc_url( site_url() ),
@@ -127,6 +131,11 @@ class Astra_Sites_Reporting {
                 'builder' => $page_builder,
                 'user_agent' => $user_agent_string,
                 'exit_intend' => $exit_intend,
+                'import_event_data' => array(
+                    'plugin_type'    => defined( 'ASTRA_PRO_SITES_VER' ) ? 'premium' : 'free',
+                    'template_type'  => $template_type,
+                    'failure_reason' => $failure_reason,
+                ),
             ),
         );
 

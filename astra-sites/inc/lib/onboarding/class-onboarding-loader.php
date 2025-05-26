@@ -265,6 +265,7 @@ class Intelligent_Starter_Templates_Loader {
 			'phpVersion' => PHP_VERSION,
 			'reportError' => $this->should_report_error(),
 			'bsfUsageTracking' => get_site_option( 'bsf_analytics_optin', 'no' ) === 'yes',
+			'showOtherBuilders' => get_option( 'st-elementor-builder-flag', false ) || ( self::is_legacy_beaver_builder_enabled() && get_option( 'st-beaver-builder-flag', false ) ),
 		);
 
 		return apply_filters( 'starter_templates_onboarding_localize_vars', $data );
