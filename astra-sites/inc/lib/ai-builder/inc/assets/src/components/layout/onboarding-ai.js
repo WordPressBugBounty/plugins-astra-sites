@@ -96,7 +96,7 @@ const OnboardingAI = () => {
 			if ( showContinueProgressModal ) {
 				setContinueProgressModal( { open: true } );
 			}
-		} else {
+		} else if ( ! urlParams.get( 'skip_redirect_last_step' ) ) {
 			navigateTo( {
 				to: redirectToStepURL,
 				replace: true,

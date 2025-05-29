@@ -439,7 +439,7 @@ export const generateAnalyticsLead = async ( tryAgainCount, status, data ) => {
 	importContent.append( 'action', 'astra-sites-generate-analytics-lead' );
 	importContent.append( 'status', status );
 	importContent.append( 'try-again-count', tryAgainCount );
-	importContent.append( 'type', 'ai-builder' );
+	importContent.append( 'type', 'ai_builder' );
 	importContent.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
 
 	// Append extra data.
