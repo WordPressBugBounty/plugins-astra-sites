@@ -367,7 +367,7 @@ class Helper {
 					if ( is_plugin_active( $plugin_pro['init'] ) ) {
 						$response['active'][] = $plugin_pro;
 
-						self::after_plugin_activate( $plugin['init'] );
+						self::after_plugin_activate( $plugin['init'], array(), array(), '', true );
 
 						// Pro - Inactive.
 					} else {
@@ -420,7 +420,7 @@ class Helper {
 					} else {
 						$response['active'][] = $plugin;
 
-						self::after_plugin_activate( $plugin['init'] );
+						self::after_plugin_activate( $plugin['init'], array(), array(), '', true );
 					}
 				}
 			}
@@ -459,14 +459,16 @@ class Helper {
 	 * @param  string               $plugin_init        Plugin Init File.
 	 * @param  array<string, mixed> $options            Site Options.
 	 * @param  array<string, mixed> $enabled_extensions Enabled Extensions.
-	 * @param string               $plugin_slug Plugin slug.
+	 * @param  string               $plugin_slug        Plugin slug.
+	 * @param  bool                 $was_plugin_active  Flag indicating if the plugin was already active.
 	 * @return void
 	 */
-	public static function after_plugin_activate( $plugin_init = '', $options = array(), $enabled_extensions = array(), $plugin_slug = '' ) {
+	public static function after_plugin_activate( $plugin_init = '', $options = array(), $enabled_extensions = array(), $plugin_slug = '', $was_plugin_active = false ) {
 		$data = array(
 			'astra_site_options' => $options,
 			'enabled_extensions' => $enabled_extensions,
 			'plugin_slug'        => $plugin_slug,
+			'was_plugin_active'  => $was_plugin_active,
 		);
 
 		do_action( 'astra_sites_after_plugin_activation', $plugin_init, $data );
@@ -509,6 +511,8 @@ class Helper {
 		add_filter( 'wp_redirect', '__return_false' );
 		$silent = 'wp-live-chat-support/wp-live-chat-support.php' === $plugin_init ? true : false;
 
+		$was_plugin_active = is_plugin_active( $plugin_init );
+
 		$activate = activate_plugin( $plugin_init, '', false, $silent );
 
 		Ai_Builder_Error_Handler::Instance()->stop_error_handler();
@@ -529,7 +533,7 @@ class Helper {
 		$options            = (array) astra_get_site_data( 'astra-site-options-data' );
 		$enabled_extensions = (array) astra_get_site_data( 'astra-enabled-extensions' );
 
-		self::after_plugin_activate( $plugin_init, $options, $enabled_extensions, $plugin_slug );
+		self::after_plugin_activate( $plugin_init, $options, $enabled_extensions, $plugin_slug, $was_plugin_active );
 
 		if ( defined( 'WP_CLI' ) ) {
 			\WP_CLI::line( 'Plugin Activated!' );

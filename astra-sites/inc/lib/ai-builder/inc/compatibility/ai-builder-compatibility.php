@@ -53,6 +53,15 @@ if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) {
 
 			// Plugin - Latepoint.
 			require_once AI_BUILDER_DIR . 'inc/compatibility/latepoint/ai-builder-compatibility-latepoint.php';
+
+			// Plugin - Ultimate Addons for Elementor.
+			require_once AI_BUILDER_DIR . 'inc/compatibility/uae/ai-builder-compatibility-uae.php';
+
+			// Plugin - Ultimate Addons for Elementor Lite.
+			require_once AI_BUILDER_DIR . 'inc/compatibility/uae-lite/ai-builder-compatibility-uae-lite.php';
+
+			// Plugin - WooCommerce Payments.
+			require_once AI_BUILDER_DIR . 'inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php';
 		}
 
 		/**

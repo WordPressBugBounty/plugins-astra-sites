@@ -35,6 +35,7 @@ if ( ! class_exists( 'Astra_Sites_Page' ) ) {
 		/**
 		 * Initiator
 		 *
+		 * @return self
 		 * @since 1.3.0
 		 */
 		public static function get_instance() {

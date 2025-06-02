@@ -236,9 +236,9 @@ function getFeaturePluginList( features, selectedEcommercePlugin ) {
 						init: 'woocommerce/woocommerce.php',
 					} );
 					requiredPlugins.push( {
-						name: 'Checkout Plugins Stripe Woo',
-						slug: 'checkout-plugins-stripe-woo',
-						init: 'checkout-plugins-stripe-woo/checkout-plugins-stripe-woo.php',
+						name: 'WooPayments',
+						slug: 'woocommerce-payments',
+						init: 'woocommerce-payments/woocommerce-payments.php',
 					} );
 				}
 				break;

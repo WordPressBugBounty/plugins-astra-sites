@@ -180,6 +180,8 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_filter( 'plugins_api_args', array( $this, 'raise_memory_for_plugins_install' ), 1, 1 );
 			add_filter( 'bsf_core_stats', array( $this, 'add_astra_sites_analytics_data' ), 10, 1 );
 			add_filter( 'wp_import_insert_term', array( $this, 'store_original_term_id' ), 10, 2 );
+			add_action( 'astra_sites_after_plugin_activation', array( $this, 'maybe_woopayments_included' ), 10, 2 );
+			add_action( 'wp_ajax_astra_sites_set_woopayments_analytics', array( $this, 'set_woopayments_analytics' ) );
 		}
 
 		/**
@@ -367,6 +369,59 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			return $args;
 		}
 
+		/**
+		 * Check if WooCommerce Payments plugin is included and update settings accordingly.
+		 * 
+		 * @param string $plugin_init The plugin initialization path.
+		 * @param array  $data Additional data (optional).
+		 *
+		 * @since 4.4.23
+		 * @return void
+		 */
+		public function maybe_woopayments_included( $plugin_init, $data = array() ) {
+			if ( 'woocommerce-payments/woocommerce-payments.php' === $plugin_init ) {
+				// Prevent showing the banner if plugin was already active.
+				if ( ! isset( $data['was_plugin_active'] ) || ! $data['was_plugin_active'] ) {
+					Astra_Sites_Page::get_instance()->update_settings(
+						array(
+							'woopayments_ref' => true,
+						)
+					);
+				}
+
+				Astra_Sites_Page::get_instance()->update_settings(
+					array(
+						'woopayments_included' => true,
+					)
+				);
+			}
+		}
+
+		/**
+		 * Set WooPayments analytics.
+		 *
+		 * @since 4.4.23
+		 * @return void
+		 */
+		public function set_woopayments_analytics() {
+			// Verify nonce.
+			if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'woopayments_nonce' ) ) {
+				wp_send_json_error( array( 'message' => __( 'Invalid nonce', 'astra-sites' ) ) );
+				exit;
+			}
+
+			$source = isset( $_POST['source'] ) ? sanitize_text_field( wp_unslash( $_POST['source'] ) ) : '';
+			if ( ! in_array( $source, array( 'banner', 'onboarding' ), true ) ) {
+				wp_send_json_error( array( 'message' => __( 'Invalid source', 'astra-sites' ) ) );
+				exit;
+			}
+
+			$key = "woopayments_{$source}_clicked";
+			Astra_Sites_Page::get_instance()->update_settings( array( $key => true ) );
+
+			wp_send_json_success( array( 'message' => 'WooPayments analytics updated!' ) );
+			exit;
+		}
 
 		/**
 		 * Add astra sites analytics data.
@@ -380,7 +435,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				'site_language'  => get_locale(),
 				'page_builder'   => Astra_Sites_Page::get_instance()->get_setting( 'page_builder' ),
 				'boolean_values' => array(
-					'import_complete' => 'yes' === get_option( 'astra_sites_import_complete' ),
+					'import_complete'                => 'yes' === get_option( 'astra_sites_import_complete' ),
+					'woopayments_included'           => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_included' ),
+					'woopayments_banner_clicked'     => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_banner_clicked' ),
+					'woopayments_onboarding_clicked' => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_onboarding_clicked' ),
 				),
 			);
 
@@ -2408,15 +2466,19 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 *
 		 * @since 2.0.0
 		 *
-		 * @param  string $plugin_init        Plugin Init File.
-		 * @param  array  $options            Site Options.
-		 * @param  array  $enabled_extensions Enabled Extensions.
+		 * @param  string               $plugin_init        Plugin Init File.
+		 * @param  array<string, mixed> $options            Site Options.
+		 * @param  array<string, mixed> $enabled_extensions Enabled Extensions.
+		 * @param  string               $plugin_slug        Plugin slug.
+		 * @param  bool                 $was_plugin_active  Flag indicating if the plugin was already active.
 		 * @return void
 		 */
-		public function after_plugin_activate( $plugin_init = '', $options = array(), $enabled_extensions = array() ) {
+		public function after_plugin_activate( $plugin_init = '', $options = array(), $enabled_extensions = array(), $plugin_slug = '', $was_plugin_active = false ) {
 			$data = array(
 				'astra_site_options' => $options,
 				'enabled_extensions' => $enabled_extensions,
+				'plugin_slug'        => $plugin_slug,
+				'was_plugin_active'  => $was_plugin_active,
 			);
 
 			do_action( 'astra_sites_after_plugin_activation', $plugin_init, $data );
