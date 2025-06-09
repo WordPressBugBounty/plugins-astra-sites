@@ -137,7 +137,7 @@ class Astra_Sites_Batch_Processing_Elementor extends Source_Local {
 						$demo_site_url = 'https:' . $demo_data['astra-site-url'];
 						$demo_site_url = str_replace( '/', '\/', $demo_site_url );
 						$data          = str_replace( $demo_site_url, $site_url, $data );
-						$data          = json_decode( $data, true );
+						$data          = wp_slash( $data ); // slash is added for smooth unslashing on updating metadata.
 					}
 				}
 
