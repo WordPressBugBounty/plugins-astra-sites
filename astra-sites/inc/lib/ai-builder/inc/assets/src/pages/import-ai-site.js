@@ -175,6 +175,17 @@ const ImportAiSite = () => {
 		solution = '',
 		stack = ''
 	) => {
+		const error = JSON.stringify( {
+			primaryText: primary,
+			secondaryText: secondary,
+			errorCode: code,
+			errorText: text,
+			solutionText: solution,
+			tryAgain: true,
+			stack,
+			tryAgainCount,
+		} );
+
 		if ( tryAgainCount >= 2 ) {
 			generateAnalyticsLead( tryAgainCount, false, {
 				id: templateId,
@@ -182,7 +193,7 @@ const ImportAiSite = () => {
 				template_type: stepsData?.selectedTemplateIsPremium
 					? 'premium'
 					: 'free',
-				failure_reason: primary,
+				error,
 			} );
 		}
 		if ( ! reportError ) {
@@ -204,19 +215,7 @@ const ImportAiSite = () => {
 				getLocalStorageItem( 'ai-builder-onboarding-details' )
 			)
 		);
-		reportErr.append(
-			'error',
-			JSON.stringify( {
-				primaryText: primary,
-				secondaryText: secondary,
-				errorCode: code,
-				errorText: text,
-				solutionText: solution,
-				tryAgain: true,
-				stack,
-				tryAgainCount,
-			} )
-		);
+		reportErr.append( 'error', error );
 		reportErr.append( 'id', templateId );
 		reportErr.append( 'plugins', JSON.stringify( requiredPlugins ) );
 		fetch( ajaxurl, {

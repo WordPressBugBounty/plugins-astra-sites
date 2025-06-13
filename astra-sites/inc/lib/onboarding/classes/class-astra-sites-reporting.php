@@ -90,7 +90,9 @@ class Astra_Sites_Reporting {
             'type'            => isset( $cached_errors['type'] ) ? sanitize_text_field( $cached_errors['type'] ) : 'astra-sites',
             'page_builder'    => isset( $cached_errors['page_builder'] ) ? sanitize_text_field( $cached_errors['page_builder'] ) : '',
             'template_type'   => isset( $cached_errors['template_type'] ) ? sanitize_text_field( $cached_errors['template_type'] ) : '',
-            'failure_reason'  => is_object( $data ) && isset( $data->primaryText ) ? $data->primaryText : 'unknown',
+            'failure_reason'  => is_object( $data ) && isset( $data->primaryText ) ? sanitize_text_field( $data->primaryText ) : 'unknown',
+            'secondary_text'  => is_object( $data ) && isset( $data->secondaryText ) ? sanitize_text_field( $data->secondaryText ) : '',
+            'error_text'      => is_object( $data ) && isset( $data->errorText ) ? sanitize_text_field( $data->errorText ) : '',
         );
 
         $this->report( $report_data );
@@ -117,6 +119,13 @@ class Astra_Sites_Reporting {
         $user_agent_string = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : '';
         $template_type     = isset( $data['template_type'] ) ? sanitize_text_field( $data['template_type'] ) : '';
         $failure_reason    = isset( $data['failure_reason'] ) ? sanitize_text_field( $data['failure_reason'] ) : '';
+        $secondary_text    = isset( $data['secondary_text'] ) ? sanitize_text_field( $data['secondary_text'] ) : '';
+        $error_text        = isset( $data['error_text'] ) ? sanitize_text_field( $data['error_text'] ) : '';
+
+        // If secondary text is not empty, append it to failure reason.
+        if ( ! empty( $secondary_text ) && is_string( $secondary_text ) ) {
+            $failure_reason .= ' (' . $secondary_text . ')';
+        }
 
         $api_args = array(
             'timeout'   => 60,
@@ -135,6 +144,7 @@ class Astra_Sites_Reporting {
                     'plugin_type'    => defined( 'ASTRA_PRO_SITES_VER' ) ? 'premium' : 'free',
                     'template_type'  => $template_type,
                     'failure_reason' => $failure_reason,
+                    'error_text'     => $error_text,
                 ),
             ),
         );

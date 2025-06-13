@@ -63,7 +63,7 @@ const TrackingOption = () => {
 
 	return (
 		<div id="st-options" className="relative" ref={ wrapperRef }>
-			<Tooltip content={ __( 'Usage Tracking', 'astra-sites' ) }>
+			<Tooltip content={ __( 'Analytics', 'astra-sites' ) }>
 				<button
 					className="inline-flex mx-1 mb-1 p-3 bg-transparent border-none cursor-pointer"
 					onClick={ () => setIsOpen( ! isOpen ) }
@@ -98,12 +98,12 @@ const TrackingOption = () => {
 							className="cursor-pointer"
 							onClick={ updateBSFUsageTracking }
 						>
-							{ __( 'Enable Usage Tracking', 'astra-sites' ) }
+							{ __( 'Enable Anonymous Analytics', 'astra-sites' ) }
 						</h6>
 
 						<p className="!text-xs">
 							{ __(
-								'Allow Starter Templates and our other products to track non-sensitive usage tracking data.',
+								'Collect non-sensitive information from your website, such as the PHP version and features used, to help us fix bugs faster, make smarter decisions, and build features that actually matter to you.',
 								'astra-sites'
 							) }{ ' ' }
 							<a

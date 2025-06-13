@@ -5,6 +5,7 @@ import { STORE_KEY } from '../store';
 import apiFetch from '@wordpress/api-fetch';
 import toast from 'react-hot-toast';
 import { toastBody } from '../helpers';
+import { setCookie } from '../utils/helpers';
 
 const useBuildSiteController = () => {
 	const { nextStep } = useNavigateSteps();
@@ -185,6 +186,7 @@ const useBuildSiteController = () => {
 				importErrorResponse: [],
 				importError: false,
 			} );
+			setCookie( 'ai-show-start-over-warning', true, 2 * 24 * 60 * 60 ); // 2 days in seconds.
 			nextStep();
 		} else {
 			const error = response?.data?.data?.errors,

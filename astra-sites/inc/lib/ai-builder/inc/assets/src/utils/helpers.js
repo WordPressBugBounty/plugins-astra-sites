@@ -259,13 +259,54 @@ export const sendPostMessage = ( data, id ) => {
 	);
 };
 
+function fallbackCopy( text ) {
+	const textarea = document.createElement( 'textarea' );
+	textarea.value = text;
+	textarea.style.position = 'fixed'; // avoid scrolling to bottom
+	document.body.appendChild( textarea );
+	textarea.focus();
+	textarea.select();
+	try {
+		document.execCommand( 'copy' );
+	} catch ( e ) {}
+	document.body.removeChild( textarea );
+}
+
 export const copyToClipboard = ( text ) => {
 	// Copy the text inside the text field
-	navigator.clipboard.writeText( text );
+	if ( navigator.clipboard ) {
+		navigator.clipboard
+			.writeText( text )
+			.catch( () => fallbackCopy( text ) );
+	} else {
+		fallbackCopy( text );
+	}
 };
 
 export const handleCopyToClipboard = ( event, text ) => {
 	copyToClipboard( text );
+};
+
+export const setCookie = ( name, value, expiryInSeconds = 60 ) => {
+	const date = new Date();
+	date.setTime( date.getTime() + expiryInSeconds * 1000 ); // in milliseconds.
+	const expires = 'expires=' + date.toUTCString();
+	document.cookie = `${ name }=${ value }; ${ expires }; path=/`;
+};
+
+export const getCookie = ( name ) => {
+	const cookies = document.cookie.split( '; ' );
+	for ( const cookie of cookies ) {
+		const [ key, value ] = cookie.split( '=' );
+		if ( key === name ) {
+			return decodeURIComponent( value );
+		}
+	}
+	return null;
+};
+
+export const deleteCookie = ( name ) => {
+	document.cookie = `${ name }=; Max-Age=0; path=/`;
 };
 
 export const socialMediaParser = {

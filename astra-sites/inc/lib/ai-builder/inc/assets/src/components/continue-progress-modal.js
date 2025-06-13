@@ -2,15 +2,19 @@ import { ClipboardIcon } from '@heroicons/react/24/outline';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { STORE_KEY } from '../store';
-import { removeLocalStorageItem } from '../helpers';
+import { getLocalStorageItem, removeLocalStorageItem } from '../helpers';
 import { defaultOnboardingAIState } from '../store/reducer';
 import Modal from './modal';
 import Button from './button';
 import { useNavigateSteps } from '../router';
+import { getCookie } from '../utils/helpers';
 
 const ContinueProgressModal = () => {
-	const { setContinueProgressModal, setWebsiteOnboardingAIDetails } =
-		useDispatch( STORE_KEY );
+	const {
+		setContinueProgressModal,
+		setConfirmationStartOverModal,
+		setWebsiteOnboardingAIDetails,
+	} = useDispatch( STORE_KEY );
 	const { navigateTo } = useNavigateSteps();
 	const { continueProgressModal } = useSelect( ( select ) => {
 		const { getContinueProgressModalInfo } = select( STORE_KEY );
@@ -20,6 +24,18 @@ const ContinueProgressModal = () => {
 	}, [] );
 
 	const handleStartOver = () => {
+		const showWarningModal = getCookie( 'ai-show-start-over-warning' );
+		const savedData = getLocalStorageItem(
+			'ai-builder-onboarding-details'
+		);
+
+		if ( showWarningModal && savedData?.websiteInfo?.uuid ) {
+			setContinueProgressModal( { open: false } );
+			setConfirmationStartOverModal( { open: true } );
+			return;
+		}
+
+		setConfirmationStartOverModal( { open: false } );
 		removeLocalStorageItem( 'ai-builder-onboarding-details' );
 		setWebsiteOnboardingAIDetails( defaultOnboardingAIState );
 		setContinueProgressModal( { open: false } );
@@ -30,6 +46,7 @@ const ContinueProgressModal = () => {
 	};
 
 	const handleContinue = () => {
+		setConfirmationStartOverModal( { open: false } );
 		setContinueProgressModal( { open: false } );
 	};
 

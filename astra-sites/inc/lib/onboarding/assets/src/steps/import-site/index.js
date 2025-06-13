@@ -109,12 +109,23 @@ const ImportSite = () => {
 		solution = '',
 		stack = ''
 	) => {
+		const error = JSON.stringify( {
+			primaryText: primary,
+			secondaryText: secondary,
+			errorCode: code,
+			errorText: text,
+			solutionText: solution,
+			tryAgain: true,
+			stack,
+			tryAgainCount,
+		} );
+
 		if ( tryAgainCount >= 2 ) {
 			generateAnalyticsLead( tryAgainCount, false, {
 				id: templateId,
 				page_builder: builder,
 				template_type: selectedTemplateType,
-				failure_reason: primary,
+				error,
 			} );
 		}
 		if ( ! reportError ) {
@@ -127,19 +138,7 @@ const ImportSite = () => {
 		reportErr.append( 'page_builder', builder );
 		reportErr.append( 'template_type', selectedTemplateType );
 
-		reportErr.append(
-			'error',
-			JSON.stringify( {
-				primaryText: primary,
-				secondaryText: secondary,
-				errorCode: code,
-				errorText: text,
-				solutionText: solution,
-				tryAgain: true,
-				stack,
-				tryAgainCount,
-			} )
-		);
+		reportErr.append( 'error', error );
 		reportErr.append( 'id', templateResponse.id );
 		reportErr.append( 'plugins', JSON.stringify( requiredPlugins ) );
 		fetch( ajaxurl, {

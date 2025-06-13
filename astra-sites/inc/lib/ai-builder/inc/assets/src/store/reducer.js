@@ -59,6 +59,9 @@ export const defaultOnboardingAIState = {
 	continueProgressModal: {
 		open: false,
 	},
+	confirmationStartOverModal: {
+		open: false,
+	},
 	signupLoginModal: {
 		open: false,
 	},
@@ -207,6 +210,11 @@ const reducer = ( state = initialState, action ) => {
 			return {
 				...state,
 				continueProgressModal: action.payload,
+			};
+		case actionTypes.SET_CONFIRMATION_START_OVER_MODAL:
+			return {
+				...state,
+				confirmationStartOverModal: action.payload,
 			};
 		case actionTypes.SET_SIGNUP_LOGIN_MODAL:
 			return {

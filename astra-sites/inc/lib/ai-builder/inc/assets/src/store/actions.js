@@ -51,6 +51,13 @@ const actions = {
 		};
 	},
 
+	setConfirmationStartOverModal( confirmationStartOverModal ) {
+		return {
+			type: actionsTypes.SET_CONFIRMATION_START_OVER_MODAL,
+			payload: confirmationStartOverModal,
+		};
+	},
+
 	setSignupLoginModal( signupLoginModal ) {
 		return {
 			type: actionsTypes.SET_SIGNUP_LOGIN_MODAL,

@@ -763,14 +763,17 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				);
 			}
 
-			$data = array(
+			$error = isset( $_POST['error'] ) ? json_decode( stripslashes( sanitize_text_field( $_POST['error'] ) ), true ) : array();
+			$data  = array(
 				'id' => $id,
 				'import_attempts' => isset( $_POST['try-again-count'] ) ? absint( $_POST['try-again-count'] ) : 0,
-				'import_status' => isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : 'true',
-				'type' => isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : 'astra-sites',
-				'page_builder'   => isset( $_POST['page_builder'] ) ? sanitize_text_field( $_POST['page_builder'] ) : 'gutenberg',
-				'template_type'  => isset( $_POST['template_type'] ) ? sanitize_text_field( $_POST['template_type'] ) : '',
-				'failure_reason' => isset( $_POST['failure_reason'] ) ? sanitize_text_field( $_POST['failure_reason'] ) : '',
+				'import_status'   => isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : 'true',
+				'type'            => isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : 'astra-sites',
+				'page_builder'    => isset( $_POST['page_builder'] ) ? sanitize_text_field( $_POST['page_builder'] ) : 'gutenberg',
+				'template_type'   => isset( $_POST['template_type'] ) ? sanitize_text_field( $_POST['template_type'] ) : '',
+				'failure_reason'  => is_array( $error ) && isset( $error['primaryText'] ) ? sanitize_text_field( $error['primaryText'] ) : '',
+				'secondary_text'  => is_array( $error ) && isset( $error['secondaryText'] ) ? sanitize_text_field( $error['secondaryText'] ) : '',
+				'error_text'      => is_array( $error ) && isset( $error['errorText'] ) ? sanitize_text_field( $error['errorText'] ) : '',
 			);
 
 			$result = Astra_Sites_Reporting::get_instance()->report( $data );

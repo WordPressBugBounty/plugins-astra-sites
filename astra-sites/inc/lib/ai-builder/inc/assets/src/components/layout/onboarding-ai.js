@@ -23,6 +23,7 @@ import PreviewWebsite from '../../pages/preview';
 import { STORE_KEY } from '../../store';
 import LimitExceedModal from '../limit-exceeded-modal';
 import ContinueProgressModal from '../continue-progress-modal';
+import ConfirmationStartOverModal from '../confimation-start-over-modal';
 import AiBuilderExitButton from '../ai-builder-exit-button';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigateSteps, steps, useValidateStep } from '../../router';
@@ -55,7 +56,8 @@ const OnboardingAI = () => {
 		! urlParams.get( 'should_resume' )
 	).current;
 
-	const { setContinueProgressModal } = useDispatch( STORE_KEY );
+	const { setContinueProgressModal, setConfirmationStartOverModal } =
+		useDispatch( STORE_KEY );
 	const { continueProgressModal } = useSelect( ( select ) => {
 		const { getContinueProgressModalInfo } = select( STORE_KEY );
 		return {
@@ -95,6 +97,7 @@ const OnboardingAI = () => {
 			} );
 			if ( showContinueProgressModal ) {
 				setContinueProgressModal( { open: true } );
+				setConfirmationStartOverModal( { open: false } );
 			}
 		} else if ( ! urlParams.get( 'skip_redirect_last_step' ) ) {
 			navigateTo( {
@@ -133,6 +136,7 @@ const OnboardingAI = () => {
 			setContinueProgressModal( {
 				open: true,
 			} );
+			setConfirmationStartOverModal( { open: false } );
 		}
 
 		const handleResize = () => {
@@ -410,6 +414,7 @@ const OnboardingAI = () => {
 				</main>
 				<LimitExceedModal />
 				<ContinueProgressModal />
+				<ConfirmationStartOverModal />
 				<SignupLoginModal />
 				<ApiErrorModel />
 				<PlanInformationModal />
