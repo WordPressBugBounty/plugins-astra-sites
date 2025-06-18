@@ -24,7 +24,9 @@ const ContinueProgressModal = () => {
 	}, [] );
 
 	const handleStartOver = () => {
-		const showWarningModal = getCookie( 'ai-show-start-over-warning' );
+		const showWarningModal =
+			! aiBuilderVars?.hideCreditsWarningModal &&
+			getCookie( 'ai-show-start-over-warning' );
 		const savedData = getLocalStorageItem(
 			'ai-builder-onboarding-details'
 		);

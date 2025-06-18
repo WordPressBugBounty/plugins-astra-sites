@@ -470,6 +470,8 @@ class Ai_Builder_Plugin_Loader {
 			'hideDashboardButton'      => 'yes' === apply_filters( 'ai_builder_hide_visit_dashboard_button', 'no' ),
 			'isElementorDisabled'      => get_option( 'st-elementor-builder-flag' ),
 			'isBeaverBuilderDisabled'  => get_option( 'st-beaver-builder-flag' ) || ! self::is_legacy_beaver_builder_enabled(),
+			'supportedPageBuilders'    => apply_filters( 'ai_builder_supported_page_builders', array( 'block-editor', 'elementor' ) ),
+			'hideCreditsWarningModal'  => apply_filters( 'ai_builder_hide_credits_warning_modal', false ), // Added for white label AI Builder.
 		);
 	}
 

@@ -4,8 +4,12 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import DropdownList from './dropdown-list';
 import { classNames } from '../helpers';
 
-const { imageDir, isBeaverBuilderDisabled, isElementorDisabled } =
-	aiBuilderVars;
+const {
+	imageDir,
+	isBeaverBuilderDisabled,
+	isElementorDisabled,
+	supportedPageBuilders = [],
+} = aiBuilderVars;
 
 const PageBuilderDropdown = () => {
 	const buildersList = [
@@ -102,12 +106,19 @@ export const SelectTemplatePageBuilderDropdown = ( {
 			title: __( 'Block Editor', 'ai-builder' ),
 			image: `${ imageDir }block-editor.svg`,
 		},
-		{
+	];
+
+	if (
+		! isElementorDisabled &&
+		supportedPageBuilders?.length &&
+		supportedPageBuilders.includes( 'elementor' )
+	) {
+		buildersList.push( {
 			id: 'elementor',
 			title: __( 'Elementor (Beta)', 'ai-builder' ),
 			image: `${ imageDir }elementor.svg`,
-		},
-	];
+		} );
+	}
 
 	return (
 		<>

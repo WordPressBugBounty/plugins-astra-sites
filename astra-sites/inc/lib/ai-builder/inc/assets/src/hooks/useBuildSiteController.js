@@ -56,9 +56,14 @@ const useBuildSiteController = () => {
 		setPrevErrorAlertOpen = ( value ) =>
 			setPrevErrorAlert( { open: value } );
 	const selectedTemplateData = templateList?.find(
-			( item ) => item?.uuid === selectedTemplate
-		),
-		isEcommarceSite = selectedTemplateData?.features?.ecommerce === 'yes';
+		( item ) => item?.uuid === selectedTemplate
+	);
+
+	const hasEcommerceFeature =
+		selectedTemplateData?.features?.ecommerce === 'yes';
+
+	const hasDonationsFeature =
+		selectedTemplateData?.features?.donations === 'yes';
 
 	const handleClosePreBuildModal = ( value = false ) => {
 		setPreBuildModal( ( prev ) => {
@@ -247,8 +252,12 @@ const useBuildSiteController = () => {
 						.map( ( feature ) => feature.id );
 
 			// Add ecommerce feature if selected template is ecommerce.
-			if ( isEcommarceSite ) {
+			if ( hasEcommerceFeature ) {
 				enabledFeatures.push( 'ecommerce' );
+			}
+
+			if ( hasDonationsFeature ) {
+				enabledFeatures.push( 'donations' );
 			}
 
 			const requestData = {

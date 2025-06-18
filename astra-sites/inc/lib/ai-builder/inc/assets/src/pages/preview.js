@@ -410,7 +410,8 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 								) }
 							</div>
 						</div>
-						{ isTemplateRestricted ? (
+						{ isTemplateRestricted &&
+						aiBuilderVars?.show_premium_badge ? (
 							<div className="mt-5">
 								<div className="flex flex-col p-4 rounded-md border border-solid border-alert-info-text gap-4 bg-transparent text-white">
 									<div className="flex gap-4 flex-col">

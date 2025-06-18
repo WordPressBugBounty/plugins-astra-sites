@@ -1,8 +1,12 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import ICONS from '../../../../../icons';
 import ToggleSwitch from '../../../../components/toggle-switch';
 import Tooltip from '../../../../components/tooltip';
 import { useEffect, useRef, useState } from 'react';
+import {
+	getWhileLabelName,
+	whiteLabelEnabled,
+} from '../../../../utils/functions';
 
 const TrackingOption = () => {
 	const [ isOpen, setIsOpen ] = useState( false );
@@ -98,7 +102,13 @@ const TrackingOption = () => {
 							className="cursor-pointer"
 							onClick={ updateBSFUsageTracking }
 						>
-							{ __( 'Enable Anonymous Analytics', 'astra-sites' ) }
+							{ sprintf(
+								// translators: %s: Starter Templates or White Label name.
+								__( 'Contribute to %s', 'astra-sites' ),
+								whiteLabelEnabled()
+									? getWhileLabelName()
+									: __( 'Starter Templates', 'astra-sites' )
+							) }
 						</h6>
 
 						<p className="!text-xs">

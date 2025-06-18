@@ -241,7 +241,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 			: [];
 	}, [ siteFeatures, disabledFeatures, isFetchingStatus ] );
 
-	const handleClickNext = ( skipFeature ) => {
+	const handleClickNext = ( { skipFeature = false } ) => {
 		if ( ! authenticated ) {
 			setSignupLoginModal( {
 				open: true,
@@ -389,7 +389,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 				continueButtonText={ __( 'Start Building', 'ai-builder' ) }
 				onClickPrevious={ previousStep }
 				onClickContinue={ handleClickNext }
-				onClickSkip={ () => handleClickNext( true ) }
+				onClickSkip={ () => handleClickNext( { skipFeature: true } ) }
 				loading={ isInProgress }
 				skipButtonText={ __( 'Skip & Start Building', 'ai-builder' ) }
 			/>
