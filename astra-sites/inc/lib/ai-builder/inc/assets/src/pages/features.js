@@ -259,7 +259,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 	};
 
 	return (
-		<Container className="grid grid-cols-1 gap-8 auto-rows-auto !max-w-[55rem] w-full mx-auto">
+		<Container className="grid grid-cols-1 gap-[26px] auto-rows-auto !max-w-[55rem] w-full mx-auto">
 			<AISitesNotice />
 			<div className="space-y-4">
 				<Heading
@@ -268,11 +268,13 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 						'Select the features you want on this website',
 						'ai-builder'
 					) }
+					className="leading-9"
+					subClassName="!mt-2"
 				/>
 			</div>
 			{ /* Feature Cards */ }
 
-			<div className="grid grid-cols-1 lg:grid-cols-2 auto-rows-auto gap-x-8 gap-y-5 w-full">
+			<div className="grid grid-cols-1 lg:grid-cols-2 auto-rows-auto gap-7 w-full">
 				{ isFetchingStatus === fetchStatus.fetched &&
 					listOfFeatures.map( ( feature ) => {
 						const isEcommerce = feature.id === 'ecommerce';
@@ -332,7 +334,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 
 								<span
 									className={ classNames(
-										'inline-flex absolute top-4 right-4 p-[0.1875rem] border border-solid border-zip-app-inactive-icon rounded',
+										'inline-flex absolute top-4 right-4 p-[0.15rem] border border-solid border-zip-app-inactive-icon rounded',
 										feature.enabled &&
 											'border-accent-st bg-accent-st',
 										feature.compulsory &&

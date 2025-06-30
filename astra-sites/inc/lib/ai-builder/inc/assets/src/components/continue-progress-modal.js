@@ -60,7 +60,7 @@ const ContinueProgressModal = () => {
 					handleContinue();
 				}
 			} }
-			width={ 480 }
+			width={ 500 }
 			height="280"
 			overflowHidden={ false }
 			className={ 'px-8 pt-8 pb-8 font-sans' }
@@ -80,7 +80,7 @@ const ContinueProgressModal = () => {
 							'ai-builder'
 						) }
 					</div>
-					<div className="flex items-center gap-3 justify-center mt-8 flex-col xs:flex-row">
+					<div className="flex items-center gap-4 sm:gap-6 justify-center mt-8 flex-col xs:flex-row">
 						<Button
 							type="submit"
 							variant="primary"

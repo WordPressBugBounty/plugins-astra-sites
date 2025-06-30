@@ -8,7 +8,6 @@ import Input from '../components/input';
 import { STORE_KEY } from '../store';
 import Divider from '../components/divider';
 import NavigationButtons from '../components/navigation-buttons';
-import StyledText from '../components/styled-text';
 import { useNavigateSteps } from '../router';
 import { z as zod } from 'zod';
 import Heading from '../components/heading';
@@ -137,7 +136,7 @@ const BusinessContact = () => {
 							'How can people get in touch with %1$s?',
 							'ai-builder'
 						),
-						renderToString( <StyledText text={ businessName } /> )
+						renderToString( businessName )
 					),
 				} }
 			/>
@@ -156,12 +155,15 @@ const BusinessContact = () => {
 					'Please provide the contact information below. These will be used on the website.',
 					'ai-builder'
 				) }
+				className="leading-[36px]"
+				subClassName="!mt-2"
 			/>
 
 			<div className="space-y-5">
-				<div className="block sm:flex justify-between gap-x-8 items-start w-full">
+				<div className="block sm:flex justify-between gap-x-8 items-start w-full mt-[26px]">
 					<Input
 						className="w-full min-h-[48px] text-zip-app-heading"
+						inputClassName="!px-3"
 						type="email"
 						name="email"
 						id="email"
@@ -182,6 +184,7 @@ const BusinessContact = () => {
 					/>
 					<Input
 						className="w-full min-h-[48px] text-zip-app-heading mt-8 sm:mt-0"
+						inputClassName="!px-3"
 						type="text"
 						name="phone"
 						id="phone"
@@ -193,12 +196,13 @@ const BusinessContact = () => {
 					/>
 				</div>
 				<Textarea
-					className="text-zip-app-heading !mt-8"
-					rows={ 3 }
+					className="text-zip-app-heading !mt-4"
+					textAreaClassName="!leading-6 !mt-0"
+					rows={ 2 }
 					name="address"
 					id="address"
 					label={ __( 'Address', 'ai-builder' ) }
-					placeholder=""
+					placeholder={ __( 'Enter address', 'ai-builder' ) }
 					register={ register }
 					error={ errors.address }
 				/>
@@ -208,7 +212,7 @@ const BusinessContact = () => {
 					onChange={ handleOnChangeSocialMedia }
 				/>
 			</div>
-			<Divider />
+			<Divider className="my-[26px]" />
 			<NavigationButtons
 				onClickPrevious={ handleClickPrevious }
 				onClickSkip={ nextStep }

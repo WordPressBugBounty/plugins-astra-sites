@@ -22,6 +22,7 @@
 		--zip-app-inactive-icon: 148 163 184;
 		--zip-app-light-bg: 240 244 250;
 		--zip-blue-crayola: 61 69 146;
+		--app-inactive-text: #94a3b8;
 	}
 	h1 {
 		@apply text-3xl font-semibold leading-9 text-zip-app-heading;
@@ -200,8 +201,9 @@ html.wp-toolbar {
 	}
 }
 
-body {
+body.ai-builder {
 	overflow-y: hidden;
+	font-size: 16px !important;
 }
 
 body * {
@@ -334,6 +336,11 @@ a {
 	div:has( > :disabled ),
 	div:has( > [data-disabled="true"] ) {
 		@apply cursor-not-allowed;
+	}
+}
+#ai-builder-root {
+	:disabled {
+		@apply opacity-50 pointer-events-none;
 	}
 }
 

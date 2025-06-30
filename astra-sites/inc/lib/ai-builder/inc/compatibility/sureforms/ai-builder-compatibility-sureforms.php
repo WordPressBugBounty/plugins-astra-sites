@@ -70,10 +70,13 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureForms' ) ) {
 		 * Stop the plugin activation redirection.
 		 *
 		 * @since 1.0.15
+		 * @param string $plugin_init The path to the plugin file that was just activated.
 		 * @return void
 		 */
-		public function activation() {
-			update_option( '__srfm_do_redirect', false );
+		public function activation( $plugin_init ) {
+			if ( 'sureforms/sureforms.php' === $plugin_init ) {
+				update_option( '__srfm_do_redirect', false );
+			}
 		}
 	}
 

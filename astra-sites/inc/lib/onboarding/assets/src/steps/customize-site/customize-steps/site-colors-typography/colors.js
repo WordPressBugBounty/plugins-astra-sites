@@ -305,3 +305,68 @@ export const LIGHT_PALETTES = [
 		],
 	},
 ];
+
+/**
+ * Reorganizes the color palette based on the Astra's palette colors reorganization compatibility introduced in v4.8.9.
+ *
+ * @param {Array}  PALETTE          - The original color palette.
+ * @param {Object} templateResponse - The template response containing customization data.
+ *
+ * @return {Array} - The reorganized color palette.
+ */
+const getColorPalette = ( PALETTE, templateResponse = {} ) => {
+	// Check if the reorganization compatibility is enabled in the template response for Astra.
+	const astraColorPaletteReorganized =
+		templateResponse?.[ 'astra-site-customizer-data' ]?.[
+			'astra-settings'
+		]?.[ 'enable-4-8-9-compatibility' ] ?? true;
+
+	// If the reorganization is not enabled, return the original palette.
+	if ( ! astraColorPaletteReorganized ) {
+		return PALETTE;
+	}
+
+	// If the reorganization is enabled, we need to reorganize the colors in the palette.
+	return PALETTE.map( ( palette ) => {
+		const reorganizedPaletteColors = [ ...palette.colors ];
+
+		// Swap 5th and 6th (index 4 and 5).
+		[ reorganizedPaletteColors[ 4 ], reorganizedPaletteColors[ 5 ] ] = [
+			reorganizedPaletteColors[ 5 ],
+			reorganizedPaletteColors[ 4 ],
+		];
+
+		// Swap 7th and 8th (index 6 and 7).
+		[ reorganizedPaletteColors[ 6 ], reorganizedPaletteColors[ 7 ] ] = [
+			reorganizedPaletteColors[ 7 ],
+			reorganizedPaletteColors[ 6 ],
+		];
+
+		return {
+			...palette,
+			colors: reorganizedPaletteColors,
+		};
+	} );
+};
+
+/**
+ * Gets the default color palette based on the template response.
+ *
+ * @param {Object} templateResponse - The template response containing customization data.
+ *
+ * @return {Array} - The light color palette.
+ */
+export const getLightColorPalette = ( templateResponse = {} ) => {
+	return getColorPalette( LIGHT_PALETTES, templateResponse );
+};
+
+/**
+ * Gets the dark color palette based on the template response.
+ *
+ * @param {Object} templateResponse - The template response containing customization data.
+ *
+ * @return {Array} - The dark color palette.
+ */
+export const getDarkColorPalette = ( templateResponse = {} ) => {
+	return getColorPalette( DARK_PALETTES, templateResponse );
+};

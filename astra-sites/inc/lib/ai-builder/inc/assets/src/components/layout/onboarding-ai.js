@@ -251,14 +251,14 @@ const OnboardingAI = () => {
 				{ ! isAuthScreen && (
 					<header
 						className={ classNames(
-							'w-full h-full grid grid-cols-[5rem_1fr_8rem] sm:grid-cols-[8rem_1fr_8rem] items-center justify-between md:justify-start z-[5] relative bg-white shadow pl-3',
+							'w-full h-full grid grid-cols-[5rem_1fr_8rem] sm:grid-cols-[8rem_1fr_8rem] items-center justify-between md:justify-start z-[5] relative bg-white shadow',
 							steps[ currentStep ]?.layoutConfig?.hideHeader &&
 								'justify-center md:justify-between'
 						) }
 					>
 						{ /* Brand logo */ }
 						<img
-							className="h-10"
+							className="h-10 w-20"
 							src={ logoUrlLight }
 							alt={ __( 'Build with AI', 'ai-builder' ) }
 						/>
@@ -309,7 +309,7 @@ const OnboardingAI = () => {
 													>
 														<div
 															className={ classNames(
-																'rounded-full border border-border-primary text-xs font-semibold flex items-center justify-center w-5 h-5',
+																'rounded-full border border-border-primary text-xs font-medium flex items-center justify-center w-5 h-5',
 																dynamicStepClassNames(
 																	currentStep,
 																	stepIdx
@@ -327,7 +327,7 @@ const OnboardingAI = () => {
 														</div>
 														<div
 															className={ classNames(
-																'hidden md:block text-sm font-medium text-secondary-text md:text-xs lg:text-sm',
+																'hidden md:block text-sm font-normal text-secondary-text md:text-xs lg:text-sm',
 																currentStep ===
 																	stepIdx &&
 																	'text-accent-st'

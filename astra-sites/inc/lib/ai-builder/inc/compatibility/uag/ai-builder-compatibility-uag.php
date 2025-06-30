@@ -42,12 +42,16 @@ class Ai_Builder_Compatibility_UAG {
 	}
 
 	/**
-	 * Disable redirec after installing and activating UAG.
+	 * Disable redirect after installing and activating UAG.
 	 *
+	 * @since 3.0.15
+	 * @param string $plugin_init The path to the plugin file that was just activated.
 	 * @return void
 	 */
-	public function uag_activation() {
-		update_option( '__uagb_do_redirect', false );
+	public function uag_activation( $plugin_init ) {
+		if ( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' === $plugin_init ) {
+			update_option( '__uagb_do_redirect', false );
+		}
 	}
 }
 

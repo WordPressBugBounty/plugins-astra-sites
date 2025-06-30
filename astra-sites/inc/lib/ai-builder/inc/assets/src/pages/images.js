@@ -743,11 +743,13 @@ const Images = () => {
 			ref={ scrollContainerRef }
 			onScroll={ handleScroll }
 		>
-			<div className="w-full space-y-6 px-5 md:px-10 lg:px-14 xl:px-15">
+			<div className="w-full space-y-6 px-5 md:px-10 lg:px-14 xl:px-15 pb-2">
 				<Heading
 					heading={ __( 'Select the Images', 'ai-builder' ) }
-					className="px-5 md:px-10 lg:px-14 xl:px-15 pt-5 md:pt-10 lg:pt-8 xl:pt-8 max-w-fit mx-auto"
+					className="px-5 md:px-10 lg:px-14 xl:px-15 pt-5 md:pt-8 lg:pt-8 xl:pt-8 max-w-fit mx-auto leading-9"
 				/>
+			</div>
+			<div className="sticky top-0 pt-4 space-y-6 z-[1] bg-container-background px-5 md:px-10 lg:px-14 xl:px-15">
 				<form
 					className="w-full overflow-visible min-h-[3.125rem]"
 					onSubmit={ handleSubmit( handleImageSearch ) }
@@ -791,7 +793,7 @@ const Images = () => {
 							</button>
 						</div>
 						<input
-							className="!text-sm p-0 border-0 w-full focus:outline-none focus:ring-0 focus-visible:outline-none"
+							className="!text-base p-0 border-0 w-full focus:outline-none focus:ring-0 focus-visible:outline-none"
 							placeholder={ __(
 								'Add more relevant keywords…',
 								'ai-builder'
@@ -830,11 +832,9 @@ const Images = () => {
 						</div>
 					</div>
 				</form>
-			</div>
-			<div className="sticky top-0 pt-4 space-y-6 z-[1] bg-container-background px-5 md:px-10 lg:px-14 xl:px-15">
-				<div className=" rounded-t-lg py-4">
+				<div className=" rounded-t-lg py-4 !mt-0">
 					<div className="flex sm:flex-row flex-col items-start sm:items-center justify-between">
-						<div className="flex items-center gap-1 text-sm font-normal leading-[21px] sm:mb-0 mb-5 w-full">
+						<div className="flex items-center gap-1 text-sm font-normal leading-[21px] sm:mb-0 mb-5 w-full h-[67px]">
 							{ /* Tabs */ }
 							<div className="flex items-center justify-start gap-3">
 								{ TABS.map( ( tab ) => (
@@ -884,7 +884,7 @@ const Images = () => {
 								placement="right"
 								trigger={
 									<div
-										className="flex items-center gap-2 min-w-[100px] w-[160px] py-3 pl-4 pr-3 cursor-pointer border border-border-primary rounded-md"
+										className="flex items-center justify-between gap-2 min-w-[100px] w-[160px] py-3 pl-4 pr-3 cursor-pointer border border-border-primary rounded-md"
 										data-disabled={ loadingNextStep }
 									>
 										<span className="text-sm font-normal text-body-text leading-[150%]">

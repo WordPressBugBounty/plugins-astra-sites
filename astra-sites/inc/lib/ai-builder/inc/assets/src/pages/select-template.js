@@ -736,7 +736,7 @@ const SelectTemplate = () => {
 		>
 			<Heading
 				heading={ __( 'Choose the Design', 'ai-builder' ) }
-				className="px-5 md:px-10 lg:px-14 xl:px-15 pt-5 md:pt-10 lg:pt-8 xl:pt-8 max-w-fit mx-auto"
+				className="w-full px-5 md:px-10 lg:px-14 xl:px-15 pt-12 max-w-fit mx-auto text-[28px] font-semibold leading-9"
 			/>
 			<form
 				className="w-full pt-4 pb-4  max-w-[37.5rem] mx-auto"
@@ -760,9 +760,10 @@ const SelectTemplate = () => {
 							);
 						} }
 					/>
+					<span className="hidden xs:block h-6 w-px bg-gray-900/10"></span>
 					<Input
 						name="keyword"
-						inputClassName={ 'pr-11 pl-2' }
+						inputClassName={ 'pr-11 pl-2 !text-base' }
 						register={ register }
 						placeholder={ __( 'Add a keyword', 'ai-builder' ) }
 						height="12"
@@ -800,7 +801,7 @@ const SelectTemplate = () => {
 				<div
 					ref={ templatesContainer }
 					className={ classNames(
-						'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-auto items-start justify-center gap-4 sm:gap-6 mb-10'
+						'grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-auto items-start justify-center gap-4 sm:gap-6 mb-10 mt-5'
 					) }
 				>
 					{ ! isFetching

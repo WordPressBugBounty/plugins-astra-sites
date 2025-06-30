@@ -134,6 +134,38 @@ class Helper {
 	}
 
 	/**
+	 * Check whether WooCommerce plugin is installed and active.
+	 *
+	 * @since 1.2.43
+	 *
+	 * @return bool True if WooCommerce is active, false otherwise.
+	 */
+	public static function is_woocommerce_active() {
+		return class_exists( 'WooCommerce' ) || is_plugin_active( 'woocommerce/woocommerce.php' );
+	}
+
+	/**
+	 * Determine if a plugin requires WooCommerce to function.
+	 *
+	 * @since 1.2.43
+	 *
+	 * @param string $plugin Plugin slug or init file.
+	 * @return bool True if plugin depends on WooCommerce.
+	 */
+	public static function plugin_requires_woocommerce( $plugin ) {
+		$wc_plugins = array(
+			'woocommerce-payments',
+			'woocommerce-payments/woocommerce-payments.php',
+			'cartflows',
+			'cartflows/cartflows.php',
+			'woo-cart-abandonment-recovery',
+			'woo-cart-abandonment-recovery/woo-cart-abandonment-recovery.php',
+		);
+
+		return in_array( $plugin, $wc_plugins, true );
+	}
+
+	/**
 	 * Has Pro Version Support?
 	 * And
 	 * Is Pro Version Installed?
@@ -278,7 +310,16 @@ class Helper {
 			$feature_plugins = is_string( $_POST['feature_plugins'] ) ? json_decode( wp_unslash( $_POST['feature_plugins'] ), true ) : array();
 
 			if ( is_array( $feature_plugins ) && is_array( $required_plugins ) ) {
-				$required_plugins = array_merge( $required_plugins, $feature_plugins );
+				// Create a set of existing plugin slugs.
+				$existing_slugs = array_column( $required_plugins, 'slug' );
+
+				// Merge only the new feature plugins that aren't already in the required plugins.
+				foreach ( $feature_plugins as $feature_plugin ) {
+					if ( isset( $feature_plugin['slug'] ) && ! in_array( $feature_plugin['slug'], $existing_slugs, true ) ) {
+						$required_plugins[] = $feature_plugin;
+						$existing_slugs[]   = $feature_plugin['slug']; // Keep the slug list updated.
+					}
+				}
 			}
 		}
 
@@ -367,7 +408,7 @@ class Helper {
 					if ( is_plugin_active( $plugin_pro['init'] ) ) {
 						$response['active'][] = $plugin_pro;
 
-						self::after_plugin_activate( $plugin['init'], array(), array(), '', true );
+						self::after_plugin_activate( $plugin['init'], array(), array(), $plugin['slug'], true );
 
 						// Pro - Inactive.
 					} else {
@@ -420,7 +461,7 @@ class Helper {
 					} else {
 						$response['active'][] = $plugin;
 
-						self::after_plugin_activate( $plugin['init'], array(), array(), '', true );
+						self::after_plugin_activate( $plugin['init'], array(), array(), $plugin['slug'], true );
 					}
 				}
 			}
@@ -504,6 +545,33 @@ class Helper {
 		$plugin_init = isset( $_POST['init'] ) ? esc_attr( sanitize_text_field( $_POST['init'] ) ) : $init;
 		$plugin_slug = isset( $_POST['slug'] ) ? esc_attr( sanitize_text_field( $_POST['slug'] ) ) : '';
 
+		// Check if plugin requires WooCommerce but WooCommerce is not active.
+		if ( self::plugin_requires_woocommerce( $plugin_slug ) || self::plugin_requires_woocommerce( $plugin_init ) ) {
+			if ( ! self::is_woocommerce_active() ) {
+				$message = __( 'This plugin requires WooCommerce to be installed and activated first.', 'astra-sites' );
+
+				if ( defined( 'WP_CLI' ) ) {
+					\WP_CLI::error( $message );
+				} elseif ( wp_doing_ajax() ) {
+					// Send deprioritize response instead of error.
+					wp_send_json_success(
+						array(
+							'success'     => false,
+							'status'      => 'deprioritize',
+							'action'      => 'defer',
+							'message'     => $message,
+							'reason'      => 'missing_woocommerce',
+							'dependency'  => 'woocommerce',
+							'plugin_slug' => $plugin_slug,
+							'plugin_init' => $plugin_init,
+							'retry_after' => 'woocommerce_activation',
+						)
+					);
+				}
+				return;
+			}
+		}
+
 		/**
 		 * Disabled redirection to plugin page after activation.
 		 * Silecing the callback for WP Live Chat plugin.
@@ -541,6 +609,7 @@ class Helper {
 			wp_send_json_success(
 				array(
 					'success' => true,
+					'status'  => 'activated',
 					'message' => __( 'Plugin Activated', 'astra-sites' ),
 				)
 			);

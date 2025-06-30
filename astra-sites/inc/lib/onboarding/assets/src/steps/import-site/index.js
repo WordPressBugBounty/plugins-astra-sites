@@ -153,6 +153,7 @@ const ImportSite = () => {
 	const importPart1 = async () => {
 		let resetStatus = false;
 		let cfStatus = false;
+		let wooCARStatus = false;
 		let latepointStatus = false;
 		let formsStatus = false;
 		let customizerStatus = false;
@@ -164,7 +165,12 @@ const ImportSite = () => {
 		if ( resetStatus ) {
 			cfStatus = await importCartflowsFlows();
 		}
+
 		if ( cfStatus ) {
+			wooCARStatus = await importCartAbandonmentRecovery();
+		}
+
+		if ( wooCARStatus ) {
 			latepointStatus = await importLatepointTables();
 		}
 
@@ -367,6 +373,37 @@ const ImportSite = () => {
 					const response = JSON.parse( text );
 					cloneResponse = response;
 					if ( response.success ) {
+						// Check if this is a deprioritization response
+						let deprioritizeStatus = false;
+						if (
+							response.data &&
+							response.data.status === 'deprioritize'
+						) {
+							deprioritizeStatus = true;
+
+							// Add to deferred queue
+							setDeferredPlugins( ( prev ) => {
+								const exists = prev.some(
+									( p ) => p.slug === plugin.slug
+								);
+								if ( ! exists ) {
+									return [
+										...prev,
+										{
+											...plugin,
+											deferReason: response.data.reason,
+											retryAfter:
+												response.data.retry_after,
+											dependency:
+												response.data.dependency,
+										},
+									];
+								}
+								return prev;
+							} );
+						}
+
+						// Remove from active processing list
 						const notActivatedPluginList = notActivatedList;
 						notActivatedPluginList.forEach(
 							( singlePlugin, index ) => {
@@ -379,16 +416,32 @@ const ImportSite = () => {
 							type: 'set',
 							notActivatedList: notActivatedPluginList,
 						} );
-						percentage += 2;
-						dispatch( {
-							type: 'set',
-							importStatus: sprintf(
-								// translators: Plugin Name.
-								__( '%1$s activated.', 'astra-sites' ),
-								plugin.name
-							),
-							importPercent: percentage,
-						} );
+
+						if ( deprioritizeStatus ) {
+							dispatch( {
+								type: 'set',
+								importStatus: sprintf(
+									// translators: Plugin Name.
+									__(
+										'%1$s deferred (requires WooCommerce).',
+										'astra-sites'
+									),
+									plugin.name
+								),
+								importPercent: percentage,
+							} );
+						} else {
+							percentage += 2;
+							dispatch( {
+								type: 'set',
+								importStatus: sprintf(
+									// translators: Plugin Name.
+									__( '%1$s activated.', 'astra-sites' ),
+									plugin.name
+								),
+								importPercent: percentage,
+							} );
+						}
 					}
 				} catch ( error ) {
 					report(
@@ -1002,6 +1055,83 @@ const ImportSite = () => {
 		return status;
 	};
 
+	/**
+	 * 2. Import Cart Abandonment Recovery data.
+	 */
+	const importCartAbandonmentRecovery = async () => {
+		const wooCARUrl = encodeURI(
+			templateResponse?.[ 'astra-site-cart-abandonment-recovery-path' ] ||
+				''
+		);
+
+		if ( '' === wooCARUrl || 'null' === wooCARUrl ) {
+			return true;
+		}
+
+		dispatch( {
+			type: 'set',
+			importStatus: __(
+				'Importing Cart Abandonment Recovery data.',
+				'astra-sites'
+			),
+		} );
+
+		const bodyData = new FormData();
+		bodyData.append(
+			'action',
+			'astra-sites-import-cart-abandonment-recovery'
+		);
+		bodyData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+
+		const status = await fetch( ajaxurl, {
+			method: 'post',
+			body: bodyData,
+		} )
+			.then( ( response ) => response.text() )
+			.then( ( text ) => {
+				try {
+					const data = JSON.parse( text );
+					if ( data.success ) {
+						percentage += 2;
+						dispatch( {
+							type: 'set',
+							importPercent: percentage,
+						} );
+						return true;
+					}
+					throw data.data;
+				} catch ( error ) {
+					report(
+						__(
+							'Importing Cart Abandonment Recovery data failed due to parse JSON error.',
+							'astra-sites'
+						),
+						'',
+						error,
+						'',
+						'',
+						text
+					);
+					return false;
+				}
+			} )
+			.catch( ( error ) => {
+				report(
+					__(
+						'Importing Cart Abandonment Recovery data Failed.',
+						'astra-sites'
+					),
+					'',
+					error
+				);
+				return false;
+			} );
+		return status;
+	};
+
+	/**
+	 * 3. Import LatePoint Tables.
+	 */
 	const importLatepointTables = async () => {
 		const latepointUrl =
 			encodeURI( templateResponse[ 'astra-site-latepoint-path' ] ) || '';
@@ -1769,17 +1899,55 @@ const ImportSite = () => {
 		}
 	}, [ xmlImportDone ] );
 
+	// State for deferred plugins (WooCommerce dependency handling)
+	const [ deferredPlugins, setDeferredPlugins ] = React.useState( [] );
+	const [ retryingDeferred, setRetryingDeferred ] = React.useState( false );
+
+	/**
+	 * Retry deferred plugins after WooCommerce is activated
+	 */
+	const retryDeferredPlugins = () => {
+		if ( deferredPlugins.length === 0 || retryingDeferred ) {
+			return;
+		}
+
+		setRetryingDeferred( true );
+
+		// Move deferred plugins back to activation queue
+		const pluginsToRetry = [ ...deferredPlugins ];
+		setDeferredPlugins( [] );
+
+		// Add them back to notActivatedList for retry
+		dispatch( {
+			type: 'set',
+			notActivatedList: [ ...notActivatedList, ...pluginsToRetry ],
+		} );
+
+		setRetryingDeferred( false );
+	};
+
 	// This checks if all the required plugins are installed and activated.
 	useEffect( () => {
 		if ( notActivatedList.length <= 0 && notInstalledList.length <= 0 ) {
+			// Check if we have deferred plugins to retry
+			if ( deferredPlugins.length > 0 && ! retryingDeferred ) {
+				retryDeferredPlugins();
+				return;
+			}
+
+			// All plugins are truly done
 			dispatch( {
 				type: 'set',
 				requiredPluginsDone: true,
 			} );
 		}
-	}, [ notActivatedList.length, notInstalledList.length ] );
+	}, [
+		notActivatedList.length,
+		notInstalledList.length,
+		deferredPlugins.length,
+	] );
 
-	// Whenever a plugin is installed, this code sends an activation request.
+	// Activate plugins one by one using the prioritized list
 	useEffect( () => {
 		// Installed all required plugins.
 		if ( notActivatedList.length > 0 ) {

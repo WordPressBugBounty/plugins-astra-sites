@@ -112,7 +112,7 @@ const LanguageOptions = ( {
 						<Listbox.Button
 							ref={ referenceRef }
 							className={ classNames(
-								'min-h-[48px] relative w-full cursor-default rounded-md bg-white text-zip-app-heading shadow-sm border border-solid border-border-tertiary focus:border-accent-st active:border-accent-st ring-1 ring-inset ring-transparent focus:outline-none active:outline-none focus:ring-accent-st',
+								'h-[40px] relative w-full cursor-default rounded-md bg-white text-zip-app-heading shadow-sm border border-solid border-border-tertiary focus:border-accent-st active:border-accent-st ring-1 ring-inset ring-transparent focus:outline-none active:outline-none focus:ring-accent-st',
 								'text-base font-normal text-left leading-6'
 							) }
 						>

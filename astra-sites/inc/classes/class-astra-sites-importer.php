@@ -24,7 +24,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 		 * Instance
 		 *
 		 * @since  1.0.0
-		 * @var (Object) Class object
+		 * @var self Class object
 		 */
 		public static $instance = null;
 
@@ -33,7 +33,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 		 *
 		 * @since  1.0.0
 		 *
-		 * @return object Class object.
+		 * @return self Class object.
 		 */
 		public static function get_instance() {
 			if ( ! isset( self::$instance ) ) {
@@ -59,6 +59,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 			// Hooks in AJAX.
 			add_action( 'wp_ajax_astra-sites-import-wpforms', array( $this, 'import_wpforms' ) );
 			add_action( 'wp_ajax_astra-sites-import-cartflows', array( $this, 'import_cartflows' ) );
+			add_action( 'wp_ajax_astra-sites-import-cart-abandonment-recovery', array( $this, 'import_cart_abandonment_recovery' ) );
 			add_action( 'wp_ajax_astra-sites-import-latepoint', array( $this, 'import_latepoint' ) );
 			add_action( 'astra_sites_import_complete', array( $this, 'clear_related_cache' ) );
 
@@ -472,6 +473,55 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 				}
 			} else {
 				wp_send_json_error( __( 'Empty file for CartFlows flows', 'astra-sites' ) );
+			}
+
+			if ( defined( 'WP_CLI' ) ) {
+				WP_CLI::line( 'Imported from ' . $url );
+			} elseif ( wp_doing_ajax() ) {
+				wp_send_json_success( $url );
+			}
+		}
+
+		/**
+		 * Import Cart Abandonment Recovery data.
+		 *
+		 * @since 4.4.27
+		 *
+		 * @param  string $url JSON file URL.
+		 * @return void
+		 */
+		public function import_cart_abandonment_recovery( $url = '' ) {
+			if ( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) {
+				// Verify Nonce.
+				check_ajax_referer( 'astra-sites', '_ajax_nonce' );
+
+				if ( ! current_user_can( 'edit_posts' ) ) {
+					wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
+				}
+			}
+
+			$url = astra_get_site_data( 'astra-site-cart-abandonment-recovery-path' );
+			if ( ! empty( $url ) && is_callable( 'Cartflows_CA_Email_Template_Importer_Exporter::get_instance' ) ) {
+				// Download JSON file.
+				$file_path = ST_WXR_Importer::download_file( $url );
+
+				if ( $file_path['success'] && isset( $file_path['data']['file'] ) ) {
+					$ext = strtolower( pathinfo( $file_path['data']['file'], PATHINFO_EXTENSION ) );
+
+					if ( 'json' === $ext ) {
+						$data = json_decode( Astra_Sites::get_instance()->get_filesystem()->get_contents( $file_path['data']['file'] ), true );
+
+						if ( ! empty( $data ) ) {
+							Cartflows_CA_Email_Template_Importer_Exporter::get_instance()->insert_templates( $data );
+						}
+					} else {
+						wp_send_json_error( __( 'Invalid file for Cart Abandonment Recovery data.', 'astra-sites' ) );
+					}
+				} else {
+					wp_send_json_error( __( 'There was an error downloading the Cart Abandonment Recovery data file.', 'astra-sites' ) );
+				}
+			} else {
+				wp_send_json_error( __( 'Empty file for Cart Abandonment Recovery data.', 'astra-sites' ) );
 			}
 
 			if ( defined( 'WP_CLI' ) ) {

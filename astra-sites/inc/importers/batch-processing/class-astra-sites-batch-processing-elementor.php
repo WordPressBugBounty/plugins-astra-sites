@@ -57,12 +57,23 @@ class Astra_Sites_Batch_Processing_Elementor extends Source_Local {
 			return;
 		}
 
+		// 🎯 Image Duplication fix: Use simple query and filter in PHP.
 		$post_ids = \Astra_Sites_Batch_Processing::get_pages( $post_types );
 		if ( empty( $post_ids ) && ! is_array( $post_ids ) ) {
 			return;
 		}
 
-		foreach ( $post_ids as $post_id ) {
+		// 🎯 PERFORMANCE FIX: Filter out already processed pages in PHP (faster than complex meta_query).
+		$unprocessed_posts = $this->filter_unprocessed_posts( $post_ids );
+		
+		if ( empty( $unprocessed_posts ) ) {
+			\Astra_Sites_Importer_Log::add( 'No Elementor pages found that need processing.' );
+			return;
+		}
+
+		\Astra_Sites_Importer_Log::add( 'Found ' . count( $unprocessed_posts ) . ' Elementor pages to process.' );
+
+		foreach ( $unprocessed_posts as $post_id ) {
 			$this->import_single_post( $post_id );
 		}
 	}
@@ -85,6 +96,16 @@ class Astra_Sites_Batch_Processing_Elementor extends Source_Local {
 		// If not then skip batch process.
 		$imported_from_demo_site = get_post_meta( $post_id, '_astra_sites_enable_for_batch', true );
 		if ( ! $imported_from_demo_site ) {
+			return;
+		}
+
+		// 🎯 FIX: Check if this page has already been processed by Elementor batch processing.
+		$already_processed = get_post_meta( $post_id, '_astra_sites_hotlink_imported', true );
+		if ( $already_processed ) {
+			if ( defined( 'WP_CLI' ) ) {
+				\WP_CLI::line( 'Elementor - Skipping already processed page: ' . $post_id );
+			}
+			\Astra_Sites_Importer_Log::add( '---- Skipping Already Processed Elementor Page ---- "' . $post_id . '"' );
 			return;
 		}
 
@@ -145,6 +166,9 @@ class Astra_Sites_Batch_Processing_Elementor extends Source_Local {
 				update_metadata( 'post', $post_id, '_elementor_data', $data );
 				update_metadata( 'post', $post_id, '_astra_sites_hotlink_imported', true );
 
+				// 🎯 FIX: Add timestamp to track when processing was completed.
+				update_metadata( 'post', $post_id, '_astra_sites_elementor_processed_time', time() );
+
 				// !important, Clear the cache after images import.
 				Plugin::$instance->files_manager->clear_cache();
 			}
@@ -155,5 +179,45 @@ class Astra_Sites_Batch_Processing_Elementor extends Source_Local {
 				astra_sites_empty_post_excerpt( $post_id );
 			}
 		}
+	}
+
+	/**
+	 * Filter posts to get only those that need Elementor processing
+	 *
+	 * @since 4.4.27
+	 * @param array $post_ids Array of post IDs to filter.
+	 * @return array Filtered array of post IDs that need processing.
+	 */
+	private function filter_unprocessed_posts( $post_ids ) {
+		
+		if ( empty( $post_ids ) || ! is_array( $post_ids ) ) {
+			return array();
+		}
+
+		$unprocessed_posts = array();
+
+		foreach ( $post_ids as $post_id ) {
+			// Check if it's an Elementor page.
+			$is_elementor_post = get_post_meta( $post_id, '_elementor_version', true );
+			if ( ! $is_elementor_post ) {
+				continue;
+			}
+
+			// Check if it's enabled for batch processing.
+			$enabled_for_batch = get_post_meta( $post_id, '_astra_sites_enable_for_batch', true );
+			if ( ! $enabled_for_batch ) {
+				continue;
+			}
+
+			// 🎯 FIX: Skip if already processed.
+			$already_processed = get_post_meta( $post_id, '_astra_sites_hotlink_imported', true );
+			if ( $already_processed ) {
+				continue;
+			}
+
+			$unprocessed_posts[] = $post_id;
+		}
+
+		return $unprocessed_posts;
 	}
 }

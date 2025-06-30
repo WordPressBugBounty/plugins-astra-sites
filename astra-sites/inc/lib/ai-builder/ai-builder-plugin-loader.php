@@ -347,8 +347,9 @@ class Ai_Builder_Plugin_Loader {
 		);
 
 		$query_args = array(
-			'family' => rawurlencode( implode( '|', $font_families ) ),
-			'subset' => rawurlencode( 'latin,latin-ext' ),
+			'family'  => rawurlencode( implode( '|', $font_families ) ),
+			'subset'  => rawurlencode( 'latin,latin-ext' ),
+			'display' => 'swap',
 		);
 
 		return add_query_arg( $query_args, '//fonts.googleapis.com/css' );

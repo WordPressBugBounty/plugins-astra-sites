@@ -18,7 +18,7 @@ const AISitesNotice = ( { className, ...props } ) => {
 			{ showAISitesNotice() && (
 				<div
 					className={ classNames(
-						'p-2.5 gap-1 border border-alert-error/30 bg-alert-error-bg rounded-md flex',
+						'p-2.5 gap-1 border border-alert-error/30 bg-alert-error-bg rounded-md flex mb-6',
 						className
 					) }
 					{ ...props }

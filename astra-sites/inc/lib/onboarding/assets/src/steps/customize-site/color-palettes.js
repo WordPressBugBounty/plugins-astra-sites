@@ -1,8 +1,8 @@
 import { memo, useEffect, useState } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import {
-	LIGHT_PALETTES,
-	DARK_PALETTES,
+	getLightColorPalette,
+	getDarkColorPalette,
 } from '../customize-site/customize-steps/site-colors-typography/colors';
 import { useStateValue } from '../../store/store';
 import {
@@ -17,7 +17,9 @@ import { __ } from '@wordpress/i18n';
 const ColorPalettes = () => {
 	const [ { activePalette: selectedPalette, templateResponse }, dispatch ] =
 		useStateValue();
-	const [ colorScheme, setColorScheme ] = useState( LIGHT_PALETTES );
+	const [ colorScheme, setColorScheme ] = useState(
+		getLightColorPalette( templateResponse )
+	);
 
 	const sendPostMessage = ( data ) => {
 		dispatchPostMessage( data, 'astra-starter-templates-preview' );
@@ -38,8 +40,8 @@ const ColorPalettes = () => {
 		const defaultPaletteValues = getDefaultColorPalette( templateResponse );
 		let scheme =
 			'light' === getColorScheme( templateResponse )
-				? LIGHT_PALETTES
-				: DARK_PALETTES;
+				? getLightColorPalette( templateResponse )
+				: getDarkColorPalette( templateResponse );
 
 		const customColors =
 			templateResponse?.[ 'astra-custom-palettes' ] || [];

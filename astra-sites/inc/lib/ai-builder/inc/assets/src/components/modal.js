@@ -22,6 +22,9 @@ const Modal = ( {
 		case '520':
 			modalWidth = 'sm:max-w-[32.5rem]';
 			break;
+		case '500':
+			modalWidth = 'sm:max-w-[31.25rem]';
+			break;
 		case '464':
 			modalWidth = 'sm:max-w-[29rem]';
 			break;

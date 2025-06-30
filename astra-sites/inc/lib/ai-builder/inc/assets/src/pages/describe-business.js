@@ -429,11 +429,13 @@ const DescribeBusiness = () => {
 					CATEGORY_DATA[ categoryKey ]?.description ||
 					CATEGORY_DATA.unknown.description
 				}
+				className="leading-[36px]"
+				subClassName="!mt-2"
 			/>
 			<div>
 				<div
 					className={ classNames(
-						'ml-0 w-full text-right text-sm font-medium leading-5 text-app-text mb-2 -mt-2'
+						'ml-0 w-full text-right text-sm font-medium leading-5 text-app-text mb-2 mt-[1.6rem]'
 					) }
 				>
 					{ __( 'Characters: ', 'ai-builder' ) }
@@ -447,6 +449,7 @@ const DescribeBusiness = () => {
 						'E.g. Mantra Minds is a yoga studio located in Chino Hills, California. The studio offers a variety of classes such as Hatha yoga, Vinyasa flow, and Restorative yoga. The studio is led by Jane, an experienced and certified yoga instructor with over 10 years of teaching expertise. The welcoming atmosphere and personalized Jane make it a favorite among yoga enthusiasts in the area.',
 						'ai-builder'
 					) }
+					textAreaClassName="font-normal text-sm !leading-6 placeholder:font-normal placeholder:text-sm placeholder:leading-6 min-h-[160px]"
 					name="businessDetails"
 					maxLength={ 3000 }
 					register={ register }
@@ -459,7 +462,7 @@ const DescribeBusiness = () => {
 				/>
 
 				{ /* Wand Button */ }
-				<div className="h-7 mt-3 flex items-center gap-2 text-app-secondary hover:text-app-accent-hover">
+				<div className="mt-2 flex items-center gap-2 text-app-secondary hover:text-app-accent-hover">
 					{ isLoading && (
 						<LoadingSpinner className="text-accent-st cursor-progress" />
 					) }
@@ -482,7 +485,7 @@ const DescribeBusiness = () => {
 							</div>
 
 							<div className="flex gap-2 items-center justify-end w-[100px] cursor-default text-zip-body-text">
-								<div className="w-5">
+								<div className="w-6">
 									{ descriptionPage > 1 ? (
 										<ChevronLeftIcon
 											className="w-5 cursor-pointer text-zip-body-text"
@@ -502,7 +505,7 @@ const DescribeBusiness = () => {
 									{ descriptionPage || 1 } /{ ' ' }
 									{ descriptionList?.length || 1 }
 								</div>
-								<div className="w-5">
+								<div className="w-6">
 									{ descriptionPage !==
 									descriptionList?.length ? (
 										<ChevronRightIcon
@@ -524,7 +527,7 @@ const DescribeBusiness = () => {
 					) }
 				</div>
 			</div>
-			<Divider />
+			<Divider className="my-[28px]" />
 			<NavigationButtons
 				onClickPrevious={ previousStep }
 				loading={ isFetchingKeywords }

@@ -253,6 +253,13 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 			}
 
 			/**
+			 * Import Cart Abandonment Recovery data.
+			 */
+			if ( isset( $demo_data['astra-site-cart-abandonment-recovery-path'] ) && ! empty( $demo_data['astra-site-cart-abandonment-recovery-path'] ) ) {
+				Astra_Sites_Importer::get_instance()->import_cart_abandonment_recovery( $demo_data['astra-site-cart-abandonment-recovery-path'] );
+			}
+
+			/**
 			 * Import WP Forms.
 			 */
 			if ( isset( $demo_data['astra-site-wpforms-path'] ) && ! empty( $demo_data['astra-site-wpforms-path'] ) ) {

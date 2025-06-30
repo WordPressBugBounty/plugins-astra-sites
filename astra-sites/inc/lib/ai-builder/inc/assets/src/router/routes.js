@@ -30,7 +30,7 @@ const steps = [
 		component: BusinessDetails,
 		layoutConfig: {
 			stepNumber: 1,
-			name: __( 'Let’s Start', 'ai-builder' ),
+			name: __( "Let's Start", 'ai-builder' ),
 			description: __( 'Name, language & type', 'ai-builder' ),
 			screen: 'type',
 			hideCredits: false,

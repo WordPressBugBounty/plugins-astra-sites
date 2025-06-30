@@ -9,13 +9,15 @@ import {
 } from '../../../../utils/functions';
 import ICONS from '../../../../../icons';
 import TypographyWrapper from './typography';
-import { DARK_PALETTES, LIGHT_PALETTES } from './colors';
+import { getLightColorPalette, getDarkColorPalette } from './colors';
 
 const SiteColorsControls = () => {
 	const [ { activePaletteSlug, templateResponse, builder }, dispatch ] =
 		useStateValue();
 	const [ defaultPalette, setDefaultPalette ] = useState( [] );
-	const [ colorScheme, setColorScheme ] = useState( LIGHT_PALETTES );
+	const [ colorScheme, setColorScheme ] = useState(
+		getLightColorPalette( templateResponse )
+	);
 
 	const onPaletteChange = ( event, palette ) => {
 		if ( ! palette ) {
@@ -39,8 +41,8 @@ const SiteColorsControls = () => {
 		setDefaultPalette( defaultPaletteValues );
 		let scheme =
 			'light' === getColorScheme( templateResponse )
-				? LIGHT_PALETTES
-				: DARK_PALETTES;
+				? getLightColorPalette( templateResponse )
+				: getDarkColorPalette( templateResponse );
 
 		const customColors =
 			templateResponse?.[ 'astra-custom-palettes' ] || [];

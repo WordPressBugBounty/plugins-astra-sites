@@ -127,6 +127,9 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				return;
 			}
 
+			// 🎯 FIX: Global hook to prevent Elementor placeholder image imports
+			add_filter( 'pre_http_request', array( $this, 'block_elementor_placeholder_requests' ), 10, 3 );
+
 			$this->set_api_url();
 			$this->includes();
 			add_action( 'plugin_action_links_' . ASTRA_SITES_BASE, array( $this, 'action_links' ) );
@@ -178,10 +181,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_action( 'astra_sites_after_theme_activation', array( $this, 'theme_activation_utm_event' ) );
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'plugin_activation_utm_event' ), 10, 2 );
 			add_filter( 'plugins_api_args', array( $this, 'raise_memory_for_plugins_install' ), 1, 1 );
-			add_filter( 'bsf_core_stats', array( $this, 'add_astra_sites_analytics_data' ), 10, 1 );
 			add_filter( 'wp_import_insert_term', array( $this, 'store_original_term_id' ), 10, 2 );
-			add_action( 'astra_sites_after_plugin_activation', array( $this, 'maybe_woopayments_included' ), 10, 2 );
-			add_action( 'wp_ajax_astra_sites_set_woopayments_analytics', array( $this, 'set_woopayments_analytics' ) );
 		}
 
 		/**
@@ -321,9 +321,13 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			if ( ! isset( $data['plugin_slug'] ) || '' === $data['plugin_slug'] ) {
 				return;
 			}
-			if ( class_exists( 'BSF_UTM_Analytics' ) && is_callable( array( 'BSF_UTM_Analytics', 'update_referer' ) ) ) {
-				// If the plugin is found and the update_referer function is callable, update the referer with the corresponding product slug.
-				BSF_UTM_Analytics::update_referer( 'astra-sites', $data['plugin_slug'] );
+
+			// Update the referer only if the plugin was not active before template import.
+			if ( ! isset( $data['was_plugin_active'] ) || ! $data['was_plugin_active'] ) {
+				if ( class_exists( 'BSF_UTM_Analytics' ) && is_callable( array( 'BSF_UTM_Analytics', 'update_referer' ) ) ) {
+					// If the plugin is found and the update_referer function is callable, update the referer with the corresponding product slug.
+					BSF_UTM_Analytics::update_referer( 'astra-sites', $data['plugin_slug'] );
+				}
 			}
 		}
 
@@ -367,106 +371,6 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				wp_raise_memory_limit( 'admin' );
 			}
 			return $args;
-		}
-
-		/**
-		 * Check if WooCommerce Payments plugin is included and update settings accordingly.
-		 * 
-		 * @param string $plugin_init The plugin initialization path.
-		 * @param array  $data Additional data (optional).
-		 *
-		 * @since 4.4.23
-		 * @return void
-		 */
-		public function maybe_woopayments_included( $plugin_init, $data = array() ) {
-			if ( 'woocommerce-payments/woocommerce-payments.php' === $plugin_init ) {
-				// Prevent showing the banner if plugin was already active.
-				if ( ! isset( $data['was_plugin_active'] ) || ! $data['was_plugin_active'] ) {
-					Astra_Sites_Page::get_instance()->update_settings(
-						array(
-							'woopayments_ref' => true,
-						)
-					);
-				}
-
-				Astra_Sites_Page::get_instance()->update_settings(
-					array(
-						'woopayments_included' => true,
-					)
-				);
-			}
-		}
-
-		/**
-		 * Set WooPayments analytics.
-		 *
-		 * @since 4.4.23
-		 * @return void
-		 */
-		public function set_woopayments_analytics() {
-			// Verify nonce.
-			if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'woopayments_nonce' ) ) {
-				wp_send_json_error( array( 'message' => __( 'Invalid nonce', 'astra-sites' ) ) );
-				exit;
-			}
-
-			$source = isset( $_POST['source'] ) ? sanitize_text_field( wp_unslash( $_POST['source'] ) ) : '';
-			if ( ! in_array( $source, array( 'banner', 'onboarding' ), true ) ) {
-				wp_send_json_error( array( 'message' => __( 'Invalid source', 'astra-sites' ) ) );
-				exit;
-			}
-
-			$key = "woopayments_{$source}_clicked";
-			Astra_Sites_Page::get_instance()->update_settings( array( $key => true ) );
-
-			wp_send_json_success( array( 'message' => 'WooPayments analytics updated!' ) );
-			exit;
-		}
-
-		/**
-		 * Check if WooPayments is configured and connected to Stripe.
-		 *
-		 * @since 4.4.24
-		 * @return bool True if WooPayments is active and connected to Stripe, false otherwise.
-		 */
-		public static function is_woo_payments_configured() {
-			// Check if WCPay account is connected to Stripe.
-			if ( class_exists( 'WC_Payments' ) && method_exists( 'WC_Payments', 'get_account_service' ) ) {
-				$account_service = WC_Payments::get_account_service();
-				if ( method_exists( $account_service, 'is_stripe_connected' ) ) {
-					return $account_service->is_stripe_connected();
-				}
-			}
-
-			return false;
-		}
-
-		/**
-		 * Add astra sites analytics data.
-		 *
-		 * @param array $stats stats array.
-		 * @return array
-		 */
-		public function add_astra_sites_analytics_data( $stats ) {
-			$stats['plugin_data']['astra_sites'] = array(
-				'version'        => defined( 'ASTRA_PRO_SITES_NAME' ) ? 'premium' : 'free',
-				'site_language'  => get_locale(),
-				'plugin_version' => defined( 'ASTRA_SITES_VER' ) ? ASTRA_SITES_VER : 'unknown',
-				'page_builder'   => Astra_Sites_Page::get_instance()->get_setting( 'page_builder' ),
-				'boolean_values' => array(
-					'import_complete'                => 'yes' === get_option( 'astra_sites_import_complete' ),
-					'woopayments_included'           => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_included' ),
-					'was_woopayments_referred'       => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_ref' ),
-					'woopayments_banner_clicked'     => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_banner_clicked' ),
-					'woopayments_onboarding_clicked' => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_onboarding_clicked' ),
-					'woopayments_configured'         => self::is_woo_payments_configured(),
-				),
-				'numeric_values' => array(
-					'woopayments_banner_dismissed_count' => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_banner_dismissed_count' ),
-				),
-			);
-
-			return $stats;
 		}
 
 		/**
@@ -2479,6 +2383,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-wp-cli.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-file-system.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-nps-notice.php';
+			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-analytics.php'; 
 
 			// libraries 'inc/lib/class-astra-sites-'.
 			require_once ASTRA_SITES_DIR . 'inc/lib/onboarding/class-onboarding.php';
@@ -2810,6 +2715,98 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			$parts['port']   = isset( $parts['port'] ) ? ':' . $parts['port'] : '';
 
 			return $parts['scheme'] . '://' . $parts['host'] . $parts['port'] . $parts['path'] . $query;
+		}
+
+		/**
+		 * Block HTTP requests for Elementor placeholder images during import
+		 *
+		 * @since 1.0.14
+		 * @param false|array|WP_Error $preempt A preemptive return value of an HTTP request.
+		 * @param array                $args    HTTP request arguments.
+		 * @param string               $url     The request URL.
+		 * @return false|array|WP_Error
+		 */
+		public function block_elementor_placeholder_requests( $preempt, $args, $url ) {
+			
+			// Only block during import processes.
+			if ( ! $this->is_import_process_active() ) {
+				return $preempt;
+			}
+
+			// Check if this is a request for an Elementor placeholder image.
+			if ( $this->is_elementor_placeholder_url( $url ) ) {
+				astra_sites_error_log( 'Blocking Elementor placeholder image request during import: ' . $url );
+				
+				// Return a WP_Error to prevent the download and import.
+				return new WP_Error( 
+					'blocked_placeholder', 
+					'Elementor placeholder image blocked from import',
+					array( 'url' => $url )
+				);
+			}
+
+			// Allow other requests to proceed normally.
+			return $preempt;
+		}
+
+		/**
+		 * Check if import process is currently active
+		 *
+		 * @since 1.0.14
+		 * @return bool True if import is active.
+		 */
+		private function is_import_process_active() {
+			
+			// Check if visible import is complete but batch processing is not yet complete.
+			$import_complete = get_option( 'astra_sites_import_complete', 'no' );
+			$batch_process_started = get_option( 'astra_sites_batch_process_started', 'no' );
+			$batch_process_complete = get_option( 'astra_sites_batch_process_complete', 'no' );
+
+			// Hook should be active when:
+			// 1. Import is complete (visible import finished)
+			// 2. Batch process has started
+			// 3. Batch process is not yet complete.
+			if ( 'yes' === $import_complete && 'yes' === $batch_process_started && 'yes' !== $batch_process_complete ) {
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
+		 * Check if URL is an Elementor placeholder image
+		 *
+		 * @since 1.0.14
+		 * @param string $url Image URL to check.
+		 * @return bool True if it's a placeholder image.
+		 */
+		private function is_elementor_placeholder_url( $url ) {
+			
+			if ( empty( $url ) ) {
+				return false;
+			}
+
+			// Check for Elementor placeholder patterns.
+			$placeholder_patterns = array(
+				'/elementor/assets/images/placeholder.png',
+				'/elementor/assets/images/placeholder.jpg',
+				'/elementor/assets/images/placeholder.jpeg',
+				'/elementor/assets/images/placeholder.gif',
+				'/elementor/assets/images/placeholder.svg',
+			);
+
+			foreach ( $placeholder_patterns as $pattern ) {
+				if ( strpos( $url, $pattern ) !== false ) {
+					return true;
+				}
+			}
+
+			// Check for generic placeholder in Elementor context.
+			if ( strpos( $url, 'placeholder' ) !== false && strpos( $url, 'elementor' ) !== false ) {
+				return true;
+			}
+
+			return false;
 		}
 	}
 

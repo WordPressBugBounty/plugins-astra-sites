@@ -77,7 +77,7 @@ const Input = (
 						name={ name }
 						disabled={ disabled }
 						className={ classNames(
-							'w-full px-[1rem] placeholder:text-secondary-text rounded-md outline-none !text-sm placeholder:!text-base',
+							'w-full px-3 h-[40px] placeholder:text-secondary-text rounded-md outline-none !text-sm placeholder:!text-sm',
 							`h-${ height }`,
 							label ? 'mt-2' : '',
 							noBorder

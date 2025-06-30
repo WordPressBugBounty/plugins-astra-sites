@@ -16,13 +16,12 @@ const LanguageSelection = () => {
 	};
 
 	return (
-		<div className="flex flex-col items-start gap-x-2">
-			<h5 className="text-sm flex font-medium leading-5 items-center !mb-2">
-				{ __( 'The website will be in:', 'ai-builder' ) }
-				<div className="ml-1 pt-1" />
-			</h5>
+		<div className="flex-1 space-y-2">
+			<label className={ `zw-sm-medium text-app-heading` }>
+				{ __( 'This website will be in:', 'ai-builder' ) }
+			</label>
 			{ ! siteLanguageList || siteLanguageList.length === 0 ? (
-				<div className="h-12 w-[320px] inline-flex justify-start items-center gap-2 border border-solid border-border-tertiary py-2 pl-3 pr-8 rounded-md shadow-sm">
+				<div className="h-[40px] w-[100%] inline-flex justify-start items-center gap-2 border border-solid border-border-tertiary py-2 pl-3 pr-8 rounded-md shadow-sm">
 					<div className="w-8 h-full bg-gray-300 animate-pulse" />
 					<span className="!shrink-0 w-px h-[14px] bg-border-tertiary" />
 					<div className="w-full h-full bg-gray-300 animate-pulse" />
@@ -34,8 +33,8 @@ const LanguageSelection = () => {
 						( lang ) => lang.code === siteLanguage
 					) }
 					showLabel={ false }
-					classNameParent="w-full sm:w-[320px]"
-					classNameChild="py-2 pl-3 pr-8"
+					classNameParent="w-full"
+					classNameChild="py-2 pl-4 pr-12"
 				/>
 			) }
 		</div>

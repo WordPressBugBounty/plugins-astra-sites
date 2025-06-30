@@ -55,10 +55,13 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) {
 		 * Set the source to 'starter-templates' on activation.
 		 *
 		 * @since 1.0.15
+		 * @param string $plugin_init The path to the plugin file that was just activated.
 		 * @return void
 		 */
-		public function activation() {
-			update_option( 'surecart_source', 'starter_templates', false );
+		public function activation( $plugin_init ) {
+			if ( 'surecart/surecart.php' === $plugin_init ) {
+				update_option( 'surecart_source', 'starter_templates', false );
+			}
 		}
 
 		/**

@@ -92,19 +92,22 @@ const BusinessDetails = () => {
 					'Please share some basic details of the website to get started.',
 					'ai-builder'
 				) }
+				className="leading-[26px]"
 			/>
-			<div className="w-full max-w-container flex flex-col gap-8">
+			<div className="w-full max-w-container flex flex-col mt-[2.2rem]">
 				<div className="!space-y-2">
-					<h5 className="text-sm flex font-medium leading-5 items-center !mb-2">
+					<h5 className="text-sm flex font-medium leading-6 items-center !mb-2 zw-sm-medium">
 						{ __( 'Name of the website:', 'ai-builder' ) }
+						<span className="text-alert-error">&nbsp;*</span>
 					</h5>
 					<Input
-						className="w-full"
+						className="w-full shadow-sm"
 						name="businessName"
 						placeholder={ __(
 							'Enter name or title of the website',
 							'ai-builder'
 						) }
+						inputClassname="p-0"
 						register={ register }
 						maxLength={ 100 }
 						validations={ {
@@ -112,14 +115,20 @@ const BusinessDetails = () => {
 							maxLength: 100,
 						} }
 						error={ errors.businessName }
-						height="12"
+						height="[40px]"
 					/>
 				</div>
-				<div className="w-full flex flex-col sm:flex-row items-stretch sm:items-start justify-start flex-wrap lg:flex-nowrap gap-8">
-					<div className="flex-1 min-h-[48px] min-w-[calc(100%_/_2)] md:min-w-0 !space-y-2">
-						<h5 className="text-sm flex font-medium leading-5 items-center">
-							{ __( 'This website is for:', 'ai-builder' ) }
-						</h5>
+				<div className="w-full items-center justify-center sm:flex sm:flex-wrap max-mobile:space-y-5 gap-8 mt-8 lg:grid grid-cols-[55%_45%] px-4 max-tablet:px-0 items-start">
+					<div className="flex-1 min-h-[48px]  md:min-w-0">
+						{ /*!space-y-1.5 class of the above ^*/ }
+						<label
+							className={ `zw-sm-medium text-app-heading` }
+							htmlFor={ `input-business-type` }
+						>
+							{ __( 'This website is for', 'ai-builder' ) }:
+							<span className="text-alert-error"> *</span>
+						</label>
+
 						<BusinessTypes />
 					</div>
 					<LanguageSelection />

@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 4.4.26
+Stable tag: 4.4.27
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -229,6 +229,12 @@ Starter Templates, uses the Astra theme. It’s the world's most popular WordPre
 
 Once your website is generated, you have complete control over its content and layout. You can customize it as you would any other website, including changing colors, text, adding images, and creating new sections and pages.
 
+= How can I report a security bug? =
+
+We take plugin security extremely seriously. If you discover a security vulnerability, please report it in a safe and responsible manner.
+
+You can report the issue through our [Bug Bounty Program](https://brainstormforce.com/bug-bounty-program/). We collaborate with Patchstack to provide opportunities for researchers to report vulnerabilities. The Patchstack team will help validate, triage, and handle any reported security issues.
+
 == Screenshots ==
 
 1. AI Website Builder - Starter Templates has been integrated with ZipWP - our innovative AI Website Builder to make building websites super easy.
@@ -239,6 +245,17 @@ Once your website is generated, you have complete control over its content and l
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.27 - 30-June-2025
+- New:
+    - Added compatibility with WooCommerce Cart Abandonment Recovery plugin.
+- Improvement:
+    - AI Builder: Updated UI for a more consistent and streamlined user experience.
+- Fix:
+    - Resolved an issue with Elementor templates import by preventing the processing of old images.
+    - Resolved an issue where Gutenberg batches of Elementor templates were not processed correctly.
+    - Resolved an issue where Preview Palette colors were not applying correctly to some new templates.
+    - Fixed an issue where WooCommerce dependent plugins showed the error `This plugin requires 1 plugin to be installed and activated: WooCommerce`.
 
 v4.4.26 - 18-June-2025
 - Fix:

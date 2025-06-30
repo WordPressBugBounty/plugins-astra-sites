@@ -63,7 +63,7 @@ const NavigationButtons = ( {
 				{ ! hideContinue && (
 					<Button
 						type="submit"
-						className="relative !pl-[18px] !pr-[18px]"
+						className="relative !pl-4 !pr-4 py-2.5 h-[40px] font-normal gap-1.5"
 						onClick={ handleOnClickContinue }
 						variant="primary"
 						disabled={ disableContinue }
@@ -93,7 +93,7 @@ const NavigationButtons = ( {
 				{ typeof onClickPrevious === 'function' && (
 					<Button
 						type="button"
-						className="!pl-[18px] !pr-[18px]"
+						className="!pl-3 !pr-3 py-2.5"
 						onClick={ handleOnClickPrevious }
 						variant="white"
 					>
