@@ -14,6 +14,7 @@ import {
 	ChevronUpIcon,
 	EnvelopeIcon,
 	CalendarIcon,
+	ArrowTrendingUpIcon,
 } from '@heroicons/react/24/outline';
 import { __ } from '@wordpress/i18n';
 import { useDispatch, useSelect } from '@wordpress/data';
@@ -146,6 +147,7 @@ const ICON_SET = {
 	ecommerce: ShoppingCartIcon,
 	envelope: EnvelopeIcon,
 	calendar: CalendarIcon,
+	'arrow-trending-up': ArrowTrendingUpIcon,
 };
 
 const Features = ( { handleClickStartBuilding, isInProgress } ) => {

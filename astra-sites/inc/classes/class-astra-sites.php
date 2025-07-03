@@ -182,6 +182,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'plugin_activation_utm_event' ), 10, 2 );
 			add_filter( 'plugins_api_args', array( $this, 'raise_memory_for_plugins_install' ), 1, 1 );
 			add_filter( 'wp_import_insert_term', array( $this, 'store_original_term_id' ), 10, 2 );
+			add_filter( 'getting_started_is_setup_wizard_showing', array( $this, 'maybe_setup_wizard_showing' ) );
 		}
 
 		/**
@@ -306,7 +307,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 			if ( class_exists( 'BSF_UTM_Analytics' ) && is_callable( array( 'BSF_UTM_Analytics', 'update_referer' ) ) ) {
 				// If the plugin is found and the update_referer function is callable, update the referer with the corresponding product slug.
-				BSF_UTM_Analytics::update_referer( 'astra-sites', 'astra' );
+				$page_builder = Astra_Sites_Page::get_instance()->get_setting( 'page_builder' );
+				// Set the referer to 'zipwp' for AI Builder and 'astra-sites' otherwise.
+				$referer = 'ai-builder' === $page_builder ? 'zipwp' : 'astra-sites';
+				BSF_UTM_Analytics::update_referer( $referer, 'astra' );
 			}
 		}
 
@@ -326,7 +330,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			if ( ! isset( $data['was_plugin_active'] ) || ! $data['was_plugin_active'] ) {
 				if ( class_exists( 'BSF_UTM_Analytics' ) && is_callable( array( 'BSF_UTM_Analytics', 'update_referer' ) ) ) {
 					// If the plugin is found and the update_referer function is callable, update the referer with the corresponding product slug.
-					BSF_UTM_Analytics::update_referer( 'astra-sites', $data['plugin_slug'] );
+					$page_builder = Astra_Sites_Page::get_instance()->get_setting( 'page_builder' );
+					// Set the referer to 'zipwp' for AI Builder and 'astra-sites' otherwise.
+					$referer = 'ai-builder' === $page_builder ? 'zipwp' : 'astra-sites';
+					BSF_UTM_Analytics::update_referer( $referer, $data['plugin_slug'] );
 				}
 			}
 		}
@@ -2807,6 +2814,22 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 
 			return false;
+		}
+
+		/**
+		 * Maybe Setup Wizard Showing
+		 *
+		 * @param  bool $showing Whether the wizard is showing.
+		 * @since 4.4.28
+		 *
+		 * @return bool
+		 */
+		public function maybe_setup_wizard_showing( $showing = false ) {
+			if ( $showing && 'yes' === get_option( 'astra_sites_import_complete', false ) ) {
+				return true;
+			}
+
+			return $showing;
 		}
 	}
 

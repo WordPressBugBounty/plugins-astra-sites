@@ -4,8 +4,8 @@ Donate link: https://wpastra.com/pro/
 Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
-Tested up to: 6.8
-Stable tag: 4.4.27
+Tested up to: 6.8.1
+Stable tag: 4.4.28
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,13 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.28 - 03-July-2025
+- New:
+    - Integrated the "Finish Setup" course to guide users after import completion.
+    - Integrated SureRank plugin for SEO option in AI and Classic Templates onboarding.
+- Fix:
+    - AI Builder: Addressed missing alt text when importing Spectra images.
 
 v4.4.27 - 30-June-2025
 - New:

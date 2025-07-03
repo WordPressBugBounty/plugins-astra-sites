@@ -64,15 +64,15 @@ export const initialState = {
 			icon: 'ecommerce',
 		},
 		{
-			title: __( 'Website Emails & SMTP', 'astra-sites' ),
-			id: 'smtp',
+			title: __( 'SEO & Search Visibility', 'astra-sites' ),
+			id: 'seo',
 			description: __(
-				'Get emails from your website (forms, etc)',
+				'Optimize your website for search engines',
 				'astra-sites'
 			),
 			enabled: true,
 			compulsory: false,
-			icon: 'envelope',
+			icon: 'arrow-trending-up',
 		},
 		{
 			title: __( 'Automation & Integrations', 'astra-sites' ),
@@ -103,6 +103,17 @@ export const initialState = {
 			enabled: false,
 			compulsory: false,
 			icon: 'live-chat',
+		},
+		{
+			title: __( 'Website Emails & SMTP', 'astra-sites' ),
+			id: 'smtp',
+			description: __(
+				'Get emails from your website (forms, etc)',
+				'astra-sites'
+			),
+			enabled: false,
+			compulsory: false,
+			icon: 'envelope',
 		},
 	],
 	formDetails: {

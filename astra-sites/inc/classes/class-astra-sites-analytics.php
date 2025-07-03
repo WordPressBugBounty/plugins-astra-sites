@@ -191,7 +191,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 *
 		 * @return bool
 		 */
-		public static function is_spectra_block_used() {
+		public static function is_spectra_blocks_used() {
 			if ( ! is_plugin_active( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ) ) {
 				return false;
 			}
@@ -206,7 +206,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 *
 		 * @return bool
 		 */
-		public static function is_uae_widget_used() {
+		public static function is_uae_widgets_used() {
 			if ( post_type_exists( 'elementor-hf' ) ) {
 				$count = wp_count_posts( 'elementor-hf' );
 				if ( isset( $count->publish ) && $count->publish > 0 ) {
@@ -361,7 +361,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				return;
 			}
 
-			$stats['plugins_data'] = wp_json_encode( $required_plugins );
+			$stats['plugins_data'] = ! empty( $required_plugins ) ? wp_json_encode( $required_plugins ) : '';
 		}
 
 		/**
@@ -376,8 +376,8 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			$stats = array_merge(
 				$stats,
 				array(
-					'spectra_blocks_used'         => self::is_spectra_block_used(),
-					'uae_widgets_used'            => self::is_uae_widget_used(),
+					'spectra_blocks_used'         => self::is_spectra_blocks_used(),
+					'uae_widgets_used'            => self::is_uae_widgets_used(),
 					'sureforms_form_published'    => self::is_sureforms_form_published(),
 					'suremails_connected'         => self::is_suremails_connected(),
 					'surecart_product_published'  => self::is_surecart_product_published(),
@@ -386,6 +386,44 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 					'presto_player_used'          => self::is_presto_player_used(),
 				)
 			);
+		}
+
+		/**
+		 * Add finish setup analytics data.
+		 *
+		 * @param array $stats Stats array.
+		 *
+		 * @since 4.4.28
+		 * @return void
+		 */
+		private static function add_finish_setup_analytics( &$stats ) {
+			$is_setup_wizard_showing = get_option( 'getting_started_is_setup_wizard_showing', false );
+			$action_items_status     = get_option( 'getting_started_action_items', array() );
+			$courses_status          = array();
+			$no_of_completed_courses = 0;
+
+			// Get the courses status from action items.
+			if ( is_array( $action_items_status ) ) {
+				foreach ( $action_items_status as $key => $action_item ) {
+					$status                 = isset( $action_item['status'] ) ? $action_item['status'] : false;
+					$courses_status[ $key ] = $status ? 'done' : 'not_done';
+					if ( $status ) {
+						$no_of_completed_courses++;
+					}
+				}
+			}
+
+			// Total number of courses.
+			$total_courses = count( $courses_status );
+
+			// Boolean and numeric values.
+			$stats['boolean_values']['is_finish_setup_showing'] = $is_setup_wizard_showing;
+			$stats['numeric_values']['total_courses']           = $total_courses;
+			$stats['numeric_values']['no_of_completed_courses'] = $no_of_completed_courses;
+			$stats['boolean_values']['course_completed']        = 0 !== $total_courses && $no_of_completed_courses >= $total_courses;
+
+			// Plain Json data.
+			$stats['courses_status'] = ! empty( $courses_status ) ? wp_json_encode( $courses_status ) : '';
 		}
 
 		/**
@@ -425,6 +463,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			if ( $import_complete ) {
 				self::add_required_plugins_analytics( $stats['plugin_data']['astra_sites'] );
 				self::add_plugin_active_analytics( $stats['plugin_data']['astra_sites']['boolean_values'] );
+				self::add_finish_setup_analytics( $stats['plugin_data']['astra_sites'] );
 			}
 
 			return $stats;

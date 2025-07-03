@@ -18,6 +18,7 @@ import {
 	ChevronUpIcon,
 	EnvelopeIcon,
 	CalendarIcon,
+	ArrowTrendingUpIcon,
 } from '@heroicons/react/24/outline';
 import { classNames } from '../../utils/functions';
 import { checkRequiredPlugins } from '../import-site/import-utils';
@@ -37,6 +38,7 @@ const ICON_SET = {
 	ecommerce: ShoppingCartIcon,
 	envelope: EnvelopeIcon,
 	calendar: CalendarIcon,
+	'arrow-trending-up': ArrowTrendingUpIcon,
 };
 
 const getPluginProps = ( id ) => {

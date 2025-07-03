@@ -263,6 +263,13 @@ function getFeaturePluginList( features, selectedEcommercePlugin ) {
 					init: 'suremails/suremails.php',
 				} );
 				break;
+			case 'seo':
+				requiredPlugins.push( {
+					name: 'SureRank',
+					slug: 'surerank',
+					init: 'surerank/surerank.php',
+				} );
+				break;
 			case 'sales-funnels':
 				requiredPlugins.push( {
 					name: 'CartFlows',

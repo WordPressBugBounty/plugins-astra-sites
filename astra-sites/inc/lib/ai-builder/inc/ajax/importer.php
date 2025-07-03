@@ -67,6 +67,7 @@ class Importer extends AjaxBase {
 	 */
 	public function update_required_options() {
 		update_option( 'astra_sites_import_complete', 'yes', false );
+		update_option( 'getting_started_is_setup_wizard_showing', true );
 
 		if ( 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
 			update_option( 'astra_sites_batch_process_complete', 'yes' );

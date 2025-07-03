@@ -459,6 +459,13 @@ if ( ! class_exists( 'ST_Replace_Blocks_Images' ) ) :
 			ST_Replace_Images::$old_image_urls[] = $block['attrs']['url'];
 			$block['innerHTML']                  = str_replace( $block['attrs']['url'], $attachment['url'], $block['innerHTML'] );
 
+			$alt_text = ! empty( $attachment['alt'] ) ? $attachment['alt'] : '';
+			if ( ! empty( $alt_text ) ) {
+				$block['innerHTML'] = str_replace( 'alt=""', 'alt="' . esc_attr( $alt_text ) . '"', $block['innerHTML'] );
+			}
+
+			$block['innerHTML'] = str_replace( $block['alt'], $attachment['alt'], $block['innerHTML'] );
+
 			$tablet_size_slug = ! empty( $block['attrs']['sizeSlugTablet'] ) ? $block['attrs']['sizeSlugTablet'] : '';
 			$mobile_size_slug = ! empty( $block['attrs']['sizeSlugMobile'] ) ? $block['attrs']['sizeSlugMobile'] : '';
 			$tablet_dest_url  = '';
@@ -492,6 +499,10 @@ if ( ! class_exists( 'ST_Replace_Blocks_Images' ) ) :
 				}
 				$block['innerContent'][ $key ] = str_replace( $block['attrs']['url'], $attachment['url'], $block['innerContent'][ $key ] );
 
+				if ( ! empty( $alt_text ) ) {
+					$block['innerContent'][ $key ] = str_replace( 'alt=""', 'alt="' . esc_attr( $alt_text ) . '"', $block['innerContent'][ $key ] );
+				}
+
 				if ( isset( $block['attrs']['urlTablet'] ) && ! empty( $block['attrs']['urlTablet'] ) ) {
 					$block['innerContent'][ $key ] = str_replace( $block['attrs']['urlTablet'], $tablet_dest_url, $block['innerContent'][ $key ] );
 				}
@@ -504,6 +515,7 @@ if ( ! class_exists( 'ST_Replace_Blocks_Images' ) ) :
 
 			$block['attrs']['url'] = $attachment['url'];
 			$block['attrs']['id']  = $attachment['id'];
+			$block['attrs']['alt'] = $attachment['alt'];
 
 			ST_Replace_Images::get_instance()->increment_image_index();
 
