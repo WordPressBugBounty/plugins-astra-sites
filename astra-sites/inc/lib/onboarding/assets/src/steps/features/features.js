@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useStateValue } from '../../store/store';
 const { imageDir } = starterTemplates;
 import {
@@ -21,7 +21,10 @@ import {
 	ArrowTrendingUpIcon,
 } from '@heroicons/react/24/outline';
 import { classNames } from '../../utils/functions';
-import { checkRequiredPlugins } from '../import-site/import-utils';
+import {
+	checkRequiredPlugins,
+	getFeaturePluginList,
+} from '../import-site/import-utils';
 import Container from './container';
 import Button from './button';
 import Dropdown from './dropdown';
@@ -39,6 +42,33 @@ const ICON_SET = {
 	envelope: EnvelopeIcon,
 	calendar: CalendarIcon,
 	'arrow-trending-up': ArrowTrendingUpIcon,
+};
+
+// Plugin icon path mapper - O(1) lookup performance.
+const PLUGIN_ICON_MAP = {
+	'astra-addon': 'astra.svg',
+	'beaver-builder': 'beaver-builder.svg',
+	brizy: 'brizy.svg',
+	cartflows: 'cartflows.svg',
+	elementor: 'elementor.svg',
+	'header-footer-elementor': 'uae.png',
+	latepoint: 'latepoint.svg',
+	'presto-player': 'presto-player.svg',
+	'spectra-pro': 'spectra.svg',
+	surecart: 'surecart-icon.svg',
+	sureforms: 'sureforms.svg',
+	suremails: 'suremails.svg',
+	surerank: 'surerank.svg',
+	suretriggers: 'ottokit.png',
+	'ultimate-addons-for-gutenberg': 'spectra.svg',
+	'ultimate-elementor': 'uae.png',
+	'variation-swatches-woo': 'variation-swatches-woo.svg',
+	woocommerce: 'woocommerce-icon.svg',
+	'woocommerce-payments': 'woopayments.png',
+	'woo-cart-abandonment-recovery': 'cartflows-ca.png',
+	wpforms: 'wpforms.svg',
+	'wpforms-lite': 'wpforms.svg',
+	'wp-live-chat-support': 'wp-live-chat-support.png',
 };
 
 const getPluginProps = ( id ) => {
@@ -168,12 +198,12 @@ const EcommerceOptions = ( {
 const ClassicFeatures = () => {
 	const [
 		{
-			requiredPlugins,
 			siteFeatures,
 			currentIndex,
 			selectedTemplateID,
 			isEcommerce,
 			selectedEcommercePlugin,
+			templateResponse,
 		},
 		dispatch,
 	] = useStateValue();
@@ -184,19 +214,21 @@ const ClassicFeatures = () => {
 		'woocommerce',
 	] );
 
+	// Template required plugins list.
+	const templateRequiredPluginsList = useMemo( () => {
+		return ( templateResponse?.[ 'required-plugins' ] ?? [] )?.map(
+			( plugin ) => ( {
+				...plugin,
+				compulsory: true,
+			} )
+		);
+	}, [ templateResponse ] );
+
 	useEffect( () => {
 		if ( isEcommerce ) {
-			const allSlugs = [
-				...( requiredPlugins?.required_plugins?.active?.map(
-					( plugin ) => plugin.slug
-				) || [] ),
-				...( requiredPlugins?.required_plugins?.inactive?.map(
-					( plugin ) => plugin.slug
-				) || [] ),
-				...( requiredPlugins?.required_plugins?.notinstalled?.map(
-					( plugin ) => plugin.slug
-				) || [] ),
-			];
+			const allSlugs =
+				templateRequiredPluginsList?.map( ( plugin ) => plugin.slug ) ||
+				[];
 
 			setEcomSupported( [ 'surecart', 'woocommerce' ] );
 
@@ -234,7 +266,12 @@ const ClassicFeatures = () => {
 				siteFeatures: updatedFeatures,
 			} );
 		}
-	}, [ selectedTemplateID, isEcommerce, selectedEcommercePlugin ] );
+	}, [
+		selectedTemplateID,
+		isEcommerce,
+		selectedEcommercePlugin,
+		templateRequiredPluginsList,
+	] );
 
 	const handleToggleFeature = ( featureId ) => () => {
 		const updatedFeatures = siteFeatures.map( ( feature ) => {
@@ -279,6 +316,23 @@ const ClassicFeatures = () => {
 			currentIndex: currentIndex + 1,
 		} );
 	};
+
+	// Generate the list of plugins required for the selected features along with the template required plugins.
+	const featurePluginsList = useMemo( () => {
+		const enabledFeatureIds =
+			siteFeatures
+				?.filter( ( feature ) => feature.enabled )
+				.map( ( feature ) => feature.id ) ?? [];
+
+		return [
+			...templateRequiredPluginsList,
+			...( getFeaturePluginList(
+				enabledFeatureIds,
+				selectedEcom,
+				templateRequiredPluginsList?.map( ( plugin ) => plugin.slug )
+			) ?? [] ),
+		];
+	}, [ templateRequiredPluginsList, siteFeatures, selectedEcom ] );
 
 	return (
 		<Container className="grid grid-cols-1 gap-8 auto-rows-auto !max-w-[55rem] w-full mx-auto">
@@ -360,6 +414,50 @@ const ClassicFeatures = () => {
 					);
 				} ) }
 			</div>
+
+			{ !! featurePluginsList?.length && (
+				<div className="flex flex-col gap-3 p-4 bg-background-secondary border border-solid border-border-subtle rounded-lg text-left">
+					<p className="text-sm !font-semibold">
+						{ __(
+							'The following plugins will be installed and activated for you:',
+							'astra-sites'
+						) }
+					</p>
+
+					<div className="flex gap-3 flex-wrap">
+						{ featurePluginsList?.map(
+							( { compulsory, name, slug } ) => (
+								<div
+									key={ slug }
+									className="flex items-center gap-2 bg-white border border-solid border-button-disabled rounded p-2 shadow-sm cursor-pointer"
+								>
+									{ PLUGIN_ICON_MAP?.[ slug ] && (
+										<img
+											className="w-5 h-5"
+											src={ `${ imageDir }${ PLUGIN_ICON_MAP[ slug ] }` }
+											alt={ name }
+										/>
+									) }
+									<span className="text-sm font-medium">
+										{ name }
+										{ compulsory && (
+											<span className="text-alert-error">
+												{ ' *' }
+											</span>
+										) }
+									</span>
+								</div>
+							)
+						) }
+					</div>
+
+					<p className="text-xs">
+						<span className="text-alert-error">{ '* ' }</span>
+						{ __( 'Required Plugins', 'astra-sites' ) }
+					</p>
+				</div>
+			) }
+
 			<div className="flex justify-between items-center mt-2">
 				<div className="flex gap-4 max-md:flex-col flex-1">
 					<Button

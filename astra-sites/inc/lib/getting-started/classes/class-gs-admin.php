@@ -78,7 +78,7 @@ class GS_Admin {
 		if ( current_user_can( 'manage_options' ) ) {
 			$parent_slug   = 'getting-started';
 			$capability    = 'manage_options';
-			$menu_priority = apply_filters( 'getting_started_menu_priority', ! defined( 'ASTRA_THEME_VERSION' ) ? 40 : 3 );
+			$menu_priority = apply_filters( 'getting_started_menu_priority', 1 );
 
 			add_menu_page(
 				'Finish Setup',
@@ -240,18 +240,6 @@ class GS_Admin {
 	 * @return string
 	 */
 	public function get_title() {
-		$current_user = get_user_by( 'id', get_current_user_id() );
-		if ( ! $current_user ) {
-			return '';
-		}
-		$user_display_name = $current_user->display_name;
-		if ( ! empty( $user_display_name ) ) {
-			return sprintf(
-				// Translators: %s: User display name.
-				__( 'Hi %s 👋', 'astra-sites' ),
-				$user_display_name
-			);
-		}
 		return __( 'Hi there 👋', 'astra-sites' );
 	}
 

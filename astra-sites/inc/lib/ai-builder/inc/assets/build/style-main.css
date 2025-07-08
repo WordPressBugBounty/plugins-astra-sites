@@ -2430,6 +2430,9 @@ select {
 }.text-alert-error {
   --tw-text-opacity: 1;
   color: rgb(var(--zip-alert-error) / var(--tw-text-opacity));
+}.text-alert-error-text {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
 }.text-alert-info {
   --tw-text-opacity: 1;
   color: rgb(59 130 246 / var(--tw-text-opacity));
@@ -3018,10 +3021,6 @@ select {
 
   .xs\:flex-row {
     flex-direction: row;
-  }
-
-  .xs\:flex-col {
-    flex-direction: column;
   }
 }@media (min-width: 640px) {
 

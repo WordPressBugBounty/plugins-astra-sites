@@ -134,7 +134,7 @@ const SignupLoginModal = () => {
 							</li>
 						</ul>
 					</div>
-					<div className="flex items-center gap-3 justify-center mt-9 xs:flex-col">
+					<div className="flex items-center gap-3 justify-center mt-9 flex-col">
 						<Button
 							type="submit"
 							variant="primary"

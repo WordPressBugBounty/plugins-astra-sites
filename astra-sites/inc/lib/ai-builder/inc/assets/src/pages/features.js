@@ -29,11 +29,41 @@ import Heading from '../components/heading';
 import Dropdown from '../components/dropdown';
 import AISitesNotice from '../components/ai-sites-notice';
 import { WooCommerceIcon, SureCartIcon } from '../ui/icons';
+import { getFeaturePluginList } from '../utils/import-site/import-utils';
 
 const fetchStatus = {
 	fetching: 'fetching',
 	fetched: 'fetched',
 	error: 'error',
+};
+
+const { imageDir } = aiBuilderVars;
+
+// Plugin icon path mapper - O(1) lookup performance.
+const PLUGIN_ICON_MAP = {
+	'astra-addon': 'astra.svg',
+	'beaver-builder': 'beaver-builder.svg',
+	brizy: 'brizy.svg',
+	cartflows: 'cartflows.svg',
+	elementor: 'elementor.svg',
+	'header-footer-elementor': 'uae.png',
+	latepoint: 'latepoint.svg',
+	'presto-player': 'presto-player.svg',
+	'spectra-pro': 'spectra.svg',
+	surecart: 'surecart-icon.svg',
+	sureforms: 'sureforms.svg',
+	suremails: 'suremails.svg',
+	surerank: 'surerank.svg',
+	suretriggers: 'ottokit.png',
+	'ultimate-addons-for-gutenberg': 'spectra.svg',
+	'ultimate-elementor': 'uae.png',
+	'variation-swatches-woo': 'variation-swatches-woo.svg',
+	woocommerce: 'woocommerce-icon.svg',
+	'woocommerce-payments': 'woopayments.png',
+	'woo-cart-abandonment-recovery': 'cartflows-ca.png',
+	wpforms: 'wpforms.svg',
+	'wpforms-lite': 'wpforms.svg',
+	'wp-live-chat-support': 'wp-live-chat-support.png',
 };
 
 const getPluginProps = ( id ) => {
@@ -171,6 +201,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 			selectedTemplate,
 			templateList,
 			selectedTemplateIsPremium,
+			pageBuilder,
 		},
 	} = useSelect( ( select ) => {
 		const { getAIStepData } = select( STORE_KEY );
@@ -259,6 +290,40 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 		const startBuilding = handleClickStartBuilding( skipFeature );
 		startBuilding();
 	};
+
+	const featurePluginsList = useMemo( () => {
+		const enabledFeatureIds =
+			siteFeatures
+				?.filter( ( feature ) => feature.enabled )
+				.map( ( feature ) => feature.id ) ?? [];
+
+		const builderPlugin = {
+			name: pageBuilder === 'elementor' ? 'Elementor' : 'Spectra',
+			slug:
+				pageBuilder === 'elementor'
+					? 'elementor'
+					: 'ultimate-addons-for-gutenberg',
+			compulsory: true,
+		};
+
+		const formPlugin = {
+			name: 'SureForms',
+			slug: 'sureforms',
+			compulsory: siteFeatures?.find(
+				( feature ) => feature.id === 'contact-form'
+			)?.compulsory,
+		};
+
+		return [
+			builderPlugin,
+			formPlugin,
+			...( getFeaturePluginList(
+				enabledFeatureIds,
+				selectedEcom,
+				siteFeatures
+			) ?? [] ),
+		];
+	}, [ isFetchingStatus, siteFeatures, selectedEcom ] );
 
 	return (
 		<Container className="grid grid-cols-1 gap-[26px] auto-rows-auto !max-w-[55rem] w-full mx-auto">
@@ -385,6 +450,52 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 					</p>
 				</div>
 			) }
+
+			{ isFetchingStatus === fetchStatus.fetched &&
+				featurePluginsList?.length && (
+					<div className="flex flex-col gap-3 p-4 bg-background-secondary border border-solid border-border-primary rounded-lg text-left">
+						<p className="text-zip-app-heading text-sm !font-semibold">
+							{ __(
+								'The following plugins will be installed and activated for you:',
+								'ai-builder'
+							) }
+						</p>
+
+						<div className="flex gap-3 flex-wrap">
+							{ featurePluginsList?.map(
+								( { compulsory, name, slug } ) => (
+									<div
+										key={ slug }
+										className="flex items-center gap-2 bg-white border border-solid border-button-disabled rounded p-2 shadow-sm cursor-pointer"
+									>
+										{ PLUGIN_ICON_MAP?.[ slug ] && (
+											<img
+												className="w-5 h-5"
+												src={ `${ imageDir }${ PLUGIN_ICON_MAP[ slug ] }` }
+												alt={ name }
+											/>
+										) }
+										<span className="text-sm font-medium">
+											{ name }
+											{ compulsory && (
+												<span className="text-alert-error">
+													{ ' *' }
+												</span>
+											) }
+										</span>
+									</div>
+								)
+							) }
+						</div>
+
+						<p className="text-xs">
+							<span className="text-alert-error-text">
+								{ '* ' }
+							</span>
+							{ __( 'Required Plugins', 'ai-builder' ) }
+						</p>
+					</div>
+				) }
 
 			<hr className="!border-border-tertiary border-b-0 w-full" />
 
