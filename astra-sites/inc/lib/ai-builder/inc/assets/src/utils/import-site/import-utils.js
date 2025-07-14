@@ -296,7 +296,7 @@ export const getFeaturePluginList = (
 				break;
 			case 'live-chat':
 				requiredPlugins.push( {
-					name: 'WP Live Chat Support',
+					name: '3CX',
 					slug: 'wp-live-chat-support',
 					compulsory: siteFeatures?.find(
 						( f ) => f.id === 'live-chat'

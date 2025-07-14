@@ -403,9 +403,9 @@ const reducer = ( state = initialState, action ) => {
 								templateData?.features?.[ feature.id ] ===
 								'yes';
 							return {
-								...feature,
 								enabled: defaultValue,
 								compulsory: defaultValue,
+								...feature,
 							};
 						} )
 					),

@@ -324,7 +324,7 @@ export function getFeaturePluginList(
 				break;
 			case 'live-chat':
 				requiredPlugins.push( {
-					name: 'WP Live Chat Support',
+					name: '3CX',
 					slug: 'wp-live-chat-support',
 					init: 'wp-live-chat-support/wp-live-chat-support.php',
 				} );

@@ -29,41 +29,14 @@ import Heading from '../components/heading';
 import Dropdown from '../components/dropdown';
 import AISitesNotice from '../components/ai-sites-notice';
 import { WooCommerceIcon, SureCartIcon } from '../ui/icons';
+import CreditConfirmModal from '../components/CreditConfirmModal';
 import { getFeaturePluginList } from '../utils/import-site/import-utils';
+import RequiredPlugins from '../components/RequiredPlugins';
 
 const fetchStatus = {
 	fetching: 'fetching',
 	fetched: 'fetched',
 	error: 'error',
-};
-
-const { imageDir } = aiBuilderVars;
-
-// Plugin icon path mapper - O(1) lookup performance.
-const PLUGIN_ICON_MAP = {
-	'astra-addon': 'astra.svg',
-	'beaver-builder': 'beaver-builder.svg',
-	brizy: 'brizy.svg',
-	cartflows: 'cartflows.svg',
-	elementor: 'elementor.svg',
-	'header-footer-elementor': 'uae.png',
-	latepoint: 'latepoint.svg',
-	'presto-player': 'presto-player.svg',
-	'spectra-pro': 'spectra.svg',
-	surecart: 'surecart-icon.svg',
-	sureforms: 'sureforms.svg',
-	suremails: 'suremails.svg',
-	surerank: 'surerank.svg',
-	suretriggers: 'ottokit.png',
-	'ultimate-addons-for-gutenberg': 'spectra.svg',
-	'ultimate-elementor': 'uae.png',
-	'variation-swatches-woo': 'variation-swatches-woo.svg',
-	woocommerce: 'woocommerce-icon.svg',
-	'woocommerce-payments': 'woopayments.png',
-	'woo-cart-abandonment-recovery': 'cartflows-ca.png',
-	wpforms: 'wpforms.svg',
-	'wpforms-lite': 'wpforms.svg',
-	'wp-live-chat-support': 'wp-live-chat-support.png',
 };
 
 const getPluginProps = ( id ) => {
@@ -196,6 +169,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 			loadingNextStep: getLoadingNextStep(),
 		};
 	}, [] );
+
 	const {
 		stepsData: {
 			selectedTemplate,
@@ -256,11 +230,27 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 		if ( feature.compulsory && feature.enabled ) {
 			return;
 		}
+
 		setSiteFeatures( feature.id );
+		storeSiteFeatures(
+			siteFeatures.map( ( f ) => {
+				if ( f.id === feature.id ) {
+					return {
+						...f,
+						enabled: ! f.enabled,
+					};
+				}
+				return f;
+			} )
+		);
 	};
 
 	useEffect( () => {
-		if ( isFetchingStatus === fetchStatus.fetching ) {
+		if ( siteFeatures?.length > 0 ) {
+			// we already have features
+			storeSiteFeatures( siteFeatures );
+			setIsFetchingStatus( fetchStatus.fetched );
+		} else if ( isFetchingStatus === fetchStatus.fetching ) {
 			fetchSiteFeatures();
 		}
 	}, [] );
@@ -288,7 +278,27 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 
 		// get the start building function from the parent component
 		const startBuilding = handleClickStartBuilding( skipFeature );
-		startBuilding();
+
+		if ( aiBuilderVars?.hideCreditsWarningModal ) {
+			startBuilding();
+			return;
+		}
+
+		const isPlanEligibleForConfirmation = [ 'free', 'hobby' ].includes(
+			aiBuilderVars?.zip_plans?.active_plan?.slug
+		);
+
+		const hasRemainingCredits =
+			aiBuilderVars?.zip_plans?.plan_data?.remaining?.ai_sites_count > 0;
+
+		if ( isPlanEligibleForConfirmation && hasRemainingCredits ) {
+			CreditConfirmModal.show( {
+				onConfirm: startBuilding,
+			} );
+		} else {
+			// user doesn't have sufficient credits or confirmation modal is not needed, startBuilding will show upgrade modal if needed
+			startBuilding();
+		}
 	};
 
 	const featurePluginsList = useMemo( () => {
@@ -326,189 +336,154 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 	}, [ isFetchingStatus, siteFeatures, selectedEcom ] );
 
 	return (
-		<Container className="grid grid-cols-1 gap-[26px] auto-rows-auto !max-w-[55rem] w-full mx-auto">
-			<AISitesNotice />
-			<div className="space-y-4">
-				<Heading
-					heading={ __( 'Select features', 'ai-builder' ) }
-					subHeading={ __(
-						'Select the features you want on this website',
-						'ai-builder'
-					) }
-					className="leading-9"
-					subClassName="!mt-2"
-				/>
-			</div>
-			{ /* Feature Cards */ }
+		<>
+			<Container className="grid grid-cols-1 gap-[26px] auto-rows-auto !max-w-[55rem] w-full mx-auto">
+				<AISitesNotice />
+				<div className="space-y-4">
+					<Heading
+						heading={ __( 'Select features', 'ai-builder' ) }
+						subHeading={ __(
+							'Select the features you want on this website',
+							'ai-builder'
+						) }
+						className="leading-9"
+						subClassName="!mt-2"
+					/>
+				</div>
+				{ /* Feature Cards */ }
 
-			<div className="grid grid-cols-1 lg:grid-cols-2 auto-rows-auto gap-7 w-full">
-				{ isFetchingStatus === fetchStatus.fetched &&
-					listOfFeatures.map( ( feature ) => {
-						const isEcommerce = feature.id === 'ecommerce';
+				<div className="grid grid-cols-1 lg:grid-cols-2 auto-rows-auto gap-7 w-full">
+					{ isFetchingStatus === fetchStatus.fetched &&
+						listOfFeatures.map( ( feature ) => {
+							const isEcommerce = feature.id === 'ecommerce';
 
-						const FeatureIcon = ICON_SET?.[ feature.icon ];
-						return (
-							<div
-								key={ feature.id }
-								className={ classNames(
-									'relative py-4 pl-4 pr-5 rounded-md shadow-sm border border-solid bg-white border-button-disabled transition-colors duration-150 ease-in-out',
-									feature.enabled && 'border-accent-st',
-									'cursor-pointer'
-								) }
-								data-disabled={ loadingNextStep }
-								onClick={ handleToggleFeature( feature ) }
-							>
-								<div className="flex items-start justify-start gap-3">
-									<div className="p-0.5 shrink-0">
-										{ FeatureIcon && (
-											<FeatureIcon className="text-zip-body-text w-7 h-7" />
-										) }
-										{ ! FeatureIcon && (
-											<WrenchIcon className="text-zip-body-text w-7 h-7" />
-										) }
-									</div>
-									<div className="space-y-1 mr-0 w-full">
-										<p className="p-0 m-0 !text-base !font-semibold !text-zip-app-heading">
-											{ feature.title }
-										</p>
-										<div className="flex justify-between items-start w-full">
-											<p className="p-0 m-0 !text-sm !font-normal !text-zip-body-text">
-												{ feature.description }
+							const FeatureIcon = ICON_SET?.[ feature.icon ];
+							return (
+								<div
+									key={ feature.id }
+									className={ classNames(
+										'relative py-4 pl-4 pr-5 rounded-md shadow-sm border border-solid bg-white border-button-disabled transition-colors duration-150 ease-in-out',
+										feature.enabled && 'border-accent-st',
+										'cursor-pointer'
+									) }
+									data-disabled={ loadingNextStep }
+									onClick={ handleToggleFeature( feature ) }
+								>
+									<div className="flex items-start justify-start gap-3">
+										<div className="p-0.5 shrink-0">
+											{ FeatureIcon && (
+												<FeatureIcon className="text-zip-body-text w-7 h-7" />
+											) }
+											{ ! FeatureIcon && (
+												<WrenchIcon className="text-zip-body-text w-7 h-7" />
+											) }
+										</div>
+										<div className="space-y-1 mr-0 w-full">
+											<p className="p-0 m-0 !text-base !font-semibold !text-zip-app-heading">
+												{ feature.title }
 											</p>
-											<div
-												onClick={ ( e ) =>
-													e.stopPropagation()
-												}
-											>
-												{ isEcommerce && (
-													<EcommerceOptions
-														ecomSupported={
-															ecomSupported
-														}
-														selectedEcom={
-															selectedEcom
-														}
-														onChange={
-															setSelectedEcom
-														}
-													/>
-												) }
+											<div className="flex justify-between items-start w-full">
+												<p className="p-0 m-0 !text-sm !font-normal !text-zip-body-text">
+													{ feature.description }
+												</p>
+												<div
+													onClick={ ( e ) =>
+														e.stopPropagation()
+													}
+												>
+													{ isEcommerce && (
+														<EcommerceOptions
+															ecomSupported={
+																ecomSupported
+															}
+															selectedEcom={
+																selectedEcom
+															}
+															onChange={
+																setSelectedEcom
+															}
+														/>
+													) }
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								{ /* Check mark */ }
+									{ /* Check mark */ }
 
-								<span
-									className={ classNames(
-										'inline-flex absolute top-4 right-4 p-[0.15rem] border border-solid border-zip-app-inactive-icon rounded',
-										feature.enabled &&
-											'border-accent-st bg-accent-st',
-										feature.compulsory &&
-											'border-button-disabled bg-button-disabled'
-									) }
-								>
-									<CheckIcon
-										className="w-2.5 h-2.5 text-white"
-										strokeWidth={ 4 }
-									/>
-								</span>
-							</div>
-						);
-					} ) }
-				{ /* Skeleton */ }
-				{ isFetchingStatus === fetchStatus.fetching &&
-					Array.from( {
-						length: Object.keys( ICON_SET ).length,
-					} ).map( ( _, index ) => (
-						<div
-							key={ index }
-							className="relative py-4 pl-4 pr-5 rounded-md shadow-sm border border-solid bg-white border-button-disabled"
-						>
-							<div className="flex items-start justify-start gap-3">
-								<div className="p-0.5 shrink-0">
-									<div className="w-7 h-7 bg-gray-200 rounded animate-pulse" />
+									<span
+										className={ classNames(
+											'inline-flex absolute top-4 right-4 p-[0.15rem] border border-solid border-zip-app-inactive-icon rounded',
+											feature.enabled &&
+												'border-accent-st bg-accent-st',
+											feature.compulsory &&
+												'border-button-disabled bg-button-disabled'
+										) }
+									>
+										<CheckIcon
+											className="w-2.5 h-2.5 text-white"
+											strokeWidth={ 4 }
+										/>
+									</span>
 								</div>
-								<div className="space-y-1 w-full">
-									<div className="w-3/4 h-6 bg-gray-200 rounded animate-pulse" />
-									<div className="w-1/2 h-5 bg-gray-200 rounded animate-pulse" />
+							);
+						} ) }
+					{ /* Skeleton */ }
+					{ isFetchingStatus === fetchStatus.fetching &&
+						Array.from( {
+							length: Object.keys( ICON_SET ).length,
+						} ).map( ( _, index ) => (
+							<div
+								key={ index }
+								className="relative py-4 pl-4 pr-5 rounded-md shadow-sm border border-solid bg-white border-button-disabled"
+							>
+								<div className="flex items-start justify-start gap-3">
+									<div className="p-0.5 shrink-0">
+										<div className="w-7 h-7 bg-gray-200 rounded animate-pulse" />
+									</div>
+									<div className="space-y-1 w-full">
+										<div className="w-3/4 h-6 bg-gray-200 rounded animate-pulse" />
+										<div className="w-1/2 h-5 bg-gray-200 rounded animate-pulse" />
+									</div>
 								</div>
+								<span className="inline-flex absolute top-4 right-4 w-4 h-4 bg-gray-200 animate-pulse rounded" />
+								<div className="absolute inset-0 cursor-pointer" />
 							</div>
-							<span className="inline-flex absolute top-4 right-4 w-4 h-4 bg-gray-200 animate-pulse rounded" />
-							<div className="absolute inset-0 cursor-pointer" />
-						</div>
-					) ) }
-			</div>
-			{ /* Error Message */ }
-			{ isFetchingStatus === fetchStatus.error && (
-				<div className="flex items-center justify-center w-full px-5 py-5">
-					<p className="text-secondary-text text-center px-10 py-5 border-2 border-dashed border-border-primary rounded-md">
-						{ __(
-							'Something went wrong. Please try again later.',
-							'ai-builder'
-						) }
-					</p>
+						) ) }
 				</div>
-			) }
-
-			{ isFetchingStatus === fetchStatus.fetched &&
-				featurePluginsList?.length && (
-					<div className="flex flex-col gap-3 p-4 bg-background-secondary border border-solid border-border-primary rounded-lg text-left">
-						<p className="text-zip-app-heading text-sm !font-semibold">
+				{ /* Error Message */ }
+				{ isFetchingStatus === fetchStatus.error && (
+					<div className="flex items-center justify-center w-full px-5 py-5">
+						<p className="text-secondary-text text-center px-10 py-5 border-2 border-dashed border-border-primary rounded-md">
 							{ __(
-								'The following plugins will be installed and activated for you:',
+								'Something went wrong. Please try again later.',
 								'ai-builder'
 							) }
-						</p>
-
-						<div className="flex gap-3 flex-wrap">
-							{ featurePluginsList?.map(
-								( { compulsory, name, slug } ) => (
-									<div
-										key={ slug }
-										className="flex items-center gap-2 bg-white border border-solid border-button-disabled rounded p-2 shadow-sm cursor-pointer"
-									>
-										{ PLUGIN_ICON_MAP?.[ slug ] && (
-											<img
-												className="w-5 h-5"
-												src={ `${ imageDir }${ PLUGIN_ICON_MAP[ slug ] }` }
-												alt={ name }
-											/>
-										) }
-										<span className="text-sm font-medium">
-											{ name }
-											{ compulsory && (
-												<span className="text-alert-error">
-													{ ' *' }
-												</span>
-											) }
-										</span>
-									</div>
-								)
-							) }
-						</div>
-
-						<p className="text-xs">
-							<span className="text-alert-error-text">
-								{ '* ' }
-							</span>
-							{ __( 'Required Plugins', 'ai-builder' ) }
 						</p>
 					</div>
 				) }
 
-			<hr className="!border-border-tertiary border-b-0 w-full" />
+				<hr className="!border-border-tertiary border-b-0 w-full" />
 
-			{ /* Navigation buttons */ }
-			<NavigationButtons
-				continueButtonText={ __( 'Start Building', 'ai-builder' ) }
-				onClickPrevious={ previousStep }
-				onClickContinue={ handleClickNext }
-				onClickSkip={ () => handleClickNext( { skipFeature: true } ) }
-				loading={ isInProgress }
-				skipButtonText={ __( 'Skip & Start Building', 'ai-builder' ) }
-			/>
-		</Container>
+				{ /* Navigation buttons */ }
+				<NavigationButtons
+					continueButtonText={ __( 'Start Building', 'ai-builder' ) }
+					onClickPrevious={ previousStep }
+					onClickContinue={ handleClickNext }
+					onClickSkip={ () =>
+						handleClickNext( { skipFeature: true } )
+					}
+					loading={ isInProgress }
+					skipButtonText={ __(
+						'Skip & Start Building',
+						'ai-builder'
+					) }
+				/>
+			</Container>
+
+			{ isFetchingStatus === fetchStatus.fetched && (
+				<RequiredPlugins pluginsList={ featurePluginsList } />
+			) }
+		</>
 	);
 };
 

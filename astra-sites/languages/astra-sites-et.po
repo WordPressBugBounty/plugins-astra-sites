@@ -13,7 +13,7 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: astra-sites.php
-#: astra-sites.php:123
+#: astra-sites.php:128
 #: inc/classes/class-astra-sites-nps-notice.php:80
 #: inc/classes/class-astra-sites.php:2646
 #: inc/lib/onboarding/class-onboarding-loader.php:105
@@ -66,6 +66,7 @@ msgstr "Kasutuse jälgimine"
 
 #. translators: %s Product title
 #: admin/bsf-analytics/class-bsf-analytics.php:458
+#, php-format
 msgid "Allow %s products to track non-sensitive usage tracking data."
 msgstr "Luba %s toodetel jälgida mitte-tundlikke kasutusandmeid."
 
@@ -101,6 +102,7 @@ msgstr "Teie veebisaidil oli viga."
 #. translators: %1$s refers to the plugin name
 #: inc/classes/class-astra-sites-importer-log.php:102
 #: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:78
+#, php-format
 msgid "Required File Permissions to import the templates from %s are missing."
 msgstr "Nõutavad failiload %s mallide importimiseks puuduvad."
 
@@ -201,6 +203,7 @@ msgstr "Teil ei ole lubatud seda toimingut teha"
 
 #. Translators: %s is WP Forms URL.
 #: inc/classes/class-astra-sites-importer.php:342
+#, php-format
 msgid "Invalid WPform Request URL - %s"
 msgstr "Kehtetu WPformi päringu URL - %s"
 
@@ -248,6 +251,7 @@ msgstr "Hindame teie panust. Kuidas saaksime teie kogemust parandada?"
 
 #. translators: %1$s is the admin page URL, %2$s is product name.
 #: inc/classes/class-astra-sites-page.php:129
+#, php-format
 msgid "Thank you for choosing %1$s! Check the library of <a class=\"astra-sites-getting-started-btn\" href=\"%2$s\">ready starter templates here »</a>"
 msgstr "Aitäh, et valisite %1$s! Vaadake <a class=\"astra-sites-getting-started-btn\" href=\"%2$s\">valmis stardimallide raamatukogu siit »</a>"
 
@@ -313,6 +317,7 @@ msgstr "Brizy"
 
 #. translators: 1: The number of years in an interval of time.
 #: inc/classes/class-astra-sites-page.php:522
+#, php-format
 msgid "%s year"
 msgid_plural "%s years"
 msgstr[0] "%s aasta"
@@ -320,6 +325,7 @@ msgstr[1] ""
 
 #. translators: 1: The number of months in an interval of time.
 #: inc/classes/class-astra-sites-page.php:524
+#, php-format
 msgid "%s month"
 msgid_plural "%s months"
 msgstr[0] "%s kuu"
@@ -327,6 +333,7 @@ msgstr[1] ""
 
 #. translators: 1: The number of weeks in an interval of time.
 #: inc/classes/class-astra-sites-page.php:526
+#, php-format
 msgid "%s week"
 msgid_plural "%s weeks"
 msgstr[0] "%s nädal"
@@ -334,6 +341,7 @@ msgstr[1] ""
 
 #. translators: 1: The number of days in an interval of time.
 #: inc/classes/class-astra-sites-page.php:528
+#, php-format
 msgid "%s day"
 msgid_plural "%s days"
 msgstr[0] "%s päev"
@@ -341,6 +349,7 @@ msgstr[1] ""
 
 #. translators: 1: The number of hours in an interval of time.
 #: inc/classes/class-astra-sites-page.php:530
+#, php-format
 msgid "%s hour"
 msgid_plural "%s hours"
 msgstr[0] "%s tund"
@@ -348,6 +357,7 @@ msgstr[1] ""
 
 #. translators: 1: The number of minutes in an interval of time.
 #: inc/classes/class-astra-sites-page.php:532
+#, php-format
 msgid "%s minute"
 msgid_plural "%s minutes"
 msgstr[0] "%s minut"
@@ -355,6 +365,7 @@ msgstr[1] ""
 
 #. translators: 1: The number of seconds in an interval of time.
 #: inc/classes/class-astra-sites-page.php:534
+#, php-format
 msgid "%s second"
 msgid_plural "%s seconds"
 msgstr[0] "%s sekund"
@@ -374,11 +385,13 @@ msgstr "VIGA! Croni ajakavad on keelatud, kui konstant ALTERNATE_WP_CRON on seat
 
 #. translators: 1: The HTTP response code.
 #: inc/classes/class-astra-sites-page.php:632
+#, php-format
 msgid "Unexpected HTTP response code: %s"
 msgstr "Ootamatu HTTP vastuse kood: %s"
 
 #. translators: %1$s product name
 #: inc/classes/class-astra-sites-white-label.php:240
+#, php-format
 msgid "%1$s Branding"
 msgstr "%1$s Bränding"
 
@@ -397,6 +410,7 @@ msgstr "Kehtetu saidi ID,"
 
 #. Translators: %s is the error message.
 #: inc/classes/class-astra-sites-wp-cli.php:176
+#, php-format
 msgid "Site Import failed due to error: %s"
 msgstr "Saidi import ebaõnnestus vea tõttu: %s"
 
@@ -431,6 +445,7 @@ msgstr "Vidinate importimine.."
 
 #. translators: %s is the site URL.
 #: inc/classes/class-astra-sites-wp-cli.php:303
+#, php-format
 msgid ""
 "Site Imported Successfully!\n"
 "Visit: %s"
@@ -442,6 +457,7 @@ msgstr "Vigane XML-i URL."
 
 #. translators: %s is the XML file URL.
 #: inc/classes/class-astra-sites-wp-cli.php:343
+#, php-format
 msgid "Downloading %s"
 msgstr "Allalaadimine %s"
 
@@ -451,6 +467,7 @@ msgstr "WXR-i importimine.."
 
 #. translators: %s is error message.
 #: inc/classes/class-astra-sites-wp-cli.php:351
+#, php-format
 msgid "WXR file Download Failed. Error %s"
 msgstr "WXR-faili allalaadimine ebaõnnestus. Viga %s"
 
@@ -480,11 +497,13 @@ msgstr "Palun lisage kehtiv parameeter."
 
 #. translators: %s is the current page builder name.
 #: inc/classes/class-astra-sites-wp-cli.php:511
+#, php-format
 msgid "Default page builder is \"%s\"."
 msgstr "Vaikimisi lehe koostaja on \"%s\"."
 
 #. translators: %s is the page builder name.
 #: inc/classes/class-astra-sites-wp-cli.php:519
+#, php-format
 msgid "\"%s\" is set as default page builder."
 msgstr "\"%s\" on määratud vaikimisi lehe koostajaks."
 
@@ -518,11 +537,13 @@ msgstr "Seda saidi kategooriat ei eksisteeri. Palun proovige teist saidi kategoo
 
 #. Translators: %s Plugin Name.
 #: inc/classes/class-astra-sites.php:256
+#, php-format
 msgid "%s: XMLReader extension is missing! To import templates, please get in touch with your hosting provider to enable this extension."
 msgstr "%s: XMLReader laiend on puudu! Mallide importimiseks võtke ühendust oma majutusteenuse pakkujaga, et see laiend lubada."
 
 #. translators: %d is the Template ID.
 #: inc/classes/class-astra-sites.php:671
+#, php-format
 msgid "Invalid Template ID - %d"
 msgstr "Kehtetu malli ID - %d"
 
@@ -545,18 +566,21 @@ msgstr "Esitatud API URL on tühi! Palun proovige uuesti!"
 
 #. Translators: %s is API URL.
 #: inc/classes/class-astra-sites.php:837
+#, php-format
 msgid "Invalid API Request URL - %s"
 msgstr "Kehtetu API päringu URL - %s"
 
 #. translators: %s Error Message
 #: inc/classes/class-astra-sites.php:860
 #: inc/classes/class-astra-sites.php:976
+#, php-format
 msgid "API Request could not be performed - %s"
 msgstr "API päringut ei saanud teostada - %s"
 
 #. translators: %s Error Message
 #: inc/classes/class-astra-sites.php:865
 #: inc/classes/class-astra-sites.php:981
+#, php-format
 msgid "API Request has failed - %s"
 msgstr "API päring ebaõnnestus - %s"
 
@@ -568,6 +592,7 @@ msgstr "Sisemine serveri viga."
 #. translators: %s IP address.
 #: inc/classes/class-astra-sites.php:901
 #: inc/classes/class-astra-sites.php:1016
+#, php-format
 msgid "Client IP: %1$s </br> Error code: %2$s"
 msgstr "Kliendi IP: %1$s </br> Veakood: %2$s"
 
@@ -579,6 +604,7 @@ msgstr "Esitatud API üksikasjad on tühjad! Palun proovige uuesti!"
 #. Translators: %s is API URL.
 #: inc/classes/class-astra-sites.php:953
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:56
+#, php-format
 msgid "Invalid Request URL - %s"
 msgstr "Kehtetu päringu URL - %s"
 
@@ -620,16 +646,19 @@ msgstr "<p>WordPressi tõrkeotsingu režiim on teie veebisaidil praegu lubatud. 
 
 #. translators: %s is a documentation link.
 #: inc/classes/class-astra-sites.php:1786
+#, php-format
 msgid "<p>We are facing a temporary issue in importing this template.</p><p>Read <a href=\"%s\" target=\"_blank\">article</a> to resolve the issue and continue importing template.</p>"
 msgstr "<p>Meil on ajutine probleem selle malli importimisel.</p><p>Lugege <a href=\"%s\" target=\"_blank\">artiklit</a>, et lahendada probleem ja jätkata malli importimist.</p>"
 
 #. translators: %s is a documentation link.
 #: inc/classes/class-astra-sites.php:1788
+#, php-format
 msgid "<p>We are facing a temporary issue in installing the required plugins for this template.</p><p>Read&nbsp;<a href=\"%s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.</p>"
 msgstr "<p>Meil on ajutine probleem selle malli jaoks vajalike pistikprogrammide installimisel.</p><p>Lugege&nbsp;<a href=\"%s\" target=\"_blank\">artiklit</a>&nbsp;probleemi lahendamiseks ja malli importimise jätkamiseks.</p>"
 
 #. translators: %s are white label strings.
 #: inc/classes/class-astra-sites.php:1792
+#, php-format
 msgid "Warning! %1$s Import process is not complete. Don't close the window until import process complete. Do you still want to leave the window?"
 msgstr "Hoiatus! %1$s Importimisprotsess ei ole lõpule viidud. Ärge sulgege akent enne, kui importimisprotsess on lõppenud. Kas soovite siiski aknast lahkuda?"
 
@@ -639,6 +668,7 @@ msgstr "Valmis! Vaata saiti"
 
 #. translators: %s is a template name
 #: inc/classes/class-astra-sites.php:1796
+#, php-format
 msgid "Import \"%s\" Template"
 msgstr "Impordi \"%s\" mall"
 
@@ -648,6 +678,7 @@ msgstr "Nõutavate pistikprogrammide installimine.."
 
 #. translators: %s are white label strings.
 #: inc/classes/class-astra-sites.php:1801
+#, php-format
 msgid "Installing %1$s Theme.."
 msgstr "Paigaldan %1$s teema.."
 
@@ -697,26 +728,31 @@ msgstr "Tundub, et teie host ei saanud tõenäoliselt XML-faili salvestada /wp-c
 
 #. translators: %s HTML tags
 #: inc/classes/class-astra-sites.php:1839
+#, php-format
 msgid "%1$sWe could not start the import process due to failed AJAX request and this is the message from WordPress:%2$s"
 msgstr "%1$sMe ei saanud importimisprotsessi alustada ebaõnnestunud AJAX-päringu tõttu ja see on WordPressi sõnum:%2$s"
 
 #. translators: %s URL to document.
 #: inc/classes/class-astra-sites.php:1841
+#, php-format
 msgid "%1$sRead&nbsp;<a href=\"%2$s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.%3$s"
 msgstr "%1$sLoe&nbsp;<a href=\"%2$s\" target=\"_blank\">artiklit</a>&nbsp;probleemi lahendamiseks ja malli importimise jätkamiseks.%3$s"
 
 #. translators: %s URL to document.
 #: inc/classes/class-astra-sites.php:1850
+#, php-format
 msgid "%1$sWe could not complete the import process due to failed AJAX request and this is the message:%2$s"
 msgstr "%1$sMe ei saanud importimisprotsessi lõpule viia ebaõnnestunud AJAX-päringu tõttu ja see on sõnum:%2$s"
 
 #. translators: %s URL to document.
 #: inc/classes/class-astra-sites.php:1852
+#, php-format
 msgid "%1$sPlease report this <a href=\"%2$s\" target=\"_blank\">here</a>.%3$s"
 msgstr "%1$sPalun teatage sellest <a href=\"%2$s\" target=\"_blank\">siin</a>.%3$s"
 
 #. translators: %s Anchor link to support URL.
 #: inc/classes/class-astra-sites.php:1857
+#, php-format
 msgid "Please report this error%1$s here %2$s, so we can fix it."
 msgstr "Palun teatage sellest veast%1$s siin %2$s, et saaksime selle parandada."
 
@@ -734,6 +770,7 @@ msgstr "Olete lähedal malli importimisele. Protsessi lõpuleviimiseks lubage om
 #: inc/classes/class-astra-sites.php:2081
 #: inc/classes/class-astra-sites.php:2086
 #: inc/classes/class-astra-sites.php:2104
+#, php-format
 msgid "Read an article <a href=\"%s\" target=\"_blank\">here</a> to resolve the issue."
 msgstr "Loe artiklit <a href=\"%s\" target=\"_blank\">siin</a>, et probleemi lahendada."
 
@@ -771,6 +808,7 @@ msgstr "Värskendused on saadaval selle algmalli kasutatavatele pistikprogrammid
 
 #. translators: %s update page link.
 #: inc/classes/class-astra-sites.php:2091
+#, php-format
 msgid "Kindly <a href=\"%s\" target=\"_blank\">update</a> them for a successful import. Skipping this step might break the template design/feature."
 msgstr "Palun <a href=\"%s\" target=\"_blank\">uuendage</a> neid eduka impordi jaoks. Selle sammu vahelejätmine võib rikkuda mallide kujunduse/funktsiooni."
 
@@ -840,11 +878,13 @@ msgstr "Teie saidi mälupiirang on alla soovitatud 256 MB. Kuigi saate jätkata,
 
 #. translators: %s are link.
 #: inc/classes/class-astra-sites.php:2246
+#, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. you can purchase it from <a href=\"%s\" target=\"_blank\">here</a>."
 msgstr "See on premium mall, mis on saadaval Essential ja Business tööriistakomplektidega. Saate selle osta <a href=\"%s\" target=\"_blank\">siit</a>."
 
 #. translators: %s are link.
 #: inc/classes/class-astra-sites.php:2250
+#, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">Validate Your License</a> Key to import this template."
 msgstr "See on premium mall, mis on saadaval Essential ja Business tööriistakomplektidega. <a href=\"%s\" target=\"_blank\">Kinnitage oma litsents</a> võtmega, et seda malli importida."
 
@@ -961,6 +1001,7 @@ msgstr "Toetatud"
 #: inc/includes/image-templates.php:102
 #: inc/includes/templates.php:344
 #: inc/includes/templates.php:498
+#, php-format
 msgid "Don't see a template you would like to import?<br><a target=\"_blank\" href=\"%1$s\">Make a Template Suggestion!</a>"
 msgstr "Kas ei näe malli, mida sooviksite importida?<br><a target=\"_blank\" href=\"%1$s\">Tee mallisoovitus!</a>"
 
@@ -1026,6 +1067,7 @@ msgstr "Sünkrooni raamatukogu"
 #: inc/includes/templates.php:200
 #: inc/includes/templates.php:327
 #: inc/includes/templates.php:415
+#, php-format
 msgid "This premium template is accessible with %1$s \"Premium\" Package."
 msgstr "See premium mall on juurdepääsetav %1$s \"Premium\" paketiga."
 
@@ -1037,6 +1079,7 @@ msgstr "SISSE"
 #. translators: %1$s External Link
 #: inc/includes/templates.php:261
 #: inc/includes/templates.php:437
+#, php-format
 msgid "Don't see a template you would like to import? %s"
 msgstr "Kas te ei näe malli, mida soovite importida? %s"
 
@@ -1063,6 +1106,7 @@ msgstr "Jäta vahele ja impordi"
 
 #: inc/includes/templates.php:481
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
+#: inc/lib/ai-builder/inc/assets/build/main.js:195
 #: inc/lib/gutenberg-templates/dist/main.js:2
 #: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
@@ -1108,6 +1152,7 @@ msgstr "Paigaldamine..."
 
 #. translators: %1$s: team name, %2$s: plan name
 #: inc/lib/ai-builder/ai-builder-plugin-loader.php:446
+#, php-format
 msgid "Your current active organization is %1$s, which is on the %2$s plan. You have reached the maximum number of sites allowed to be created on %2$s plan."
 msgstr "Teie praegu aktiivne organisatsioon on %1$s, mis on %2$s plaanil. Olete saavutanud maksimaalse lubatud saitide arvu, mida saab luua %2$s plaanil."
 
@@ -1115,6 +1160,7 @@ msgstr "Teie praegu aktiivne organisatsioon on %1$s, mis on %2$s plaanil. Olete 
 #. translators: %s: team name
 #: inc/lib/ai-builder/ai-builder-plugin-loader.php:455
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#, php-format,js-format
 msgid "Please upgrade the plan for %s in order to create more sites."
 msgstr "Palun uuendage %s plaani, et luua rohkem saite."
 
@@ -1175,6 +1221,7 @@ msgstr "Saadi tühjad parameetrid."
 
 #. Translators: %s is URL.
 #: inc/lib/ai-builder/inc/ajax/plugin.php:218
+#, php-format
 msgid "Invalid URL - %s"
 msgstr "Vigane URL - %s"
 
@@ -1432,6 +1479,7 @@ msgstr "Kõik protsessid on lõpetatud"
 
 #. translators: %d are the minutes.
 #: inc/lib/starter-templates-importer/importer/helpers/wp-background-process.php:444
+#, php-format
 msgid "Every %d Minutes"
 msgstr "Iga %d minuti järel"
 
@@ -1477,6 +1525,7 @@ msgstr "Kohandaja andmed imporditi edukalt."
 
 #. Translators: %s is WXR URL.
 #: inc/lib/starter-templates-importer/importer/st-importer.php:217
+#, php-format
 msgid "Invalid WXR Request URL - %s"
 msgstr "Kehtetu WXR-i päringu URL - %s"
 
@@ -1504,6 +1553,7 @@ msgstr "Ei saanud faili parsida"
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:276
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:395
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:471
+#, php-format
 msgid "This WXR file (version %1$s) is newer than the importer (version %2$s) and may not be supported. Please consider updating."
 msgstr "See WXR-fail (versioon %1$s) on uuem kui importija (versioon %2$s) ja seda ei pruugita toetada. Palun kaaluge uuendamist."
 
@@ -1521,21 +1571,25 @@ msgstr "Ei saa importida automaatmustandi postitusi"
 
 #. translators: %1$s is the import message, %2$s is post type.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:883
+#, php-format
 msgid "Failed to import \"%1$s\": Invalid post type %2$s"
 msgstr "Ebaõnnestus importida \"%1$s\": Vigane postituse tüüp %2$s"
 
 #. translators: %1$s single post type, %2$s is post title.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:895
+#, php-format
 msgid "%1$s \"%2$s\" already exists."
 msgstr "%1$s \"%2$s\" on juba olemas."
 
 #. translators: %s is post title
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:993
+#, php-format
 msgid "Skipping attachment \"%s\", fetching attachments disabled"
 msgstr "Manust \"%s\" ei lisata, manuste allalaadimine on keelatud"
 
 #. translators: %1$s is the post title, %2$s is post type.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1017
+#, php-format
 msgid "Failed to import \"%1$s\" (%2$s)"
 msgstr "Ei õnnestunud importida \"%1$s\" (%2$s)"
 
@@ -1543,11 +1597,13 @@ msgstr "Ei õnnestunud importida \"%1$s\" (%2$s)"
 #. translators: %1$s is the taxonomy name, %2$s is taxonomy.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1052
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1944
+#, php-format
 msgid "Imported \"%1$s\" (%2$s)"
 msgstr "Imporditud \"%1$s\" (%2$s)"
 
 #. translators: %1$s is the original post id, %2$s is old post id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1060
+#, php-format
 msgid "Post %1$d remapped to %2$d"
 msgstr "Postitus %1$d kaardistati ümber %2$d"
 
@@ -1557,31 +1613,37 @@ msgstr "Kehtetu failitüüp"
 
 #. translators: %s user login name
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1716
+#, php-format
 msgid "Failed to import user \"%s\""
 msgstr "Kasutaja \"%s\" importimine ebaõnnestus"
 
 #. translators: %s user login name
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1740
+#, php-format
 msgid "Imported user \"%s\""
 msgstr "Imporditud kasutaja \"%s\""
 
 #. translators: %1$s original user Id, %2$s old user Id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1747
+#, php-format
 msgid "User %1$d remapped to %2$d"
 msgstr "Kasutaja %1$d kaardistati ümber %2$d"
 
 #. translators: %1$s is the taxonomy, %2$s is taxonomy name.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1917
+#, php-format
 msgid "Failed to import %1$s %2$s"
 msgstr "Ei õnnestunud importida %1$s %2$s"
 
 #. translators: %1$s is term original id, %2$s is term id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:1952
+#, php-format
 msgid "Term %1$d remapped to %2$d"
 msgstr "Termin %1$d kaardistati ümber %2$d"
 
 #. translators: %1$s is error code, %2$s is error code header, %3$s is url.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2056
+#, php-format
 msgid "Remote server returned %1$d %2$s for %3$s"
 msgstr "Kaugserver tagastas %1$d %2$s aadressile %3$s"
 
@@ -1595,76 +1657,91 @@ msgstr "Allalaaditud faili suurus on null"
 
 #. translators: %s max file size.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2081
+#, php-format
 msgid "Remote file is too large, limit is %s"
 msgstr "Kaugfail on liiga suur, piirang on %s"
 
 #. translators: %d is post id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2114
+#, php-format
 msgid "Running post-processing for post %d"
 msgstr "Käimas on järeltöötlus postituse %d jaoks"
 
 #. translators: %1$s is post title, %2$s is post id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2130
+#, php-format
 msgid "Could not find the post parent for \"%1$s\" (post #%2$d)"
 msgstr "Ei leidnud postituse vanemat \"%1$s\" (postitus #%2$d)"
 
 #. translators: %1$d is post id, %2$d is parent post id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2138
+#, php-format
 msgid "Post %1$d was imported with parent %2$d, but could not be found"
 msgstr "Postitus %1$d imporditi koos vanemaga %2$d, kuid seda ei leitud"
 
 #. translators: %1$s is the post title, %2$s is post id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2155
+#, php-format
 msgid "Could not find the author for \"%1$s\" (post #%2$d)"
 msgstr "Ei leidnud autorit postitusele \"%1$s\" (postitus #%2$d)"
 
 #. translators: %1$d is post id, %2$s is author slug.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2163
+#, php-format
 msgid "Post %1$d was imported with author \"%2$s\", but could not be found"
 msgstr "Postitus %1$d imporditi autoriga \"%2$s\", kuid seda ei leitud"
 
 #. translators: %d is post id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2192
+#, php-format
 msgid "Post %d was marked for post-processing, but none was required."
 msgstr "Postitus %d märgiti järelprotsessimiseks, kuid seda ei olnud vaja."
 
 #. translators: %1$s is the post title, %2$s is post id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2209
+#, php-format
 msgid "Could not update \"%1$s\" (post #%2$d) with mapped data"
 msgstr "Ei saanud värskendada \"%1$s\" (postitus #%2$d) kaardistatud andmetega"
 
 #. translators: %1$s is the post title, %2$s is post id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2263
+#, php-format
 msgid "Could not find the menu object for \"%1$s\" (post #%2$d)"
 msgstr "Ei leidnud menüü objekti \"%1$s\" (postitus #%2$d)"
 
 #. translators: %1$s is post id, %2$s is post object id, %3$s is menu type.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2271
+#, php-format
 msgid "Post %1$d was imported with object \"%2$d\" of type \"%3$s\", but could not be found"
 msgstr "Postitus %1$d imporditi objektiga \"%2$d\" tüübist \"%3$s\", kuid seda ei leitud"
 
 #. translators: %d is comment id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2302
+#, php-format
 msgid "Could not find the comment parent for comment #%d"
 msgstr "Ei leidnud kommentaari #%d vanemat"
 
 #. translators: %1$s is comment id, %2$s is parent comment id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2309
+#, php-format
 msgid "Comment %1$d was imported with parent %2$d, but could not be found"
 msgstr "Kommentaar %1$d imporditi koos vanemaga %2$d, kuid seda ei leitud"
 
 #. translators: %d is comment id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2326
+#, php-format
 msgid "Could not find the author for comment #%d"
 msgstr "Ei leidnud kommentaari #%d autorit"
 
 #. translators: %1$d is comment id, %2$d is author id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2333
+#, php-format
 msgid "Comment %1$d was imported with author %2$d, but could not be found"
 msgstr "Kommentaar %1$d imporditi koos autoriga %2$d, kuid seda ei leitud"
 
 #. translators: %d is comment id.
 #: inc/lib/starter-templates-importer/importer/wxr-importer.php:2353
+#, php-format
 msgid "Could not update comment #%d with mapped data"
 msgstr "Kommentaari #%d ei õnnestunud kaardistatud andmetega uuendada"
 
@@ -1674,6 +1751,7 @@ msgstr "Import on lõpetatud!"
 
 #. translators: %1$s: HTML link start tag, %2$s: HTML link end tag.
 #: inc/lib/zip-ai/classes/admin-configurations.php:513
+#, php-format
 msgid "Thank you for using %1$sZip AI.%2$s"
 msgstr "Aitäh, et kasutasite %1$sZip AI.%2$s"
 
@@ -1813,6 +1891,7 @@ msgstr "Stiil 10"
 
 #. translators: %s: index
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
+#, js-format
 msgid "Original %1$s"
 msgstr "Algne %1$s"
 
@@ -1904,6 +1983,7 @@ msgstr "Elav"
 
 #. translators: %1$s: light or dark, %2$s: brighter or darker
 #: inc/lib/ai-builder/inc/assets/build/main.js:3
+#, js-format
 msgid "This color is not suitable for reading on %1$s backgrounds. Consider making it slightly %2$s."
 msgstr "See värv ei sobi lugemiseks %1$s taustadel. Kaaluge selle veidi %2$s muutmist."
 
@@ -1959,6 +2039,7 @@ msgstr "Sa oled peaaegu kohal!"
 
 #. translators: %s: span tag
 #: inc/lib/ai-builder/inc/assets/build/main.js:174
+#, js-format
 msgid "You've chosen a %1$s Access this design and all others when you upgrade."
 msgstr "Olete valinud %1$s Juurdepääs sellele kujundusele ja kõigile teistele, kui uuendate."
 
@@ -1985,11 +2066,13 @@ msgstr "Pole piisavalt teavet kuvamiseks."
 
 #. translators: %s: support link
 #: inc/lib/ai-builder/inc/assets/build/main.js:177
+#, js-format
 msgid "If you want to retry the import, select a saved site below then click on the “Retry Import” button. Or contact our support %1$s."
 msgstr "Kui soovite importimist uuesti proovida, valige allpool salvestatud sait ja klõpsake nuppu „Proovi importimist uuesti”. Või võtke ühendust meie toega %1$s."
 
 #. translators: %s: support link
 #: inc/lib/ai-builder/inc/assets/build/main.js:180
+#, js-format
 msgid "If you proceed without fixing these issues, you may encounter the same errors again, which could exhaust your AI site creation attempts. If you need help, feel free to contact us %1$s. Do you still want to continue?"
 msgstr "Kui jätkate nende probleemide lahendamata jätmist, võite kohata samu vigu uuesti, mis võib teie AI saidi loomise katseid ammendada. Kui vajate abi, võtke meiega ühendust %1$s. Kas soovite ikkagi jätkata?"
 
@@ -2042,12 +2125,14 @@ msgstr "Reageeriv eelvaade"
 #. translators: %s: daily limit
 #: inc/lib/ai-builder/inc/assets/build/main.js:181
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:143
+#, js-format
 msgid "%s AI sites"
 msgstr "%s AI saidid"
 
 #. translators: %s: daily limit
 #: inc/lib/ai-builder/inc/assets/build/main.js:182
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:144
+#, js-format
 msgid "This plan allows you to generate %s per day, and you have reached this limit."
 msgstr "See plaan võimaldab teil genereerida %s päevas ja olete selle limiidi saavutanud."
 
@@ -2086,6 +2171,7 @@ msgstr "Ups, midagi läks valesti!"
 #. translators: %1$s: Contact us link
 #: inc/lib/ai-builder/inc/assets/build/main.js:184
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "There was a problem processing the request. Please try again. If this error continues please contact our <a href=\"%1$s\">support team</a>."
 msgstr "Taotluse töötlemisel ilmnes probleem. Palun proovige uuesti. Kui see viga jätkub, võtke palun ühendust meie <a href=\"%1$s\">toetustiimiga</a>."
 
@@ -2105,6 +2191,7 @@ msgstr "Lisatehniline teave:"
 
 #. translators: %s: message
 #: inc/lib/ai-builder/inc/assets/build/main.js:185
+#, js-format
 msgid "Error Message: %1$s"
 msgstr "Veateade: %1$s"
 
@@ -2131,6 +2218,7 @@ msgstr "Seda kasutuslimiiti lähtestatakse iga päev"
 
 #. translators: Reset Type
 #: inc/lib/ai-builder/inc/assets/build/main.js:188
+#, js-format
 msgid "This usage quota will reset %s"
 msgstr "See kasutuslimiit lähtestatakse %s"
 
@@ -2209,6 +2297,7 @@ msgstr "Suurepärane algus! Palju õnne.."
 
 #. translators: %1$s: Number of AI sites used, %2$s: Current plan name, %3$s: Suggested Plan
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
+#, js-format
 msgid "You've successfully generated %1$s AI sites with your %2$s account. Do much more with the %3$s Plan:"
 msgstr "Olete edukalt loonud %1$s AI saiti oma %2$s kontoga. Tehke palju rohkem %3$s plaaniga:"
 
@@ -2280,6 +2369,7 @@ msgstr "Ma kirjutan ise"
 #. translators: %s: social media name
 #: inc/lib/ai-builder/inc/assets/build/main.js:192
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "Enter your %s account URL"
 msgstr "Sisestage oma %s konto URL"
 
@@ -2351,11 +2441,13 @@ msgstr "Laadi üles pildid"
 #: inc/lib/ai-builder/inc/assets/build/main.js:193
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "Invalid file name! Please avoid special characters. (%s)"
 msgstr "Vigane faili nimi! Palun vältige erimärke. (%s)"
 
 #. translators: %s: Option number
 #: inc/lib/ai-builder/inc/assets/build/main.js:194
+#, js-format
 msgid "Option %s"
 msgstr "Valik %s"
 
@@ -2373,6 +2465,7 @@ msgstr "Kaasa arvatud leheküljed:"
 
 #. translators: %s: Page count
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
+#, js-format
 msgid "Page count: %s"
 msgstr "Lehekülgede arv: %s"
 
@@ -2575,6 +2668,7 @@ msgstr "Nimi, keel ja tüüp"
 
 #. translators: %s: business name
 #: inc/lib/ai-builder/inc/assets/build/main.js:196
+#, js-format
 msgid "What is %s? Please describe the business."
 msgstr "Mis on %s? Palun kirjeldage ettevõtet."
 
@@ -2584,6 +2678,7 @@ msgstr "Palun ole nii kirjeldav kui võimalik. Jaga üksikasju, nagu teenused, t
 
 #. translators: %s: person name
 #: inc/lib/ai-builder/inc/assets/build/main.js:197
+#, js-format
 msgid "Who is %s? Tell us more about the person."
 msgstr "Kes on %s? Räägi meile sellest inimesest rohkem."
 
@@ -2593,6 +2688,7 @@ msgstr "Palun ole nii kirjeldav kui võimalik. Jaga üksikasju, nagu mida nad te
 
 #. translators: %s: organisation name
 #: inc/lib/ai-builder/inc/assets/build/main.js:198
+#, js-format
 msgid "What is %s? Please describe the organisation."
 msgstr "Mis on %s? Palun kirjeldage organisatsiooni."
 
@@ -2602,6 +2698,7 @@ msgstr "Palun ole võimalikult kirjeldav. Jaga selliseid üksikasju nagu teenuse
 
 #. translators: %s: restaurant name
 #: inc/lib/ai-builder/inc/assets/build/main.js:199
+#, js-format
 msgid "What is %s? Tell us more about the restaurant."
 msgstr "Mis on %s? Räägi meile restoranist rohkem."
 
@@ -2611,6 +2708,7 @@ msgstr "Palun ole võimalikult kirjeldav. Jaga üksikasju, nagu lühitutvustus r
 
 #. translators: %s: product name
 #: inc/lib/ai-builder/inc/assets/build/main.js:200
+#, js-format
 msgid "What is %s? Share more details about the product."
 msgstr "Mis on %s? Jagage rohkem teavet toote kohta."
 
@@ -2621,6 +2719,7 @@ msgstr "Palun ole võimalikult kirjeldav. Jaga üksikasju, nagu toote lühitutvu
 
 #. translators: %s: event name
 #: inc/lib/ai-builder/inc/assets/build/main.js:201
+#, js-format
 msgid "Tell us more about %s."
 msgstr "Räägi meile rohkem %s kohta."
 
@@ -2630,11 +2729,13 @@ msgstr "Palun ole võimalikult kirjeldav. Jaga üksikasju, nagu sündmuse teave,
 
 #. translators: %s: landing page name
 #: inc/lib/ai-builder/inc/assets/build/main.js:202
+#, js-format
 msgid "Share more details about %s."
 msgstr "Jaga rohkem üksikasju %s kohta."
 
 #. translators: %s: medical facility name
 #: inc/lib/ai-builder/inc/assets/build/main.js:203
+#, js-format
 msgid "Tell us more about the %s."
 msgstr "Räägi meile rohkem %s kohta."
 
@@ -2644,6 +2745,7 @@ msgstr "Palun ole nii kirjeldav kui võimalik. Jaga üksikasju, nagu ravimeetodi
 
 #. translators: %s: entity name
 #: inc/lib/ai-builder/inc/assets/build/main.js:204
+#, js-format
 msgid "Please describe %s in a few words."
 msgstr "Palun kirjeldage %s mõne sõnaga."
 
@@ -2674,6 +2776,7 @@ msgstr "Mõned üksikasjad, palun"
 
 #. translators: %s: Business name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:207
+#, js-format
 msgid "How can people get in touch with %1$s?"
 msgstr "Kuidas saavad inimesed %1$s-ga ühendust võtta?"
 
@@ -2902,6 +3005,7 @@ msgstr "Saidi sisu importimine ebaõnnestus. - Impordiprotsess katkestati"
 #. translators: Response importMessage
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+#, js-format
 msgid "Importing - %1$s"
 msgstr "Importimine - %1$s"
 
@@ -2968,6 +3072,7 @@ msgstr "Vana veebisaidi lähtestamine on tehtud."
 
 #. translators: %s: Image number.
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
+#, js-format
 msgid "Downloading Image %s"
 msgstr "Pildi %s allalaadimine"
 
@@ -3028,12 +3133,14 @@ msgstr "Nõutavate pistikprogrammide installimine."
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:217
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#, js-format
 msgid "%1$s plugin installed successfully."
 msgstr "%1$s plugin on edukalt installitud."
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#, js-format
 msgid "Could not install the plugin - %s"
 msgstr "Ei saanud pistikprogrammi installida - %s"
 
@@ -3094,18 +3201,21 @@ msgstr "Lõplik viimistlus ebaõnnestus."
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:223
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:162
+#, js-format
 msgid "Activating %1$s plugin."
 msgstr "Aktiveerimine %1$s pluginat."
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:226
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:168
+#, js-format
 msgid "%1$s activated."
 msgstr "%1$s aktiveeritud."
 
 #. translators: Plugin name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:229
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+#, js-format
 msgid "JSON_Error: Could not activate the required plugin - %1$s."
 msgstr "JSON_Viga: Ei saanud vajalikku pistikprogrammi aktiveerida - %1$s."
 
@@ -3113,12 +3223,14 @@ msgstr "JSON_Viga: Ei saanud vajalikku pistikprogrammi aktiveerida - %1$s."
 #. translators: %1$s is the opening <a> tag, %2$s is the closing </a> tag.
 #: inc/lib/ai-builder/inc/assets/build/main.js:232
 #: inc/lib/ai-builder/inc/assets/build/main.js:238
+#, js-format
 msgid "%1$sRead article%2$s to resolve the issue and continue importing the template."
 msgstr "%1$sLoe artiklit%2$s, et probleemi lahendada ja jätkata malli importimist."
 
 #. translators: Plugin name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:235
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#, js-format
 msgid "Could not activate the required plugin - %1$s."
 msgstr "Ei saanud vajalikku pistikprogrammi aktiveerida - %1$s."
 
@@ -3142,6 +3254,7 @@ msgstr "Teie veebisait on valmis!"
 
 #. translators: %s: line break
 #: inc/lib/ai-builder/inc/assets/build/main.js:239
+#, js-format
 msgid "Woohoo, your website %1$s is ready!"
 msgstr "Hurraa, teie veebisait %1$s on valmis!"
 
@@ -3199,6 +3312,7 @@ msgid "Error Occurred!"
 msgstr "Tekkis viga!"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "Error: %s"
 msgstr "Viga: %s"
 
@@ -3211,6 +3325,7 @@ msgid "Installed the required plugin. The page will be saved and refreshed."
 msgstr "Installitud vajalik pistikprogramm. Lehekülg salvestatakse ja värskendatakse."
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "Error saving the page: %s"
 msgstr "Lehe salvestamisel ilmnes viga: %s"
 
@@ -3342,6 +3457,7 @@ msgid "Heads Up!"
 msgstr "Pane tähele!"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "Skip & Import \"%s\" Page"
 msgstr "Jäta vahele ja impordi \"%s\" leht"
 
@@ -3419,6 +3535,7 @@ msgid "Get the content for all your pages with just a click. You can generate co
 msgstr "Hankige kogu oma lehtede sisu vaid ühe klõpsuga. Saate sisu lehekülje kaupa luua, kasutades \"Jäta vahele\" valikut. Oleme siin, et muuta kõik lihtsaks ja kohandada täpselt teie vajadustele vastavaks!"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "Let’s Go (%s Credits)"
 msgstr "Lähme (%s krediiti)"
 
@@ -3451,6 +3568,7 @@ msgid "support team"
 msgstr "tugimeeskond"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "If this error continues please contact our %1$s."
 msgstr "Kui see viga jätkub, võtke palun ühendust meie %1$s."
 
@@ -3515,6 +3633,7 @@ msgid "With AI credits, you have the power to personalize the design library wit
 msgstr "AI-krediitidega on teil võimalus kohandada disainiraamatukogu ainulaadse teksti ja kaunite piltidega, mis on teie veebisaidile spetsiifilised."
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "Your account has %1$s AI credits left. If you want to personalize the entire design library with content and images tailored to your business and website project, you'll require %2$s credits."
 msgstr "Teie kontole on jäänud %1$s AI krediiti. Kui soovite kogu disainiraamatukogu isikupärastada oma ettevõtte ja veebiprojekti jaoks kohandatud sisu ja piltidega, vajate %2$s krediiti."
 
@@ -3527,6 +3646,7 @@ msgid "Want to see how this works?"
 msgstr "Kas tahad näha, kuidas see töötab?"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#, js-format
 msgid "Begin with the 1000 AI credits provided when you signed up for your free account. With this, you can personalize templates in the %s categories."
 msgstr "Alusta 1000 AI krediidiga, mis anti sulle tasuta konto loomisel. Sellega saad isikupärastada malle %s kategooriates."
 
@@ -3666,11 +3786,13 @@ msgstr "4. Viimaste seadete lõpetamine"
 
 #. translators: %1$s Time taken %2$s Time Type %3$s Website Url.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:135
+#, js-format
 msgid "Your Website is ready and it took just %1$s %2$s to build."
 msgstr "Teie veebisait on valmis ja selle ehitamine võttis vaid %1$s %2$s."
 
 #. translators: %1$s Time taken %2$s Time Type %3$s theme name.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:138
+#, js-format
 msgid "I just built my website in %1$s %2$s with Starter Templates by %3$s. Can’t believe how easy it was!!! 😍"
 msgstr "Ma just ehitasin oma veebisaidi %1$s %2$s Starter Templates abil %3$s. Ei suuda uskuda, kui lihtne see oli!!! 😍"
 
@@ -3680,6 +3802,7 @@ msgstr "Teie veebisait on valmis. Selle ehitamine võttis vaid 25 sekundit."
 
 #. translators: %1$s theme name.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#, js-format
 msgid "I just built my website with Starter Templates by %1$s in minutes. Can't believe how easy it is! 😍"
 msgstr "Ma ehitasin oma veebisaidi minutitega Starter Templates abil %1$s. Ei suuda uskuda, kui lihtne see on! 😍"
 
@@ -3801,6 +3924,7 @@ msgstr "Millist veebisaiti te ehitate?"
 
 #. translators: %1$s: search term.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#, js-format
 msgid "Starter Templates for %1$s:"
 msgstr "Alustamismallid %1$s jaoks:"
 
@@ -3935,6 +4059,7 @@ msgstr "Lõplikud viimistlused ebaõnnestusid."
 #. translators: Support article URL.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#, js-format
 msgid "<a href=\"%1$s\">Read article</a> to resolve the issue and continue importing template."
 msgstr "<a href=\"%1$s\">Loe artiklit</a>, et lahendada probleem ja jätkata malli importimist."
 
@@ -4000,11 +4125,13 @@ msgstr "Palun sisestage oma litsentsivõti."
 
 #. translators: %1$s Opening anchor tag %2$s Closing anchor tag.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:129
+#, js-format
 msgid "If you have already purchased the Essential or Business Toolkit, please install the premium version of the Starter Templates plugin from our %1$sstore%2$s."
 msgstr "Kui olete juba ostnud Essential või Business Toolkit'i, installige Starter Templates pistikprogrammi premium versioon meie %1$spoe%2$s kaudu."
 
 #. translators: %1$s Opening anchor tag %2$s Closing anchor tag.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:132
+#, js-format
 msgid "Need help? feel free to get in touch with our %1$ssupport team%2$s."
 msgstr "Vajad abi? Võtke julgelt ühendust meie %1$stoega%2$s."
 
@@ -4054,11 +4181,13 @@ msgstr "Ma saan aru, lähme!"
 
 #. translators: %1$s: team name, %2$s: plan name
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:142
+#, js-format
 msgid "Your current active organization is %1$s, which is on the %2$s plan."
 msgstr "Teie praegu aktiivne organisatsioon on %1$s, mis on %2$s plaanil."
 
 #. translators: %s: plan name
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:145
+#, js-format
 msgid "You have reached the maximum number of sites allowed to be created on %s plan."
 msgstr "Olete jõudnud maksimaalse lubatud saitide arvuni, mida saab luua %s plaanil."
 
@@ -4189,6 +4318,7 @@ msgstr "Kohandatud lehed tehisintellektiga"
 
 #. translators: %s: Percentage Ascii Code
 #: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:2
+#, js-format
 msgid "With Zip AI by your side, you can create beautiful, 100%s custom web pages without the need for any design or coding skills."
 msgstr "Zip AI abil saate luua ilusaid, 100%s kohandatud veebilehti ilma disaini- või kodeerimisoskusteta."
 
@@ -4210,6 +4340,7 @@ msgstr "Hangi rohkem krediiti"
 
 #. translators: %s: number of words
 #: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
+#, js-format
 msgid "of %s"
 msgstr "%s"
 
@@ -4482,6 +4613,7 @@ msgid "Make it shorter."
 msgstr "Tee see lühemaks."
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
+#, js-format
 msgid "Change tone to %s."
 msgstr "Muuda toon %s."
 
@@ -4586,6 +4718,7 @@ msgid "Translate"
 msgstr "Tõlgi"
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
+#, js-format
 msgid "Translate to %s."
 msgstr "Tõlgi %s."
 
@@ -4628,6 +4761,7 @@ msgstr "Klõpsake siin"
 
 #. translators: %1$d is the current page, %2$d is the total number of pages.
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#, js-format
 msgid "%1$d/%2$d"
 msgstr "%1$d/%2$d"
 
@@ -4653,6 +4787,7 @@ msgstr "Kustuta vestlus"
 
 #. Translators: %1$s is the opening link tag, %2$s is the closing link tag.
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#, js-format
 msgid "AI Assistant can make mistakes. Want to %1$sdisable it?%2$s"
 msgstr "Tehisintellekti assistent võib teha vigu. Kas soovite selle %1$skeelata%2$s?"
 
@@ -4678,6 +4813,7 @@ msgstr "Alustamine…"
 
 #. Translators: %1$s is the opening link tag, %2$s is the closing link tag.
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
+#, js-format
 msgid "Get started from %1$shere%2$s."
 msgstr "Alusta %1$ssiit%2$s."
 
@@ -4688,6 +4824,7 @@ msgstr "Võimalused on lõputud!"
 
 #. translators: %s: Plugin Name
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:10
+#, js-format
 msgid "Build 10x Faster with %s AI"
 msgstr "Ehita 10x kiiremini %s AI-ga"
 
@@ -4697,6 +4834,7 @@ msgstr "Ehita 10 korda kiiremini ZipWP-ga"
 
 #. translators: %s: Plugin Name
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#, js-format
 msgid "%s offers AI features powered by ZipWP to help you build your website 10 times faster."
 msgstr "%s pakub ZipWP poolt toetatud tehisintellekti funktsioone, et aidata teil oma veebisaiti 10 korda kiiremini luua."
 
@@ -4759,6 +4897,7 @@ msgstr "Hangi rohkem krediiti"
 
 #. translators: %s: lastUsedTone label
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
+#, js-format
 msgid "Change Tone to %s"
 msgstr "Muuda tooniks %s"
 
@@ -4844,6 +4983,7 @@ msgstr "Eemalda filter"
 
 #. translators: %s: search keyword
 #: inc/lib/zipwp-images/dist/main.js:4
+#, js-format
 msgid "Sorry, we couldn't find anything for “%s”."
 msgstr "Kahjuks ei leidnud me midagi otsingule „%s”."
 
@@ -4872,7 +5012,7 @@ msgid "Oops! Something went wrong. Please refresh the page and try again."
 msgstr "Ups! Midagi läks valesti. Palun värskendage lehte ja proovige uuesti."
 
 #: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:80
-#: astra-sites.php:135
+#: astra-sites.php:140
 msgid "Quick Feedback"
 msgstr "Kiire tagasiside"
 
@@ -4891,6 +5031,7 @@ msgstr "Palun andke meile rohkem üksikasju."
 
 #. translators: %1$s: link html start, %2$s: link html end
 #: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:148
+#, php-format
 msgid "Need help from our experts? %1$sClick here to contact us.%2$s"
 msgstr "Vajad abi meie ekspertidelt? %1$sKlõpsake siin, et meiega ühendust võtta.%2$s"
 
@@ -4938,7 +5079,7 @@ msgstr "Palun rääkige meile funktsioonist lähemalt."
 msgid "Other"
 msgstr "Muu"
 
-#: astra-sites.php:137
+#: astra-sites.php:142
 msgid "If you have a moment, please share why you are deactivating Starter Templates:"
 msgstr "Kui teil on hetk, palun jagage, miks te Starter Mallide deaktiveerite:"
 
@@ -4961,6 +5102,7 @@ msgstr "Tekkis viga ebapiisava mälu tõttu. Palun suurendage serveri mälupiiri
 
 #. translators: %1$s is a terms link, %2$s is a privacy policy link
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#, js-format
 msgid "By continuing, you agree to our %1$s and %2$s."
 msgstr "Jätkates nõustute meie %1$s ja %2$s tingimustega."
 
@@ -4997,6 +5139,7 @@ msgid "Easily manage bookings for your services"
 msgstr "Haldage oma teenuste broneeringuid lihtsalt"
 
 #: admin/bsf-analytics/class-bsf-analytics.php:238
+#, php-format
 msgid "Help us improve %1$s and our other products!<br><br>With your permission, we'd like to collect <strong>non-sensitive information</strong> from your website — like your PHP version and which features you use — so we can fix bugs faster, make smarter decisions, and build features that actually matter to you. <em>No personal info. Ever.</em>"
 msgstr "Aita meil parandada %1$s ja meie teisi tooteid!<br><br>Teie loal soovime koguda <strong>mitte-tundlikku teavet</strong> teie veebisaidilt — nagu teie PHP versioon ja milliseid funktsioone te kasutate — et saaksime kiiremini vigu parandada, teha targemaid otsuseid ja luua funktsioone, mis teile tegelikult korda lähevad. <em>Isiklikku teavet ei koguta. Kunagi.</em>"
 
@@ -5114,6 +5257,7 @@ msgstr "Olete ühe sammu kaugusel WooPaymentsiga maksete vastuvõtmisest — kii
 
 #. translators: %s: WooPayments for WooCommerce text with strong tag
 #: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:325
+#, php-format
 msgid "Your store is ready to sell! Connect %s now to securely accept credit cards, Apple Pay, and more — with zero setup fees and instant integration."
 msgstr "Teie pood on valmis müüma! Ühendage %s kohe, et turvaliselt vastu võtta krediitkaarte, Apple Payd ja palju muud — ilma seadistustasudeta ja kohese integreerimisega."
 
@@ -5171,6 +5315,7 @@ msgstr "UUID:"
 
 #. translators: %1$s: Contact us link
 #: inc/lib/ai-builder/inc/assets/build/main.js:183
+#, js-format
 msgid "If the issue persists after multiple attempts, please %1$s for assistance. Copy and share the above details with our support team to help us resolve the issue quickly."
 msgstr "Kui probleem püsib pärast mitut katset, palun %1$s abi saamiseks. Kopeerige ja jagage ülaltoodud üksikasju meie tugitiimiga, et aidata meil probleemi kiiresti lahendada."
 
@@ -5184,6 +5329,7 @@ msgstr "Koguge oma veebisaidilt mittetundlikku teavet, nagu PHP versioon ja kasu
 
 #. translators: %s: Starter Templates or White Label name.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:126
+#, js-format
 msgid "Contribute to %s"
 msgstr "Panusta %s"
 
@@ -5233,6 +5379,7 @@ msgstr "Sisestage aadress"
 
 #. translators: Plugin Name.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:165
+#, js-format
 msgid "%1$s deferred (requires WooCommerce)."
 msgstr "%1$s edasi lükatud (nõuab WooCommerce'i)."
 
@@ -5244,28 +5391,23 @@ msgstr "Täida need sammud, et saada oma veebisaidi täielik kontroll."
 msgid "Awesome, You did it! 😍"
 msgstr "Vinge, sa tegid seda! 😍"
 
-#. Translators: %s: User display name.
-#: inc/lib/getting-started/classes/class-gs-admin.php:251
-msgid "Hi %s 👋"
-msgstr "Tere %s 👋"
-
-#: inc/lib/getting-started/classes/class-gs-admin.php:255
+#: inc/lib/getting-started/classes/class-gs-admin.php:243
 msgid "Hi there 👋"
 msgstr "Tere 👋"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:265
+#: inc/lib/getting-started/classes/class-gs-admin.php:253
 msgid "🎉 Congratulations on completing the tasks and instructional videos to take full control of your website.\\n 🚀 Now, you're well-equipped to make your website thrive. Best of luck with your website journey, and may it bring you great achievements and opportunities in the digital world!"
 msgstr "🎉 Palju õnne ülesannete ja juhendvideote lõpetamise puhul, et saada oma veebisaidi täielik kontroll.\\n 🚀 Nüüd oled hästi varustatud, et muuta oma veebisait edukaks. Soovin sulle edu veebisaidi teekonnal ja et see tooks sulle suuri saavutusi ja võimalusi digitaalses maailmas!"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:291
+#: inc/lib/getting-started/classes/class-gs-admin.php:279
 msgid "You're Website is Almost Ready!"
 msgstr "Teie veebisait on peaaegu valmis!"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:295
+#: inc/lib/getting-started/classes/class-gs-admin.php:283
 msgid "Follow a simple step-by-step guide to finish setup, learn the basics, unlock powerful tools and launch a stunning website with ease."
 msgstr "Järgige lihtsat samm-sammulist juhendit, et lõpetada seadistamine, õppida põhitõdesid, avada võimsad tööriistad ja käivitada vapustav veebisait hõlpsalt."
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:301
+#: inc/lib/getting-started/classes/class-gs-admin.php:289
 msgid "Finish Setup"
 msgstr "Lõpeta seadistamine"
 
@@ -5283,7 +5425,7 @@ msgstr "Tegevusüksuse olekut ei uuendatud."
 
 #: inc/lib/getting-started/classes/class-gs-api.php:271
 msgid " Failed to dismiss and remove the Setup wizard."
-msgstr " Seadistusviisardi sulgemine ja eemaldamine ebaõnnestus."
+msgstr "Seadistusviisardi sulgemine ja eemaldamine ebaõnnestus."
 
 #: inc/lib/getting-started/classes/class-gs-api.php:280
 msgid "Successfully dismissed and removed the Setup wizard."
@@ -5312,6 +5454,7 @@ msgstr "Mõista WordPressi"
 #: inc/lib/getting-started/classes/class-gs-helper.php:382
 #: inc/lib/getting-started/classes/class-gs-helper.php:431
 #: inc/lib/getting-started/classes/class-gs-helper.php:480
+#, php-format
 msgid "%d mins"
 msgstr "%d min"
 
@@ -5522,11 +5665,13 @@ msgstr "Hangi veebisaidi käivitamise kontrollnimekiri"
 
 #. translators: %d is minute.
 #: inc/lib/getting-started/classes/class-gs-helper.php:515
+#, php-format
 msgid "%d min"
 msgstr "%d min"
 
 #. translators: %s is the step number.
 #: inc/lib/getting-started/build/main.js:4
+#, js-format
 msgid "Step %d:"
 msgstr "Samm %d:"
 
@@ -5548,6 +5693,7 @@ msgstr "Jää"
 
 #. translators: %1$s: Plugin Name with link.
 #: inc/lib/getting-started/build/main.js:7
+#, js-format
 msgid "Website setup brought to you by %1$s."
 msgstr "Veebisaidi seadistamine on toodud sinuni %1$s."
 
@@ -5567,9 +5713,32 @@ msgstr "SEO ja otsingu nähtavus"
 msgid "Optimize your website for search engines"
 msgstr "Optimeeri oma veebisait otsingumootorite jaoks"
 
+#: inc/lib/ai-builder/inc/assets/build/main.js:195
+msgid "Confirm Credit Usage"
+msgstr "Kinnita krediidi kasutamine"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:195
+msgid "credit"
+msgstr "krediit"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:195
+msgid "Confirm and Proceed"
+msgstr "Kinnita ja jätka"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:195
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+msgid "The following plugins will be installed and activated for the selected features:"
+msgstr "Järgmised pistikprogrammid installitakse ja aktiveeritakse valitud funktsioonide jaoks:"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:195
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+msgid "Required plugins for the website"
+msgstr "Veebisaidi jaoks vajalikud pistikprogrammid"
+
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
 #: inc/classes/class-astra-sites-importer-log.php:302
 #: inc/lib/ai-builder/inc/classes/ai-builder-importer-log.php:302
+#, php-format
 msgctxt "Recommended Memory Limit"
 msgid "Current memory limit %1$s. We recommend setting memory to at least %2$s."
 msgstr "Praegune mälupiirang %1$s. Soovitame seada mälu vähemalt %2$s."

@@ -74,14 +74,15 @@ export const initialState = {
 			compulsory: false,
 			icon: 'arrow-trending-up',
 		},
-		{
-			title: __( 'Automation & Integrations', 'astra-sites' ),
-			id: 'automation-integrations',
-			description: __( 'Automate your website & tasks', 'astra-sites' ),
-			enabled: false,
-			compulsory: false,
-			icon: 'squares-plus',
-		},
+		// Will be added back.
+		// {
+		// 	title: __( 'Automation & Integrations', 'astra-sites' ),
+		// 	id: 'automation-integrations',
+		// 	description: __( 'Automate your website & tasks', 'astra-sites' ),
+		// 	enabled: false,
+		// 	compulsory: false,
+		// 	icon: 'squares-plus',
+		// },
 		{
 			title: __( 'Appointment & Bookings', 'astra-sites' ),
 			id: 'appointment-bookings',
@@ -94,17 +95,6 @@ export const initialState = {
 			icon: 'calendar',
 		},
 		{
-			title: __( 'Free Live Chat', 'astra-sites' ),
-			id: 'live-chat',
-			description: __(
-				'Connect with your website visitors for free',
-				'astra-sites'
-			),
-			enabled: false,
-			compulsory: false,
-			icon: 'live-chat',
-		},
-		{
 			title: __( 'Website Emails & SMTP', 'astra-sites' ),
 			id: 'smtp',
 			description: __(
@@ -114,6 +104,17 @@ export const initialState = {
 			enabled: false,
 			compulsory: false,
 			icon: 'envelope',
+		},
+		{
+			title: __( 'Free Live Chat', 'astra-sites' ),
+			id: 'live-chat',
+			description: __(
+				'Connect with your website visitors for free',
+				'astra-sites'
+			),
+			enabled: false,
+			compulsory: false,
+			icon: 'live-chat',
 		},
 	],
 	formDetails: {
