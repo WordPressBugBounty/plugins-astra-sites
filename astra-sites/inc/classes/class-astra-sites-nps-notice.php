@@ -80,12 +80,11 @@ if ( ! class_exists( 'Astra_Sites_Nps_Notice' ) ) :
 						'plugin_name' => __( 'Starter Templates', 'astra-sites' ),
 						'nps_rating_message' => __( 'How likely are you to recommend #pluginname to your friends or colleagues?', 'astra-sites' ),
 
-						// Step 2A i.e. positive.
+						// Step 2A i.e. for rating 8 and above.
 						'feedback_title' => __( 'Thanks a lot for your feedback! 😍', 'astra-sites' ),
-						'feedback_content' => __( 'Could you please do us a favor and give us a 5-star rating on WordPress? It would help others choose Starter Templates with confidence. Thank you!', 'astra-sites' ),
-						'plugin_rating_link' => esc_url( 'https://wordpress.org/support/plugin/astra-sites/reviews/#new-post' ),
+						'feedback_content' => __( "Thanks for being part of the Starter Templates community! Got feedback or suggestions? We'd love to hear it.", 'astra-sites' ),
 
-						// Step 2B i.e. negative.
+						// Step 2B i.e. for rating 7 and below.
 						'plugin_rating_title' => __( 'Thank you for your feedback', 'astra-sites' ),
 						'plugin_rating_content' => __( 'We value your input. How can we improve your experience?', 'astra-sites' ),
 					),

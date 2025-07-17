@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.8.1
-Stable tag: 4.4.30
+Stable tag: 4.4.31
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,14 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.31 - 17-July-2025
+- New:
+    - AI Builder: Added compatibility with the Elementor plugin.
+- Improvement:
+    - Improved plugin installation architecture on import for enhanced error handling and scalability.
+    - NPS Survey: Rating prompt logic now allows disabling for guideline compliance.
+    - Refined the "Finish Setup" UI for a smoother experience.
 
 v4.4.30 - 14-July-2025
 - Improvement:

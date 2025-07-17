@@ -60,11 +60,17 @@ const ApiErrorModel = ( { onOpenChange } ) => {
 						) }
 					</div>
 
-					<div className="p-4 border border-red-400 rounded-md bg-red-50 overflow-auto max-h-96">
-						<pre className="p-2 whitespace-pre-wrap rounded-md  overflow-auto max-h-full">
-							{ JSON.stringify( apiErrorModal.error, null, 2 ) }
-						</pre>
-					</div>
+					{ apiErrorModal?.error && (
+						<div className="p-4 border border-red-400 rounded-md bg-red-50 overflow-auto max-h-96">
+							<pre className="p-2 whitespace-pre-wrap rounded-md  overflow-auto max-h-full">
+								{ JSON.stringify(
+									apiErrorModal.error,
+									null,
+									2
+								) }
+							</pre>
+						</div>
+					) }
 				</div>
 				<div className="items-center gap-3 justify-center mt-4">
 					<Button

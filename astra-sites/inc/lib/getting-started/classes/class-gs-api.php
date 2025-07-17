@@ -64,10 +64,11 @@ class GS_Api {
 	 * Check whether a given request has permission to read notes.
 	 *
 	 * @param  object $request WP_REST_Request Full details about the request.
+	 *
+	 * @since 1.0.0
 	 * @return object|boolean
 	 */
-	public function get_item_permissions_check( $request ) {
-
+	public function get_permissions_check( $request ) {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new \WP_Error(
 				'gt_rest_cannot_access',
@@ -75,6 +76,7 @@ class GS_Api {
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
+
 		return true;
 	}
 
@@ -94,7 +96,7 @@ class GS_Api {
 				array(
 					'methods'             => \WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'get_action_items_content' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'permission_callback' => array( $this, 'get_permissions_check' ),
 					'args'                => array(),
 				),
 			)
@@ -107,7 +109,7 @@ class GS_Api {
 				array(
 					'methods'             => \WP_REST_Server::EDITABLE,
 					'callback'            => array( $this, 'dismiss_setup_wizard' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'permission_callback' => array( $this, 'get_permissions_check' ),
 					'args'                => array(
 						'dismiss' => array(
 							'type'     => 'string',
@@ -120,20 +122,19 @@ class GS_Api {
 
 		register_rest_route(
 			$namespace,
-			'/action-items-status/',
+			'/update-action-item-steps/',
 			array(
 				array(
 					'methods'             => \WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'update_action_item_status' ),
-					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+					'callback'            => array( $this, 'update_action_item_steps' ),
+					'permission_callback' => array( $this, 'get_permissions_check' ),
 					'args'                => array(
-						'id'     => array(
+						'action_id' => array(
 							'type'     => 'string',
 							'required' => true,
 						),
-						'status' => array(
-							'type'     => 'bool',
-							'required' => false,
+						'steps'    => array(
+							'type' => 'array',
 						),
 					),
 				),
@@ -166,9 +167,31 @@ class GS_Api {
 		$action_items_status = get_option( 'getting_started_action_items', array() );
 
 		if ( is_array( $action_items_status ) ) {
+			$update_needed = false; // Flag to check if any dynamic step is completed.
 			foreach ( $default_action_items as $key => $action_item ) {
-				$status = $action_items_status[ $action_item['id'] ]['status'] ?? false;
-				$default_action_items[ $key ]['complete_status'] = $status;
+				// Add step completion status if steps exist.
+				if ( isset( $action_item['steps'] ) && is_array( $action_item['steps'] ) ) {
+					foreach ( $action_item['steps'] as $step_key => $step ) {
+						$db_step_completed = $action_items_status[ $action_item['id'] ]['steps'][ $step['id'] ];
+
+						$step_completed = isset( $step['completed'] ) ? (bool) $step['completed'] : false;
+						if ( ! $step_completed ) {
+							$step_completed = $db_step_completed ?? false;
+						}
+
+						$default_action_items[ $key ]['steps'][ $step_key ]['completed']   = $step_completed;
+
+						if ( $db_step_completed !== $step_completed ) {
+							$action_items_status[ $action_item['id'] ]['steps'][ $step['id'] ] = $step_completed;
+							$update_needed = true; // Set flag to true if any step completed dynamically.
+						}
+					}
+				}
+			}
+
+			// Update the action items status if any step was completed dynamically.
+			if ( $update_needed ) {
+				update_option( 'getting_started_action_items', $action_items_status );
 			}
 		}
 
@@ -184,34 +207,64 @@ class GS_Api {
 
 		wp_send_json_success(
 			array(
-				'data'   => $default_action_items,
-				'status' => true,
+				'items'      => $default_action_items,
+				'categories' => GS_Helper::get_action_items_categories(),
+				'status'     => true,
 			)
 		);
 	}
 
 	/**
-	 * Update items status.
+	 * Update items steps status.
 	 *
 	 * @param \WP_REST_Request $request Full details about the request.
 	 * @return void
 	 */
-	public function update_action_item_status( $request ) {
+	public function update_action_item_steps( $request ) {
 
 		$nonce = (string) $request->get_header( 'X-WP-Nonce' );
 		// Verify the nonce.
 		if ( ! wp_verify_nonce( sanitize_text_field( $nonce ), 'wp_rest' ) ) {
 			wp_send_json_error(
 				array(
-					'data'   => __( 'Nonce verification failed.', 'astra-sites' ),
-					'status' => false,
+					'message' => __( 'Nonce verification failed!', 'astra-sites' ),
+					'status'  => false,
 
 				)
 			);
 		}
 
-		$action_item_id     = $request->get_param( 'id' );
-		$action_item_status = $request->get_param( 'status' );
+		$action_id = $request->get_param( 'action_id' );
+		$steps     = $request->get_param( 'steps' );
+
+		// Return error if action item ID is not provided.
+		if ( empty( $action_id ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Action item ID is required!', 'astra-sites' ),
+					'status'  => false,
+				)
+			);
+		}
+
+		if ( empty( $steps ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Steps data are required!', 'astra-sites' ),
+					'status'  => false,
+				)
+			);
+		}
+
+		if ( ! is_array( $steps ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __('Steps data are not in correct format!', 'astra-sites'),
+					'status'  => false,
+					'data'    => $steps,
+				)
+			);
+		}
 
 		$action_items = get_option( 'getting_started_action_items', array() );
 
@@ -220,25 +273,69 @@ class GS_Api {
 			$default_action_items = GS_Helper::get_default_action_items();
 			foreach ( $default_action_items as $action_item ) {
 				$action_items[ $action_item['id'] ]['status'] = false;
+				// Initialize steps status if they exist.
+				if ( isset( $action_item['steps'] ) && is_array( $action_item['steps'] ) ) {
+					$action_items[ $action_item['id'] ]['steps'] = array();
+
+					$all_steps_completed = true; // Assume all steps are completed initially.
+					foreach ( $action_item['steps'] as $step ) {
+						$step_completed = isset( $step['completed'] ) ? (bool) $step['completed'] : false;
+
+						$action_items[ $action_item['id'] ]['steps'][ $step['id'] ] = $step_completed;
+
+						if ( $all_steps_completed && ! $step_completed ) {
+							$all_steps_completed = false; // If any step is not completed, set to false.
+						}
+					}
+
+					// Update parent action item status based on steps completion.
+					$action_items[ $action_item['id'] ]['status'] = $all_steps_completed;
+				}
 			}
 		}
 
 		if ( is_array( $action_items ) ) {
-			$action_items[ $action_item_id ]['status'] = $action_item_status;
+			// Initialize steps array if it doesn't exist.
+			if ( ! isset( $action_items[ $action_id ]['steps'] ) ) {
+				$action_items[ $action_id ]['steps'] = array();
+			}
+
+			$all_steps_completed = true;
+			foreach ( $steps as $step ) {
+				$step_id          = $step['id'] ?? '';
+				$step_completed  = isset( $step['completed'] ) ? (bool) $step['completed'] : false;
+
+				// If step ID is not provided, skip this step.
+				if ( empty( $step_id ) ) {
+					continue;
+				}
+
+				// Update the step status.
+				$action_items[ $action_id ]['steps'][ $step_id ] = $step_completed;
+
+				if ( $all_steps_completed && ! $step_completed ) {
+					$all_steps_completed = false; // If any step is not completed, set to false.
+				}
+			}
+
+			// Update parent action item status based on steps completion.
+			$action_items[ $action_id ]['status'] = $all_steps_completed;
+
 			update_option( 'getting_started_action_items', $action_items );
 
 			wp_send_json_success(
 				array(
-					'status' => true,
-					'data'   => __( 'Action item status updated.', 'astra-sites' ),
+					'status'  => true,
+					'message' => __( 'Step status updated.', 'astra-sites' ),
+					'data'    => $action_items,
 				)
 			);
 		}
 
 		wp_send_json_error(
 			array(
-				'status' => false,
-				'error'  => __( 'Action item status not updated.', 'astra-sites' ),
+				'status'  => false,
+				'message' => __( 'Action items failed to update!', 'astra-sites' ),
 			)
 		);
 

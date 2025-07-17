@@ -223,6 +223,7 @@ const useBuildSiteController = () => {
 			} else {
 				setApiErrorModal( {
 					open: true,
+					message,
 					error,
 				} );
 			}

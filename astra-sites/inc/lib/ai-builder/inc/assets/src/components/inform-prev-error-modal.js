@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 
 const supportLink = (
 	<a
-		href="https://wpastra.com/contact"
+		href={ aiBuilderVars.supportLink }
 		target="_blank"
 		className="text-accent-st"
 		rel="noreferrer"

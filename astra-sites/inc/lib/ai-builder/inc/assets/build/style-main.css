@@ -1176,6 +1176,8 @@ select {
   height: 1px;
 }.h-screen {
   height: 100vh;
+}.max-h-10 {
+  max-height: 2.5rem;
 }.max-h-52 {
   max-height: 13rem;
 }.max-h-60 {
@@ -3148,8 +3150,8 @@ select {
     transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 
-  .sm\:grid-cols-\[8rem_1fr_8rem\] {
-    grid-template-columns: 8rem 1fr 8rem;
+  .sm\:grid-cols-\[6\.75rem_1fr_8rem\] {
+    grid-template-columns: 6.75rem 1fr 8rem;
   }
 
   .sm\:flex-row {
@@ -3205,6 +3207,10 @@ select {
 
   .sm\:pl-0 {
     padding-left: 0px;
+  }
+
+  .sm\:pl-5 {
+    padding-left: 1.25rem;
   }
 
   .sm\:text-left {

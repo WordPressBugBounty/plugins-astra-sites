@@ -60,6 +60,7 @@ class Intelligent_Starter_Templates_Loader {
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-helper.php';
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-integration.php';
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-api.php';
+		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-install-plugin.php';
 
 		// Admin Menu.
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );

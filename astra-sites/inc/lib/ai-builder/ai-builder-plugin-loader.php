@@ -414,7 +414,7 @@ class Ai_Builder_Plugin_Loader {
 			'zipwp_auth_nonce'         => wp_create_nonce( 'zipwp-auth-nonce' ),
 			'adminUrl'                 => admin_url(),
 			'imageDir'                 => AI_BUILDER_URL . 'inc/assets/images/',
-			'supportLink'              => $support_link,
+			'supportLink'              => apply_filters( 'ai_builder_support_link', $support_link ),
 			'logoUrl'                  => apply_filters( 'ai_builder_logo', AI_BUILDER_URL . 'inc/assets/images/logo.svg' ),
 			'placeholder_images'       => Helper::get_image_placeholders(),
 			'reportError'              => $this->should_report_error(),

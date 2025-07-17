@@ -47,8 +47,9 @@ class GS_Admin {
 
 		add_action( 'admin_menu', array( $this, 'setup_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_scripts' ) );
-		add_action( 'admin_notices', array( $this, 'display_dashboard_banner' ), 8 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_notice_styles' ) );
+		add_action( 'admin_head', array( $this, 'hide_notices_on_getting_started_page' ) );
+		// add_action( 'admin_notices', array( $this, 'display_dashboard_banner' ), 8 );
+		// add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_notice_styles' ) );
 	}
 
 	/**
@@ -68,6 +69,22 @@ class GS_Admin {
 	}
 
 	/**
+	 * Get the icon for the Getting Started page.
+	 *
+	 * @param string $fill_color The fill color for the icon.
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+	public static function get_icon( $fill_color = 'currentColor' ) {
+		$icon = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M12.002 8.712L13.5087 7.20467C14.0659 6.64757 14.508 5.98615 14.8097 5.25819C15.1113 4.53023 15.2666 3.74998 15.2667 2.962V0.733334H13.038C12.2501 0.733327 11.4699 0.888516 10.7419 1.19004C10.0139 1.49156 9.3525 1.93352 8.79534 2.49067L7.28801 3.99733L3.51667 3.526L0.693341 6.34933L9.65001 15.3067L12.4733 12.4833L12.002 8.712ZM10.8073 9.906L11.0693 12.0013L9.65001 13.4207L8.47134 12.242L10.8073 9.906ZM6.09401 5.192L3.75734 7.528L2.58001 6.34933L3.99934 4.93L6.09401 5.192ZM3.75734 11.2987L1.40067 13.656L0.458008 12.7133L2.81467 10.3567L3.75734 11.2987ZM5.64334 13.1853L3.28601 15.542L2.34334 14.5993L4.70001 12.242L5.64334 13.1853Z" fill="' . $fill_color . '"/>
+			</svg>';
+
+		return apply_filters( 'getting_started_icon', $icon );
+	}
+
+	/**
 	 * Add submenu to admin menu.
 	 *
 	 * @since 1.0.0
@@ -79,26 +96,24 @@ class GS_Admin {
 			$parent_slug   = 'getting-started';
 			$capability    = 'manage_options';
 			$menu_priority = apply_filters( 'getting_started_menu_priority', 1 );
+			
+			// Get the count of incomplete steps.
+			$incomplete_steps = GS_Helper::get_incomplete_actions_count();
+
+			$menu_text   = __( 'Finish Setup', 'astra-sites' );
+			$bubble_text = $incomplete_steps
+				? '<span class="awaiting-mod">' . esc_html( $incomplete_steps ) . '</span>'
+				: '<span class="awaiting-mod" style="background-color: #15803d;"><svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="scale: 1.5; translate: 0 1px;"><path d="M20 6 9 17l-5-5"/></svg></span>';
 
 			add_menu_page(
-				'Finish Setup',
-				'<div class="gs-loading" style="display: flex; align-items: center; gap: 6px;">
-					<span>Finish Setup</span>
-					<span style="display: inline-block; width: 10px; height: 10px; background: #d63638; border-radius: 50%; animation: pulse 1.5s infinite;"></span>
-				</div>',
+				$menu_text,
+				'<span>' . $menu_text . '</span> ' . $bubble_text,
 				$capability,
 				$parent_slug,
-				'__return_empty_string',
-				'data:image/svg+xml;base64,' . base64_encode( //phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-					'<svg dataSlot="icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path clipRule="evenodd" fillRule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 0 1 .75.75c0 5.056-2.383 9.555-6.084 12.436A6.75 6.75 0 0 1 9.75 22.5a.75.75 0 0 1-.75-.75v-4.131A15.838 15.838 0 0 1 6.382 15H2.25a.75.75 0 0 1-.75-.75 6.75 6.75 0 0 1 7.815-6.666ZM15 6.75a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z" />
-                <path d="M5.26 17.242a.75.75 0 1 0-.897-1.203 5.243 5.243 0 0 0-2.05 5.022.75.75 0 0 0 .625.627 5.243 5.243 0 0 0 5.022-2.051.75.75 0 1 0-1.202-.897 3.744 3.744 0 0 1-3.008 1.51c0-1.23.592-2.323 1.51-3.008Z" />
-                </svg>'
-				),
+				array( $this, 'render_page' ),
+				'data:image/svg+xml;base64,' . base64_encode( self::get_icon( 'white' ) ), //phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 				$menu_priority
 			);
-
-			add_action( 'admin_footer', array( $this, 'render' ) );
 		}
 	}
 
@@ -108,7 +123,7 @@ class GS_Admin {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public function render() {
+	public function render_page() {
 		echo "<div id='getting-started-page' class='getting-started-style'></div>";
 	}
 
@@ -163,6 +178,8 @@ class GS_Admin {
 				'ajaxurl'                => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'_ajax_nonce'            => wp_create_nonce( 'getting-started' ),
 				'rest_api_nonce'         => ( current_user_can( 'manage_options' ) ) ? wp_create_nonce( 'wp_rest' ) : '',
+				'icon'                   => self::get_icon(),
+				'iconURL'                => esc_url( apply_filters( 'getting_started_logo_url', '' ) ),
 				'title'                  => sanitize_text_field( $content['title'] ),
 				'description'            => sanitize_text_field( $content['description'] ),
 				'footerLogoURL'          => esc_url_raw( $content['footer_logo'] ),
@@ -185,7 +202,19 @@ class GS_Admin {
 		wp_enqueue_style( 'getting-started-style', GS_URL . 'build/style-main.css', array(), GS_VER );
 		wp_enqueue_style( 'getting-started-google-fonts', $this->google_fonts_url(), array(), 'all' );
 
-		wp_add_inline_style( 'getting-started-style', 'a.toplevel_page_getting-started:has(.gs-loading) { opacity: 0.8; pointer-events: none; }' );
+		// Add custom CSS for the Getting Started page
+		if ( isset( $_GET['page'] ) && 'getting-started' === $_GET['page'] ) {
+			wp_add_inline_style( 'getting-started-style', '
+				#wpcontent { padding-left: 0 !important; }
+				.wrap { margin: 0 !important; }
+				#wpbody-content { padding-bottom: 0; }
+				.getting-started-page-container { 
+					max-width: 1200px; 
+					margin: 0 auto; 
+					padding: 40px 20px;
+				}
+			');
+		}
 	}
 
 	/**
@@ -257,15 +286,35 @@ class GS_Admin {
 	}
 
 	/**
+	 * Hide all admin notices on the Getting Started page.
+	 *
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function hide_notices_on_getting_started_page() {
+		if ( isset( $_GET['page'] ) && 'getting-started' === $_GET['page'] ) {
+			remove_all_actions( 'admin_notices' );
+			remove_all_actions( 'all_admin_notices' );
+			
+			// Add custom CSS to hide any remaining notices
+			echo '<style>
+				.notice, .updated, .update-nag, .error, .warning {
+					display: none !important;
+				}
+			</style>';
+		}
+	}
+
+	/**
 	 * Custom Elementor Dashboard Banner.
 	 *
 	 * @since 1.0.0
 	 * @return void
 	 */
 	public function display_dashboard_banner() {
-		// Show only on Dashboard page.
+		// Show only on Dashboard page and not on Getting Started page.
 		$screen = get_current_screen();
-		if ( is_object( $screen ) && 'dashboard' !== $screen->base ) {
+		if ( is_object( $screen ) && ( 'dashboard' !== $screen->base || isset( $_GET['page'] ) && 'getting-started' === $_GET['page'] ) ) {
 			return;
 		}
 
@@ -283,8 +332,8 @@ class GS_Admin {
 						<?php esc_html_e( 'Follow a simple step-by-step guide to finish setup, learn the basics, unlock powerful tools and launch a stunning website with ease.', 'astra-sites' ); ?>
 					</p>
 					<a
-						href="<?php echo esc_url( admin_url( 'admin.php?page=your-plugin-settings' ) ); ?>"
-						class="button button-primary gs-finish-setup-button"
+						href="<?php echo esc_url( admin_url( 'admin.php?page=getting-started' ) ); ?>"
+						class="button button-primary"
 					>
 						<?php esc_html_e( 'Finish Setup', 'astra-sites' ); ?>
 					</a>

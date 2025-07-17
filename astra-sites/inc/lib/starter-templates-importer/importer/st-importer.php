@@ -261,6 +261,38 @@ class ST_Importer {
 	}
 
 	/**
+	 * Update post option
+	 *
+	 * @since 1.1.18
+	 *
+	 * @return void
+	 */
+	public static function set_elementor_kit() {
+
+		// Update Elementor Theme Kit Option.
+		$args = array(
+			'post_type'   => 'elementor_library',
+			'post_status' => 'publish',
+			'numberposts' => 1,
+			'meta_query'  => array( //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Setting elementor kit. WP Query would have been expensive.
+				array(
+					'key'   => '_astra_sites_imported_post',
+					'value' => '1',
+				),
+				array(
+					'key'   => '_elementor_template_type',
+					'value' => 'kit',
+				),
+			),
+		);
+
+		$query = get_posts( $args );
+		if ( ! empty( $query ) && isset( $query[0]->ID ) ) {
+			update_option( 'elementor_active_kit', $query[0]->ID );
+		}
+	}
+
+	/**
 	 * Import site options.
 	 *
 	 * @since  1.0.0
@@ -306,6 +338,12 @@ class ST_Importer {
 
 						case 'site_title':
 							update_option( 'blogname', $option_value );
+							break;
+
+						case 'elementor_active_kit':
+							if ( '' !== $option_value ) {
+								self::set_elementor_kit();
+							}
 							break;
 
 						default:

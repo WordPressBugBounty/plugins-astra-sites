@@ -251,14 +251,14 @@ const OnboardingAI = () => {
 				{ ! isAuthScreen && (
 					<header
 						className={ classNames(
-							'w-full h-full grid grid-cols-[5rem_1fr_8rem] sm:grid-cols-[8rem_1fr_8rem] items-center justify-between md:justify-start z-[5] relative bg-white shadow',
+							'w-full h-full grid grid-cols-[5rem_1fr_8rem] sm:grid-cols-[6.75rem_1fr_8rem] items-center justify-between md:justify-start z-[5] relative bg-white shadow pl-3 sm:pl-5',
 							steps[ currentStep ]?.layoutConfig?.hideHeader &&
 								'justify-center md:justify-between'
 						) }
 					>
 						{ /* Brand logo */ }
 						<img
-							className="h-10 w-20"
+							className="max-h-10"
 							src={ logoUrlLight }
 							alt={ __( 'Build with AI', 'ai-builder' ) }
 						/>

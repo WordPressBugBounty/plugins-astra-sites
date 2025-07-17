@@ -183,6 +183,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_filter( 'plugins_api_args', array( $this, 'raise_memory_for_plugins_install' ), 1, 1 );
 			add_filter( 'wp_import_insert_term', array( $this, 'store_original_term_id' ), 10, 2 );
 			add_filter( 'getting_started_is_setup_wizard_showing', array( $this, 'maybe_setup_wizard_showing' ) );
+			add_filter( 'getting_started_logo_url', array( $this, 'starter_templates_logo_url' ) );
 		}
 
 		/**
@@ -2830,6 +2831,17 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 
 			return $showing;
+		}
+
+		/**
+		 * Get the logo URL for Finish Setup page.
+		 *
+		 * @since 4.4.31
+		 *
+		 * @return string
+		 */
+		public function starter_templates_logo_url() {
+			return ASTRA_SITES_URI . 'inc/lib/onboarding/assets/images/logo.svg';
 		}
 	}
 
