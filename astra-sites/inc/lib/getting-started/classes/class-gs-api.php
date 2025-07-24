@@ -133,7 +133,7 @@ class GS_Api {
 							'type'     => 'string',
 							'required' => true,
 						),
-						'steps'    => array(
+						'steps'     => array(
 							'type' => 'array',
 						),
 					),
@@ -179,7 +179,13 @@ class GS_Api {
 							$step_completed = $db_step_completed ?? false;
 						}
 
-						$default_action_items[ $key ]['steps'][ $step_key ]['completed']   = $step_completed;
+						/**
+						 * Update the default step completion status.
+						 *
+						 * @var array<string, array{
+						 *     steps: array<int|string, array{ completed: bool }>
+						 * }> $default_action_items */
+						$default_action_items[ $key ]['steps'][ $step_key ]['completed'] = $step_completed;
 
 						if ( $db_step_completed !== $step_completed ) {
 							$action_items_status[ $action_item['id'] ]['steps'][ $step['id'] ] = $step_completed;
@@ -259,7 +265,7 @@ class GS_Api {
 		if ( ! is_array( $steps ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __('Steps data are not in correct format!', 'astra-sites'),
+					'message' => __( 'Steps data are not in correct format!', 'astra-sites' ),
 					'status'  => false,
 					'data'    => $steps,
 				)
@@ -302,8 +308,8 @@ class GS_Api {
 
 			$all_steps_completed = true;
 			foreach ( $steps as $step ) {
-				$step_id          = $step['id'] ?? '';
-				$step_completed  = isset( $step['completed'] ) ? (bool) $step['completed'] : false;
+				$step_id        = $step['id'] ?? '';
+				$step_completed = isset( $step['completed'] ) ? (bool) $step['completed'] : false;
 
 				// If step ID is not provided, skip this step.
 				if ( empty( $step_id ) ) {

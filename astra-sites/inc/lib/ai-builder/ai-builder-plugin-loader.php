@@ -269,6 +269,7 @@ class Ai_Builder_Plugin_Loader {
 			'screen_url'   => ZIPWP_APP,
 			'redirect_url' => admin_url( 'themes.php?page=ai-builder' ),
 			'source'       => 'starter-templates',
+			'utmSource'    => 'st',
 		);
 
 		if ( ! empty( $partner_id ) ) {

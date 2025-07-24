@@ -246,11 +246,11 @@ const useBuildSiteController = () => {
 				return;
 			}
 
-			const enabledFeatures = skip
-				? []
-				: siteFeatures
-						.filter( ( feature ) => feature.enabled )
-						.map( ( feature ) => feature.id );
+			const enabledFeatures = siteFeatures
+				.filter( ( feature ) =>
+					skip ? feature.compulsory : feature.enabled
+				)
+				.map( ( feature ) => feature.id );
 
 			// Add ecommerce feature if selected template is ecommerce.
 			if ( hasEcommerceFeature ) {

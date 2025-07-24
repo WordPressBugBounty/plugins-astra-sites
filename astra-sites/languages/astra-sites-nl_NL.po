@@ -15,8 +15,8 @@ msgstr ""
 #: astra-sites.php
 #: astra-sites.php:128
 #: inc/classes/class-astra-sites-nps-notice.php:80
-#: inc/classes/class-astra-sites.php:2646
-#: inc/lib/onboarding/class-onboarding-loader.php:105
+#: inc/classes/class-astra-sites.php:2647
+#: inc/lib/onboarding/class-onboarding-loader.php:106
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:126
@@ -119,12 +119,12 @@ msgstr "U heeft momenteel geen geplande cron-evenementen."
 #: inc/classes/class-astra-sites-importer.php:549
 #: inc/classes/class-astra-sites-page.php:77
 #: inc/classes/class-astra-sites-page.php:223
-#: inc/classes/class-astra-sites.php:275
-#: inc/classes/class-astra-sites.php:740
-#: inc/classes/class-astra-sites.php:1154
-#: inc/classes/class-astra-sites.php:1249
-#: inc/classes/class-astra-sites.php:1280
-#: inc/classes/class-astra-sites.php:1480
+#: inc/classes/class-astra-sites.php:276
+#: inc/classes/class-astra-sites.php:741
+#: inc/classes/class-astra-sites.php:1155
+#: inc/classes/class-astra-sites.php:1250
+#: inc/classes/class-astra-sites.php:1281
+#: inc/classes/class-astra-sites.php:1481
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:967
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:985
 #: inc/lib/ai-builder/inc/ajax/importer.php:139
@@ -202,15 +202,11 @@ msgstr "Hoe waarschijnlijk is het dat je #pluginname aan je vrienden of collega'
 msgid "Thanks a lot for your feedback! 😍"
 msgstr "Heel erg bedankt voor je feedback! 😍"
 
-#: inc/classes/class-astra-sites-nps-notice.php:85
-msgid "Could you please do us a favor and give us a 5-star rating on WordPress? It would help others choose Starter Templates with confidence. Thank you!"
-msgstr "Zou je ons alstublieft een plezier willen doen en ons een 5-sterrenbeoordeling op WordPress willen geven? Het zou anderen helpen om met vertrouwen Starter Templates te kiezen. Dank je!"
-
-#: inc/classes/class-astra-sites-nps-notice.php:89
+#: inc/classes/class-astra-sites-nps-notice.php:88
 msgid "Thank you for your feedback"
 msgstr "Dank u voor uw feedback"
 
-#: inc/classes/class-astra-sites-nps-notice.php:90
+#: inc/classes/class-astra-sites-nps-notice.php:89
 msgid "We value your input. How can we improve your experience?"
 msgstr "We waarderen uw feedback. Hoe kunnen we uw ervaring verbeteren?"
 
@@ -501,373 +497,372 @@ msgid "This site category does not exist. Please try a different site category."
 msgstr "Deze sitecategorie bestaat niet. Probeer een andere sitecategorie."
 
 #. Translators: %s Plugin Name.
-#: inc/classes/class-astra-sites.php:256
+#: inc/classes/class-astra-sites.php:257
 #, php-format
 msgid "%s: XMLReader extension is missing! To import templates, please get in touch with your hosting provider to enable this extension."
 msgstr "%s: XMLReader-extensie ontbreekt! Neem contact op met uw hostingprovider om deze extensie in te schakelen om sjablonen te importeren."
 
 #. translators: %d is the Template ID.
-#: inc/classes/class-astra-sites.php:671
+#: inc/classes/class-astra-sites.php:672
 #, php-format
 msgid "Invalid Template ID - %d"
 msgstr "Ongeldige Template-ID - %d"
 
-#: inc/classes/class-astra-sites.php:755
-#: inc/classes/class-astra-sites.php:1175
+#: inc/classes/class-astra-sites.php:756
+#: inc/classes/class-astra-sites.php:1176
 msgid "Invalid API URL."
 msgstr "Ongeldige API-URL."
 
-#: inc/classes/class-astra-sites.php:767
+#: inc/classes/class-astra-sites.php:768
 msgid "Invalid Post Meta"
 msgstr "Ongeldige Post Meta"
 
-#: inc/classes/class-astra-sites.php:774
+#: inc/classes/class-astra-sites.php:775
 msgid "Invalid Post ID or Elementor Meta"
 msgstr "Ongeldige Post-ID of Elementor Meta"
 
-#: inc/classes/class-astra-sites.php:818
+#: inc/classes/class-astra-sites.php:819
 msgid "Provided API URL is empty! Please try again!"
 msgstr "De opgegeven API-URL is leeg! Probeer het opnieuw!"
 
 #. Translators: %s is API URL.
-#: inc/classes/class-astra-sites.php:837
+#: inc/classes/class-astra-sites.php:838
 #, php-format
 msgid "Invalid API Request URL - %s"
 msgstr "Ongeldige API-verzoek-URL - %s"
 
 #. translators: %s Error Message
-#: inc/classes/class-astra-sites.php:860
-#: inc/classes/class-astra-sites.php:976
+#: inc/classes/class-astra-sites.php:861
+#: inc/classes/class-astra-sites.php:977
 #, php-format
 msgid "API Request could not be performed - %s"
 msgstr "API-verzoek kon niet worden uitgevoerd - %s"
 
 #. translators: %s Error Message
-#: inc/classes/class-astra-sites.php:865
-#: inc/classes/class-astra-sites.php:981
+#: inc/classes/class-astra-sites.php:866
+#: inc/classes/class-astra-sites.php:982
 #, php-format
 msgid "API Request has failed - %s"
 msgstr "API-verzoek is mislukt - %s"
 
-#: inc/classes/class-astra-sites.php:895
-#: inc/classes/class-astra-sites.php:1010
+#: inc/classes/class-astra-sites.php:896
+#: inc/classes/class-astra-sites.php:1011
 msgid "Internal Server Error."
 msgstr "Interne serverfout."
 
 #. translators: %s IP address.
-#: inc/classes/class-astra-sites.php:901
-#: inc/classes/class-astra-sites.php:1016
+#: inc/classes/class-astra-sites.php:902
+#: inc/classes/class-astra-sites.php:1017
 #, php-format
 msgid "Client IP: %1$s </br> Error code: %2$s"
 msgstr "Client-IP: %1$s </br> Foutcode: %2$s"
 
-#: inc/classes/class-astra-sites.php:934
+#: inc/classes/class-astra-sites.php:935
 msgid "Provided API details are empty! Please try again!"
 msgstr "De verstrekte API-gegevens zijn leeg! Probeer het opnieuw!"
 
 #. Translators: %s is Request URL.
 #. Translators: %s is API URL.
-#: inc/classes/class-astra-sites.php:953
+#: inc/classes/class-astra-sites.php:954
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:56
 #, php-format
 msgid "Invalid Request URL - %s"
 msgstr "Ongeldige aanvraag-URL - %s"
 
-#: inc/classes/class-astra-sites.php:1288
+#: inc/classes/class-astra-sites.php:1289
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:274
 msgid "Need to send URL of the image to be downloaded"
 msgstr "Moet de URL van de afbeelding verzenden die gedownload moet worden"
 
-#: inc/classes/class-astra-sites.php:1313
+#: inc/classes/class-astra-sites.php:1314
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:284
 msgid "Could not download the image."
 msgstr "Kon de afbeelding niet downloaden."
 
-#: inc/classes/class-astra-sites.php:1574
+#: inc/classes/class-astra-sites.php:1575
 msgid "Get Started"
 msgstr "Beginnen"
 
-#: inc/classes/class-astra-sites.php:1776
-#: inc/classes/class-astra-sites.php:2279
+#: inc/classes/class-astra-sites.php:1777
+#: inc/classes/class-astra-sites.php:2280
 #: inc/includes/templates.php:321
 msgid "Get Access!"
 msgstr "Toegang krijgen!"
 
-#: inc/classes/class-astra-sites.php:1778
+#: inc/classes/class-astra-sites.php:1779
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: inc/classes/class-astra-sites.php:1782
+#: inc/classes/class-astra-sites.php:1783
 msgid "Syncing template library in the background. The process can take anywhere between 2 to 3 minutes. We will notify you once done."
 msgstr "De sjabloonbibliotheek wordt op de achtergrond gesynchroniseerd. Het proces kan tussen de 2 en 3 minuten duren. We laten het u weten zodra het klaar is."
 
-#: inc/classes/class-astra-sites.php:1783
+#: inc/classes/class-astra-sites.php:1784
 msgid "Some of the files required during the import process are missing.<br/><br/>Please try again after some time."
 msgstr "Sommige van de bestanden die nodig zijn tijdens het importproces ontbreken.<br/><br/>Probeer het na enige tijd opnieuw."
 
-#: inc/classes/class-astra-sites.php:1784
+#: inc/classes/class-astra-sites.php:1785
 msgid "<p>WordPress debug mode is currently enabled on your website. This has interrupted the import process..</p><p>Kindly disable debug mode and try importing Starter Template again.</p><p>You can add the following code into the wp-config.php file to disable debug mode.</p><p><code>define('WP_DEBUG', false);</code></p>"
 msgstr "<p>De debugmodus van WordPress is momenteel ingeschakeld op uw website. Dit heeft het importproces onderbroken.</p><p>Schakel alstublieft de debugmodus uit en probeer de Starter Template opnieuw te importeren.</p><p>U kunt de volgende code toevoegen aan het wp-config.php-bestand om de debugmodus uit te schakelen.</p><p><code>define('WP_DEBUG', false);</code></p>"
 
 #. translators: %s is a documentation link.
-#: inc/classes/class-astra-sites.php:1786
+#: inc/classes/class-astra-sites.php:1787
 #, php-format
 msgid "<p>We are facing a temporary issue in importing this template.</p><p>Read <a href=\"%s\" target=\"_blank\">article</a> to resolve the issue and continue importing template.</p>"
 msgstr "<p>We ondervinden een tijdelijk probleem bij het importeren van deze sjabloon.</p><p>Lees het <a href=\"%s\" target=\"_blank\">artikel</a> om het probleem op te lossen en verder te gaan met het importeren van de sjabloon.</p>"
 
 #. translators: %s is a documentation link.
-#: inc/classes/class-astra-sites.php:1788
+#: inc/classes/class-astra-sites.php:1789
 #, php-format
 msgid "<p>We are facing a temporary issue in installing the required plugins for this template.</p><p>Read&nbsp;<a href=\"%s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.</p>"
 msgstr "<p>We ondervinden een tijdelijk probleem bij het installeren van de vereiste plugins voor deze template.</p><p>Lees&nbsp;<a href=\"%s\" target=\"_blank\">het artikel</a>&nbsp;om het probleem op te lossen en verder te gaan met het importeren van de template.</p>"
 
 #. translators: %s are white label strings.
-#: inc/classes/class-astra-sites.php:1792
+#: inc/classes/class-astra-sites.php:1793
 #, php-format
 msgid "Warning! %1$s Import process is not complete. Don't close the window until import process complete. Do you still want to leave the window?"
 msgstr "Waarschuwing! %1$s Het importproces is niet voltooid. Sluit het venster niet totdat het importproces is voltooid. Wilt u het venster toch verlaten?"
 
-#: inc/classes/class-astra-sites.php:1793
+#: inc/classes/class-astra-sites.php:1794
 msgid "Done! View Site"
 msgstr "Klaar! Bekijk site"
 
 #. translators: %s is a template name
-#: inc/classes/class-astra-sites.php:1796
+#: inc/classes/class-astra-sites.php:1797
 #, php-format
 msgid "Import \"%s\" Template"
 msgstr "Importeer \"%s\" sjabloon"
 
-#: inc/classes/class-astra-sites.php:1799
+#: inc/classes/class-astra-sites.php:1800
 msgid "Installing Required Plugins.."
 msgstr "Vereiste plugins installeren.."
 
 #. translators: %s are white label strings.
-#: inc/classes/class-astra-sites.php:1801
+#: inc/classes/class-astra-sites.php:1802
 #, php-format
 msgid "Installing %1$s Theme.."
 msgstr "Installeren van %1$s-thema.."
 
-#: inc/classes/class-astra-sites.php:1824
+#: inc/classes/class-astra-sites.php:1825
 msgid "Dismiss this notice."
 msgstr "Negeer deze melding."
 
-#: inc/classes/class-astra-sites.php:1826
+#: inc/classes/class-astra-sites.php:1827
 msgid "One Last Step.."
 msgstr "Eén laatste stap.."
 
-#: inc/classes/class-astra-sites.php:1827
+#: inc/classes/class-astra-sites.php:1828
 msgid "Your Selected Website is Being Imported."
 msgstr "Uw geselecteerde website wordt geïmporteerd."
 
-#: inc/classes/class-astra-sites.php:1828
+#: inc/classes/class-astra-sites.php:1829
 msgid "Your Selected Template is Being Imported."
 msgstr "Uw geselecteerde sjabloon wordt geïmporteerd."
 
-#: inc/classes/class-astra-sites.php:1830
+#: inc/classes/class-astra-sites.php:1831
 msgid "We have sent you a surprise gift on your email address! Please check your inbox!"
 msgstr "We hebben je een verrassingscadeau naar je e-mailadres gestuurd! Controleer je inbox!"
 
-#: inc/classes/class-astra-sites.php:1832
+#: inc/classes/class-astra-sites.php:1833
 msgid "Looks like the template you are importing is temporarily not available."
 msgstr "Het lijkt erop dat de sjabloon die je importeert tijdelijk niet beschikbaar is."
 
-#: inc/classes/class-astra-sites.php:1833
+#: inc/classes/class-astra-sites.php:1834
 msgid "We could not start the import process and this is the message from WordPress:"
 msgstr "We konden het importproces niet starten en dit is het bericht van WordPress:"
 
-#: inc/classes/class-astra-sites.php:1834
+#: inc/classes/class-astra-sites.php:1835
 msgid "There was an error connecting to the Starter Templates API."
 msgstr "Er was een fout bij het verbinden met de Starter Templates API."
 
-#: inc/classes/class-astra-sites.php:1835
+#: inc/classes/class-astra-sites.php:1836
 msgid "There was an error while importing the content."
 msgstr "Er is een fout opgetreden bij het importeren van de inhoud."
 
-#: inc/classes/class-astra-sites.php:1836
+#: inc/classes/class-astra-sites.php:1837
 msgid "To import content, WordPress needs to store XML file in /wp-content/ folder. Please get in touch with your hosting provider."
 msgstr "Om inhoud te importeren, moet WordPress het XML-bestand opslaan in de map /wp-content/. Neem contact op met uw hostingprovider."
 
-#: inc/classes/class-astra-sites.php:1837
+#: inc/classes/class-astra-sites.php:1838
 msgid "Looks like your host probably could not store XML file in /wp-content/ folder."
 msgstr "Het lijkt erop dat uw host waarschijnlijk het XML-bestand niet kon opslaan in de map /wp-content/."
 
 #. translators: %s HTML tags
-#: inc/classes/class-astra-sites.php:1839
+#: inc/classes/class-astra-sites.php:1840
 #, php-format
 msgid "%1$sWe could not start the import process due to failed AJAX request and this is the message from WordPress:%2$s"
 msgstr "%1$sWe konden het importproces niet starten vanwege een mislukte AJAX-aanvraag en dit is het bericht van WordPress:%2$s"
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1841
+#: inc/classes/class-astra-sites.php:1842
 #, php-format
 msgid "%1$sRead&nbsp;<a href=\"%2$s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.%3$s"
 msgstr "%1$sLees&nbsp;<a href=\"%2$s\" target=\"_blank\">artikel</a>&nbsp;om het probleem op te lossen en verder te gaan met het importeren van de sjabloon.%3$s"
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1850
+#: inc/classes/class-astra-sites.php:1851
 #, php-format
 msgid "%1$sWe could not complete the import process due to failed AJAX request and this is the message:%2$s"
 msgstr "%1$sWe konden het importproces niet voltooien vanwege een mislukte AJAX-aanvraag en dit is het bericht:%2$s"
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1852
+#: inc/classes/class-astra-sites.php:1853
 #, php-format
 msgid "%1$sPlease report this <a href=\"%2$s\" target=\"_blank\">here</a>.%3$s"
 msgstr "%1$sRapporteer dit alstublieft <a href=\"%2$s\" target=\"_blank\">hier</a>.%3$s"
 
-#: inc/classes/class-astra-sites.php:2074
+#: inc/classes/class-astra-sites.php:2075
 msgid "XMLReader Support Missing"
 msgstr "Ondersteuning voor XMLReader ontbreekt"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2076
+#: inc/classes/class-astra-sites.php:2077
 msgid "You're close to importing the template. To complete the process, enable XMLReader support on your website.."
 msgstr "Je bent dicht bij het importeren van de sjabloon. Om het proces te voltooien, schakel XMLReader-ondersteuning in op je website."
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2076
-#: inc/classes/class-astra-sites.php:2081
-#: inc/classes/class-astra-sites.php:2086
-#: inc/classes/class-astra-sites.php:2104
+#: inc/classes/class-astra-sites.php:2077
+#: inc/classes/class-astra-sites.php:2082
+#: inc/classes/class-astra-sites.php:2087
+#: inc/classes/class-astra-sites.php:2105
 #, php-format
 msgid "Read an article <a href=\"%s\" target=\"_blank\">here</a> to resolve the issue."
 msgstr "Lees een artikel <a href=\"%s\" target=\"_blank\">hier</a> om het probleem op te lossen."
 
-#: inc/classes/class-astra-sites.php:2079
+#: inc/classes/class-astra-sites.php:2080
 msgid "cURL Support Missing"
 msgstr "cURL-ondersteuning ontbreekt"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2081
+#: inc/classes/class-astra-sites.php:2082
 msgid "To run a smooth import, kindly enable cURL support on your website."
 msgstr "Om een soepele import te laten verlopen, schakel cURL-ondersteuning in op uw website."
 
-#: inc/classes/class-astra-sites.php:2084
+#: inc/classes/class-astra-sites.php:2085
 msgid "Disable Debug Mode"
 msgstr "Debugmodus uitschakelen"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2086
+#: inc/classes/class-astra-sites.php:2087
 msgid "WordPress debug mode is currently enabled on your website. With this, any errors from third-party plugins might affect the import process."
 msgstr "De debugmodus van WordPress is momenteel ingeschakeld op uw website. Hierdoor kunnen eventuele fouten van plug-ins van derden het importproces beïnvloeden."
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2086
+#: inc/classes/class-astra-sites.php:2087
 msgid "Kindly disable it to continue importing the Starter Template. To do so, you can add the following code into the wp-config.php file."
 msgstr "Schakel het uit om door te gaan met het importeren van de Starter Template. Om dit te doen, kunt u de volgende code toevoegen aan het wp-config.php-bestand."
 
-#: inc/classes/class-astra-sites.php:2089
+#: inc/classes/class-astra-sites.php:2090
 msgid "Update Plugin"
 msgstr "Plugin bijwerken"
 
 #. translators: %s update page link.
-#: inc/classes/class-astra-sites.php:2091
+#: inc/classes/class-astra-sites.php:2092
 msgid "Updates are available for plugins used in this starter template."
 msgstr "Er zijn updates beschikbaar voor plugins die in deze startertemplate worden gebruikt."
 
 #. translators: %s update page link.
-#: inc/classes/class-astra-sites.php:2091
+#: inc/classes/class-astra-sites.php:2092
 #, php-format
 msgid "Kindly <a href=\"%s\" target=\"_blank\">update</a> them for a successful import. Skipping this step might break the template design/feature."
 msgstr "Werk ze alstublieft <a href=\"%s\" target=\"_blank\">bij</a> voor een succesvolle import. Het overslaan van deze stap kan het sjabloonontwerp of de functie verstoren."
 
-#: inc/classes/class-astra-sites.php:2094
+#: inc/classes/class-astra-sites.php:2095
 #: inc/includes/templates.php:468
 msgid "Required Plugins Missing"
 msgstr "Vereiste plugins ontbreken"
 
-#: inc/classes/class-astra-sites.php:2095
+#: inc/classes/class-astra-sites.php:2096
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:150
 msgid "This starter template requires premium plugins. As these are third party premium plugins, you'll need to purchase, install and activate them first."
 msgstr "Deze starttemplate vereist premium plugins. Aangezien dit premium plugins van derden zijn, moet je ze eerst aanschaffen, installeren en activeren."
 
-#: inc/classes/class-astra-sites.php:2098
+#: inc/classes/class-astra-sites.php:2099
 msgid "Dynamic Page"
 msgstr "Dynamische pagina"
 
-#: inc/classes/class-astra-sites.php:2099
+#: inc/classes/class-astra-sites.php:2100
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "The page template you are about to import contains a dynamic widget/module. Please note this dynamic data will not be available with the imported page."
 msgstr "Het paginasjabloon dat u gaat importeren bevat een dynamische widget/module. Houd er rekening mee dat deze dynamische gegevens niet beschikbaar zullen zijn bij de geïmporteerde pagina."
 
-#: inc/classes/class-astra-sites.php:2099
+#: inc/classes/class-astra-sites.php:2100
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "You will need to add it manually on the page."
 msgstr "Je zult het handmatig op de pagina moeten toevoegen."
 
-#: inc/classes/class-astra-sites.php:2099
+#: inc/classes/class-astra-sites.php:2100
 msgid "This dynamic content will be available when you import the entire site."
 msgstr "Deze dynamische inhoud zal beschikbaar zijn wanneer je de hele site importeert."
 
-#: inc/classes/class-astra-sites.php:2102
+#: inc/classes/class-astra-sites.php:2103
 msgid "Enable Flexbox Container from Elementor"
 msgstr "Flexbox-container inschakelen vanuit Elementor"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2104
+#: inc/classes/class-astra-sites.php:2105
 msgid "The Flexbox Container widget is disabled on your website. With this disabled, the import process will be affected. Kindly enable it to continue importing the Starter Template."
 msgstr "De Flexbox Container-widget is uitgeschakeld op uw website. Als dit is uitgeschakeld, wordt het importproces beïnvloed. Schakel het in om door te gaan met het importeren van de Starter Template."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2246
+#: inc/classes/class-astra-sites.php:2247
 #, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. you can purchase it from <a href=\"%s\" target=\"_blank\">here</a>."
 msgstr "Dit is een premium sjabloon dat beschikbaar is met Essential en Business Toolkits. Je kunt het <a href=\"%s\" target=\"_blank\">hier</a> aanschaffen."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2250
+#: inc/classes/class-astra-sites.php:2251
 #, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">Validate Your License</a> Key to import this template."
 msgstr "Dit is een premium sjabloon beschikbaar met Essential en Business Toolkits. <a href=\"%s\" target=\"_blank\">Valideer uw licentiesleutel</a> om dit sjabloon te importeren."
 
-#: inc/classes/class-astra-sites.php:2283
+#: inc/classes/class-astra-sites.php:2284
 msgid "Template"
 msgstr "Sjabloon"
 
-#: inc/classes/class-astra-sites.php:2284
+#: inc/classes/class-astra-sites.php:2285
 msgid "Block"
 msgstr "Blok"
 
-#: inc/classes/class-astra-sites.php:2285
+#: inc/classes/class-astra-sites.php:2286
 #: inc/includes/templates.php:78
-#: inc/lib/getting-started/build/main.js:4
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Dismiss"
 msgstr "Afwijzen"
 
-#: inc/classes/class-astra-sites.php:2286
+#: inc/classes/class-astra-sites.php:2287
 msgid "Install Required Plugins"
 msgstr "Vereiste plugins installeren"
 
-#: inc/classes/class-astra-sites.php:2290
+#: inc/classes/class-astra-sites.php:2291
 msgid "You can locate <strong>Starter Templates Settings</strong> under the <strong>Page Settings</strong> of the Style Tab."
 msgstr "U kunt <strong>Starter Templates Instellingen</strong> vinden onder de <strong>Pagina-instellingen</strong> van het Stijl-tabblad."
 
-#: inc/classes/class-astra-sites.php:2292
+#: inc/classes/class-astra-sites.php:2293
 msgid "Read More →"
 msgstr "Lees meer →"
 
-#: inc/classes/class-astra-sites.php:2574
+#: inc/classes/class-astra-sites.php:2575
 msgid "Template library refreshed!"
 msgstr "Sjabloonbibliotheek vernieuwd!"
 
-#: inc/classes/class-astra-sites.php:2648
+#: inc/classes/class-astra-sites.php:2649
 msgid "Build Your Dream Site in Minutes With AI"
 msgstr "Bouw uw droomsite in enkele minuten met AI"
 
-#: inc/classes/class-astra-sites.php:2649
+#: inc/classes/class-astra-sites.php:2650
 msgid "Say goodbye to the days of spending weeks designing and building your website.<br/> You can now create professional-grade websites in minutes."
 msgstr "Zeg vaarwel tegen de dagen van wekenlang ontwerpen en bouwen van je website.<br/> Je kunt nu binnen enkele minuten websites van professionele kwaliteit maken."
 
-#: inc/classes/class-astra-sites.php:2651
+#: inc/classes/class-astra-sites.php:2652
 msgid "Let’s Get Started"
 msgstr "Laten we beginnen"
 
-#: inc/classes/class-astra-sites.php:2652
+#: inc/classes/class-astra-sites.php:2653
 msgid "I want to build this website from scratch"
 msgstr "Ik wil deze website helemaal opnieuw bouwen"
 
-#: inc/classes/class-astra-sites.php:2686
+#: inc/classes/class-astra-sites.php:2687
 msgid "Required WP_Filesystem Permissions to import the templates from Starter Templates are missing."
 msgstr "Vereiste WP_Filesystem-machtigingen om de sjablonen van Starter Templates te importeren ontbreken."
 
@@ -1066,42 +1061,42 @@ msgstr "Plug-in Beschrijving:"
 msgid "AI Builder"
 msgstr "AI Builder"
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:426
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:427
 msgid "Installed! Activating.."
 msgstr "Geïnstalleerd! Activeren.."
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:427
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:428
 msgid "Activating..."
 msgstr "Activeren..."
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:428
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:429
 msgid "Activated!"
 msgstr "Geactiveerd!"
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:429
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:430
 msgid "Installing..."
 msgstr "Installeren..."
 
 #. translators: %1$s: team name, %2$s: plan name
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:446
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:447
 #, php-format
 msgid "Your current active organization is %1$s, which is on the %2$s plan. You have reached the maximum number of sites allowed to be created on %2$s plan."
 msgstr "Uw huidige actieve organisatie is %1$s, die zich op het %2$s-plan bevindt. U heeft het maximale aantal sites bereikt dat mag worden aangemaakt op het %2$s-plan."
 
 #. translators: %1$s: team name
 #. translators: %s: team name
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:455
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:456
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:146
 #, php-format,js-format
 msgid "Please upgrade the plan for %s in order to create more sites."
 msgstr "Gelieve het plan voor %s te upgraden om meer sites te kunnen maken."
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:461
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:462
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:146
 msgid "Unlock Full Power"
 msgstr "Ontgrendel Volledige Kracht"
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:464
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:465
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
 msgid "Contact Support"
 msgstr "Neem contact op met de ondersteuning"
@@ -1166,7 +1161,7 @@ msgid "Failed to set the site language."
 msgstr "Het is niet gelukt om de taal van de site in te stellen."
 
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:83
-#: inc/lib/getting-started/classes/class-gs-api.php:74
+#: inc/lib/getting-started/classes/class-gs-api.php:75
 #: inc/lib/gutenberg-templates/inc/api/blocks.php:70
 #: inc/lib/gutenberg-templates/inc/api/category.php:70
 #: inc/lib/gutenberg-templates/inc/api/description.php:92
@@ -1207,9 +1202,8 @@ msgstr "Sorry, je mag dat niet doen."
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1887
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1953
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1980
-#: inc/lib/getting-started/classes/class-gs-api.php:157
-#: inc/lib/getting-started/classes/class-gs-api.php:206
-#: inc/lib/getting-started/classes/class-gs-api.php:260
+#: inc/lib/getting-started/classes/class-gs-api.php:158
+#: inc/lib/getting-started/classes/class-gs-api.php:363
 #: inc/lib/gutenberg-templates/inc/api/blocks.php:93
 #: inc/lib/gutenberg-templates/inc/api/category.php:93
 #: inc/lib/gutenberg-templates/inc/api/description.php:112
@@ -1309,6 +1303,7 @@ msgstr "Sorry, instellingen zijn niet opgeslagen."
 msgid "File Permissions Needed - Importing patterns, pages, and templates from Design Library requires proper file permissions. For guidance on resolving this issue and ensuring smooth importing processes, please refer to the accompanying documentation."
 msgstr "Bestandsrechten Nodig - Het importeren van patronen, pagina's en sjablonen uit de Designbibliotheek vereist de juiste bestandsrechten. Raadpleeg de bijbehorende documentatie voor richtlijnen over het oplossen van dit probleem en het verzekeren van een soepel importproces."
 
+#: inc/lib/getting-started/classes/class-gs-helper.php:433
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-notices.php:57
 msgid "Doc: "
 msgstr "Doc:"
@@ -1352,11 +1347,11 @@ msgstr "De Zip AI Middleware reageert niet."
 msgid "The Zip AI Middleware encountered an error."
 msgstr "De Zip AI Middleware heeft een fout ondervonden."
 
-#: inc/lib/onboarding/class-onboarding-loader.php:342
+#: inc/lib/onboarding/class-onboarding-loader.php:343
 msgid "Disable Elementor Page Builder Templates in Starter Templates"
 msgstr "Elementor Page Builder-sjablonen uitschakelen in Starter Templates"
 
-#: inc/lib/onboarding/class-onboarding-loader.php:349
+#: inc/lib/onboarding/class-onboarding-loader.php:350
 msgid "Disable Beaver Builder Page Builder Templates in Starter Templates"
 msgstr "Schakel Beaver Builder Page Builder-sjablonen uit in Starter Templates"
 
@@ -1457,19 +1452,19 @@ msgstr "Customizer-gegevens succesvol geïmporteerd."
 msgid "Invalid WXR Request URL - %s"
 msgstr "Ongeldige WXR-verzoek-URL - %s"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:277
+#: inc/lib/starter-templates-importer/importer/st-importer.php:309
 msgid "Site options are empty!"
 msgstr "Site-opties zijn leeg!"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:322
+#: inc/lib/starter-templates-importer/importer/st-importer.php:360
 msgid "Options imported successfully."
 msgstr "Opties succesvol geïmporteerd."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:355
+#: inc/lib/starter-templates-importer/importer/st-importer.php:393
 msgid "Widget data is empty!"
 msgstr "Widgetgegevens zijn leeg!"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:364
+#: inc/lib/starter-templates-importer/importer/st-importer.php:402
 msgid "Widgets imported successfully."
 msgstr "Widgets succesvol geïmporteerd."
 
@@ -1957,7 +1952,7 @@ msgstr "Begin met bouwen"
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:146
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:147
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:150
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Back"
 msgstr "Terug"
 
@@ -2128,7 +2123,7 @@ msgstr "Foutmelding: %1$s"
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:146
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Exit to Dashboard"
 msgstr "Ga naar Dashboard"
 
@@ -2833,88 +2828,88 @@ msgid "Select features as you need"
 msgstr "Selecteer functies naar behoefte"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting posts."
 msgstr "Berichten resetten."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting posts failed."
 msgstr "Het resetten van berichten is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Taking settings backup."
 msgstr "Instellingen back-up maken."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Taking settings backup failed."
 msgstr "Het maken van een back-up van de instellingen is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting customizer."
 msgstr "Customizer opnieuw instellen."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting customizer failed."
 msgstr "Het opnieuw instellen van de aanpasser is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting site options."
 msgstr "Site-opties opnieuw instellen."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting site options Failed."
 msgstr "Het resetten van site-opties is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting widgets."
 msgstr "Widgets opnieuw instellen."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting widgets JSON parse failed."
 msgstr "Het opnieuw instellen van widgets is mislukt bij het parseren van JSON."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting widgets failed."
 msgstr "Het resetten van widgets is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting terms and forms."
 msgstr "Termen en formulieren opnieuw instellen."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting terms and forms failed."
 msgstr "Het resetten van termen en formulieren is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Gathering posts for deletions."
 msgstr "Berichten verzamelen voor verwijdering."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Resetting posts done."
 msgstr "Berichten opnieuw instellen voltooid."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 msgid "Importing Site Content Failed. - Import Process Interrupted"
 msgstr "Importeren van site-inhoud mislukt. - Importproces onderbroken"
 
 #. translators: Response importMessage
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:168
 #, js-format
 msgid "Importing - %1$s"
 msgstr "Importeren - %1$s"
@@ -2922,7 +2917,7 @@ msgstr "Importeren - %1$s"
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:132
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:147
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:168
 msgid "Are you sure you want to cancel the site import process?"
 msgstr "Weet u zeker dat u het importproces van de site wilt annuleren?"
 
@@ -2951,7 +2946,7 @@ msgid "The website is created successfully!"
 msgstr "De website is succesvol aangemaakt!"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:168
 msgid "Starting Import."
 msgstr "Importeren starten."
 
@@ -2960,7 +2955,7 @@ msgid "Resetting site."
 msgstr "Site resetten."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Reset for old website is done."
 msgstr "Reset voor oude website is voltooid."
 
@@ -2975,96 +2970,93 @@ msgid "Downloading images failed."
 msgstr "Het downloaden van afbeeldingen is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing forms."
 msgstr "Formulieren importeren."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Customizer failed due to parse JSON error."
 msgstr "Het importeren van de Customizer is mislukt vanwege een JSON-parsefout."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Customizer Failed."
 msgstr "Importeren van Customizer mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Spectra Settings."
 msgstr "Importeren van Spectra-instellingen."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Spectra Settings failed due to parse JSON error."
 msgstr "Het importeren van Spectra-instellingen is mislukt vanwege een JSON-parsefout."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Spectra Settings Failed."
 msgstr "Importeren van spectra-instellingen mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Surecart Settings failed."
 msgstr "Het importeren van Surecart-instellingen is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Surecart Settings Failed."
 msgstr "Importeren van Surecart-instellingen mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Site Content."
 msgstr "Site-inhoud importeren."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
 msgid "Installing Required Plugins."
 msgstr "Vereiste plugins installeren."
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:217
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
 #, js-format
 msgid "%1$s plugin installed successfully."
 msgstr "%1$s plugin succesvol geïnstalleerd."
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
 #, js-format
 msgid "Could not install the plugin - %s"
 msgstr "Kon de plugin niet installeren - %s"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Site Options."
 msgstr "Site-opties importeren."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Site Options failed due to parse JSON error."
 msgstr "Het importeren van site-opties is mislukt vanwege een JSON-parsefout."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Site Options Failed."
 msgstr "Het importeren van site-opties is mislukt."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Widgets."
 msgstr "Widgets importeren."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Widgets failed due to parse JSON error."
 msgstr "Het importeren van widgets is mislukt vanwege een JSON-parsefout."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Widgets Failed."
 msgstr "Importeren van widgets mislukt."
 
@@ -3094,41 +3086,44 @@ msgstr "Definitieve afwerking mislukt."
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:223
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:162
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
 #, js-format
 msgid "Activating %1$s plugin."
 msgstr "Plugin %1$s activeren."
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:226
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:168
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:183
 #, js-format
 msgid "%1$s activated."
 msgstr "%1$s geactiveerd."
 
 #. translators: Plugin name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:229
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:186
 #, js-format
 msgid "JSON_Error: Could not activate the required plugin - %1$s."
 msgstr "JSON_Fout: Kon de vereiste plugin niet activeren - %1$s."
 
+#. translators: Resolution html
 #. translators: Support article URL.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:162
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:189
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 #, js-format
 msgid "<a href=\"%1$s\">Read article</a> to resolve the issue and continue importing template."
 msgstr "<a href=\"%1$s\">Lees het artikel</a> om het probleem op te lossen en verder te gaan met het importeren van de sjabloon."
 
 #. translators: Plugin name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:235
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:192
 #, js-format
 msgid "Could not activate the required plugin - %1$s."
 msgstr "Kon de vereiste plugin niet activeren - %1$s."
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:238
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "We are building your website…"
 msgstr "We zijn uw website aan het bouwen…"
 
@@ -3755,13 +3750,8 @@ msgstr "Deel niet-gevoelige gegevens"
 msgid "Help our developers build better templates and products for you by sharing anonymous and non-sensitive data about your website."
 msgstr "Help onze ontwikkelaars om betere sjablonen en producten voor u te maken door anonieme en niet-gevoelige gegevens over uw website te delen."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:176
-#: inc/lib/getting-started/classes/class-gs-helper.php:225
-#: inc/lib/getting-started/classes/class-gs-helper.php:274
-#: inc/lib/getting-started/classes/class-gs-helper.php:323
-#: inc/lib/getting-started/classes/class-gs-helper.php:372
-#: inc/lib/getting-started/classes/class-gs-helper.php:421
-#: inc/lib/getting-started/classes/class-gs-helper.php:470
+#: inc/lib/getting-started/classes/class-gs-helper.php:283
+#: inc/lib/getting-started/build/main.js:1
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:126
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:141
 msgid "Learn More"
@@ -3861,59 +3851,59 @@ msgstr "Schrijfrechten:"
 msgid "WP_Filesystem Permissions:"
 msgstr "WP_Filesystem Machtigingen:"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Reseting site."
 msgstr "Site opnieuw instellen."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing CartFlows flows."
 msgstr "CartFlows-flows importeren."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing CartFlows flows failed due to parse JSON error."
 msgstr "Het importeren van CartFlows-flows is mislukt vanwege een JSON-parsefout."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing CartFlows flows Failed."
 msgstr "Het importeren van CartFlows-flows is mislukt."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing forms failed due to parse JSON error."
 msgstr "Het importeren van formulieren is mislukt vanwege een JSON-parsefout."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing forms Failed."
 msgstr "Het importeren van formulieren is mislukt."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "The XML URL for the site content is empty."
 msgstr "De XML-URL voor de site-inhoud is leeg."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Site Content Failed"
 msgstr "Importeren van site-inhoud mislukt"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Site Content failed due to parse JSON error."
 msgstr "Het importeren van site-inhoud is mislukt vanwege een JSON-parsefout."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Site Content Failed."
 msgstr "Importeren van site-inhoud mislukt."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Final finishings."
 msgstr "Laatste afwerkingen."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Final finishings failed due to parse JSON error."
 msgstr "De laatste afwerkingen zijn mislukt vanwege een JSON-parsefout."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Final finishings Failed."
 msgstr "Laatste afwerkingen mislukt."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Congratulations"
 msgstr "Gefeliciteerd"
 
@@ -4017,43 +4007,36 @@ msgstr "Begin het proces van het bouwen van een website met onze uitgebreide bib
 msgid "Build with Templates"
 msgstr "Bouwen met sjablonen"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Page Builder"
 msgstr "Pagina Bouwer"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Design pages with visual website builder"
 msgstr "Ontwerp pagina's met een visuele websitebouwer"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/getting-started/classes/class-gs-helper.php:294
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Contact Form"
 msgstr "Contactformulier"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Allow your visitors to get in touch with you"
 msgstr "Laat uw bezoekers contact met u opnemen"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "eCommerce"
 msgstr "eCommerce"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Sell your products online"
 msgstr "Verkoop uw producten online"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
-msgid "Automation & Integrations"
-msgstr "Automatisering & Integraties"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
-msgid "Automate your website & tasks"
-msgstr "Automatiseer je website en taken"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Free Live Chat"
 msgstr "Gratis Live Chat"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Connect with your website visitors for free"
 msgstr "Verbind gratis met uw websitebezoekers"
 
@@ -4763,35 +4746,35 @@ msgid "Zip - Your AI Assistant"
 msgstr "Zip - Je AI-assistent"
 
 #. translators: %s Anchor link to support URL.
-#: inc/classes/class-astra-sites.php:1857
+#: inc/classes/class-astra-sites.php:1858
 #, php-format
 msgid "Please report this error%1$s here %2$s, so we can fix it."
 msgstr "Rapporteer deze fout%1$s hier %2$s, zodat we het kunnen oplossen."
 
-#: inc/classes/class-astra-sites.php:2107
+#: inc/classes/class-astra-sites.php:2108
 msgid "Missing plugin installation permission"
 msgstr "Ontbrekende toestemming voor het installeren van de plugin"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2109
+#: inc/classes/class-astra-sites.php:2110
 msgid "You do not have permission to install the required plugin. You must have install permissions to proceed with the required plugin."
 msgstr "U heeft geen toestemming om de vereiste plugin te installeren. U moet installatierechten hebben om door te gaan met de vereiste plugin."
 
-#: inc/classes/class-astra-sites.php:2112
+#: inc/classes/class-astra-sites.php:2113
 msgid "Missing plugin activation permission"
 msgstr "Ontbrekende toestemming voor plugin-activatie"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2114
+#: inc/classes/class-astra-sites.php:2115
 msgid "You do not have permission to activate the required plugin. You must have activate permissions to proceed with the required plugin."
 msgstr "U heeft geen toestemming om de vereiste plugin te activeren. U moet activeringsrechten hebben om door te gaan met de vereiste plugin."
 
-#: inc/classes/class-astra-sites.php:2117
+#: inc/classes/class-astra-sites.php:2118
 msgid "Insufficient Memory Limit"
 msgstr "Onvoldoende geheugengrens"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2119
+#: inc/classes/class-astra-sites.php:2120
 msgid "The memory limit of your site is below the recommended 256MB. While you can proceed, increasing the memory limit is advised for a seamless import experience."
 msgstr "De geheugengrens van uw site is lager dan de aanbevolen 256MB. Hoewel u kunt doorgaan, wordt het verhogen van de geheugengrens aangeraden voor een naadloze importervaring."
 
@@ -5096,7 +5079,7 @@ msgstr "Er is een fout opgetreden bij het downloaden van het Latepoint-tabellenb
 msgid "Empty file for Latepoint tables"
 msgstr "Leeg bestand voor Latepoint-tabellen"
 
-#: inc/classes/class-astra-sites.php:360
+#: inc/classes/class-astra-sites.php:361
 msgid "An error occurred due to insufficient memory. Please increase the memory limit on the server to resolve this issue"
 msgstr "Er is een fout opgetreden door onvoldoende geheugen. Verhoog de geheugengrens op de server om dit probleem op te lossen"
 
@@ -5106,23 +5089,23 @@ msgstr "Er is een fout opgetreden door onvoldoende geheugen. Verhoog de geheugen
 msgid "By continuing, you agree to our %1$s and %2$s."
 msgstr "Door door te gaan, ga je akkoord met onze %1$s en %2$s."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing LatePoint data."
 msgstr "LatePoint-gegevens importeren."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing LatePoint data failed due to parse JSON error."
 msgstr "Het importeren van LatePoint-gegevens is mislukt vanwege een JSON-parsefout."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing LatePoint data Failed."
 msgstr "Het importeren van LatePoint-gegevens is mislukt."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Website Emails & SMTP"
 msgstr "Website-e-mails & SMTP"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Get emails from your website (forms, etc)"
 msgstr "Ontvang e-mails van uw website (formulieren, enz.)"
 
@@ -5130,11 +5113,11 @@ msgstr "Ontvang e-mails van uw website (formulieren, enz.)"
 msgid "Invalid notice ID."
 msgstr "Ongeldig kennisgevings-ID."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Appointment & Bookings"
 msgstr "Afspraken & Boekingen"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Easily manage bookings for your services"
 msgstr "Beheer eenvoudig boekingen voor uw diensten"
 
@@ -5227,7 +5210,7 @@ msgstr "(Maximaal 20)"
 msgid "Batch process failed."
 msgstr "Batchproces mislukt."
 
-#: inc/classes/class-astra-sites.php:1582
+#: inc/classes/class-astra-sites.php:1583
 msgid "Get Premium Templates"
 msgstr "Ontvang Premium Sjablonen"
 
@@ -5345,15 +5328,15 @@ msgstr "Er was een fout bij het downloaden van het gegevensbestand voor herstel 
 msgid "Empty file for Cart Abandonment Recovery data."
 msgstr "Leeg bestand voor gegevensherstel bij winkelwagenverlating."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Cart Abandonment Recovery data."
 msgstr "Gegevensherstel bij winkelwagenverlating importeren."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Cart Abandonment Recovery data failed due to parse JSON error."
 msgstr "Het importeren van gegevensherstel bij winkelwagenverlating is mislukt vanwege een JSON-parsefout."
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Cart Abandonment Recovery data Failed."
 msgstr "Het importeren van gegevensherstel bij winkelwagenverlating is mislukt."
 
@@ -5378,338 +5361,59 @@ msgid "Enter address"
 msgstr "Voer adres in"
 
 #. translators: Plugin Name.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
 #, js-format
 msgid "%1$s deferred (requires WooCommerce)."
 msgstr "%1$s uitgesteld (vereist WooCommerce)."
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:203
+#: inc/lib/getting-started/classes/class-gs-admin.php:221
 msgid "Complete these steps to take full control of your website."
 msgstr "Voltooi deze stappen om volledige controle over je website te krijgen."
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:207
+#: inc/lib/getting-started/classes/class-gs-admin.php:225
 msgid "Awesome, You did it! 😍"
 msgstr "Geweldig, je hebt het gedaan! 😍"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:243
+#: inc/lib/getting-started/classes/class-gs-admin.php:261
 msgid "Hi there 👋"
 msgstr "Hoi daar 👋"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:253
+#: inc/lib/getting-started/classes/class-gs-admin.php:271
 msgid "🎉 Congratulations on completing the tasks and instructional videos to take full control of your website.\\n 🚀 Now, you're well-equipped to make your website thrive. Best of luck with your website journey, and may it bring you great achievements and opportunities in the digital world!"
 msgstr "🎉 Gefeliciteerd met het voltooien van de taken en instructievideo's om volledige controle over je website te krijgen.\\n 🚀 Nu ben je goed uitgerust om je website te laten floreren. Veel succes met je website-avontuur en moge het je grote prestaties en kansen in de digitale wereld brengen!"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:279
-msgid "You're Website is Almost Ready!"
-msgstr "Je website is bijna klaar!"
-
-#: inc/lib/getting-started/classes/class-gs-admin.php:283
-msgid "Follow a simple step-by-step guide to finish setup, learn the basics, unlock powerful tools and launch a stunning website with ease."
-msgstr "Volg een eenvoudige stapsgewijze handleiding om de installatie te voltooien, leer de basis, ontgrendel krachtige tools en lanceer eenvoudig een verbluffende website."
-
-#: inc/lib/getting-started/classes/class-gs-admin.php:289
+#: inc/lib/getting-started/classes/class-gs-admin.php:101
+#: inc/lib/getting-started/build/main.js:1
 msgid "Finish Setup"
 msgstr "Voltooi installatie"
 
-#: inc/lib/getting-started/classes/class-gs-api.php:180
+#: inc/lib/getting-started/classes/class-gs-api.php:209
 msgid "Action items are empty"
 msgstr "Actie-items zijn leeg"
 
-#: inc/lib/getting-started/classes/class-gs-api.php:233
-msgid "Action item status updated."
-msgstr "Status van actie-item bijgewerkt."
-
-#: inc/lib/getting-started/classes/class-gs-api.php:241
-msgid "Action item status not updated."
-msgstr "Status van actie-item niet bijgewerkt."
-
-#: inc/lib/getting-started/classes/class-gs-api.php:271
+#: inc/lib/getting-started/classes/class-gs-api.php:374
 msgid " Failed to dismiss and remove the Setup wizard."
 msgstr "Het is niet gelukt om de Setup-wizard te sluiten en te verwijderen."
 
-#: inc/lib/getting-started/classes/class-gs-api.php:280
+#: inc/lib/getting-started/classes/class-gs-api.php:383
 msgid "Successfully dismissed and removed the Setup wizard."
 msgstr "Setup-wizard succesvol gesloten en verwijderd."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:50
-msgid "Learn how WordPress works!"
-msgstr "Leer hoe WordPress werkt!"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:55
-msgid "Start here to understand Pages vs Posts, how to install plugins, and what powers your website behind the scenes."
-msgstr "Begin hier om het verschil tussen Pagina's en Berichten te begrijpen, hoe je plugins installeert en wat je website achter de schermen aandrijft."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:62
-msgid "Understand WordPress"
-msgstr "Begrijp WordPress"
-
-#. translators: %d is minutes.
-#: inc/lib/getting-started/classes/class-gs-helper.php:68
-#: inc/lib/getting-started/classes/class-gs-helper.php:104
-#: inc/lib/getting-started/classes/class-gs-helper.php:140
-#: inc/lib/getting-started/classes/class-gs-helper.php:186
-#: inc/lib/getting-started/classes/class-gs-helper.php:235
-#: inc/lib/getting-started/classes/class-gs-helper.php:284
-#: inc/lib/getting-started/classes/class-gs-helper.php:333
-#: inc/lib/getting-started/classes/class-gs-helper.php:382
-#: inc/lib/getting-started/classes/class-gs-helper.php:431
-#: inc/lib/getting-started/classes/class-gs-helper.php:480
-#, php-format
-msgid "%d mins"
-msgstr "%d min"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:75
-msgid "Meet Your Theme — Astra"
-msgstr "Ontmoet je thema — Astra"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:80
-msgid "Your theme controls layout, colors, typography, and more. Let’s show you how to make it yours."
-msgstr "Je thema bepaalt de lay-out, kleuren, typografie en meer. We laten je zien hoe je het eigen kunt maken."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:87
-#: inc/lib/getting-started/classes/class-gs-helper.php:123
-msgid "Design your Site’s Look"
-msgstr "Ontwerp de uitstraling van je site"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:96
-msgid "Go to Customizer"
-msgstr "Ga naar Customizer"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:111
-msgid "Design Pages Visually – Spectra"
-msgstr "Ontwerp pagina's visueel – Spectra"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:116
-msgid "Spectra lets you drag and drop sections and design like a pro."
-msgstr "Met Spectra kun je secties slepen en neerzetten en als een professional ontwerpen."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:132
-msgid "Design Your First Page"
-msgstr "Ontwerp je eerste pagina"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:147
-msgid "Add Smart Forms — SureForms"
-msgstr "Voeg slimme formulieren toe — SureForms"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:152
-msgid "Capture leads, messages, or feedback using powerful, drag-and-drop AI forms. Let’s help you connect with visitors from Day 1."
-msgstr "Leg leads, berichten of feedback vast met krachtige, drag-and-drop AI-formulieren. We helpen je vanaf dag 1 contact te maken met bezoekers."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:159
-msgid "Design your First Form"
-msgstr "Ontwerp je eerste formulier"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:168
-msgid "Design Your First Form"
-msgstr "Ontwerp je eerste formulier"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:193
-msgid "Launch Your Store — SureCart"
-msgstr "Lanceer je winkel — SureCart"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:198
-msgid "Sell products or services with built-in payments, checkout, and order management. Let’s turn your website into a revenue-generating machine."
-msgstr "Verkoop producten of diensten met ingebouwde betalingen, afrekenen en orderbeheer. Laten we van je website een inkomsten genererende machine maken."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:205
-msgid "Go to SureCart → Products and click Add New Product"
-msgstr "Ga naar SureCart → Producten en klik op Nieuw product toevoegen"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:206
-msgid "Enter product name, price, and other details"
-msgstr "Voer productnaam, prijs en andere details in"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:207
-msgid "Click Save Product, then Enable Live Payments"
-msgstr "Klik op Product opslaan en schakel vervolgens Live-betalingen in"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:217
-msgid "Create Your First Product"
-msgstr "Maak je eerste product"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:242
-msgid "Boost Conversions — CartFlows"
-msgstr "Verhoog conversies — CartFlows"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:247
-msgid "Guide visitors through a smooth checkout journey with landing pages and sales funnels. Turn clicks into customers with a funnel that sells for you."
-msgstr "Leid bezoekers door een soepele afrekenreis met landingspagina's en verkoopfunnels. Zet klikken om in klanten met een funnel die voor jou verkoopt."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:254
-msgid "Create your first product in WooCommerce"
-msgstr "Maak je eerste product in WooCommerce"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:255
-msgid "Go to CartFlows → Funnels → Import New Funnel"
-msgstr "Ga naar CartFlows → Funnels → Nieuwe funnel importeren"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:256
-msgid "Open the Checkout step → Assign your Woo product"
-msgstr "Open de Checkout-stap → Wijs je Woo-product toe"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:266
-msgid "Create Your First Funnel"
-msgstr "Maak je eerste funnel"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:291
-msgid "Accept Appointments — LatePoint"
-msgstr "Accepteer afspraken — LatePoint"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:296
-msgid "Add a calendar so visitors can book calls, meetings, or sessions with you. Let’s turn interest into real bookings with one click."
-msgstr "Voeg een kalender toe zodat bezoekers afspraken, vergaderingen of sessies met je kunnen boeken. Laten we interesse omzetten in echte boekingen met één klik."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:303
-msgid "Add your services and set work hours"
-msgstr "Voeg je diensten toe en stel werktijden in"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:304
-msgid "Enable notifications and payment options"
-msgstr "Schakel meldingen en betalingsopties in"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:305
-msgid "Embed the booking form using shortcode or block"
-msgstr "Embed het boekingsformulier met behulp van shortcode of blok"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:315
-msgid "Add Your First Booking Form"
-msgstr "Voeg je eerste boekingsformulier toe"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:340
-msgid "Add Engaging Videos — Presto Player"
-msgstr "Voeg boeiende video's toe — Presto Player"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:345
+#: inc/lib/getting-started/classes/class-gs-helper.php:510
 msgid "Embed videos with modern features like chapters, overlays, and custom branding and keep people watching and make your content unforgettable."
 msgstr "Embed video's met moderne functies zoals hoofdstukken, overlays en aangepaste branding en zorg ervoor dat mensen blijven kijken en maak je inhoud onvergetelijk."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:352
-msgid "Click “+” on any page → add Presto Player block"
-msgstr "Klik op “+” op een pagina → voeg Presto Player-blok toe"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:353
-msgid "Paste your video URL"
-msgstr "Plak je video-URL"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:354
-msgid "Customize settings and click “Publish”"
-msgstr "Pas instellingen aan en klik op “Publiceren”"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:364
-msgid "Embed Your First Video"
-msgstr "Embed je eerste video"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:389
-msgid "Automate Your Work — OttoKit"
-msgstr "Automatiseer je werk — OttoKit"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:394
-msgid "Connect plugins and automate routine tasks like follow-ups or form triggers without code. Let’s save you hours and keep your website running on autopilot."
-msgstr "Verbind plugins en automatiseer routinetaken zoals follow-ups of formuliertriggers zonder code. Laten we je uren besparen en je website op autopilot laten draaien."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:401
-msgid "Sign up or log in to your OttoKit account"
-msgstr "Meld je aan of log in op je OttoKit-account"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:402
-msgid "Click “Create New Workflow”"
-msgstr "Klik op “Nieuwe workflow maken”"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:403
-msgid "Choose a Trigger and add one or more Actions"
-msgstr "Kies een trigger en voeg een of meer acties toe"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:413
-msgid "Automate Your First Task"
-msgstr "Automatiseer je eerste taak"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:438
-msgid "Start Sending Emails Reliably — SureMail"
-msgstr "Begin met het betrouwbaar verzenden van e-mails — SureMail"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:443
-msgid "Ensure your contact forms, order updates, and notifications actually reach inboxes. Let’s make sure your emails never get lost again."
-msgstr "Zorg ervoor dat je contactformulieren, bestelupdates en meldingen daadwerkelijk in inboxen terechtkomen. Laten we ervoor zorgen dat je e-mails nooit meer verloren gaan."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:450
-msgid "Go to Settings → SureMail → Connections"
-msgstr "Ga naar Instellingen → SureMail → Verbindingen"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:451
-msgid "Click Add Connection and fill in the required email details"
-msgstr "Klik op Verbinding toevoegen en vul de vereiste e-mailgegevens in"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:452
-msgid "Use Send Test Mail to verify your connection is working"
-msgstr "Gebruik Testmail verzenden om te verifiëren of je verbinding werkt"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:462
-msgid "Send Your First Email"
-msgstr "Verzend je eerste e-mail"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:486
-msgid "Final Step Before Website Launch: Checklist"
-msgstr "Laatste stap voor website-lancering: Checklist"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:491
-msgid "Launching soon?"
-msgstr "Binnenkort lanceren?"
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:497
-msgid "Make sure your site is ready to go with this essential checklist. This final step will help you launch your website with confidence, not chaos."
-msgstr "Zorg ervoor dat je site klaar is met deze essentiële checklist. Deze laatste stap helpt je om je website met vertrouwen te lanceren, niet in chaos."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:505
-msgid "Get Website Launch Checklist"
-msgstr "Verkrijg website-lanceringschecklist"
-
-#. translators: %d is minute.
-#: inc/lib/getting-started/classes/class-gs-helper.php:515
-#, php-format
-msgid "%d min"
-msgstr "%d min"
-
 #. translators: %s is the step number.
-#: inc/lib/getting-started/build/main.js:4
+#: inc/lib/getting-started/build/main.js:7
 #, js-format
 msgid "Step %d:"
 msgstr "Stap %d:"
 
-#: inc/lib/getting-started/build/main.js:4
-msgid "Are you sure you want to dismiss the setup wizard?"
-msgstr "Weet je zeker dat je de setup wizard wilt sluiten?"
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Dismissing the setup wizard will remove it from your view, and this action cannot be undone. You'll miss out on valuable instructional videos and tasks that can help you customize, launch, and grow your website effectively."
-msgstr "Het sluiten van de setup wizard verwijdert deze uit je zicht, en deze actie kan niet ongedaan worden gemaakt. Je mist waardevolle instructievideo's en taken die je kunnen helpen je website effectief aan te passen, te lanceren en te laten groeien."
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "If you're sure you want to proceed, click 'Dismiss' again. To continue with the setup, click 'Stay'."
-msgstr "Als je zeker weet dat je wilt doorgaan, klik dan nogmaals op 'Sluiten'. Om door te gaan met de setup, klik op 'Blijven'."
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Stay"
-msgstr "Blijven"
-
-#. translators: %1$s: Plugin Name with link.
-#: inc/lib/getting-started/build/main.js:7
-#, js-format
-msgid "Website setup brought to you by %1$s."
-msgstr "Website setup aangeboden door %1$s."
-
-#: inc/lib/getting-started/build/main.js:7
-msgid "Dismiss and Remove Setup Wizard"
-msgstr "Sluiten en setup wizard verwijderen"
-
-#: inc/lib/getting-started/build/main.js:7
-msgid "Progress"
-msgstr "Voortgang"
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "SEO & Search Visibility"
 msgstr "SEO & Zoekzichtbaarheid"
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 msgid "Optimize your website for search engines"
 msgstr "Optimaliseer uw website voor zoekmachines"
 
@@ -5734,6 +5438,644 @@ msgstr "De volgende plugins worden geïnstalleerd en geactiveerd voor de geselec
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:146
 msgid "Required plugins for the website"
 msgstr "Vereiste plugins voor de website"
+
+#: inc/classes/class-astra-sites-nps-notice.php:85
+msgid "Thanks for being part of the Starter Templates community! Got feedback or suggestions? We'd love to hear it."
+msgstr "Bedankt dat je deel uitmaakt van de Starter Templates-gemeenschap! Heb je feedback of suggesties? We horen het graag."
+
+#: inc/lib/getting-started/classes/class-gs-api.php:236
+msgid "Nonce verification failed!"
+msgstr "Nonce-verificatie mislukt!"
+
+#: inc/lib/getting-started/classes/class-gs-api.php:250
+msgid "Action item ID is required!"
+msgstr "Actie-item ID is vereist!"
+
+#: inc/lib/getting-started/classes/class-gs-api.php:259
+msgid "Steps data are required!"
+msgstr "Stappen gegevens zijn vereist!"
+
+#: inc/lib/getting-started/classes/class-gs-api.php:268
+msgid "Steps data are not in correct format!"
+msgstr "Stappen gegevens zijn niet in het juiste formaat!"
+
+#: inc/lib/getting-started/classes/class-gs-api.php:335
+msgid "Step status updated."
+msgstr "Stapstatus bijgewerkt."
+
+#: inc/lib/getting-started/classes/class-gs-api.php:344
+msgid "Action items failed to update!"
+msgstr "Actie-items konden niet worden bijgewerkt!"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:56
+msgid "WordPress Basics"
+msgstr "WordPress Basisprincipes"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:57
+msgid "Get your site’s foundation rock-solid so it looks professional and runs smoothly from day one."
+msgstr "Zorg ervoor dat de basis van je site rotsvast is, zodat het er professioneel uitziet en soepel draait vanaf dag één."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:63
+msgid "Set Site Title & Tagline"
+msgstr "Stel Site Titel & Ondertitel in"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:70
+msgid "Your site title and tagline show up in browser tabs and search results. Make a strong first impression by customizing them to match your brand. A 10-second tweak that boosts professionalism and SEO."
+msgstr "Je site titel en ondertitel verschijnen in browsertabbladen en zoekresultaten. Maak een sterke eerste indruk door ze aan te passen aan je merk. Een aanpassing van 10 seconden die de professionaliteit en SEO verbetert."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:83
+msgid "Review Admin Email"
+msgstr "Controleer Admin E-mail"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:85
+#: inc/lib/getting-started/classes/class-gs-helper.php:135
+#: inc/lib/getting-started/classes/class-gs-helper.php:255
+#: inc/lib/getting-started/classes/class-gs-helper.php:307
+msgid "Review"
+msgstr "Beoordeling"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:91
+msgid "Your admin email is where you’ll receive important site alerts like user messages, order updates, and security notifications. Make sure it’s correct so you don’t miss anything critical."
+msgstr "Je admin e-mail is waar je belangrijke sitewaarschuwingen ontvangt, zoals gebruikersberichten, bestelupdates en beveiligingsmeldingen. Zorg ervoor dat het correct is, zodat je niets belangrijks mist."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:104
+msgid "Choose how your page links look"
+msgstr "Kies hoe je paginalinks eruitzien"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:111
+msgid "Set up clean, readable URLs for your website that look better, help with SEO, and are easier to share. Setting your permalinks takes just a few click and makes your site feel pro from day one."
+msgstr "Stel schone, leesbare URL's in voor je website die er beter uitzien, helpen met SEO en gemakkelijker te delen zijn. Het instellen van je permalinks kost slechts een paar klikken en zorgt ervoor dat je site vanaf dag één professioneel aanvoelt."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:117
+msgid "Bad example: yourwebsite.com/page_id=123"
+msgstr "Slecht voorbeeld: yourwebsite.com/page_id=123"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:118
+msgid "Good example: yourwebsite.com/about-us"
+msgstr "Goed voorbeeld: yourwebsite.com/about-us"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:133
+msgid "Search Engine Visibility"
+msgstr "Zoekmachine Zichtbaarheid"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:141
+msgid "If this setting is left unchecked, search engines can’t find your site even if it’s ready. Make sure your site is visible to Google and others so you can start showing up in search results."
+msgstr "Als deze instelling niet is aangevinkt, kunnen zoekmachines je site niet vinden, zelfs als deze klaar is. Zorg ervoor dat je site zichtbaar is voor Google en anderen, zodat je in zoekresultaten kunt verschijnen."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:163
+msgid "Design, Style & Theme"
+msgstr "Ontwerp, Stijl & Thema"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:164
+msgid "Create a memorable brand experience that looks professional and instantly recognizable."
+msgstr "Creëer een gedenkwaardige merkervaring die er professioneel uitziet en direct herkenbaar is."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:174
+msgid "Customize Style Guide"
+msgstr "Stijl Gids Aanpassen"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:190
+msgid "Add Logo and Site Icon"
+msgstr "Voeg Logo en Site-icoon toe"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:206
+msgid "Customize Header"
+msgstr "Pas Header aan"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:222
+msgid "Customize Footer"
+msgstr "Pas Footer aan"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:242
+msgid "Website Pages"
+msgstr "Website Pagina's"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:243
+msgid "Review and polish every page so your message is crystal clear and your audience knows exactly what to do."
+msgstr "Beoordeel en verfijn elke pagina zodat je boodschap glashelder is en je publiek precies weet wat te doen."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:253
+msgid "Review Pages"
+msgstr "Pagina's Beoordelen"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:266
+msgid "Set Up Email Delivery Using a Reliable Service"
+msgstr "Stel E-mailbezorging in met een Betrouwbare Dienst"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:267
+msgid "Ensure your site’s emails land in inboxes so you never miss an opportunity to connect or sell."
+msgstr "Zorg ervoor dat de e-mails van je site in inboxen terechtkomen, zodat je nooit een kans mist om te verbinden of te verkopen."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:277
+msgid "Connect SMTP provider"
+msgstr "Verbind SMTP-provider"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:295
+msgid "Make it effortless for visitors to reach out to you, turning curious browsers into real leads."
+msgstr "Maak het moeiteloos voor bezoekers om contact met je op te nemen, waardoor nieuwsgierige browsers echte leads worden."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:305
+msgid "Review contact form"
+msgstr "Controleer contactformulier"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:322
+msgid "Launch Your Store"
+msgstr "Lanceer Je Winkel"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:323
+msgid "Start selling and generating revenue by setting up an online store seamlessly in minutes."
+msgstr "Begin met verkopen en genereer inkomsten door naadloos binnen enkele minuten een online winkel op te zetten."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:333
+msgid "Set up SureCart account"
+msgstr "Stel SureCart-account in"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:341
+msgid "Create new product"
+msgstr "Maak nieuw product"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:350
+msgid "Design Shop Page"
+msgstr "Ontwerp Winkelpagina"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:359
+#: inc/lib/getting-started/classes/class-gs-helper.php:460
+msgid "Connect payment gateway"
+msgstr "Verbind betalingsgateway"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:372
+msgid "Create Funnel"
+msgstr "Maak Trechter"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:373
+msgid "Guide your visitors step-by-step to buy more, boosting sales without extra ad spend."
+msgstr "Leid uw bezoekers stap voor stap om meer te kopen, waardoor de verkoop wordt verhoogd zonder extra advertentiekosten."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:383
+msgid "Create product you're selling"
+msgstr "Maak product dat je verkoopt"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:391
+msgid "Setup Store Checkout"
+msgstr "Stel Winkel Checkout in"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:399
+msgid "Design beautiful Thank-You page"
+msgstr "Ontwerp een mooie Bedankpagina"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:407
+msgid "Offer a related product to sell"
+msgstr "Bied een gerelateerd product aan om te verkopen"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:419
+#: inc/lib/getting-started/classes/class-gs-helper.php:425
+msgid "Accept Appointments"
+msgstr "Accepteer Afspraken"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:420
+msgid "Streamline your booking process so clients can book and pay you with zero hassle."
+msgstr "Vereenvoudig uw boekingsproces zodat klanten zonder gedoe kunnen boeken en betalen."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:424
+#: inc/lib/getting-started/build/main.js:1
+msgid "Learn how"
+msgstr "Leer hoe"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:429
+msgid "Add a calendar so visitors can book calls, meetings, or sessions with you. Turn interested prospects into paying clients with one click."
+msgstr "Voeg een kalender toe zodat bezoekers gesprekken, vergaderingen of sessies met u kunnen boeken. Zet geïnteresseerde prospects met één klik om in betalende klanten."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:444
+msgid "Add Service"
+msgstr "Voeg Dienst toe"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:452
+msgid "Enable notifications"
+msgstr "Schakel meldingen in"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:472
+msgid "Add Engaging Videos"
+msgstr "Voeg Boeiende Video's toe"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:473
+msgid "Showcase your brand personality with videos that inform, inspire, and engage."
+msgstr "Toon de persoonlijkheid van uw merk met video's die informeren, inspireren en betrekken."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:483
+msgid "Upload video to Media Hub"
+msgstr "Upload video naar Media Hub"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:490
+msgid "The media hub is a flexible way to add audio or video to your site. It allows you to save media which you can later use in any post or page on your site."
+msgstr "De mediahub is een flexibele manier om audio of video aan uw site toe te voegen. Hiermee kunt u media opslaan die u later in elk bericht of elke pagina op uw site kunt gebruiken."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:503
+msgid "Add Presto Player block to pages"
+msgstr "Voeg Presto Player-blok toe aan pagina's"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:530
+msgid "Automate Recurring Website Tasks"
+msgstr "Automatiseer Terugkerende Website Taken"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:531
+msgid "Save hours each week by automating routine website tasks, so you can focus on growing your business."
+msgstr "Bespaar elke week uren door routinematige websitestaken te automatiseren, zodat u zich kunt concentreren op het laten groeien van uw bedrijf."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:541
+msgid "Create OttoKit account"
+msgstr "Maak OttoKit-account aan"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:549
+msgid "Add connections"
+msgstr "Voeg verbindingen toe"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:557
+msgid "Set up “when this happens, do that” actions"
+msgstr "Stel \"wanneer dit gebeurt, doe dat\" acties in"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:594
+msgid "Set Up The Basics"
+msgstr "Stel De Basis In"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:597
+msgid "Start Selling Online"
+msgstr "Begin Online Te Verkopen"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:600
+msgid "Level Up Your Site"
+msgstr "Verhoog Uw Site"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:75
+msgid "Security verification failed. Please refresh the page and try again."
+msgstr "Beveiligingsverificatie mislukt. Vernieuw de pagina en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:121
+#, php-format
+msgid "%s plugin is already installed."
+msgstr "%s plugin is al geïnstalleerd."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:154
+#, php-format
+msgid "Plugin %s was installed but could not locate plugin file."
+msgstr "Plugin %s is geïnstalleerd maar kon het pluginbestand niet vinden."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:164
+#, php-format
+msgid "%s plugin installed successfully."
+msgstr "%s plugin succesvol geïnstalleerd."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:182
+msgid "An unexpected error occurred during plugin installation."
+msgstr "Er is een onverwachte fout opgetreden tijdens de installatie van de plugin."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:228
+msgid "You do not have permissions to install plugins."
+msgstr "U heeft geen toestemming om plugins te installeren."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:236
+msgid "You must be logged in to install plugins."
+msgstr "U moet ingelogd zijn om plugins te installeren."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:254
+msgid "Plugin slug is required."
+msgstr "Plugin-slug is vereist."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:262
+msgid "Plugin slug contains invalid characters."
+msgstr "Plugin-slug bevat ongeldige tekens."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:350
+msgid "Plugin slug and name are required for installation."
+msgstr "Plugin-slug en naam zijn vereist voor installatie."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:375
+#, php-format
+msgid "Unexpected error during %s plugin installation: %s"
+msgstr "Onverwachte fout tijdens %s plugin installatie: %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:390
+msgid "Please try the installation again."
+msgstr "Probeer de installatie opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:391
+msgid "If the problem persists, try installing the plugin manually from the WordPress admin."
+msgstr "Als het probleem aanhoudt, probeer de plugin dan handmatig te installeren vanuit de WordPress-beheerder."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:392
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:905
+msgid "Contact your hosting provider if you continue to experience issues."
+msgstr "Neem contact op met uw hostingprovider als u problemen blijft ondervinden."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:419
+#, php-format
+msgid "Failed to load required WordPress files: %s"
+msgstr "Kon vereiste WordPress-bestanden niet laden: %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:471
+#, php-format
+msgid "Plugin API request failed after %d attempts: %s"
+msgstr "Plugin API-verzoek mislukt na %d pogingen: %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:480
+#, php-format
+msgid "Could not retrieve plugin information for %s"
+msgstr "Kon geen plugin-informatie ophalen voor %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:494
+#, php-format
+msgid "Could not connect to WordPress.org plugin repository for %s. Please check your internet connection and try again."
+msgstr "Kon geen verbinding maken met de WordPress.org plugin repository voor %s. Controleer uw internetverbinding en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:500
+#, php-format
+msgid "Plugin %s was not found in the WordPress.org repository. Please verify the plugin name and try again."
+msgstr "Plugin %s werd niet gevonden in de WordPress.org-repository. Controleer de pluginnaam en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:506
+#, php-format
+msgid "Could not retrieve plugin information for %s from WordPress.org. Error: %s"
+msgstr "Kon geen plugininformatie voor %s ophalen van WordPress.org. Fout: %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:530
+#, php-format
+msgid "Received invalid response from WordPress.org for plugin %s."
+msgstr "Ongeldig antwoord ontvangen van WordPress.org voor plugin %s."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:540
+#, php-format
+msgid "Could not find download URL for %s. The plugin may not be available in WordPress.org repository or may be a premium plugin."
+msgstr "Kon geen download-URL vinden voor %s. De plugin is mogelijk niet beschikbaar in de WordPress.org-repository of is een premium plugin."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:598
+#, php-format
+msgid "Failed to initialize plugin installer for %s: %s"
+msgstr "Kon plugininstaller voor %s niet initialiseren: %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:615
+#, php-format
+msgid "Plugin %s installation failed with exception: %s"
+msgstr "Installatie van plugin %s is mislukt met uitzondering: %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:652
+#, php-format
+msgid "Plugin %s installation failed: Unknown error occurred during installation. Please try again or install the plugin manually."
+msgstr "Installatie van plugin %s is mislukt: Er is een onbekende fout opgetreden tijdens de installatie. Probeer het opnieuw of installeer de plugin handmatig."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:656
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:864
+msgid "Try refreshing the page and attempting the installation again."
+msgstr "Probeer de pagina te vernieuwen en de installatie opnieuw te proberen."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:657
+msgid "Check if you have sufficient permissions to install plugins."
+msgstr "Controleer of u voldoende rechten heeft om plugins te installeren."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:658
+msgid "Verify that your WordPress installation has write permissions to the plugins directory."
+msgstr "Controleer of uw WordPress-installatie schrijfrechten heeft voor de plugins-directory."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:694
+#, php-format
+msgid "Plugin %s requires WordPress version %s or higher. You are currently running version %s. Please update WordPress first."
+msgstr "Plugin %s vereist WordPress-versie %s of hoger. U gebruikt momenteel versie %s. Update WordPress eerst."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:708
+#, php-format
+msgid "Plugin %s requires PHP version %s or higher. You are currently running version %s. Please contact your hosting provider to upgrade PHP."
+msgstr "Plugin %s vereist PHP-versie %s of hoger. U gebruikt momenteel versie %s. Neem contact op met uw hostingprovider om PHP te upgraden."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:736
+#, php-format
+msgid "Insufficient disk space to install %s. At least 50MB of free space is required. Please free up some disk space and try again."
+msgstr "Onvoldoende schijfruimte om %s te installeren. Er is minimaal 50MB vrije ruimte vereist. Maak wat schijfruimte vrij en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:761
+#, php-format
+msgid "Plugin %s installation verification failed: Plugin directory not found after installation. The installation may have been incomplete."
+msgstr "Installatieverificatie van plugin %s is mislukt: Plugindirectory niet gevonden na installatie. De installatie is mogelijk onvolledig geweest."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:772
+#, php-format
+msgid "Plugin %s installation verification failed: Could not locate main plugin file after installation."
+msgstr "Installatieverificatie van plugin %s is mislukt: Kon het hoofdpluginbestand niet vinden na installatie."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:783
+#, php-format
+msgid "Plugin %s installation verification failed: Plugin file exists but is not readable. Please check file permissions."
+msgstr "Installatieverificatie van plugin %s is mislukt: Pluginbestand bestaat maar is niet leesbaar. Controleer de bestandsrechten."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:803
+#, php-format
+msgid "Plugin %s installation failed: Plugin folder already exists. This usually means the plugin is already installed. Try refreshing the plugins page to see if it appears."
+msgstr "Installatie van plugin %s is mislukt: Pluginmap bestaat al. Dit betekent meestal dat de plugin al is geïnstalleerd. Probeer de pluginpagina te vernieuwen om te zien of deze verschijnt."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:810
+#, php-format
+msgid "Plugin %s installation failed: WordPress does not have permission to write files. Please check that your web server has write permissions to the plugins directory (/wp-content/plugins/), or contact your hosting provider for assistance."
+msgstr "Installatie van plugin %s is mislukt: WordPress heeft geen toestemming om bestanden te schrijven. Controleer of uw webserver schrijfrechten heeft voor de plugins-directory (/wp-content/plugins/), of neem contact op met uw hostingprovider voor hulp."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:817
+#, php-format
+msgid "Plugin %s installation failed: Filesystem is not accessible. This is usually a server configuration issue. Please contact your hosting provider to resolve filesystem access problems."
+msgstr "Installatie van plugin %s is mislukt: Bestandsysteem is niet toegankelijk. Dit is meestal een serverconfiguratieprobleem. Neem contact op met uw hostingprovider om problemen met de toegang tot het bestandsysteem op te lossen."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:824
+#, php-format
+msgid "Plugin %s installation failed: Could not download plugin file from WordPress.org. Please check your internet connection and try again. If the problem persists, your server may be blocking outbound connections."
+msgstr "Plugin %s installatie mislukt: Kan het pluginbestand niet downloaden van WordPress.org. Controleer uw internetverbinding en probeer het opnieuw. Als het probleem aanhoudt, kan het zijn dat uw server uitgaande verbindingen blokkeert."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:831
+#, php-format
+msgid "Plugin %s installation failed: The downloaded plugin file appears to be corrupted or invalid. Please try the installation again."
+msgstr "Plugin %s installatie mislukt: Het gedownloade pluginbestand lijkt beschadigd of ongeldig. Probeer de installatie opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:837
+#, php-format
+msgid "Plugin %s installation failed: Could not create plugin directory. Please check that your web server has write permissions to the plugins directory."
+msgstr "Plugin %s installatie mislukt: Kan de plugindirectory niet aanmaken. Controleer of uw webserver schrijfrechten heeft voor de plugindirectory."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:843
+#, php-format
+msgid "Plugin %s installation failed: Could not copy plugin files. This may be due to insufficient disk space or file permission issues."
+msgstr "Plugin %s installatie mislukt: Kan pluginbestanden niet kopiëren. Dit kan te wijten zijn aan onvoldoende schijfruimte of problemen met bestandsrechten."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:849
+#, php-format
+msgid "Plugin %s installation failed: %s. Please try again or install the plugin manually from the WordPress admin area."
+msgstr "Plugin %s installatie mislukt: %s. Probeer het opnieuw of installeer de plugin handmatig vanuit het WordPress-beheergebied."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:865
+msgid "If the problem persists, try installing the plugin manually from WordPress admin > Plugins > Add New."
+msgstr "Als het probleem aanhoudt, probeer de plugin dan handmatig te installeren via WordPress beheer > Plugins > Nieuwe toevoegen."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:871
+msgid "Check if the plugin is already installed by going to Plugins > Installed Plugins."
+msgstr "Controleer of de plugin al is geïnstalleerd door naar Plugins > Geïnstalleerde plugins te gaan."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:872
+msgid "If the plugin appears but is not working, try deactivating and reactivating it."
+msgstr "Als de plugin verschijnt maar niet werkt, probeer deze dan te deactiveren en opnieuw te activeren."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:882
+msgid "Contact your hosting provider to check file permissions for the /wp-content/plugins/ directory."
+msgstr "Neem contact op met uw hostingprovider om de bestandsrechten voor de /wp-content/plugins/ directory te controleren."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:883
+msgid "Ensure your web server has write permissions to the WordPress installation directory."
+msgstr "Zorg ervoor dat uw webserver schrijfrechten heeft voor de WordPress-installatiemap."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:884
+msgid "Check if there is sufficient disk space available on your server."
+msgstr "Controleer of er voldoende schijfruimte beschikbaar is op uw server."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:890
+msgid "Check your internet connection and try again."
+msgstr "Controleer uw internetverbinding en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:891
+msgid "Contact your hosting provider if your server is blocking outbound connections to WordPress.org."
+msgstr "Neem contact op met uw hostingprovider als uw server uitgaande verbindingen naar WordPress.org blokkeert."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:892
+msgid "Try installing the plugin at a different time when server load might be lower."
+msgstr "Probeer de plugin op een ander tijdstip te installeren wanneer de serverbelasting mogelijk lager is."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:898
+msgid "The plugin download may have been corrupted. Try the installation again."
+msgstr "Het downloaden van de plugin kan beschadigd zijn. Probeer de installatie opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:899
+msgid "Clear your browser cache and try again."
+msgstr "Wis uw browsercache en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:904
+msgid "Check the WordPress error logs for more detailed information about the failure."
+msgstr "Controleer de WordPress-foutlogboeken voor meer gedetailleerde informatie over de storing."
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:191
+msgid "Great Job! Your Site is Ready! 🎉"
+msgstr "Goed gedaan! Uw site is klaar! 🎉"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:191
+msgid "Already have an account?"
+msgstr "Heb je al een account?"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:191
+msgid "Click here to login."
+msgstr "Klik hier om in te loggen."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Finish Setup Icon"
+msgstr "Setup voltooiingspictogram"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "More Options"
+msgstr "Meer opties"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Setup dismissal failed!"
+msgstr "Setup-afwijzing mislukt!"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Failed to dismiss setup."
+msgstr "Het afwijzen van de setup is mislukt."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Dismiss Setup"
+msgstr "Setup afwijzen"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Mark as incomplete"
+msgstr "Markeer als onvolledig"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Mark as complete"
+msgstr "Markeer als voltooid"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "An error occurred while updating the step status."
+msgstr "Er is een fout opgetreden bij het bijwerken van de stapstatus."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Failed to update step status:"
+msgstr "Het bijwerken van de stapstatus is mislukt:"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Error updating step status:"
+msgstr "Fout bij het bijwerken van de stapstatus:"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Set Up"
+msgstr "Instellen"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Play Video"
+msgstr "Video afspelen"
+
+#. translators: %1$d is the number of completed steps, %2$d is the total number of steps.
+#: inc/lib/getting-started/build/main.js:4
+#, js-format
+msgid "%1$d of %2$d steps completed"
+msgstr "%1$d van %2$d stappen voltooid"
+
+#: inc/lib/getting-started/build/main.js:7
+msgid "Finish Setting Up Your Website"
+msgstr "Voltooi de installatie van uw website"
+
+#: inc/lib/getting-started/build/main.js:7
+msgid "Let’s get your new website fully ready. Follow this quick checklist to customize, configure, and launch with confidence."
+msgstr "Laten we uw nieuwe website volledig gereed maken. Volg deze snelle checklist om aan te passen, configureren en met vertrouwen te lanceren."
+
+#. translators: Installing Failed Plugin Name.
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+#, js-format
+msgid "Failed to install plugin: %s"
+msgstr "Kon plugin niet installeren: %s"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+msgid "Invalid response from server during plugin installation."
+msgstr "Ongeldig antwoord van server tijdens plugin-installatie."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+msgid "JSON parse error"
+msgstr "JSON-parsefout"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+msgid "Please try again. If the problem persists, check server logs for more details."
+msgstr "Probeer het opnieuw. Als het probleem aanhoudt, controleer dan de serverlogboeken voor meer details."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+msgid "Plugin installation failed"
+msgstr "Plugin-installatie mislukt"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+msgid "Unknown installation error"
+msgstr "Onbekende installatie fout"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:162
+msgid "Network error occurred during plugin installation."
+msgstr "Netwerkfout opgetreden tijdens plugin-installatie."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:162
+msgid "Please check your internet connection and try again."
+msgstr "Controleer uw internetverbinding en probeer het opnieuw."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:168
+msgid "Preparing plugin installation…"
+msgstr "Plugin-installatie voorbereiden…"
+
+#. translators: Installing Plugin Name.
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+#, js-format
+msgid "Installing plugin %1$s"
+msgstr "Plugin %1$s installeren"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "Error occurred during plugin installation process."
+msgstr "Er is een fout opgetreden tijdens het installatieproces van de plugin."
 
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
 #: inc/classes/class-astra-sites-importer-log.php:302

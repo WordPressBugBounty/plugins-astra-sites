@@ -15,7 +15,8 @@ const SignupLoginModal = () => {
 		};
 	}, [] );
 	const { zipwp_auth } = wpApiSettings || {};
-	const { screen_url, redirect_url, source, partner_id } = zipwp_auth || {};
+	const { screen_url, redirect_url, source, utmSource, partner_id } =
+		zipwp_auth || {};
 	const { isPremiumTemplate } = signupLoginModal || {};
 
 	const encodedRedirectUrl = encodeURIComponent(
@@ -40,7 +41,7 @@ const SignupLoginModal = () => {
 
 		let url = `${ screen_url }?type=token&redirect_url=${ encodedRedirectUrl }&ask=/${ ask }&source=${ source }${
 			partner_id ? `&aff=${ partner_id }` : ''
-		}`;
+		}&utm_source=${ utmSource }&utm_medium=plugin&utm_campaign=build-with-ai&utm_content=start-building`;
 
 		// if it's a premium template, add premium_design=true to the URL
 		// so zipwp can redirect back to designs page if user wants to change design
@@ -84,7 +85,10 @@ const SignupLoginModal = () => {
 				<div className="mt-6">
 					<div className="text-zip-body-text text-base font-normal leading-6 flex flex-col space-y-4">
 						<h2 className="font-bold leading-6">
-							Great Job! Your Site is Ready! 🎉
+							{ __(
+								'Great Job! Your Site is Ready! 🎉',
+								'ai-builder'
+							) }
 						</h2>
 
 						<p className="text-base text-light-theme-text-inactive font-normal leading-5">
@@ -147,7 +151,7 @@ const SignupLoginModal = () => {
 							{ __( 'Create ZipWP Account', 'ai-builder' ) }
 						</Button>
 						<span className="text-sm">
-							Already have an account?{ ' ' }
+							{ __( 'Already have an account?', 'ai-builder' ) }{ ' ' }
 							<span
 								className="text-accent-st cursor-pointer hover:underline"
 								onClick={ () => {
@@ -155,7 +159,7 @@ const SignupLoginModal = () => {
 								} }
 							>
 								{ ' ' }
-								Click here to login.
+								{ __( 'Click here to login.', 'ai-builder' ) }
 							</span>
 						</span>
 					</div>

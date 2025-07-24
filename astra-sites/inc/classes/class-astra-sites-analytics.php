@@ -308,15 +308,17 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			$latepoint_activities_table = defined( 'LATEPOINT_TABLE_ACTIVITIES' ) ? LATEPOINT_TABLE_ACTIVITIES : $wpdb->prefix . 'latepoint_activities';
 			$last_30_days               = gmdate( 'Y-m-d H:i:s', strtotime( '-30 days' ) );
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			// Table names can't be parameterized in wpdb::prepare(), safe to ignore PHPCS here.
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$count = $wpdb->get_var(
 				$wpdb->prepare(
-					'SELECT COUNT(*) FROM %s WHERE code = %s AND updated_at >= %s',
-					$latepoint_activities_table,
+					"SELECT COUNT(*) FROM {$latepoint_activities_table} WHERE code = %s AND updated_at >= %s",
 					'booking_created',
 					$last_30_days
 				)
 			);
+			// phpcs:enable
+
 			return $count > 0;
 		}
 
