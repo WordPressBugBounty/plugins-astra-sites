@@ -66,12 +66,20 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				return;
 			}
 
+			// Set WooPayments related settings.
+			$this->maybe_woopayments_included( $plugin_init, $data );
+
 			$plugin_slug      = $data['plugin_slug'];
 			$required_plugins = Astra_Sites_Page::get_instance()->get_setting( 'required_plugins', array() );
 
-			// If the required plugins is not an array or the plugin is already activated by starter templates, return early.
-			if ( ! is_array( $required_plugins ) || ( isset( $required_plugins[ $plugin_slug ] ) && 'activated' === $required_plugins[ $plugin_slug ] ) ) {
+			// If the plugin is already activated by starter templates, return early.
+			if ( ( isset( $required_plugins[ $plugin_slug ] ) && 'activated' === $required_plugins[ $plugin_slug ] ) ) {
 				return;
+			}
+
+			// If required plugins is not an array, initialize it.
+			if ( ! is_array( $required_plugins ) ) {
+				$required_plugins = array();
 			}
 
 			// Set the plugin activation status and update in settings.
@@ -81,9 +89,6 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 					'required_plugins' => $required_plugins,
 				)
 			);
-
-			// Set WooPayments related settings.
-			$this->maybe_woopayments_included( $plugin_init, $data );
 		}
 
 		/**
@@ -159,23 +164,87 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		}
 
 		/**
-		 * Helper function to run a quick search query for a string in post content.
+		 * Get all posts that have been imported and not modified since import.
 		 *
-		 * @since 4.4.27
+		 * These are posts that were imported via Starter Templates and haven't been
+		 * edited by the user since import (within a 3-minute buffer for background processing).
 		 *
-		 * @param string $search Search string.
-		 * @param array  $args   Optional arguments for WP_Query.
-		 * @return bool True when string found in any published post or page.
+		 * @param string $post_type The post type to check. Default is 'any'.
+		 * 
+		 * @since 4.4.33
+		 * @return array Post IDs that have not been modified since their import.
 		 */
-		private static function posts_contains( $search, $args = array() ) {
+		private static function get_unmodified_imported_post_ids( $post_type = 'any' ) {
+			// Get all posts that have been imported.
+			$args  = array(
+				'post_type'      => $post_type,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'meta_query'     => array( //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required for analytics and run in background.
+					array(
+						'key'     => '_astra_sites_imported_post',
+						'value'   => '1',
+						'compare' => '=',
+					),
+				),
+			);
+			$posts = get_posts( $args );
+
+			// Get all post IDs that have not been modified since their import.
+			return array_reduce(
+				$posts,
+				function ( $carry, $post ) {
+					$post_date     = strtotime( $post->post_date );
+					$modified_date = strtotime( $post->post_modified );
+
+					// Check if modified time is within 3 minutes (180 seconds) of post date. 3 mins buffer for background post processing.
+					if ( abs( $modified_date - $post_date ) <= 180 ) {
+						$carry[] = $post->ID;
+					}
+					return $carry;
+				},
+				array()
+			);
+		}
+
+		/**
+		 * Check if any user-engaged posts exist for a given post type.
+		 *
+		 * "User-engaged" means either:
+		 * - Posts created by the user (not imported).
+		 * - Imported posts that have been modified by the user since import.
+		 *
+		 * @param string $post_type The post type to check.
+		 * @param array  $args      Optional arguments for WP_Query.
+		 *
+		 * @since 4.4.33
+		 * @return bool True if any qualifying posts exist, false otherwise.
+		 */
+		private static function has_user_engaged_posts_of_type( $post_type = 'any', $args = array() ) {
+			// If post type is not 'any', ensure it exists.
+			if ( 'any' !== $post_type && ! post_type_exists( $post_type ) ) {
+				return false;
+			}
+
+			// Merge default arguments with provided ones.
 			$args = array_merge(
 				array(
-					'post_type'   => 'any',
+					'post_type'   => $post_type,
 					'post_status' => 'publish',
-					's'           => $search,
+					'fields'      => 'ids',
+					'numberposts' => 1,
 				),
 				$args
 			);
+
+			// Exclude post__not_in if already set.
+			if ( ! isset( $args['post__not_in'] ) ) {
+				// Exclude posts that have been imported and not modified since import.
+				$excluded_post_ids = self::get_unmodified_imported_post_ids( $post_type );
+				if ( ! empty( $excluded_post_ids ) ) {
+					$args['post__not_in'] = $excluded_post_ids;
+				}
+			}
 
 			$query = new \WP_Query( $args );
 			$found = $query->have_posts();
@@ -187,6 +256,10 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		/**
 		 * Checks if any Spectra block is used on the site.
 		 *
+		 * ACTIVE CONDITION:
+		 * - Imported post/page is updated, published and has at least one Spectra block.
+		 * - New post/page is published and has at least one Spectra block.
+		 *
 		 * @since 4.4.27
 		 *
 		 * @return bool
@@ -196,27 +269,41 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				return false;
 			}
 
-			return self::posts_contains( '<!-- wp:uagb/' );
+			// Check for Spectra v2 blocks (wp:uagb/).
+			$has_spectra_v2_blocks = self::has_user_engaged_posts_of_type( 'any', array( 's' => '<!-- wp:uagb/' ) );
+			if ( $has_spectra_v2_blocks ) {
+				return true;
+			}
+
+			// Check for Spectra v3 blocks (wp:spectra/).
+			return self::has_user_engaged_posts_of_type( 'any', array( 's' => '<!-- wp:spectra/' ) );
 		}
 
 		/**
 		 * Checks if any UAE Header Footer Layout is published or any UAE widget is used on the site.
+		 *
+		 * ACTIVE CONDITION:
+		 * - Imported header footer post is updated, published.
+		 * - New header footer post is published.
 		 *
 		 * @since 4.4.27
 		 *
 		 * @return bool
 		 */
 		public static function is_uae_widgets_used() {
-			if ( post_type_exists( 'elementor-hf' ) ) {
-				$count = wp_count_posts( 'elementor-hf' );
-				if ( isset( $count->publish ) && $count->publish > 0 ) {
-					return true;
-				} else {
-					$uae_used_widgets = get_option( 'uae_widgets_usage_data_option', array() );
-					if ( is_array( $uae_used_widgets ) && ! empty( $uae_used_widgets ) ) {
-						return true;
-					}
-				}
+			if ( ! is_plugin_active( 'header-footer-elementor/header-footer-elementor.php' ) ) {
+				return false;
+			}
+
+			// Check for user-engaged elementor-hf posts.
+			if ( self::has_user_engaged_posts_of_type( 'elementor-hf' ) ) {
+				return true;
+			}
+
+			// Check UAE widget usage data (fallback for older detection method).
+			$uae_used_widgets = get_option( 'uae_widgets_usage_data_option', array() );
+			if ( is_array( $uae_used_widgets ) && ! empty( $uae_used_widgets ) ) {
+				return true;
 			}
 
 			return false;
@@ -225,21 +312,22 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		/**
 		 * Checks if any SureForms form is published.
 		 *
+		 * ACTIVE CONDITION:
+		 * - Imported form is updated and published.
+		 * - New form is published.
+		 *
 		 * @since 4.4.27
 		 *
 		 * @return bool
 		 */
 		public static function is_sureforms_form_published() {
-			if ( post_type_exists( 'sureforms_form' ) ) {
-				$count = wp_count_posts( 'sureforms_form' );
-				return isset( $count->publish ) && $count->publish > 0;
-			}
-
-			return false;
+			return self::has_user_engaged_posts_of_type( 'sureforms_form' );
 		}
 
 		/**
 		 * Checks if SureMail has at least one connection configured.
+		 *
+		 * ACTIVE CONDITION: SureMails is connected.
 		 *
 		 * @since 4.4.27
 		 *
@@ -263,37 +351,37 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		/**
 		 * Checks if SureCart has any published product.
 		 *
+		 * ACTIVE CONDITION:
+		 * - Imported SureCart product is updated and published.
+		 * - New SureCart product is published.
+		 *
 		 * @since 4.4.27
 		 *
 		 * @return bool
 		 */
 		public static function is_surecart_product_published() {
-			if ( post_type_exists( 'sc_product' ) ) {
-				$count = wp_count_posts( 'sc_product' );
-				return isset( $count->publish ) && $count->publish > 0;
-			}
-
-			return false;
+			return self::has_user_engaged_posts_of_type( 'sc_product' );
 		}
 
 		/**
 		 * Checks if CartFlows has any published funnel.
+		 *
+		 * ACTIVE CONDITION:
+		 * - Imported funnel is updated and published.
+		 * - New funnel is published.
 		 *
 		 * @since 4.4.27
 		 *
 		 * @return bool
 		 */
 		public static function is_cartflows_funnel_published() {
-			if ( post_type_exists( 'cartflows_flow' ) ) {
-				$count = wp_count_posts( 'cartflows_flow' );
-				return isset( $count->publish ) && $count->publish > 0;
-			}
-
-			return false;
+			return self::has_user_engaged_posts_of_type( 'cartflows_flow' );
 		}
 
 		/**
 		 * Checks if LatePoint booking/appointment is created or managed by user.
+		 *
+		 * ACTIVE CONDITION: Booking form is managed or created in last 30 days.
 		 *
 		 * @since 4.4.27
 		 *
@@ -324,6 +412,8 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 
 		/**
 		 * Checks if a Presto Player video is embedded on the site.
+		 * 
+		 * ACTIVE CONDITION: Presto Player block/shortcode used on any post/page
 		 *
 		 * @since 4.4.27
 		 *
@@ -336,17 +426,27 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 
 			// Exclude 'pp_video_block' post type to avoid false positives.
 			$args = array(
-				'post_type' => array_diff(
+				'post_type'     => array_diff(
 					get_post_types(
 						array( 'public' => true ),
 						'names'
 					),
 					array( 'pp_video_block' )
 				),
+				'posts__not_in' => array(), // To search in all posts including imported ones.
+				's'             => '<!-- /wp:presto-player',
 			);
 
-			// Check for Presto Player block or shortcode in posts.
-			return self::posts_contains( '<!-- /wp:presto-player', $args ) || self::posts_contains( '[presto_player id=', $args );
+			// Check for Presto Player block in posts.
+			$is_presto_player_block_used = self::has_user_engaged_posts_of_type( 'any', $args );
+			if ( $is_presto_player_block_used ) {
+				return true;
+			}
+
+			// Check for Presto Player shortcode in posts.
+			$args['s'] = '[presto_player id=';
+
+			return self::has_user_engaged_posts_of_type( 'any', $args );
 		}
 
 		/**

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Toaster } from '@brainstormforce/starter-templates-components';
 import Tooltip from '../../../../components/tooltip/tooltip';
 import { __ } from '@wordpress/i18n';
@@ -74,44 +74,35 @@ const SyncLibrary = () => {
 			syncPageInProgress: 0,
 		} );
 
+		// If the sync is already up to date, we don't need to sync again.
 		const syncUptoDate = await isSyncUptoDate();
-		if ( syncUptoDate ) {
-			setSyncState( {
-				updatedData: {
-					allSitesData: null,
-					categories: null,
-					categoriesAndTags: null,
-				},
-				syncStatus: isSyncSuccess(),
-			} );
-			dispatch( {
-				type: 'set',
-				sitesSyncing: false,
-			} );
-		} else {
-			const sites = await syncSites();
-			const { categories, tags } = await fetchCategoriesAndTags();
-			setSyncState( {
-				updatedData: {
-					allSitesData: sites,
-					categories,
-					categoriesAndTags: tags,
-				},
-				syncStatus: isSyncSuccess(),
-			} );
-			dispatch( {
-				type: 'set',
-				sitesSyncing: false,
-			} );
-		}
+		const sites = ! syncUptoDate ? await syncSites() : null;
+		const { categories = null, tags = null } = ! syncUptoDate
+			? await fetchCategoriesAndTags()
+			: {};
+
+		setSyncState( {
+			updatedData: {
+				allSitesData: sites,
+				categories,
+				categoriesAndTags: tags,
+			},
+			syncStatus: isSyncSuccess(),
+		} );
+
+		dispatch( {
+			type: 'set',
+			sitesSyncing: false,
+		} );
 	};
 
 	const syncSites = async () => {
 		// const newData = await SyncStart();
-		const pageCount = await fetchSitesPageCount();
+		const { totalPages: pageCount } = await fetchSitesPageCount();
 		dispatch( {
 			type: 'set',
 			syncPageCount: pageCount,
+			syncPageInProgress: 0,
 		} );
 
 		const sites = [];

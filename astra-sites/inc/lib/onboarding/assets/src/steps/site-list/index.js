@@ -35,6 +35,7 @@ import {
 	isSyncUptoDate,
 	fetchSitesPageCount,
 	fetchPagedSites,
+	fetchAllSites,
 } from './header/sync-library/utils';
 
 export const useFilteredSites = () => {
@@ -239,15 +240,16 @@ const SiteList = () => {
 
 	const syncSites = async () => {
 		// const newData = await SyncStart();
-		const pageCount = await fetchSitesPageCount();
+		const { totalPages, currentPage } = await fetchSitesPageCount();
 
 		dispatch( {
 			type: 'set',
-			syncPageCount: pageCount,
+			syncPageCount: totalPages,
+			syncPageInProgress: currentPage,
 		} );
 
 		const sites = [];
-		for ( let i = 0; i < pageCount; i++ ) {
+		for ( let i = currentPage; i < totalPages; i++ ) {
 			const sitesData = await fetchPagedSites( i + 1 );
 			sitesData.forEach( ( siteItem ) => {
 				sites.push( siteItem );
@@ -258,10 +260,12 @@ const SiteList = () => {
 			} );
 		}
 
-		if ( sites.length > 0 ) {
+		if ( currentPage <= 1 && sites.length > 0 ) {
 			return sites;
 		}
-		return null;
+
+		// Fetch all sites if the current page is greater than 1 (means we were in the middle of fetching all the sites).
+		return Object.values( await fetchAllSites() );
 	};
 
 	const fetchSitesAndCategories = async () => {
@@ -286,26 +290,17 @@ const SiteList = () => {
 			const categories = await SyncAndGetAllCategories();
 			const categoriesAndTags = await SyncAndGetAllCategoriesAndTags();
 
-			const updatedState = {
+			dispatch( {
 				type: 'set',
 				bgSyncInProgress: false,
 				syncPageInProgress: 0,
 				syncPageCount: 0,
-			};
+				allSitesData: sites ?? null,
+				categories: categories ?? null,
+				categoriesAndTags: categoriesAndTags ?? null,
+			} );
 
-			if ( ! sites || ! categories || ! categoriesAndTags ) {
-				updatedState.allSitesData = sites ?? null;
-				updatedState.categories = categories ?? null;
-				updatedState.categoriesAndTags = categoriesAndTags ?? null;
-			} else {
-				updatedState.allSitesData = sites;
-				updatedState.categories = categories;
-				updatedState.categoriesAndTags = categories;
-			}
-			dispatch( updatedState );
 			astraSitesVars.bgSyncInProgress = false;
-
-			// await fetchSitesAndCategories();
 		} catch ( error ) {
 			console.error( error );
 		}

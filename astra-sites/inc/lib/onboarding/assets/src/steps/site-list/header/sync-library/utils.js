@@ -272,10 +272,13 @@ export const SyncAllCategoriesAndTags = async () => {
 export const SyncImportAllSites = async () => {
 	try {
 		// Get sites request count.
-		const totalRequest = await post( {
+		const response = await post( {
 			action: 'astra-sites-get-sites-request-count',
 			_ajax_nonce: astraSitesVars?._ajax_nonce,
 		} );
+
+		// Get total request count.
+		const totalRequest = response?.total;
 
 		// Import all sites.
 		if ( totalRequest ) {
@@ -315,12 +318,15 @@ export const SyncImportAllSites = async () => {
 
 export const fetchSitesPageCount = async () => {
 	try {
-		const totalRequest = await post( {
+		const response = await post( {
 			action: 'astra-sites-get-sites-request-count',
 			_ajax_nonce: astraSitesVars?._ajax_nonce,
 		} );
 
-		return totalRequest ?? 0;
+		return {
+			totalPages: response?.total ?? 0,
+			currentPage: response?.current ?? 0,
+		};
 	} catch ( error ) {
 		return 0;
 	}
@@ -348,6 +354,32 @@ export const fetchPagedSites = async ( pageNo ) => {
 		return sites;
 	} catch ( error ) {
 		return null;
+	}
+};
+
+/**
+ * Fetch all sites.
+ *
+ * @return {Promise<Object>} Returns all sites.
+ */
+export const fetchAllSites = async () => {
+	// Import all sites.
+	try {
+		const formData = new FormData();
+		formData.append( 'action', 'astra-sites-get-all-sites' );
+		formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+		const response = await fetch( ajaxurl, {
+			method: 'post',
+			body: formData,
+		} ).then( ( res ) => res.json() );
+
+		if ( response.success === true ) {
+			return response?.data || {};
+		}
+
+		return {};
+	} catch ( error ) {
+		return {};
 	}
 };
 

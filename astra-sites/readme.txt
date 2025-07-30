@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.8.1
-Stable tag: 4.4.32
+Stable tag: 4.4.33
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,12 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.33 - 30-July-2025
+- Improvement:
+    - Background template sync now resumes from the last fetched page, reducing redundant requests and speeding up load time.
+- Fix:
+    - Prevent UAELite from redirecting during Elementor page and block imports.
 
 v4.4.32 - 24-July-2025
 - Improvement:

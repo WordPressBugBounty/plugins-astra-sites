@@ -87,6 +87,7 @@ if ( class_exists( 'WP_Background_Process' ) ) :
 			astra_sites_error_log( esc_html__( 'All processes are complete', 'astra-sites' ) );
 			update_site_option( 'astra-sites-batch-status-string', 'All processes are complete' );
 			delete_site_option( 'astra-sites-batch-status' );
+			delete_site_option( 'astra-sites-current-page' );
 			update_site_option( 'astra-sites-batch-is-complete', 'yes' );
 
 			do_action( 'astra_sites_site_import_batch_complete' );

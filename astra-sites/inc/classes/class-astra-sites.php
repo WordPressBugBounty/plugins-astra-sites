@@ -1868,7 +1868,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					'get_more_credits_url' => $credit_purchase_url,
 					'dismiss_ai_notice' => Astra_Sites_Page::get_instance()->get_setting( 'dismiss_ai_promotion' ),
 					'showClassicTemplates' => apply_filters( 'astra_sites_show_classic_templates', true ),
-					'bgSyncInProgress' => 'in-process' === get_site_option( 'astra-sites-batch-status', '' ),
+					'bgSyncInProgress'     => self::is_sync_in_progress(),
 				)
 			);
 
@@ -2842,6 +2842,31 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 */
 		public function starter_templates_logo_url() {
 			return ASTRA_SITES_URI . 'inc/lib/onboarding/assets/images/logo.svg';
+		}
+
+		/**
+		 * Check if sync is in progress.
+		 *
+		 * @since 4.4.33
+		 *
+		 * @return bool
+		 */
+		public static function is_sync_in_progress() {
+			// Early return if sync is explicitly marked in-progress.
+			if ( 'in-process' === get_site_option( 'astra-sites-batch-status', '' ) ) {
+				return true;
+			}
+
+			// If either batch or manual sync is completed, no sync in progress.
+			if (
+				'yes' === get_site_option( 'astra-sites-batch-is-complete', 'no' ) ||
+				'yes' === get_site_option( 'astra-sites-manual-sync-complete', 'no' )
+			) {
+				return false;
+			}
+
+			// If current page is set, assume sync is in progress.
+			return (bool) get_site_option( 'astra-sites-current-page' );
 		}
 	}
 

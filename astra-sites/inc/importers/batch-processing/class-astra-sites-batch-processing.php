@@ -109,6 +109,7 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 			add_action( 'wp_ajax_astra-sites-get-sites-request-count', array( $this, 'sites_requests_count' ) );
 			add_action( 'wp_ajax_astra-sites-get-blocks-request-count', array( $this, 'blocks_requests_count' ) );
 			add_action( 'wp_ajax_astra-sites-import-sites', array( $this, 'import_sites' ) );
+			add_action( 'wp_ajax_astra-sites-get-all-sites', array( $this, 'get_all_sites' ) );
 			add_action( 'wp_ajax_astra-sites-get-all-categories', array( $this, 'get_all_categories' ) );
 			add_action( 'wp_ajax_astra-sites-get-all-categories-and-tags', array( $this, 'get_all_categories_and_tags' ) );
 
@@ -345,7 +346,17 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 			}
 			$page_no = isset( $_POST['page_no'] ) ? absint( $_POST['page_no'] ) : '';
 			if ( $page_no ) {
-				$sites_and_pages = Astra_Sites_Batch_Processing_Importer::get_instance()->import_sites( $page_no );
+				// Checks to improve template sync performance.
+				$is_in_process      = 'in-process' === get_site_option( 'astra-sites-batch-status', '' );
+				$current_page       = (int) get_site_option( 'astra-sites-current-page' );
+				$is_batch_completed = 'yes' === get_site_option( 'astra-sites-batch-is-complete', 'no' );
+
+				// Get sites from JSON file if background template syncing is in process or completed and the page no is less than the already fetched page number.
+				if ( $page_no < $current_page && ( $is_in_process || $is_batch_completed ) ) {
+					$sites_and_pages = Astra_Sites_File_System::get_instance()->get_json_file_content( 'astra-sites-and-pages-page-' . $page_no . '.json' );
+				} else {
+					$sites_and_pages = Astra_Sites_Batch_Processing_Importer::get_instance()->import_sites( $page_no );
+				}
 
 				wp_send_json_success( $sites_and_pages );
 			}
@@ -369,7 +380,16 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 			// Get count.
 			$total_requests = $this->get_total_requests();
 			if ( $total_requests ) {
-				wp_send_json_success( $total_requests );
+				$is_batch_completed = 'yes' === get_site_option( 'astra-sites-batch-is-complete', 'no' );
+				$is_manual_synced   = 'yes' === get_site_option( 'astra-sites-manual-sync-complete', 'no' );
+				$current_page       = intval( get_site_option( 'astra-sites-current-page' ) );
+
+				wp_send_json_success(
+					array(
+						'total'   => $total_requests,
+						'current' => $is_batch_completed || $is_manual_synced ? $total_requests : $current_page, // If batch is completed or manual sync is done then current request will be total requests.
+					)
+				);
 			}
 
 			wp_send_json_error();
@@ -413,6 +433,9 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 
 			update_site_option( 'astra-sites-batch-is-complete', 'no' );
 			update_site_option( 'astra-sites-manual-sync-complete', 'yes' );
+
+			// Delete the current page site option once all the sites are synced.
+			delete_site_option( 'astra-sites-current-page' );
 			wp_send_json_success();
 		}
 
@@ -655,6 +678,7 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 				$this->log( 'Sync Process Complete.' );
 				$this->sync_batch_complete();
 				delete_site_option( 'astra-sites-batch-status' );
+				delete_site_option( 'astra-sites-current-page' );
 				update_site_option( 'astra-sites-batch-is-complete', 'yes' );
 			} else {
 				// Dispatch Queue.
@@ -954,6 +978,27 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 			);
 
 			return $post_types;
+		}
+
+		/**
+		 * Get all sites.
+		 *
+		 * @return void
+		 * @since 4.4.33
+		 */
+		public function get_all_sites() {
+			if ( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) {
+				if ( ! current_user_can( 'customize' ) ) {
+					wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
+				}
+
+				$all_sites = Astra_Sites::get_instance()->get_all_sites();
+
+				// Delete the current page option, once all sites are fetched.
+				delete_site_option( 'astra-sites-current-page' );
+
+				wp_send_json_success( $all_sites );
+			}
 		}
 
 		/**

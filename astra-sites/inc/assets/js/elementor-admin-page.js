@@ -708,7 +708,7 @@ var AstraSitesAjaxQueue = ( function () {
 								} )
 								.done( function ( response ) {
 									if ( response.success ) {
-										var total = response.data;
+										var total = response.data?.total;
 
 										for ( let i = 1; i <= total; i++ ) {
 											AstraSitesAjaxQueue.add( {
@@ -944,6 +944,7 @@ var AstraSitesAjaxQueue = ( function () {
 						action: 'astra-sites-required_plugin_activate',
 						init: single_plugin.init,
 						_ajax_nonce: astraElementorSites._ajax_nonce,
+						trigger_origin: 'elementor'
 					},
 					success: function ( result ) {
 						if ( result.success ) {
@@ -2307,6 +2308,7 @@ var AstraSitesAjaxQueue = ( function () {
 						action: 'astra-sites-required_plugin_activate',
 						init: curr_plugin.init,
 						_ajax_nonce: astraElementorSites._ajax_nonce,
+						trigger_origin: 'elementor'
 					},
 				} ).done( function ( result ) {
 					if ( result.success ) {

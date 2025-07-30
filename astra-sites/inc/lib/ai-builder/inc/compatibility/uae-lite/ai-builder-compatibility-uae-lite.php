@@ -51,16 +51,25 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_UAE_Lite' ) ) {
 
 		/**
 		 * Disable redirection for UAE Lite plugin when activated via Starter templates import process.
+		 * This is also prevent redirection for plugin activation from elementor.
 		 *
 		 * @since 1.2.37
 		 * @param string $plugin_init The plugin init.
 		 * @return void
 		 */
 		public function activation( $plugin_init ) {
-			if (
-				'header-footer-elementor/header-footer-elementor.php' === $plugin_init &&
-				astra_sites_has_import_started()
-			) {
+			// Skip if not UAE Lite plugin.
+			if ( 'header-footer-elementor/header-footer-elementor.php' !== $plugin_init ) {
+				return;
+			}
+
+			// Check if we're in an import context.
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified earlier in the call stack.
+			$trigger_origin    = isset( $_POST['trigger_origin'] ) ? sanitize_text_field( wp_unslash( $_POST['trigger_origin'] ) ) : '';
+			$is_import_context = astra_sites_has_import_started() || 'elementor' === $trigger_origin;
+
+			if ( $is_import_context ) {
+				// Prevent UAE Lite onboarding to maintain uninterrupted import flow.
 				delete_option( 'hfe_start_onboarding' );
 			}
 		}
