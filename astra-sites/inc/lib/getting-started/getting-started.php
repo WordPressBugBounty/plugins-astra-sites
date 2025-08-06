@@ -3,7 +3,7 @@
  * Plugin Name: Getting Started
  * Description: It is a library which helps you to complete the website setup.
  * Author: Brainstorm Force
- * Version: 1.0.0
+ * Version: 1.0.1
  * License: GPL v2
  * Text Domain: getting-started
  *

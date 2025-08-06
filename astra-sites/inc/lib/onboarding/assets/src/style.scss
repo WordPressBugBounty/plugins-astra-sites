@@ -1053,6 +1053,35 @@ body.step-import-site-done {
 }
 .features-container {
 	padding-bottom: 60px;
+
+	.plugin-list {
+		overflow-x: auto;
+
+		&::-webkit-scrollbar {
+			height: 6px;
+		}
+
+		&::-webkit-scrollbar-track {
+			border-radius: 10px;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: transparent;
+			border-radius: 10px;
+			transition: background 0.3s ease;
+		}
+
+		&:hover::-webkit-scrollbar-thumb {
+			background: #d5d6d7;
+		}
+
+		scrollbar-color: transparent transparent;
+		scrollbar-width: thin;
+
+		&:hover {
+			scrollbar-color: #d5d6d7 transparent;
+		}
+	}
 }
 
 .stc-grid-item-badge {

@@ -106,7 +106,8 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				if ( ! isset( $data['was_plugin_active'] ) || ! $data['was_plugin_active'] ) {
 					Astra_Sites_Page::get_instance()->update_settings(
 						array(
-							'woopayments_ref' => true,
+							'woopayments_ref'     => true,
+							'wcpay_referred_time' => time(),
 						)
 					);
 				}
@@ -161,6 +162,57 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			}
 
 			return false;
+		}
+
+		/**
+		 * Checks if WooPayments has processed at least one transaction.
+		 *
+		 * @since 4.4.34
+		 * @return bool True if WooPayments has transactions, false otherwise.
+		 */
+		private static function has_woopayments_successful_transaction() {
+			// Check if WooPayments plugin is active.
+			if ( ! is_plugin_active( 'woocommerce-payments/woocommerce-payments.php' ) ) {
+				return false;
+			}
+
+			// Check if WooCommerce is active (required for WooPayments).
+			if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) || ! function_exists( 'wc_get_orders' ) ) {
+				return false;
+			}
+
+			// Get the timestamp after which to check for transactions.
+			$after_timestamp = Astra_Sites_Page::get_instance()->get_setting( 'wcpay_referred_time', 0 );
+
+			// Use WooCommerce's built-in order query system to support both legacy and HPOS storage.
+			$orders = wc_get_orders(
+				array(
+					'payment_method' => 'woocommerce_payments',
+					'status'         => array( 'completed', 'processing', 'on-hold' ),
+					'limit'          => 1,
+					'date_after'     => intval( $after_timestamp ),
+					'meta_query'     => array( //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required for analytics and run in background.
+						'relation' => 'OR',
+						array(
+							'key'     => '_wcpay_intent_id',
+							'value'   => '',
+							'compare' => '!=',
+						),
+						array(
+							'key'     => '_wcpay_charge_id',
+							'value'   => '',
+							'compare' => '!=',
+						),
+						array(
+							'key'     => '_transaction_id',
+							'value'   => '',
+							'compare' => '!=',
+						),
+					),
+				)
+			);
+
+			return ! empty( $orders );
 		}
 
 		/**
@@ -556,6 +608,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 					'woopayments_banner_clicked'     => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_banner_clicked' ),
 					'woopayments_onboarding_clicked' => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_onboarding_clicked' ),
 					'woopayments_configured'         => self::is_woo_payments_configured(),
+					'has_woopayments_transaction'    => self::has_woopayments_successful_transaction(),
 				),
 				'numeric_values' => array(
 					'woopayments_banner_dismissed_count' => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_banner_dismissed_count' ),

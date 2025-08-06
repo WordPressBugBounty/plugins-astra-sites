@@ -462,7 +462,11 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 					</div>
 				) }
 
-				<hr className="!border-border-tertiary border-b-0 w-full" />
+				{ isFetchingStatus === fetchStatus.fetched ? (
+					<RequiredPlugins pluginsList={ featurePluginsList } />
+				) : (
+					<hr className="!border-border-tertiary border-b-0 w-full" />
+				) }
 
 				{ /* Navigation buttons */ }
 				<NavigationButtons
@@ -479,10 +483,6 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 					) }
 				/>
 			</Container>
-
-			{ isFetchingStatus === fetchStatus.fetched && (
-				<RequiredPlugins pluginsList={ featurePluginsList } />
-			) }
 		</>
 	);
 };

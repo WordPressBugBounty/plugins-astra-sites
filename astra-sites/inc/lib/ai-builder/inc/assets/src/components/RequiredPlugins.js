@@ -48,8 +48,8 @@ const RequiredPlugins = ( { pluginsList } ) => {
 
 	return (
 		pluginsList?.length && (
-			<div className="pt-10 !max-w-[55rem] w-full mx-auto flex flex-col gap-4 text-left">
-				<div className="flex flex-col md:flex-row items-start md:items-center gap-2 justify-between">
+			<div className="bg-container-background pt-3 pb-2 !max-w-[55rem] w-full mx-auto flex flex-col gap-4 text-left border-[1px] border-solid border-button-disabled rounded">
+				<div className="px-3 flex flex-col md:flex-row items-start md:items-center gap-2 justify-between">
 					<p className="text-sm">
 						{ __(
 							'The following plugins will be installed and activated for the selected features:',
@@ -66,7 +66,7 @@ const RequiredPlugins = ( { pluginsList } ) => {
 					</p>
 				</div>
 
-				<div className="flex gap-2 flex-wrap">
+				<div className="px-3 flex gap-2 overflow-x-auto plugin-list">
 					{ pluginsList?.map( ( { compulsory, name, slug } ) => (
 						<div
 							key={ slug }
@@ -93,7 +93,7 @@ const RequiredPlugins = ( { pluginsList } ) => {
 								</div>
 							) }
 
-							<span className="px-1 text-sm font-medium text-[#1F2937]">
+							<span className="px-1 text-sm font-medium text-[#1F2937] whitespace-nowrap">
 								{ name }
 								{ compulsory && (
 									<span className="text-alert-error">

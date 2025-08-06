@@ -144,6 +144,18 @@ export const ColumnItem = ( {
 		}
 	}, [ shouldLoad, isLoaded ] );
 
+	const handleAddUUIDToQueryParams = ( uuid ) => {
+		// Add the uuid to the query params
+		const newUrl = new URL( window.location.href );
+		newUrl.search = '';
+		newUrl.searchParams.set( 'page', 'ai-builder' );
+		newUrl.searchParams.set( 'uuid', uuid );
+		// set hashtag to design page
+		newUrl.hash = '/design';
+
+		window.history.pushState( {}, '', newUrl.toString() );
+	};
+
 	return (
 		<div
 			className={ classNames(
@@ -195,6 +207,7 @@ export const ColumnItem = ( {
 					<div
 						className="absolute inset-0 w-full h-full bg-transparent cursor-pointer"
 						onClick={ () => {
+							handleAddUUIDToQueryParams( template.uuid );
 							setWebsiteSelectedTemplateAIStep( template.uuid );
 							setSelectedTemplateIsPremium( template.is_premium );
 							setWebsiteLogo( siteLogoDefault );

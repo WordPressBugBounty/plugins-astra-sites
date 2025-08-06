@@ -134,8 +134,8 @@ class Getting_Started_Plugin_Loader {
 	 * @return void
 	 */
 	public function load_files() {
-		require_once GS_DIR . 'classes/class-gs-admin.php';
 		require_once GS_DIR . 'classes/class-gs-helper.php';
+		require_once GS_DIR . 'classes/class-gs-admin.php';
 		require_once GS_DIR . 'classes/class-gs-api.php';
 	}
 }

@@ -109,6 +109,24 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_WooCommerce_Payments' ) ) {
 		}
 
 		/**
+		 * Check if we're on the WooCommerce Payments page.
+		 *
+		 * @since 1.2.52
+		 * @return bool True if on the WooCommerce Payments page, false otherwise.
+		 */
+		public static function is_woocommerce_payments_page() {
+			// Check if we're on WooPayments Onboarding page.
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only GET used safely here.
+			$is_woo_payments_page = isset( $_GET['page'], $_GET['path'] ) && 'wc-admin' === sanitize_text_field( $_GET['page'] ) && '/payments/connect' === sanitize_text_field( rawurldecode( $_GET['path'] ) );
+
+			// Check if we're on the WooCommerce Payments settings page.
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only GET used safely here.
+			$is_woo_payments_new_page = isset( $_GET['page'], $_GET['tab'] ) && 'wc-settings' === sanitize_text_field( $_GET['page'] ) && 'checkout' === sanitize_text_field( rawurldecode( $_GET['tab'] ) );
+
+			return $is_woo_payments_page || $is_woo_payments_new_page;
+		}
+
+		/**
 		 * Enqueue scripts and localize data.
 		 *
 		 * @since 1.2.37
@@ -117,11 +135,8 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_WooCommerce_Payments' ) ) {
 		public function enqueue_scripts() {
 			$can_show_notice = $this->can_show_payment_notice();
 
-			// Check if we're on WooPayments connect page.
-			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only GET used safely here.
-			$is_woo_payments_page = isset( $_GET['page'], $_GET['path'] ) && 'wc-admin' === sanitize_text_field( $_GET['page'] ) && '/payments/connect' === sanitize_text_field( rawurldecode( $_GET['path'] ) );
-
-			if ( ! $can_show_notice && ! $is_woo_payments_page ) {
+			// Bail early if the notice can not be shown and not on the WooCommerce Payments page.
+			if ( ! $can_show_notice && ! self::is_woocommerce_payments_page() ) {
 				return;
 			}
 
@@ -416,14 +431,21 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_WooCommerce_Payments' ) ) {
 			}
 
 			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only GET used safely here.
-			if (
-				is_admin() &&
-				isset( $_GET['page'], $_GET['path'] ) &&
-				'wc-admin' === sanitize_text_field( $_GET['page'] ) &&
-				'/payments/connect' === sanitize_text_field( rawurldecode( $_GET['path'] ) ) &&
-				! isset( $_GET['woopayments-ref'] )
-			) {
-				// phpcs:enable WordPress.Security.NonceVerification.Recommended -- Read-only GET used safely here.
+			if ( ! is_admin() || isset( $_GET['woopayments-ref'] ) ) {
+				return;
+			}
+
+			// Bail early if WooPayments referral code is already set.
+			if ( get_transient( 'woopayments_referral_code' ) ) {
+				return;
+			}
+
+			// Check if WooPayments is configured already.
+			if ( self::is_woo_payments_configured() ) {
+				return;
+			}
+
+			if ( self::is_woocommerce_payments_page() ) {
 				$ref_value = self::get_woopayments_ref_id();
 
 				// Preserve all existing query vars.
@@ -433,6 +455,9 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_WooCommerce_Payments' ) ) {
 
 				// Build the URL with updated args.
 				$new_url = admin_url( 'admin.php' ) . '?' . http_build_query( $query_args );
+
+				// Set the transient to prevent multiple redirects in edge cases.
+				set_transient( 'woopayments_referral_code', $ref_value, 30 * DAY_IN_SECONDS );
 
 				// Perform safe redirect and exit.
 				wp_safe_redirect( esc_url_raw( $new_url ) );

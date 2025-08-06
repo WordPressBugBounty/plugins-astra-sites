@@ -420,22 +420,8 @@ class GS_Helper {
 				'description' => __( 'Streamline your booking process so clients can book and pay you with zero hassle.', 'astra-sites' ),
 				'category'    => 'sale-online',
 				'cta'         => [
-					'type'    => 'modal',
-					'label'   => __( 'Learn how', 'astra-sites' ),
-					'title'   => __( 'Accept Appointments', 'astra-sites' ),
-					'content' => [
-						[
-							'type' => 'paragraph',
-							'text' => __( 'Add a calendar so visitors can book calls, meetings, or sessions with you. Turn interested prospects into paying clients with one click.', 'astra-sites' ),
-						],
-						[
-							'type'   => 'link',
-							'prefix' => __( 'Doc: ', 'astra-sites' ),
-							'data'   => [
-								'url' => 'https://wpdocs.latepoint.com/getting-started-with-latepoint/',
-							],
-						],
-					],
+					'type' => 'video',
+					'url'  => 'https://www.youtube-nocookie.com/embed/PJvWhxoetV8?modestbranding=1',
 				],
 				'steps'       => [
 					[
@@ -704,6 +690,24 @@ class GS_Helper {
 		}
 
 		return $incomplete_steps_count;
+	}
+
+	/**
+	 * Get the option name for the setup wizard showing status.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @return string
+	 */
+	public static function get_setup_wizard_showing_option_name() {
+		/**
+		 * Filter to modify the option name for the setup wizard showing status.
+		 *
+		 * @since 1.0.1
+		 * @param string $option_name The option name.
+		 * @return string
+		 */
+		return apply_filters( 'getting_started_wizard_option_name', 'getting_started_is_setup_wizard_showing' );
 	}
 }
 

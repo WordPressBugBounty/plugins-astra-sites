@@ -376,7 +376,7 @@ class GS_Api {
 			);
 		}
 
-		delete_option( 'getting_started_is_setup_wizard_showing' );
+		delete_option( GS_Helper::get_setup_wizard_showing_option_name() );
 		wp_send_json_success(
 			array(
 				'status' => true,

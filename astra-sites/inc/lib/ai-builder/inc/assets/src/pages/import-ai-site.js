@@ -23,7 +23,7 @@ const { migrateSvg, reportError } = aiBuilderVars;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
 import { STORE_KEY } from '../store';
 import ErrorModel from '../components/error-model';
-import { TOTAL_STEPS, useNavigateSteps } from '../router';
+import { stepNextButtonClick, TOTAL_STEPS, useNavigateSteps } from '../router';
 import { SITE_CREATION_STATUS_CODES, getLocalStorageItem } from '../helpers';
 
 const RANDOM_FINAL_FINISHING_MESSAGES = [
@@ -1754,6 +1754,12 @@ const ImportAiSite = () => {
 					importPercent: 100,
 					importEnd: true,
 				} );
+
+				stepNextButtonClick( {
+					stepNumber: 8,
+					slug: 'building-website',
+				} );
+
 				setShowProgressBar( false );
 				return true;
 			} else if ( response?.data?.data === 'no' ) {

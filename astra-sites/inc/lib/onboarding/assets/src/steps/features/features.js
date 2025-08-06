@@ -310,7 +310,7 @@ const ClassicFeatures = () => {
 
 	return (
 		<>
-			<Container className="grid grid-cols-1 gap-8 auto-rows-auto !max-w-[55rem] w-full mx-auto">
+			<Container className="grid grid-cols-1 gap-6 auto-rows-auto !max-w-[55rem] w-full mx-auto">
 				<div className="space-y-4 text-left">
 					<div className="space-y-3">
 						<div className="text-heading-text !text-[1.75rem] font-semibold leading-9">
@@ -325,7 +325,7 @@ const ClassicFeatures = () => {
 					</div>
 				</div>
 				{ /* Feature Cards */ }
-				<div className="grid grid-cols-1 lg:grid-cols-2 auto-rows-auto gap-x-8 gap-y-5 w-full">
+				<div className="grid grid-cols-1 lg:grid-cols-2 auto-rows-auto gap-4 w-full">
 					{ siteFeatures.map( ( feature ) => {
 						const isEcommerceFeature = feature.id === 'ecommerce';
 						const FeatureIcon =
@@ -394,7 +394,11 @@ const ClassicFeatures = () => {
 					} ) }
 				</div>
 
-				<div className="flex justify-between items-center mt-2">
+				{ !! featurePluginsList?.length && (
+					<RequiredPlugins pluginsList={ featurePluginsList } />
+				) }
+
+				<div className="flex justify-between items-center">
 					<div className="flex gap-4 max-md:flex-col flex-1">
 						<Button
 							variant="primary"
@@ -428,10 +432,6 @@ const ClassicFeatures = () => {
 					</div>
 				</div>
 			</Container>
-
-			{ !! featurePluginsList?.length && (
-				<RequiredPlugins pluginsList={ featurePluginsList } />
-			) }
 		</>
 	);
 };

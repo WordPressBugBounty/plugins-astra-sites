@@ -10,6 +10,7 @@ import { twMerge } from 'tailwind-merge';
 import { useSelect, useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import NavigationButtons from '../components/navigation-buttons';
+import { siteLogoDefault } from '../store/reducer';
 import { classNames, toastBody } from '../helpers';
 import { STORE_KEY } from '../store';
 import { ColumnItem } from '../components/column-item';
@@ -50,6 +51,10 @@ const SelectTemplate = () => {
 		setWebsiteTemplateSearchResultsAIStep,
 		setSelectedTemplateIsPremium,
 		setSelectedPageBuilder,
+		setWebsiteColorPalette,
+		setWebsiteTypography,
+		setWebsiteLogo,
+		setSiteTitleVisible,
 	} = useDispatch( STORE_KEY );
 
 	const {
@@ -560,6 +565,26 @@ const SelectTemplate = () => {
 	useEffect( () => {
 		fetchNewTemplates( false );
 	}, [ debouncedKeyword ] );
+
+	useEffect( () => {
+		// if there's a uuid in the query params, find the template
+		const urlParams = new URLSearchParams( window.location.search );
+		const templateUuid = urlParams.get( 'uuid' );
+
+		if ( templateUuid ) {
+			const selectedTemplateItem = allTemplates?.find(
+				( item ) => item?.uuid === templateUuid
+			);
+			if ( selectedTemplateItem ) {
+				setWebsiteSelectedTemplateAIStep( selectedTemplateItem.uuid );
+				setSelectedTemplateIsPremium( selectedTemplateItem.is_premium );
+				setWebsiteLogo( siteLogoDefault );
+				setWebsiteTypography( null );
+				setWebsiteColorPalette( null );
+				setSiteTitleVisible( true );
+			}
+		}
+	}, [] );
 
 	const handleSubmitKeyword = ( { keyword } ) => {
 		onChangeKeyword( keyword );

@@ -160,8 +160,9 @@ msgstr "Obecnie nie masz zaplanowanych zdarzeń cron."
 #: inc/classes/class-astra-sites.php:1250
 #: inc/classes/class-astra-sites.php:1281
 #: inc/classes/class-astra-sites.php:1481
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:967
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:985
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:992
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1012
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1030
 #: inc/lib/ai-builder/inc/ajax/importer.php:139
 #: inc/lib/ai-builder/inc/ajax/importer.php:164
 #: inc/lib/ai-builder/inc/ajax/importer.php:216
@@ -903,8 +904,8 @@ msgstr "Chcę zbudować tę stronę internetową od podstaw"
 msgid "Required WP_Filesystem Permissions to import the templates from Starter Templates are missing."
 msgstr "Brak wymaganych uprawnień WP_Filesystem do importowania szablonów z Starter Templates."
 
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:974
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:992
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1019
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1037
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:780
 msgid "You are not allowed to perform this action."
 msgstr "Nie masz uprawnień do wykonania tej czynności."
@@ -1197,7 +1198,7 @@ msgstr "Motyw aktywowany"
 msgid "Failed to set the site language."
 msgstr "Nie udało się ustawić języka witryny."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:83
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:84
 #: inc/lib/getting-started/classes/class-gs-api.php:75
 #: inc/lib/gutenberg-templates/inc/api/blocks.php:70
 #: inc/lib/gutenberg-templates/inc/api/category.php:70
@@ -1220,25 +1221,26 @@ msgstr "Nie udało się ustawić języka witryny."
 msgid "Sorry, you are not allowed to do that."
 msgstr "Przepraszam, nie masz pozwolenia na to."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:622
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:664
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:756
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:849
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:957
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1048
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1140
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1219
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1290
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1366
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1446
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1527
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1610
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1686
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1751
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1816
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1887
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1953
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1980
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:652
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:694
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:786
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:879
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:987
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1078
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1170
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1249
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1320
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1396
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1476
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1557
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1640
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1716
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1781
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1846
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1917
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1983
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2010
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2100
 #: inc/lib/getting-started/classes/class-gs-api.php:158
 #: inc/lib/getting-started/classes/class-gs-api.php:363
 #: inc/lib/gutenberg-templates/inc/api/blocks.php:93
@@ -1261,12 +1263,12 @@ msgstr "Przepraszam, nie masz pozwolenia na to."
 msgid "Nonce verification failed."
 msgstr "Weryfikacja nonce nie powiodła się."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:909
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:939
 #: inc/lib/starter-templates-importer/importer/st-importer.php:242
 msgid "There was an error downloading the XML file."
 msgstr "Wystąpił błąd podczas pobierania pliku XML."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:921
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:951
 #: inc/lib/ai-builder/inc/traits/helper.php:635
 #: inc/lib/ai-builder/inc/traits/helper.php:671
 #: inc/lib/ai-builder/inc/traits/helper.php:714
@@ -1340,7 +1342,6 @@ msgstr "Przepraszamy, ustawienia nie zostały zapisane."
 msgid "File Permissions Needed - Importing patterns, pages, and templates from Design Library requires proper file permissions. For guidance on resolving this issue and ensuring smooth importing processes, please refer to the accompanying documentation."
 msgstr "Potrzebne uprawnienia do plików - Importowanie wzorów, stron i szablonów z Biblioteki Projektów wymaga odpowiednich uprawnień do plików. Aby uzyskać wskazówki dotyczące rozwiązania tego problemu i zapewnienia płynnego procesu importowania, zapoznaj się z dołączoną dokumentacją."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:433
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-notices.php:57
 msgid "Doc: "
 msgstr "Dokument:"
@@ -5224,33 +5225,33 @@ msgstr "Podpis"
 msgid "Show Other Builders"
 msgstr "Pokaż innych budowniczych"
 
-#: inc/classes/class-astra-sites-analytics.php:126
+#: inc/classes/class-astra-sites-analytics.php:132
 msgid "Invalid nonce"
 msgstr "Nieprawidłowy nonce"
 
-#: inc/classes/class-astra-sites-analytics.php:132
+#: inc/classes/class-astra-sites-analytics.php:138
 msgid "Invalid source"
 msgstr "Nieprawidłowe źródło"
 
-#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:142
+#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:157
 msgid "To complete your store setup and start selling, you must connect WooPayments now. Without it, your customers won't be able to pay."
 msgstr "Aby zakończyć konfigurację sklepu i rozpocząć sprzedaż, musisz teraz połączyć WooPayments. Bez tego Twoi klienci nie będą mogli płacić."
 
-#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:322
+#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:337
 msgid "You’re One Step Away from Accepting Payments with WooPayments — Fast, Easy & Free!"
 msgstr "Jesteś o krok od akceptowania płatności z WooPayments — szybko, łatwo i za darmo!"
 
 #. translators: %s: WooPayments for WooCommerce text with strong tag
-#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:325
+#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:340
 #, php-format
 msgid "Your store is ready to sell! Connect %s now to securely accept credit cards, Apple Pay, and more — with zero setup fees and instant integration."
 msgstr "Twój sklep jest gotowy do sprzedaży! Połącz %s teraz, aby bezpiecznie akceptować karty kredytowe, Apple Pay i inne — bez opłat za konfigurację i z natychmiastową integracją."
 
-#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:329
+#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:344
 msgid "WooPayments"
 msgstr "WooPayments"
 
-#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:332
+#: inc/lib/ai-builder/inc/compatibility/woocommerce-payments/ai-builder-compatibility-woocommerce-payments.php:347
 msgid "Start Accepting Payments"
 msgstr "Rozpocznij akceptowanie płatności"
 
@@ -5368,23 +5369,23 @@ msgstr "Wprowadź adres"
 msgid "%1$s deferred (requires WooCommerce)."
 msgstr "%1$s odroczony (wymaga WooCommerce)."
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:221
+#: inc/lib/getting-started/classes/class-gs-admin.php:224
 msgid "Complete these steps to take full control of your website."
 msgstr "Wykonaj te kroki, aby przejąć pełną kontrolę nad swoją stroną internetową."
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:225
+#: inc/lib/getting-started/classes/class-gs-admin.php:228
 msgid "Awesome, You did it! 😍"
 msgstr "Świetnie, udało Ci się! 😍"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:261
+#: inc/lib/getting-started/classes/class-gs-admin.php:264
 msgid "Hi there 👋"
 msgstr "Cześć 👋"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:271
+#: inc/lib/getting-started/classes/class-gs-admin.php:274
 msgid "🎉 Congratulations on completing the tasks and instructional videos to take full control of your website.\\n 🚀 Now, you're well-equipped to make your website thrive. Best of luck with your website journey, and may it bring you great achievements and opportunities in the digital world!"
 msgstr "🎉 Gratulacje z ukończenia zadań i filmów instruktażowych, aby przejąć pełną kontrolę nad swoją stroną internetową.\\n 🚀 Teraz jesteś dobrze przygotowany, aby Twoja strona internetowa prosperowała. Powodzenia w podróży po stronie internetowej i niech przyniesie Ci wielkie osiągnięcia i możliwości w cyfrowym świecie!"
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:101
+#: inc/lib/getting-started/classes/class-gs-admin.php:104
 #: inc/lib/getting-started/build/main.js:1
 msgid "Finish Setup"
 msgstr "Zakończ konfigurację"
@@ -5401,7 +5402,7 @@ msgstr "Nie udało się zamknąć i usunąć kreatora konfiguracji."
 msgid "Successfully dismissed and removed the Setup wizard."
 msgstr "Pomyślnie zamknięto i usunięto kreatora konfiguracji."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:510
+#: inc/lib/getting-started/classes/class-gs-helper.php:496
 msgid "Embed videos with modern features like chapters, overlays, and custom branding and keep people watching and make your content unforgettable."
 msgstr "Osadź filmy z nowoczesnymi funkcjami, takimi jak rozdziały, nakładki i niestandardowe oznakowanie, aby utrzymać uwagę widzów i uczynić Twoje treści niezapomnianymi."
 
@@ -5601,7 +5602,7 @@ msgid "Design Shop Page"
 msgstr "Zaprojektuj stronę sklepu"
 
 #: inc/lib/getting-started/classes/class-gs-helper.php:359
-#: inc/lib/getting-started/classes/class-gs-helper.php:460
+#: inc/lib/getting-started/classes/class-gs-helper.php:446
 msgid "Connect payment gateway"
 msgstr "Połącz bramkę płatności"
 
@@ -5630,7 +5631,6 @@ msgid "Offer a related product to sell"
 msgstr "Zaproponuj powiązany produkt do sprzedaży"
 
 #: inc/lib/getting-started/classes/class-gs-helper.php:419
-#: inc/lib/getting-started/classes/class-gs-helper.php:425
 msgid "Accept Appointments"
 msgstr "Akceptuj spotkania"
 
@@ -5638,72 +5638,67 @@ msgstr "Akceptuj spotkania"
 msgid "Streamline your booking process so clients can book and pay you with zero hassle."
 msgstr "Usprawnij proces rezerwacji, aby klienci mogli rezerwować i płacić bez żadnych problemów."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:424
 #: inc/lib/getting-started/build/main.js:1
 msgid "Learn how"
 msgstr "Dowiedz się jak"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:429
-msgid "Add a calendar so visitors can book calls, meetings, or sessions with you. Turn interested prospects into paying clients with one click."
-msgstr "Dodaj kalendarz, aby odwiedzający mogli rezerwować rozmowy, spotkania lub sesje z Tobą. Zamień zainteresowanych klientów w płacących klientów jednym kliknięciem."
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:444
+#: inc/lib/getting-started/classes/class-gs-helper.php:430
 msgid "Add Service"
 msgstr "Dodaj usługę"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:452
+#: inc/lib/getting-started/classes/class-gs-helper.php:438
 msgid "Enable notifications"
 msgstr "Włącz powiadomienia"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:472
+#: inc/lib/getting-started/classes/class-gs-helper.php:458
 msgid "Add Engaging Videos"
 msgstr "Dodaj angażujące filmy"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:473
+#: inc/lib/getting-started/classes/class-gs-helper.php:459
 msgid "Showcase your brand personality with videos that inform, inspire, and engage."
 msgstr "Pokaż osobowość swojej marki za pomocą filmów, które informują, inspirują i angażują."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:483
+#: inc/lib/getting-started/classes/class-gs-helper.php:469
 msgid "Upload video to Media Hub"
 msgstr "Prześlij wideo do Media Hub"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:490
+#: inc/lib/getting-started/classes/class-gs-helper.php:476
 msgid "The media hub is a flexible way to add audio or video to your site. It allows you to save media which you can later use in any post or page on your site."
 msgstr "Media hub to elastyczny sposób dodawania audio lub wideo do Twojej strony. Pozwala na zapisywanie mediów, które później można wykorzystać w dowolnym poście lub na stronie."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:503
+#: inc/lib/getting-started/classes/class-gs-helper.php:489
 msgid "Add Presto Player block to pages"
 msgstr "Dodaj blok Presto Player do stron"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:530
+#: inc/lib/getting-started/classes/class-gs-helper.php:516
 msgid "Automate Recurring Website Tasks"
 msgstr "Automatyzuj powtarzające się zadania na stronie"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:531
+#: inc/lib/getting-started/classes/class-gs-helper.php:517
 msgid "Save hours each week by automating routine website tasks, so you can focus on growing your business."
 msgstr "Oszczędzaj godziny każdego tygodnia, automatyzując rutynowe zadania na stronie, abyś mógł skupić się na rozwoju swojego biznesu."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:541
+#: inc/lib/getting-started/classes/class-gs-helper.php:527
 msgid "Create OttoKit account"
 msgstr "Załóż konto OttoKit"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:549
+#: inc/lib/getting-started/classes/class-gs-helper.php:535
 msgid "Add connections"
 msgstr "Dodaj połączenia"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:557
+#: inc/lib/getting-started/classes/class-gs-helper.php:543
 msgid "Set up “when this happens, do that” actions"
 msgstr "Skonfiguruj akcje „gdy to się stanie, zrób to”"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:594
+#: inc/lib/getting-started/classes/class-gs-helper.php:580
 msgid "Set Up The Basics"
 msgstr "Skonfiguruj podstawy"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:597
+#: inc/lib/getting-started/classes/class-gs-helper.php:583
 msgid "Start Selling Online"
 msgstr "Zacznij sprzedawać online"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:600
+#: inc/lib/getting-started/classes/class-gs-helper.php:586
 msgid "Level Up Your Site"
 msgstr "Podnieś poziom swojej strony"
 

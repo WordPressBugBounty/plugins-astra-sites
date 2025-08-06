@@ -46,8 +46,9 @@ jQuery( document ).ready( function ( $ ) {
 	);
 
 	// WooPayments Analytics button clicks.
-	$( '.woop-notice-btn, .connect-account-page__buttons button' ).on(
+	$( document ).on(
 		'click',
+		'.woop-notice-btn, .connect-account-page__buttons button, #woocommerce_payments .woocommerce-list__item-buttons__actions button',
 		function ( e ) {
 			const { ajaxNonce, ajaxUrl } = aiBuilderWooPayments;
 			// Set the flag in user meta via AJAX.

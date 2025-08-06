@@ -2,6 +2,30 @@ import { useNavigate, useRouterState } from '@tanstack/react-router';
 import steps from './routes';
 import { useSelect } from '@wordpress/data';
 import { STORE_KEY } from '../store';
+import apiFetch from '@wordpress/api-fetch';
+
+export const stepNextButtonClick = async ( { stepNumber, slug } ) => {
+	if ( ! stepNumber || ! slug ) {
+		return;
+	}
+
+	try {
+		await apiFetch( {
+			path: 'zipwp/v1/record-step',
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify( {
+				action: 'next-step',
+				current_step: stepNumber,
+				current_step_name: slug,
+			} ),
+		} );
+	} catch ( error ) {
+		console.error( 'Error generating next step button:', error );
+	}
+};
 
 export const useNavigateSteps = () => {
 	const routerState = useRouterState(),
@@ -27,6 +51,11 @@ export const useNavigateSteps = () => {
 			...( !! from && { from } ),
 			to: `/${ nextStepURL || firstStep }`,
 			state: { from: currentStepURL },
+		} );
+
+		stepNextButtonClick( {
+			stepNumber: steps[ currentStepIndex ]?.layoutConfig?.stepNumber,
+			slug: steps[ currentStepIndex ]?.layoutConfig?.name,
 		} );
 	};
 

@@ -57,7 +57,8 @@ class GS_Admin {
 	 * @return bool
 	 */
 	public function is_show_setup() {
-		$is_wizard_showing = apply_filters( 'getting_started_is_setup_wizard_showing', get_option( 'getting_started_is_setup_wizard_showing', false ) );
+		$option_name       = GS_Helper::get_setup_wizard_showing_option_name();
+		$is_wizard_showing = apply_filters( 'getting_started_is_setup_wizard_showing', get_option( $option_name, false ) );
 
 		if ( $is_wizard_showing ) {
 			return true;
