@@ -609,8 +609,6 @@ video:where(.getting-started-style,.getting-started-style *) {
   z-index: 10;
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.z-20) {
   z-index: 20;
-}:is(.getting-started-style,[data-floating-ui-portal]) :is(.z-50) {
-  z-index: 50;
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.z-999999) {
   z-index: 999999;
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.z-\[1\]) {
@@ -1954,6 +1952,9 @@ video:where(.getting-started-style,.getting-started-style *) {
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.text-badge-color-yellow) {
   --tw-text-opacity: 1;
   color: rgb(161 98 7 / var(--tw-text-opacity));
+}:is(.getting-started-style,[data-floating-ui-portal]) :is(.text-black) {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.text-border-strong) {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
@@ -2501,6 +2502,9 @@ video:where(.getting-started-style,.getting-started-style *) {
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.hover\:text-button-tertiary:hover) {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}:is(.getting-started-style,[data-floating-ui-portal]) :is(.hover\:text-gray-800:hover) {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity));
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.hover\:text-gs-primary:hover) {
   --tw-text-opacity: 1;
   color: rgb(2 132 199 / var(--tw-text-opacity));
@@ -2806,11 +2810,6 @@ video:where(.getting-started-style,.getting-started-style *) {
 
   :is(.getting-started-style,[data-floating-ui-portal]) :is(.sm\:hidden) {
     display: none;
-  }
-
-  :is(.getting-started-style,[data-floating-ui-portal]) :is(.sm\:size-4) {
-    width: 1rem;
-    height: 1rem;
   }
 
   :is(.getting-started-style,[data-floating-ui-portal]) :is(.sm\:h-3) {
@@ -4065,9 +4064,6 @@ video:where(.getting-started-style,.getting-started-style *) {
   display: flex;
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.\[\&\>span\]\:items-center>span) {
   align-items: center;
-}:is(.getting-started-style,[data-floating-ui-portal]) :is(.\[\&\>span\]\:px-0>span) {
-  padding-right: 0px;
-  padding-left: 0px;
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.\[\&\>svg\]\:m-1>svg) {
   margin: 0.25rem;
 }:is(.getting-started-style,[data-floating-ui-portal]) :is(.\[\&\>svg\]\:m-1\.5>svg) {

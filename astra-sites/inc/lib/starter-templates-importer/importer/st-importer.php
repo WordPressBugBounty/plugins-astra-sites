@@ -131,7 +131,7 @@ class ST_Importer {
 		$currency       = isset( $_POST['source_currency'] ) ? sanitize_text_field( $_POST['source_currency'] ) : 'usd'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$data = array(
-			'email'            => $email, // optional.
+			'email'            => empty( $email ) ? get_option( 'admin_email' ) : $email,
 			'seed'             => true,
 			'account_currency' => $currency,
 		);

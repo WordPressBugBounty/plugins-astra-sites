@@ -1864,6 +1864,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					'zip_token_exists' => Astra_Sites_ZipWP_Helper::get_token() !== '' ? true : false,
 					'zip_plans' => ( $plans && isset( $plans['data'] ) ) ? $plans['data'] : array(),
 					'dashboard_url' => admin_url(),
+					'finish_setup_url' => admin_url( 'admin.php?page=getting-started' ),
 					'placeholder_images' => Helper::get_image_placeholders(),
 					'get_more_credits_url' => $credit_purchase_url,
 					'dismiss_ai_notice' => Astra_Sites_Page::get_instance()->get_setting( 'dismiss_ai_promotion' ),

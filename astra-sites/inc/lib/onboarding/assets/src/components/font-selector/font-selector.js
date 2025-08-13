@@ -170,7 +170,8 @@ const FontSelector = ( { options, onSelect, selected } ) => {
 
 	const nextStep = () => {
 		if ( ! importError ) {
-			premiumTemplate = 'free' !== templateResponse[ 'astra-site-type' ];
+			premiumTemplate =
+				'free' !== templateResponse?.[ 'astra-site-type' ];
 
 			if ( premiumTemplate && ! licenseStatus ) {
 				if ( astraSitesVars?.isPro ) {

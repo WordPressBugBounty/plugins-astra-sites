@@ -1182,7 +1182,8 @@ const ImportSite = () => {
 	 */
 	const importCartflowsFlows = async () => {
 		const cartflowsUrl =
-			encodeURI( templateResponse[ 'astra-site-cartflows-path' ] ) || '';
+			encodeURI( templateResponse?.[ 'astra-site-cartflows-path' ] ) ||
+			'';
 
 		if ( '' === cartflowsUrl || 'null' === cartflowsUrl ) {
 			return true;
@@ -1319,7 +1320,8 @@ const ImportSite = () => {
 	 */
 	const importLatepointTables = async () => {
 		const latepointUrl =
-			encodeURI( templateResponse[ 'astra-site-latepoint-path' ] ) || '';
+			encodeURI( templateResponse?.[ 'astra-site-latepoint-path' ] ) ||
+			'';
 
 		if ( '' === latepointUrl || 'null' === latepointUrl ) {
 			return true;
@@ -1382,7 +1384,7 @@ const ImportSite = () => {
 	 */
 	const importForms = async () => {
 		const wpformsUrl =
-			encodeURI( templateResponse[ 'astra-site-wpforms-path' ] ) || '';
+			encodeURI( templateResponse?.[ 'astra-site-wpforms-path' ] ) || '';
 
 		if ( '' === wpformsUrl || 'null' === wpformsUrl ) {
 			return true;
@@ -1520,7 +1522,7 @@ const ImportSite = () => {
 		}
 
 		const wxrUrl =
-			encodeURI( templateResponse[ 'astra-site-wxr-path' ] ) || '';
+			encodeURI( templateResponse?.[ 'astra-site-wxr-path' ] ) || '';
 		if ( 'null' === wxrUrl || '' === wxrUrl ) {
 			const errorTxt = __(
 				'The XML URL for the site content is empty.',
@@ -1598,7 +1600,7 @@ const ImportSite = () => {
 	 */
 	const importSpectraSettings = async () => {
 		const spectraSettings =
-			templateResponse[ 'astra-site-spectra-options' ] || '';
+			templateResponse?.[ 'astra-site-spectra-options' ] || '';
 
 		if ( '' === spectraSettings || 'null' === spectraSettings ) {
 			return true;
@@ -1862,7 +1864,8 @@ const ImportSite = () => {
 			importStatus: __( 'Importing Widgets.', 'astra-sites' ),
 		} );
 
-		const widgetsData = templateResponse[ 'astra-site-widgets-data' ] || '';
+		const widgetsData =
+			templateResponse?.[ 'astra-site-widgets-data' ] || '';
 
 		const widgets = new FormData();
 		widgets.append( 'action', 'astra-sites-import_widgets' );

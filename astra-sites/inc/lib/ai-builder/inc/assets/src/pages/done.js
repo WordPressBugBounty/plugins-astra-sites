@@ -5,11 +5,16 @@ import Confetti from '../components/confetti-firework';
 import { removeLocalStorageItem } from '../helpers';
 import { USER_KEYWORD } from './select-template';
 
-const { adminUrl, siteUrl, hideDashboardButton } = aiBuilderVars;
+const { adminUrl, siteUrl, hideDashboardButton, hideFinishSetupButton } =
+	aiBuilderVars;
 
 const BuildDone = () => {
 	const handleClickVisitDashboard = () => {
 		window.open( adminUrl, '_self' );
+	};
+
+	const handleClickFinishSetup = () => {
+		window.open( adminUrl + 'admin.php?page=getting-started', '_self' );
 	};
 
 	const handleClickSeeWebsite = () => {
@@ -71,18 +76,45 @@ const BuildDone = () => {
 								{ __( 'See Your Website', 'ai-builder' ) }
 							</span>
 						</Button>
-						{ ! hideDashboardButton && (
-							<Button
-								onClick={ handleClickVisitDashboard }
-								variant="blank"
-								size="l"
-								className="w-full min-w-fit py-0 text-accent-st"
-							>
-								<span>
-									{ __( 'Visit Dashboard', 'ai-builder' ) }
-								</span>
-							</Button>
-						) }
+						{ ( () => {
+							if ( ! hideFinishSetupButton ) {
+								return (
+									<Button
+										onClick={ handleClickFinishSetup }
+										variant="blank"
+										size="l"
+										className="w-full min-w-fit py-0 text-accent-st"
+									>
+										<span>
+											{ __(
+												'Finish Setup',
+												'ai-builder'
+											) }
+										</span>
+									</Button>
+								);
+							}
+
+							if ( ! hideDashboardButton ) {
+								return (
+									<Button
+										onClick={ handleClickVisitDashboard }
+										variant="blank"
+										size="l"
+										className="w-full min-w-fit py-0 text-accent-st"
+									>
+										<span>
+											{ __(
+												'Visit Dashboard',
+												'ai-builder'
+											) }
+										</span>
+									</Button>
+								);
+							}
+
+							return null;
+						} )() }
 					</div>
 				</div>
 				{ /* Confetti firework */ }

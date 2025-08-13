@@ -470,6 +470,7 @@ class Ai_Builder_Plugin_Loader {
 			'show_zip_plan'            => apply_filters( 'ai_builder_show_zip_plan_details', true ),
 			'hide_site_features'       => apply_filters( 'ai_builder_hidden_site_features', array() ),
 			'hideDashboardButton'      => 'yes' === apply_filters( 'ai_builder_hide_visit_dashboard_button', 'no' ),
+			'hideFinishSetupButton'    => 'yes' === apply_filters( 'ai_builder_hide_finish_setup_button', 'no' ),
 			'isElementorDisabled'      => get_option( 'st-elementor-builder-flag' ),
 			'isBeaverBuilderDisabled'  => get_option( 'st-beaver-builder-flag' ) || ! self::is_legacy_beaver_builder_enabled(),
 			'supportedPageBuilders'    => apply_filters( 'ai_builder_supported_page_builders', array( 'block-editor', 'elementor' ) ),

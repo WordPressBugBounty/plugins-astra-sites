@@ -944,7 +944,7 @@ var AstraSitesAjaxQueue = ( function () {
 						action: 'astra-sites-required_plugin_activate',
 						init: single_plugin.init,
 						_ajax_nonce: astraElementorSites._ajax_nonce,
-						trigger_origin: 'elementor'
+						trigger_origin: 'elementor',
 					},
 					success: function ( result ) {
 						if ( result.success ) {
@@ -2308,7 +2308,7 @@ var AstraSitesAjaxQueue = ( function () {
 						action: 'astra-sites-required_plugin_activate',
 						init: curr_plugin.init,
 						_ajax_nonce: astraElementorSites._ajax_nonce,
-						trigger_origin: 'elementor'
+						trigger_origin: 'elementor',
 					},
 				} ).done( function ( result ) {
 					if ( result.success ) {

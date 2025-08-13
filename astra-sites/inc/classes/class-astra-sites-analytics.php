@@ -551,8 +551,20 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 * @return void
 		 */
 		private static function add_finish_setup_analytics( &$stats ) {
-			$is_setup_wizard_showing = get_option( 'getting_started_is_setup_wizard_showing', false );
+			// Get setup wizard showing option name.
+			$option_name = class_exists( '\GS\Classes\GS_Helper' )
+				? \GS\Classes\GS_Helper::get_setup_wizard_showing_option_name()
+				: 'getting_started_is_setup_wizard_showing';
+			$is_setup_wizard_showing = get_option( $option_name, false );
 			$action_items_status     = get_option( 'getting_started_action_items', array() );
+			$menu_priority_val       = Astra_Sites_Page::get_instance()->get_setting( 'fs_menu_position', '' );
+
+			if ( '1' === $menu_priority_val ) {
+				$menu_priority = 'before-dashboard';
+			} elseif ( '2.00001' === $menu_priority_val ) {
+				$menu_priority = 'after-dashboard';
+			}
+ 
 			$courses_status          = array();
 			$no_of_completed_courses = 0;
 
@@ -575,6 +587,8 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			$stats['numeric_values']['total_courses']           = $total_courses;
 			$stats['numeric_values']['no_of_completed_courses'] = $no_of_completed_courses;
 			$stats['boolean_values']['course_completed']        = 0 !== $total_courses && $no_of_completed_courses >= $total_courses;
+
+			$stats['finish_setup_menu_position'] = $menu_priority;
 
 			// Plain Json data.
 			$stats['courses_status'] = ! empty( $courses_status ) ? wp_json_encode( $courses_status ) : '';
