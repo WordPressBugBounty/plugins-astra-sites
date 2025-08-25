@@ -119,11 +119,8 @@ if ( ! class_exists( 'Astra_Sites_Page' ) ) {
 					return;
 				}
 
-				$arguments = array(
-					'page' => 'starter-templates',
-				);
-
-				$url = add_query_arg( $arguments, admin_url( 'themes.php' ) );
+				// Get the starter templates URL.
+				$url = esc_url( Astra_Sites::get_starter_templates_url() );
 
 				?>
 				<div class="notice notice-info is-dismissible astra-sites-notice astra-sites-getting-started-notice">
@@ -166,7 +163,7 @@ if ( ! class_exists( 'Astra_Sites_Page' ) ) {
 			
 			if ( false === $stored_priority ) {
 				// Generate random priority: 1 (above dashboard) or 2.00001 (below dashboard).
-				$priorities = array( 1, 2.00001 );
+				$priorities      = array( 1, 2.00001 );
 				$random_priority = $priorities[ array_rand( $priorities ) ];
 	
 				// Store the random priority in database.

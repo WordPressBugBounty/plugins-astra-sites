@@ -169,10 +169,15 @@ class GS_Api {
 		if ( is_array( $action_items_status ) ) {
 			$update_needed = false; // Flag to check if any dynamic step is completed.
 			foreach ( $default_action_items as $key => $action_item ) {
+				$action_id = $action_item['id'];
+
 				// Add step completion status if steps exist.
 				if ( isset( $action_item['steps'] ) && is_array( $action_item['steps'] ) ) {
 					foreach ( $action_item['steps'] as $step_key => $step ) {
-						$db_step_completed = $action_items_status[ $action_item['id'] ]['steps'][ $step['id'] ];
+						$step_id           = $step['id'];
+						$db_step_completed = isset( $action_items_status[ $action_id ]['steps'][ $step_id ] )
+							? $action_items_status[ $action_id ]['steps'][ $step_id ]
+							: false;
 
 						$step_completed = isset( $step['completed'] ) ? (bool) $step['completed'] : false;
 						if ( ! $step_completed ) {
@@ -188,7 +193,7 @@ class GS_Api {
 						$default_action_items[ $key ]['steps'][ $step_key ]['completed'] = $step_completed;
 
 						if ( $db_step_completed !== $step_completed ) {
-							$action_items_status[ $action_item['id'] ]['steps'][ $step['id'] ] = $step_completed;
+							$action_items_status[ $action_id ]['steps'][ $step_id ] = $step_completed;
 							$update_needed = true; // Set flag to true if any step completed dynamically.
 						}
 					}

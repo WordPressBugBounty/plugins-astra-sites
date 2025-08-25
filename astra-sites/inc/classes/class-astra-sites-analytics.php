@@ -192,19 +192,8 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 					'limit'          => 1,
 					'date_after'     => intval( $after_timestamp ),
 					'meta_query'     => array( //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Required for analytics and run in background.
-						'relation' => 'OR',
 						array(
-							'key'     => '_wcpay_intent_id',
-							'value'   => '',
-							'compare' => '!=',
-						),
-						array(
-							'key'     => '_wcpay_charge_id',
-							'value'   => '',
-							'compare' => '!=',
-						),
-						array(
-							'key'     => '_transaction_id',
+							'key'     => '_wcpay_payment_transaction_id',
 							'value'   => '',
 							'compare' => '!=',
 						),
@@ -557,8 +546,9 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				: 'getting_started_is_setup_wizard_showing';
 			$is_setup_wizard_showing = get_option( $option_name, false );
 			$action_items_status     = get_option( 'getting_started_action_items', array() );
-			$menu_priority_val       = Astra_Sites_Page::get_instance()->get_setting( 'fs_menu_position', '' );
+			$menu_priority_val       = (string) Astra_Sites_Page::get_instance()->get_setting( 'fs_menu_position', '' );
 
+			// Determine menu position.
 			if ( '1' === $menu_priority_val ) {
 				$menu_priority = 'before-dashboard';
 			} elseif ( '2.00001' === $menu_priority_val ) {

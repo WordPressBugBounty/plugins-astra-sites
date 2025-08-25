@@ -54,17 +54,16 @@ const AdvancedSettings = () => {
 			</p>
 			{ showAdvancedOption && (
 				<div className="survey-advanced-section mb-6">
-					<div className="border border-solid border-border-primary rounded-md grid grid-cols-1 !divide-y !divide-border-primary divide-solid divide-x-0">
+					<div className="rounded-md grid grid-cols-1">
 						{ 'installed-and-active' !== themeStatus && (
-							<div className="items-center py-3 px-4 grid grid-cols-[1fr_min-content] !gap-2">
+							<div className="items-center p-1 grid grid-cols-[1fr_min-content] !gap-2">
 								<div className="flex-1 flex items-center space-x-2">
-									<h6 className="text-sm !leading-6 text-zip-app-heading">
-										{ ' ' }
+									<p className="text-sm !leading-6">
 										{ __(
 											'Install & Activate Astra Theme',
 											'astra-sites'
 										) }
-									</h6>
+									</p>
 									<Tooltip
 										content={ __(
 											'To import the site in the original format, you would need the Astra theme activated. You can import it with any other theme, but the site might lose some of the design settings and look a bit different.',
@@ -88,27 +87,27 @@ const AdvancedSettings = () => {
 							</div>
 						) }
 						{ ! whiteLabelEnabled() && analytics !== 'yes' && (
-							<div className="items-center py-3 px-4 grid grid-cols-[1fr_min-content] gap-4">
+							<div className="items-center p-1 grid grid-cols-[1fr_min-content] gap-4">
 								<div className="flex-1 flex items-center space-x-2">
-									<h6 className="text-sm !leading-6 text-zip-app-heading">
-										{ ' ' }
+									<p className="text-sm !leading-6">
 										{ __(
-											'Share Non-Sensitive Data',
+											'Help Us Improve Your Experience',
 											'astra-sites'
 										) }
-									</h6>
+									</p>
 									<Tooltip
 										interactive={ true }
 										content={
 											<div>
 												{ __(
-													'Help our developers build better templates and products for you by sharing anonymous and non-sensitive data about your website.',
+													'Collect non-sensitive information from your website, such as the PHP version and features used, to help us fix bugs faster, make smarter decisions, and build features that actually matter to you.',
 													'astra-sites'
 												) }{ ' ' }
 												<a
 													href="https://store.brainstormforce.com/usage-tracking/?utm_source=wp_dashboard&utm_medium=general_settings&utm_campaign=usage_tracking"
 													target="_blank"
 													rel="noreferrer noopener"
+													className="!text-[color-mix(in_srgb,var(--st-color-accent),white_50%)]"
 												>
 													{ __(
 														'Learn More',

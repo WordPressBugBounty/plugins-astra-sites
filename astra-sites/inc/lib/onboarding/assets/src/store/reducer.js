@@ -11,6 +11,11 @@ if ( astraSitesVars?.default_page_builder ) {
 		astraSitesVars?.default_page_builder === 'brizy'
 			? 'gutenberg'
 			: astraSitesVars?.default_page_builder;
+
+	// If AI builder is disabled but set as default, fallback to gutenberg
+	if ( builderKey === 'ai-builder' && ! astraSitesVars?.showAiBuilder ) {
+		builderKey = 'gutenberg';
+	}
 }
 
 export const siteLogoDefault = {
@@ -118,8 +123,8 @@ export const initialState = {
 		},
 	],
 	formDetails: {
-		first_name: '',
-		email: '',
+		first_name: astraSitesVars?.userDetails?.first_name || '',
+		email: astraSitesVars?.userDetails?.email || '',
 		wp_user_type: '',
 		build_website_for: '',
 		opt_in: true,
@@ -228,6 +233,11 @@ export const initialState = {
 	// Limit exceed modal for AI-Builder.
 	limitExceedModal: {
 		open: false,
+	},
+
+	// Page builder API loading state and cache
+	pageBuilderCache: {
+		timestamp: null,
 	},
 };
 

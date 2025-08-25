@@ -135,6 +135,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_action( 'plugin_action_links_' . ASTRA_SITES_BASE, array( $this, 'action_links' ) );
 			add_action( 'init', array( $this, 'load_textdomain' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue' ), 99 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_menu_url_updater' ), 10 );
 			add_action( 'elementor/editor/footer', array( $this, 'insert_templates' ) );
 			add_action( 'admin_footer', array( $this, 'insert_image_templates' ) );
 			add_action( 'customize_controls_print_footer_scripts', array( $this, 'insert_image_templates' ) );
@@ -329,6 +330,13 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 
 			// Update the referer only if the plugin was not active before template import.
 			if ( ! isset( $data['was_plugin_active'] ) || ! $data['was_plugin_active'] ) {
+				if ( class_exists( 'BSF_UTM_Analytics' ) && is_callable( array( 'BSF_UTM_Analytics', 'is_valid_bsf_product_slug' ) ) ) {
+					// Bail early if the product slug is invalid to avoid warnings from BSF_UTM_Analytics::update_referer().
+					if ( ! BSF_UTM_Analytics::is_valid_bsf_product_slug( $data['plugin_slug'] ) ) {
+						return;
+					}
+				}
+
 				if ( class_exists( 'BSF_UTM_Analytics' ) && is_callable( array( 'BSF_UTM_Analytics', 'update_referer' ) ) ) {
 					// If the plugin is found and the update_referer function is callable, update the referer with the corresponding product slug.
 					$page_builder = Astra_Sites_Page::get_instance()->get_setting( 'page_builder' );
@@ -419,7 +427,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			$icon = ASTRA_SITES_URI . 'inc/assets/images/vector-ai.svg';
 			?>
 			<style type="text/css">
-				.wp-submenu a[href="themes.php?page=starter-templates"]::after {
+				.wp-submenu a[href*="themes.php?page=starter-templates"]::after {
 					content: url("<?php echo esc_url( $icon ); ?>");
 					position: absolute;
 					margin-left: 5px;
@@ -1562,14 +1570,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 * @return  array
 		 */
 		public function action_links( $links ) {
-
-			$arguments = array(
-				'page' => 'starter-templates',
-			);
-
 			$astra_site_pro = 'https://wpastra.com/essential-toolkit-pricing/';
 
-			$url = add_query_arg( $arguments, admin_url( 'themes.php' ) );
+			// Get the starter templates URL.
+			$url = esc_url( self::get_starter_templates_url() );
 
 			$action_links = array(
 				'settings' => '<a href="' . esc_url( $url ) . '" aria-label="' . esc_attr__( 'Get Started', 'astra-sites' ) . '">' . esc_html__( 'Get Started', 'astra-sites' ) . '</a>',
@@ -1851,7 +1855,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					'process_failed_primary'        => sprintf( __( '%1$sWe could not complete the import process due to failed AJAX request and this is the message:%2$s', 'astra-sites' ), '<p>', '</p>' ),
 					/* translators: %s URL to document. */
 					'process_failed_secondary'      => sprintf( __( '%1$sPlease report this <a href="%2$s" target="_blank">here</a>.%3$s', 'astra-sites' ), '<p>', esc_url( 'https://wpastra.com/starter-templates-support/?url=#DEMO_URL#&subject=#SUBJECT#' ), '</p>' ),
-					'st_page_url' => admin_url( 'themes.php?page=starter-templates' ),
+					'st_page_url' => esc_url( self::get_starter_templates_url() ),
 					'staging_connected' => apply_filters( 'astra_sites_staging_connected', '' ),
 					'isRTLEnabled' => is_rtl(),
 					/* translators: %s Anchor link to support URL. */
@@ -1869,7 +1873,13 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					'get_more_credits_url' => $credit_purchase_url,
 					'dismiss_ai_notice' => Astra_Sites_Page::get_instance()->get_setting( 'dismiss_ai_promotion' ),
 					'showClassicTemplates' => apply_filters( 'astra_sites_show_classic_templates', true ),
+					'showAiBuilder'        => self::should_show_ai_builder(),
 					'bgSyncInProgress'     => self::is_sync_in_progress(),
+					'userDetails'          => array(
+						'first_name' => get_user_meta( get_current_user_ID(), 'first_name', true ),
+						'last_name'  => get_user_meta( get_current_user_ID(), 'last_name', true ),
+						'email'     => wp_get_current_user()->user_email,
+					),
 				)
 			);
 
@@ -2254,7 +2264,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 
 			$last_viewed_block_data = array();
 			// Retrieve the value of the 'blockID' parameter using filter_input().
-			$id = filter_input( INPUT_GET, 'blockID', FILTER_SANITIZE_STRING );
+			$id = filter_input( INPUT_GET, 'blockID', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			if ( ! empty( $id ) ) {
 				$last_viewed_block_data = get_option( 'astra_sites_import_elementor_data_' . $id ) !== false ? get_option( 'astra_sites_import_elementor_data_' . $id ) : array();
 			}
@@ -2650,7 +2660,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 								<h1 class="text-heading">' . __( 'Build Your Dream Site in Minutes With AI', 'astra-sites' ) . '</h1>
 								<p>' . __( 'Say goodbye to the days of spending weeks designing and building your website.<br/> You can now create professional-grade websites in minutes.', 'astra-sites' ) . '</p>
 								<div class="button-section">
-									<a href="' . home_url() . '/wp-admin/themes.php?page=starter-templates" class="text-button">' . __( 'Let’s Get Started', 'astra-sites' ) . '</a>
+									<a href="' . esc_url( self::get_starter_templates_url() ) . '" class="text-button">' . __( 'Let’s Get Started', 'astra-sites' ) . '</a>
 									<a href="javascript:void(0);" class="scratch-link astra-notice-close">' . __( 'I want to build this website from scratch', 'astra-sites' ) . '</a>
 								</div>
 							</div>
@@ -2868,6 +2878,118 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 
 			// If current page is set, assume sync is in progress.
 			return (bool) get_site_option( 'astra-sites-current-page' );
+		}
+
+		/**
+		 * Check if AI Builder step should be shown.
+		 *
+		 * @since 4.4.36
+		 * @return bool True if AI Builder step should be shown, false otherwise.
+		 */
+		public static function should_show_ai_builder() {
+			/**
+			 * Filter to show/hide AI Builder step.
+			 *
+			 * @since 4.4.36
+			 * @param bool $show_ai_builder Whether to show the AI Builder step. Default true.
+			 * @return bool
+			 */
+			return apply_filters( 'astra_sites_show_ai_builder', true );
+		}
+
+		/**
+		 * Determine the appropriate current index (ci) parameter based on page builder flags.
+		 *
+		 * Mirrors the step-skipping logic used in the site-type/index.js (JavaScript).
+		 *
+		 * @since 4.4.36
+		 * @return int The calculated ci value for the stepper.
+		 */
+		public static function get_onboarding_page_index() {
+			// Show AI Builder step if enabled.
+			if ( self::should_show_ai_builder() ) {
+				return 0; // Site Type Step.
+			}
+
+			// Check if builders are disabled.
+			$is_beaver_builder_disabled = get_option( 'st-beaver-builder-flag' ) || ! Intelligent_Starter_Templates_Loader::is_legacy_beaver_builder_enabled();
+			$is_elementor_disabled      = get_option( 'st-elementor-builder-flag' );
+
+			// Skip to templates if both builders are also disabled.
+			if ( $is_beaver_builder_disabled && $is_elementor_disabled ) {
+				return 2; // Skip to template list.
+			}
+
+			// Skip to the page builder selection.
+			return 1;
+		}
+
+		/**
+		 * Get starter templates URL with appropriate current index (ci) parameter
+		 *
+		 * @since 4.4.36
+		 * @return string The URL with appropriate ci parameter
+		 */
+		public static function get_starter_templates_url() {
+			$base_url = admin_url( 'themes.php?page=starter-templates' );
+			$ci       = self::get_onboarding_page_index();
+			if ( 0 === $ci ) {
+				return $base_url;
+			}
+
+			return add_query_arg( 'ci', $ci, $base_url );
+		}
+
+		/**
+		 * Enqueue admin menu URL updater script.
+		 *
+		 * @since 4.4.36
+		 *
+		 * @param string $hook Current hook name.
+		 * @return void
+		 */
+		public function enqueue_menu_url_updater( $hook = '' ) {
+			// Bail if not in admin area.
+			if ( ! is_admin() ) {
+				return;
+			}
+
+			// Bail if user lacks admin privileges.
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
+			// Bail if in customizer preview mode.
+			if ( is_customize_preview() ) {
+				return;
+			}
+
+			// Bail if handling AJAX request.
+			if ( wp_doing_ajax() ) {
+				return;
+			}
+
+			$dynamic_url = self::get_starter_templates_url();
+
+			// Bail if ci parameter is not present.
+			if ( strpos( $dynamic_url, 'ci=' ) === false ) {
+				return;
+			}
+
+			$script = <<<JS
+				// Safely update starter templates menu link after page load.
+				window.addEventListener( 'load', function() {
+					// Locate the starter templates menu item.
+					const menuItem = document.querySelector( '.wp-submenu a[href*="themes.php?page=starter-templates"]' );
+
+					// Verify element exists before modifying.
+					if ( menuItem ) {
+						menuItem.href = "$dynamic_url";
+					}
+				} );
+JS;
+
+			wp_add_inline_script( 'common', $script );
 		}
 	}
 

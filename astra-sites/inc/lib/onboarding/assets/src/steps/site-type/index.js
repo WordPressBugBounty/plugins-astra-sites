@@ -11,12 +11,19 @@ import { useStateValue } from '../../store/store';
 import LimitExceedModal from '../../components/limit-exceeded-modal';
 import { WandIcon } from '../ui/icons';
 import './style.scss';
-import { getStepIndex, removeLocalStorageItem } from '../../utils/functions';
-const { showClassicTemplates } = astraSitesVars;
+import {
+	getStepIndex,
+	removeLocalStorageItem,
+	saveGutenbergAsDefaultBuilder,
+} from '../../utils/functions';
+const { showClassicTemplates, showAiBuilder } = astraSitesVars;
+const { isBeaverBuilderDisabled, isElementorDisabled } = starterTemplates;
 
 const SiteType = () => {
-	const [ { builder, currentIndex, limitExceedModal }, dispatch ] =
-		useStateValue();
+	const [
+		{ builder, currentIndex, limitExceedModal, pageBuilderCache },
+		dispatch,
+	] = useStateValue();
 
 	const zipPlans = astraSitesVars?.zip_plans;
 	const sitesRemaining = zipPlans?.plan_data?.remaining;
@@ -31,6 +38,35 @@ const SiteType = () => {
 			localStorage.removeItem( 'st-import-end' );
 		}
 	} );
+
+	useEffect( () => {
+		async function setBuilder() {
+			if ( showAiBuilder || builder !== 'ai-builder' ) {
+				return;
+			}
+
+			// Check cache - if same builder was set recently (within 5 minutes), skip API call.
+			const now = Date.now();
+			const cacheExpiry = 5 * 60 * 1000; // 5 minutes.
+
+			if (
+				pageBuilderCache.timestamp &&
+				now - pageBuilderCache.timestamp > cacheExpiry
+			) {
+				await saveGutenbergAsDefaultBuilder( 'gutenberg' );
+			}
+
+			dispatch( {
+				type: 'set',
+				builder: 'gutenberg',
+				pageBuilderCache: {
+					timestamp: now,
+				},
+			} );
+		}
+
+		setBuilder();
+	}, [ showAiBuilder, isBeaverBuilderDisabled, isElementorDisabled ] );
 
 	const handleKeyPress = ( e, navigate ) => {
 		e = e || window.event;
@@ -106,7 +142,8 @@ const SiteType = () => {
 	useEffect( () => {
 		if (
 			currentIndex === getStepIndex( 'page-builder' ) &&
-			builder !== 'fse'
+			builder !== 'fse' &&
+			showAiBuilder
 		) {
 			dispatch( {
 				type: 'set',
@@ -115,7 +152,11 @@ const SiteType = () => {
 		}
 	}, [] );
 
-	const colClass = showClassicTemplates ? 'md:grid-cols-2' : 'md:grid-cols-1';
+	// Determine grid columns based on what should be shown
+	let colClass = 'md:grid-cols-1';
+	if ( showAiBuilder && showClassicTemplates ) {
+		colClass = 'md:grid-cols-2';
+	}
 
 	return (
 		<DefaultStep
@@ -133,36 +174,48 @@ const SiteType = () => {
 					<div
 						className={ `max-w-full lg:max-w-[800px] grid grid-cols-1 ${ colClass } place-content-center gap-6 ist-fadeinUp` }
 					>
-						<div
-							className="flex-col flex bg-white pt-10 pb-8 px-8 text-left relative  rounded-xl shadow-card gradient-border-cover gradient-border-cover-button max-w-[356px]"
-							tabIndex="0"
-							onKeyDown={ ( event ) =>
-								handleKeyPress( event, handleBuildWithAIPress )
-							}
-						>
-							<WandIcon className="w-12 h-12 text-accent-st-secondary stroke-1" />
-							<div className="mt-6 text-xl font-semibold leading-7 mb-2.5 text-heading-text">
-								{ __( 'AI Website Builder', 'astra-sites' ) }
+						{ showAiBuilder && (
+							<div
+								className="flex-col flex bg-white pt-10 pb-8 px-8 text-left relative  rounded-xl shadow-card gradient-border-cover gradient-border-cover-button max-w-[356px]"
+								tabIndex="0"
+								onKeyDown={ ( event ) =>
+									handleKeyPress(
+										event,
+										handleBuildWithAIPress
+									)
+								}
+							>
+								<WandIcon className="w-12 h-12 text-accent-st-secondary stroke-1" />
+								<div className="mt-6 text-xl font-semibold leading-7 mb-2.5 text-heading-text">
+									{ __(
+										'AI Website Builder',
+										'astra-sites'
+									) }
+								</div>
+								<div className="zw-sm-normal text-body-text">
+									{ ' ' }
+									{ __(
+										'Experience the future of website building. We offer AI features powered by ZipWP to help you build your website 10x faster.',
+										'astra-sites'
+									) }{ ' ' }
+								</div>
+								<div className="pt-10 mt-auto">
+									<Button
+										className="w-full h-10"
+										onClick={ handleBuildWithAIPress }
+									>
+										<span>
+											{ __(
+												'Build with AI',
+												'astra-sites'
+											) }
+										</span>{ ' ' }
+										<ArrowRightIcon className="w-5 h-5 ml-2" />
+									</Button>
+								</div>
 							</div>
-							<div className="zw-sm-normal text-body-text">
-								{ ' ' }
-								{ __(
-									'Experience the future of website building. We offer AI features powered by ZipWP to help you build your website 10x faster.',
-									'astra-sites'
-								) }{ ' ' }
-							</div>
-							<div className="pt-10 mt-auto">
-								<Button
-									className="w-full h-10"
-									onClick={ handleBuildWithAIPress }
-								>
-									<span>
-										{ __( 'Build with AI', 'astra-sites' ) }
-									</span>{ ' ' }
-									<ArrowRightIcon className="w-5 h-5 ml-2" />
-								</Button>
-							</div>
-						</div>
+						) }
+
 						{ showClassicTemplates && (
 							<div
 								className="flex-col flex bg-white pt-10 pb-8 px-8 text-left relative rounded-xl max-w-[356px]"
@@ -195,14 +248,20 @@ const SiteType = () => {
 										className="w-full h-10"
 										type="secondary"
 										onClick={ () => {
+											const newIndex =
+												builder === 'fse' ||
+												( isBeaverBuilderDisabled &&
+													isElementorDisabled )
+													? 2
+													: 1;
+
 											dispatch( {
 												type: 'set',
 												builder:
 													builder === 'ai-builder'
 														? 'gutenberg'
 														: builder,
-												currentIndex:
-													builder === 'fse' ? 2 : 1,
+												currentIndex: newIndex,
 											} );
 											removeLocalStorageItem(
 												'st-scroll-position'

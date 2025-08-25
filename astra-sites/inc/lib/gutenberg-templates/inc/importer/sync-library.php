@@ -70,6 +70,12 @@ class Sync_Library {
 				Helper::instance()->update_json_file( 'ast-block-templates-customizer-css', $res_data['data']['customizer_css'] );
 				do_action( 'ast_block_templates_customizer_css', $res_data['data']['customizer_css'] );
 			}
+
+			// Set global styles for Spectra v3.
+			if ( isset( $res_data['data']['global_styles'] ) ) {
+				Helper::instance()->update_json_file( 'ast-block-templates-global-styles', $res_data['data']['global_styles'] );
+				do_action( 'ast_block_templates_global_styles', $res_data['data']['global_styles'] );
+			}
 		}
 	}
 
@@ -303,6 +309,7 @@ class Sync_Library {
 			'ast-block-templates-site-requests',
 			'ast-block-templates-last-export-checksums',
 			'ast-block-templates-customizer-css',
+			'ast-block-templates-global-styles',
 		);
 	}
 

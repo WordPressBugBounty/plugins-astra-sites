@@ -423,7 +423,16 @@ class Helper {
 	 */
 	public function get_block_template_customiser_css() {
 		return trim( self::get_json_file_content( 'ast-block-templates-customizer-css.json', false ), '"' );
-	}   
+	}
+
+	/**
+	 * Get global styles for Spectra v3.
+	 *
+	 * @return string
+	 */
+	public function get_block_template_global_styles() {
+		return trim( self::get_json_file_content( 'ast-block-templates-global-styles.json', false ), '"' );
+	}
 
 	/**
 	 * Get last exported checksum.

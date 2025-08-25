@@ -76,16 +76,23 @@ if ( ! class_exists( 'Astra_Sites_Nps_Notice' ) ) :
 					'message' => array(
 
 						// Step 1 i.e rating input.
-						'logo' => esc_url( INTELLIGENT_TEMPLATES_URI . 'assets/images/logo.svg' ),
-						'plugin_name' => __( 'Starter Templates', 'astra-sites' ),
-						'nps_rating_message' => __( 'How likely are you to recommend #pluginname to your friends or colleagues?', 'astra-sites' ),
+						'logo'                  => esc_url( INTELLIGENT_TEMPLATES_URI . 'assets/images/logo.svg' ),
+						'plugin_name'           => __( 'Starter Templates', 'astra-sites' ),
+						'nps_rating_title'            => __( 'Quick Question!', 'astra-sites' ),
+						'nps_rating_message'          => sprintf(
+							/* translators: %s is the plugin name */
+							__( "How would you rate %s? Love it, hate it, or somewhere in between? Your honest answer helps us understand how we're doing.", 'astra-sites' ),
+							'#pluginname'
+						),
+						'rating_min_label'      => __( 'Hate it', 'astra-sites' ),
+						'rating_max_label'      => __( 'Love it', 'astra-sites' ),
 
 						// Step 2A i.e. for rating 8 and above.
-						'feedback_title' => __( 'Thanks a lot for your feedback! 😍', 'astra-sites' ),
-						'feedback_content' => __( "Thanks for being part of the Starter Templates community! Got feedback or suggestions? We'd love to hear it.", 'astra-sites' ),
+						'feedback_title'        => __( 'Thanks a lot for your feedback! 😍', 'astra-sites' ),
+						'feedback_content'      => __( "Thanks for being part of the Starter Templates community! Got feedback or suggestions? We'd love to hear it.", 'astra-sites' ),
 
 						// Step 2B i.e. for rating 7 and below.
-						'plugin_rating_title' => __( 'Thank you for your feedback', 'astra-sites' ),
+						'plugin_rating_title'   => __( 'Thank you for your feedback', 'astra-sites' ),
 						'plugin_rating_content' => __( 'We value your input. How can we improve your experience?', 'astra-sites' ),
 					),
 				)

@@ -945,6 +945,11 @@ class Plugin {
 			$server_astra_customizer_css = Helper::instance()->get_block_template_customiser_css();
 		}
 
+		// Get global class based styles for Spectra v3.
+		$global_styles                = Helper::instance()->get_block_template_global_styles();
+		$astra_customizer_css        .= $global_styles;
+		$server_astra_customizer_css .= $global_styles;
+
 		$settings = get_option( 'ast_block_templates_ai_settings', array() );
 		$disable_ai = isset( $settings['disable_ai'] ) ? $settings['disable_ai'] : false;
 		$adaptive_mode = isset( $settings['adaptive_mode'] ) ? $settings['adaptive_mode'] : true;

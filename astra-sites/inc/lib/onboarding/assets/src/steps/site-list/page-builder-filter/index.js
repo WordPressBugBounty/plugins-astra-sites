@@ -10,6 +10,8 @@ const {
 	showOtherBuilders = false,
 } = starterTemplates;
 
+const { showAiBuilder } = astraSitesVars;
+
 import Tippy from '@tippyjs/react/headless';
 import { motion } from 'framer-motion';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
@@ -113,6 +115,18 @@ const PageBuilder = ( { placement = 'bottom-end', isDisabled } ) => {
 		}
 	}
 
+	if ( ! showAiBuilder ) {
+		// Find the index of the Beaver builder in the array.
+		const indexToRemove = buildersList.findIndex(
+			( pageBuilder ) => pageBuilder.id === 'ai-builder'
+		);
+
+		// Remove the Beaver builder if it exists.
+		if ( indexToRemove !== -1 ) {
+			buildersList.splice( indexToRemove, 1 );
+		}
+	}
+
 	// Add `Show Other Builders` option when any of our builders are disabled via option meta.
 	if ( showOtherBuilders ) {
 		buildersList.push( {
@@ -184,7 +198,8 @@ const PageBuilder = ( { placement = 'bottom-end', isDisabled } ) => {
 				arrow={ false }
 				offset={ [ 60, 8 ] }
 				render={ ( attrs ) =>
-					currentIndex === getStepIndex( 'site-list' ) && (
+					currentIndex === getStepIndex( 'site-list' ) &&
+					showAiBuilder && (
 						<motion.div
 							className="flex flex-col items-start gap-5 min-w-[250px] sm:min-w-[304px] bg-white rounded-lg shadow-lg p-4 border border-button-disabled"
 							{ ...attrs }

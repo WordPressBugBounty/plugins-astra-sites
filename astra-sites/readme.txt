@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.8.1
-Stable tag: 4.4.35
+Stable tag: 4.4.36
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,17 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.36 - 25-August-2025
+- New:
+    - Introduced a filter to hide the AI Builder type during onboarding.
+    - Design Kit: Added compatibility with Spectra version 3.
+- Improvement:
+    - Ensured PHP 8.2 compatibility by replacing the deprecated FILTER_SANITIZE_STRING.
+    - Added headers to improve XML SSE import over the HTTP/2 protocol.
+- Fix:
+    - Fixed an issue where an incorrect Content-Type header prevented the NPS survey popup from closing.
+    - Finish Setup: Added safe existence checks for action item steps to prevent PHP warnings.
 
 v4.4.35 - 13-August-2025
 - Improvement:

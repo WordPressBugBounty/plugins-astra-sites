@@ -225,7 +225,7 @@ export const saveGutenbergAsDefaultBuilder = ( pageBuilder = 'gutenberg' ) => {
 	content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 	content.append( 'page_builder', pageBuilder );
 
-	fetch( ajaxurl, {
+	return fetch( ajaxurl, {
 		method: 'post',
 		body: content,
 	} );

@@ -148,6 +148,8 @@ class ST_WXR_Importer {
 
 			// Start the event stream.
 			header( 'Content-Type: text/event-stream, charset=UTF-8' );
+			header( 'Cache-Control: no-cache' );
+			header( 'Connection: keep-alive' );
 			// Turn off PHP output compression.
 			$previous = error_reporting( error_reporting() ^ E_WARNING ); //phpcs:ignore WordPress.PHP.DevelopmentFunctions, WordPress.PHP.DiscouragedPHPFunctions -- 3rd party library.
 			ini_set( 'output_buffering', 'off' ); //phpcs:ignore WordPress.PHP.IniSet.Risky -- 3rd party library.
