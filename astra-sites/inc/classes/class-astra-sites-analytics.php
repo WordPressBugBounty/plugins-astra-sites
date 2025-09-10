@@ -47,6 +47,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 */
 		private function __construct() {
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'update_settings_after_plugin_activation' ), 10, 2 );
+			add_action( 'admin_init', array( $this, 'maybe_update_finish_setup_banner_clicked' ) );
 			add_action( 'wp_ajax_astra_sites_set_woopayments_analytics', array( $this, 'set_woopayments_analytics' ) );
 			add_filter( 'bsf_core_stats', array( $this, 'add_astra_sites_analytics_data' ), 10, 1 );
 		}
@@ -87,6 +88,27 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			Astra_Sites_Page::get_instance()->update_settings(
 				array(
 					'required_plugins' => $required_plugins,
+				)
+			);
+		}
+
+		/**
+		 * Maybe update finish setup banner clicked.
+		 *
+		 * @since 4.4.37
+		 * @return void
+		 */
+		public function maybe_update_finish_setup_banner_clicked() {
+			// Bail early if the source is not dashboard-banner.
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification not needed here.
+			if ( ! isset( $_GET['source'] ) || 'dashboard-banner' !== sanitize_text_field( $_GET['source'] ) ) {
+				return;
+			}
+
+			// Update the finish setup banner clicked setting.
+			Astra_Sites_Page::get_instance()->update_settings(
+				array(
+					'fs_banner_clicked' => 'yes',
 				)
 			);
 		}
@@ -547,6 +569,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			$is_setup_wizard_showing = get_option( $option_name, false );
 			$action_items_status     = get_option( 'getting_started_action_items', array() );
 			$menu_priority_val       = (string) Astra_Sites_Page::get_instance()->get_setting( 'fs_menu_position', '' );
+			$fs_banner_clicked       = (string) Astra_Sites_Page::get_instance()->get_setting( 'fs_banner_clicked', '' );
 
 			// Determine menu position.
 			if ( '1' === $menu_priority_val ) {
@@ -577,6 +600,11 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			$stats['numeric_values']['total_courses']           = $total_courses;
 			$stats['numeric_values']['no_of_completed_courses'] = $no_of_completed_courses;
 			$stats['boolean_values']['course_completed']        = 0 !== $total_courses && $no_of_completed_courses >= $total_courses;
+
+			// Dashboard banner clicked.
+			if ( $fs_banner_clicked ) {
+				$stats['boolean_values']['finish_setup_banner_clicked'] = 'yes' === $fs_banner_clicked;
+			}
 
 			$stats['finish_setup_menu_position'] = $menu_priority;
 

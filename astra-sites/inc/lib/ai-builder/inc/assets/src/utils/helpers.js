@@ -375,7 +375,7 @@ export const isValidURL = ( url ) => {
 
 export const isValidImageURL = ( fileURL ) => {
 	// regex only matches letters, numbers, spaces, dots, underscores, colons, slashes, and hyphens
-	const validPattern = /^[a-zA-Z0-9_\-\. :/]+$/;
+	const validPattern = /^[a-zA-Z0-9_\-\. :~/]+$/;
 
 	if ( ! isValidURL( fileURL ) ) {
 		return false;

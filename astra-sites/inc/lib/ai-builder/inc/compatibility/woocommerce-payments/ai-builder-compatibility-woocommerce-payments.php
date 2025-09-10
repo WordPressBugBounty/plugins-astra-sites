@@ -188,14 +188,14 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_WooCommerce_Payments' ) ) {
 		public function dismiss_woopayments_notice() {
 			// Verify nonce.
 			if ( ! isset( $_POST['_security'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_security'] ) ), 'woopayments_nonce' ) ) {
-				wp_send_json_error( 'Invalid nonce' );
+				wp_send_json_error( __( 'Invalid nonce', 'astra-sites' ) );
 			}
 
 			// Get notice ID.
 			$notice_id = isset( $_POST['notice_id'] ) ? sanitize_text_field( wp_unslash( $_POST['notice_id'] ) ) : '';
 
 			if ( empty( $notice_id ) ) {
-				wp_send_json_error( 'Notice ID is required' );
+				wp_send_json_error( __( 'Notice ID is required', 'astra-sites' ) );
 			}
 
 			$show_after = 72 * 60 * 60; // 72 hours in seconds.

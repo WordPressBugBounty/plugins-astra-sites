@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.8.1
-Stable tag: 4.4.36
+Stable tag: 4.4.37
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -192,8 +192,8 @@ Please note: To access templates and AI features, you’ll need a ZipWP account.
 = Fun Facts About Starter Templates =
 
 ➜ Over 5,000 websites are built with Starter Templates every day.
-➜ The plugin has been installed on more than 1.6 million websites.
-➜ Starter Templates has more than 4,000 five-star reviews.
+➜ The plugin has been installed on more than 2 million websites.
+➜ Starter Templates has more than 4,500 five-star reviews.
 ➜ Our team of dedicated full-time WordPress experts help and support hundreds of users daily.
 ➜ A devoted team full-time designers keep the design library up to date.
 ➜ Our plugin offers more than 100 free Elementor templates.
@@ -245,6 +245,12 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.37 - 10-September-2025
+- Improvement:
+    - AI Builder: Applied missing internationalization to strings in site creation status messages.
+- Fix:
+    - Free Images: Fixed the issue where the Free Images tab was missing in the Beaver Builder editor.
 
 v4.4.36 - 25-August-2025
 - New:

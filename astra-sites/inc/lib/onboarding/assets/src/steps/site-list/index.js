@@ -509,7 +509,7 @@ const SiteList = () => {
 									)
 								}
 							>
-								{ __( 'Get Essential Toolkit', 'astra-sites' ) }
+								{ __( 'Get Premium Templates', 'astra-sites' ) }
 							</Button>
 						</div>
 					) }

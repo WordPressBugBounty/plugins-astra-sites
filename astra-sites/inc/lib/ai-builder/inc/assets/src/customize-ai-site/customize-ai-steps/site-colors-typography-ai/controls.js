@@ -1,5 +1,5 @@
 import { useEffect, useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import ColorPalettes from '../../../../../components/color-palettes/color-palettes';
 import {
 	sendPostMessage,
@@ -63,7 +63,11 @@ const SiteColorsControls = () => {
 			} );
 			colors = [ ...customColorsSet, ...scheme ];
 			colors.map( ( value, i ) => {
-				colors[ i ].title = 'Style' + ( i + 1 );
+				colors[ i ].title = sprintf(
+					/* translators: %d is the style number */
+					__( 'Style %d', 'ai-builder' ),
+					i + 1
+				);
 				colors[ i ].slug = 'style-' + ( i + 1 );
 				return colors;
 			} );

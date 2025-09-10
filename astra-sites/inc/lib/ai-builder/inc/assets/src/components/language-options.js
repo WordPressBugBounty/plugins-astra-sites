@@ -170,7 +170,10 @@ const LanguageOptions = ( {
 											}
 										} }
 										className="appearance-none text-base h-[2.625rem] block w-full !border-0 py-0 !pl-10 pr-5 text-zip-app-heading placeholder:!text-zip-app-inactive-icon focus:ring-0 sm:text-sm bg-transparent focus:outline-none focus:!shadow-none focus:!border-0 focus-within:!border-0"
-										placeholder="Search Language"
+										placeholder={ __(
+											'Search Language',
+											'ai-builder'
+										) }
 										type="search"
 										value={ query }
 										onChange={ handleSearch }

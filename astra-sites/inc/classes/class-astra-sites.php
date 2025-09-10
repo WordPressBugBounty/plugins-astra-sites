@@ -147,8 +147,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_action( 'astra_notice_before_markup', array( $this, 'notice_assets' ) );
 			add_action( 'load-index.php', array( $this, 'admin_dashboard_notices' ) );
 			add_action( 'admin_notices', array( $this, 'check_filesystem_access_notice' ) );
-			add_filter( 'ai_builder_textdomain', array( $this, 'updat_ai_builder_textdomain' ), 10, 1 );
+			add_filter( 'ai_builder_textdomain', array( $this, 'get_astra_sites_textdomain' ), 10, 1 );
 			add_filter( 'ai_builder_languages_directory', array( $this, 'change_languages_directory' ), 10, 1 );
+			add_filter( 'one_onboarding_textdomain', array( $this, 'get_astra_sites_textdomain' ) );
+			add_filter( 'one_onboarding_languages_directory', array( $this, 'change_languages_directory' ) );
 
 			// AJAX.
 			$this->ajax = array(
@@ -221,13 +223,13 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		}
 
 		/**
-		 * Set ai builder textdomain.
+		 * Set textdomain as 'astra-sites'.
 		 * 
 		 * @param string $textdomain Textdomain.
 		 * @return string
-		 * @since  4.3.8
+		 * @since  4.4.37
 		 */
-		public function updat_ai_builder_textdomain( $textdomain ) {
+		public function get_astra_sites_textdomain( $textdomain ) {
 			return 'astra-sites';
 		}
 
@@ -1603,6 +1605,17 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		}
 
 		/**
+		 * Get the Metrics API URL.
+		 *
+		 * @since  4.4.37
+		 *
+		 * @return string
+		 */
+		public static function get_metrics_api_domain() {
+			return trailingslashit( defined( 'BSF_METRICS_REMOTE_URL' ) ? BSF_METRICS_REMOTE_URL : apply_filters( 'nps_survey_api_domain', 'https://metrics.brainstormforce.com/' ) );
+		}
+
+		/**
 		 * Setter for $api_url
 		 *
 		 * @since  1.0.0
@@ -2403,6 +2416,9 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-file-system.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-nps-notice.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-analytics.php'; 
+
+			// Astra Onboarding Integration.
+			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-astra-onboarding.php';
 
 			// libraries 'inc/lib/class-astra-sites-'.
 			require_once ASTRA_SITES_DIR . 'inc/lib/onboarding/class-onboarding.php';

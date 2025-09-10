@@ -88,11 +88,11 @@ class Zipwp_Images_Script {
 		}
 		$current_screen = get_current_screen();
 
-		if ( ! is_object( $current_screen ) ) {
-			return;
-		}
-
-		if ( in_array( $current_screen->post_type, $exclude_post_types, true ) ) {
+		if ( is_object( $current_screen ) ) {
+			if ( in_array( $current_screen->post_type, $exclude_post_types, true ) ) {
+				return;
+			}
+		} elseif ( ! isset( $_GET['fl_builder'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Fetching GET parameter, no nonce associated with this action.
 			return;
 		}
 

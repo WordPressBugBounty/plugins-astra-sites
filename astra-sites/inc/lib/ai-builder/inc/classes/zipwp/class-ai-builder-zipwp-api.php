@@ -20,7 +20,6 @@ use STImporter\Importer\WXR_Importer\ST_WXR_Importer;
  * @since 1.0.0
  */
 class Ai_Builder_ZipWP_Api {
-
 	use Instance;
 	/**
 	 * Constructor
@@ -59,15 +58,30 @@ class Ai_Builder_ZipWP_Api {
 	/**
 	 * Get API headers
 	 *
+	 * @param bool $locale Check for locale.
 	 * @since 4.0.0
 	 * @return array<string, string>
 	 */
-	public function get_api_headers() {
-		return array(
+	public function get_api_headers( $locale = false ) {
+		$headers = array(
 			'Content-Type'  => 'application/json',
 			'Accept'        => 'application/json',
 			'Authorization' => 'Bearer ' . Ai_Builder_ZipWP_Integration::get_token(),
 		);
+
+		if ( $locale ) {
+			$locale = get_locale();
+			if ( 'en_US' !== $locale ) {
+				// Getting translation codes.
+				$iso_locale = $locale;
+				if ( strpos( $iso_locale, '_' ) !== false ) {
+					$iso_locale = strstr( $locale, '_', true );
+				}
+				$headers['X-Zip-Locale'] = $iso_locale ? $iso_locale : 'en';
+			}
+		}
+
+		return $headers;
 	}
 
 	/**
@@ -744,7 +758,8 @@ class Ai_Builder_ZipWP_Api {
 		if ( is_wp_error( $response ) ) {
 			// There was an error in the request.
 			return array(
-				'data'   => 'Failed ' . $response->get_error_message(),
+				/* translators: %s is the error message */
+				'data'   => sprintf( __( 'Failed %s', 'astra-sites' ), $response->get_error_message() ),
 				'status' => false,
 			);
 		}
@@ -1722,7 +1737,7 @@ class Ai_Builder_ZipWP_Api {
 
 		$api_endpoint = $this->get_api_domain() . '/sites/features/';
 		$request_args = array(
-			'headers' => $this->get_api_headers(),
+			'headers' => $this->get_api_headers( true ),
 			'timeout' => 100,
 		);
 		$response     = wp_safe_remote_get( $api_endpoint, $request_args );
@@ -2016,23 +2031,8 @@ class Ai_Builder_ZipWP_Api {
 
 		$keyword      = $request['keyword'];
 		$api_endpoint = $this->get_api_domain() . '/sites/business/search?q=' . $keyword;
-
-		$headers = $this->get_api_headers();
-
-		$locale = get_locale();
-
-		if ( 'en_US' !== $locale ) {
-
-			// Getting translation codes.
-			$iso_locale = $locale;
-			if ( strpos( $iso_locale, '_' ) !== false ) {
-				$iso_locale = strstr( $locale, '_', true );
-			}
-			$headers['X-Zip-Locale'] = $iso_locale ? $iso_locale : 'en';
-		}
-
 		$request_args = array(
-			'headers' => $headers,
+			'headers' => $this->get_api_headers( true ),
 			'timeout' => 100,
 		);
 		$response     = wp_safe_remote_get( $api_endpoint, $request_args );
