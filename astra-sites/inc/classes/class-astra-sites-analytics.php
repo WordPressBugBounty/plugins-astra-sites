@@ -442,9 +442,9 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		}
 
 		/**
-		 * Checks if LatePoint booking/appointment is created or managed by user.
+		 * Checks if LatePoint activities are made by admin or appointment created by users.
 		 *
-		 * ACTIVE CONDITION: Booking form is managed or created in last 30 days.
+		 * ACTIVE CONDITION: Any activity is made by admin or appointment created by users.
 		 *
 		 * @since 4.4.27
 		 *
@@ -457,18 +457,10 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 
 			global $wpdb;
 			$latepoint_activities_table = defined( 'LATEPOINT_TABLE_ACTIVITIES' ) ? LATEPOINT_TABLE_ACTIVITIES : $wpdb->prefix . 'latepoint_activities';
-			$last_30_days               = gmdate( 'Y-m-d H:i:s', strtotime( '-30 days' ) );
 
 			// Table names can't be parameterized in wpdb::prepare(), safe to ignore PHPCS here.
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			$count = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$latepoint_activities_table} WHERE code = %s AND updated_at >= %s",
-					'booking_created',
-					$last_30_days
-				)
-			);
-			// phpcs:enable
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$count = $wpdb->get_var( "SELECT COUNT(*) FROM {$latepoint_activities_table}" );
 
 			return $count > 0;
 		}

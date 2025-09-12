@@ -77,7 +77,7 @@ export const SITE_CREATION_STATUS_CODES = {
 		"It's taking a bit more than usual. Bear with us…",
 		'ai-builder'
 	),
-	A011: __( 'Done', 'ai-builder' ),
+	A011: 'Done', // Don't translate 'Done' as it is used as a status check.
 	R001: __(
 		'Oops, Site creation hiccupped, we are trying one more time',
 		'ai-builder'
