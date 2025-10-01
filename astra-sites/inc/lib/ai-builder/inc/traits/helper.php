@@ -469,9 +469,23 @@ class Helper {
 
 		// Checking the `install_plugins` and `activate_plugins` capability for the current user.
 		// To perform plugin installation process.
+		$has_notinstalled = ! empty( $response['notinstalled'] );
+		$has_inactive     = ! empty( $response['inactive'] );
+		$can_install      = current_user_can( 'install_plugins' );
+		$can_activate     = current_user_can( 'activate_plugins' );
+
+		if ( is_multisite() ) {
+			// For multisite: Super admins can handle both, subsite admins need activation capability.
+			$is_error = $can_activate
+				? $has_notinstalled
+				: ( $has_notinstalled || $has_inactive );
+		} else {
+			// For single site: Check install and activate permissions separately.
+			$is_error = ( ! $can_install && $has_notinstalled ) || ( ! $can_activate && $has_inactive );
+		}
+
 		if (
-			( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) &&
-			( ( ! current_user_can( 'install_plugins' ) && ! empty( $response['notinstalled'] ) ) || ( ! current_user_can( 'activate_plugins' ) && ! empty( $response['inactive'] ) ) ) ) {
+			( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) && $is_error ) {
 			$message               = __( 'Insufficient Permission. Please contact your Super Admin to allow the install required plugin permissions.', 'astra-sites' );
 			$required_plugins_list = array_merge( $response['notinstalled'], $response['inactive'] );
 			$markup                = $message;
@@ -481,7 +495,14 @@ class Helper {
 			}
 			$markup .= '</ul>';
 
-			wp_send_json_error( $markup );
+			$data = array(
+				'markup'                       => $markup,
+				'required_plugins'             => $response,
+				'third_party_required_plugins' => $third_party_required_plugins,
+				'update_avilable_plugins'      => $update_avilable_plugins,
+				'incompatible_plugins'         => $incompatible_plugins,
+			);
+			wp_send_json_error( $data );
 		}
 
 		return array(
@@ -530,11 +551,11 @@ class Helper {
 		if ( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
-			if ( ! current_user_can( 'install_plugins' ) || ! isset( $_POST['init'] ) || ! sanitize_text_field( $_POST['init'] ) ) {
+			if ( ! current_user_can( 'activate_plugins' ) || ! isset( $_POST['init'] ) || ! sanitize_text_field( $_POST['init'] ) ) {
 				wp_send_json_error(
 					array(
 						'success' => false,
-						'message' => __( 'Error: You don\'t have the required permissions to install plugins.', 'astra-sites' ),
+						'message' => __( "Error: You don't have the required permissions to activate plugins.", 'astra-sites' ),
 					)
 				);
 			}
@@ -598,8 +619,11 @@ class Helper {
 			}
 		}
 
-		$options            = (array) astra_get_site_data( 'astra-site-options-data' );
-		$enabled_extensions = (array) astra_get_site_data( 'astra-enabled-extensions' );
+		$options            = astra_get_site_data( 'astra-site-options-data' );
+		$enabled_extensions = astra_get_site_data( 'astra-enabled-extensions' );
+
+		$options            = is_array( $options ) ? $options : array();
+		$enabled_extensions = is_array( $enabled_extensions ) ? $enabled_extensions : array();
 
 		self::after_plugin_activate( $plugin_init, $options, $enabled_extensions, $plugin_slug, $was_plugin_active );
 
@@ -744,20 +768,40 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
+				wp_send_json_error( __( "Permission denied: You don't have sufficient permissions to import. Please contact your site administrator.", 'astra-sites' ) );
 			}
 		}
 
 		if ( ! class_exists( 'STImporter\Importer\ST_Importer_File_System' ) ) {
-			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
+			wp_send_json_error( __( 'Import failed: ST_Importer_File_System class not found. Please ensure the importer is properly loaded.', 'astra-sites' ) );
 		}
 
-		$demo_data = ST_Importer_File_System::get_instance()->get_demo_content();
+		// Handle demo content retrieval with specific error handling.
+		try {
+			$demo_data = ST_Importer_File_System::get_instance()->get_demo_content();
+			if ( is_null( $demo_data ) ) {
+				$demo_data = array(); // Fallback to prevent null errors.
+			}
+		} catch ( \Exception $e ) {
+			astra_sites_error_log( 'Import End: Exception getting demo content - ' . $e->getMessage() );
+			// translators: %s: Error message.
+			wp_send_json_error( sprintf( __( 'Import failed: Unexpected error - %s', 'astra-sites' ), $e->getMessage() ) );
+		} catch ( \Error $e ) {
+			// translators: %s: Error message.
+			wp_send_json_error( sprintf( __( 'Import failed: Fatal error - %s', 'astra-sites' ), $e->getMessage() ) );
+		}
+
 		// Set permalink structure to use post name.
 		update_option( 'permalink_structure', '/%postname%/' );
 		update_option( 'astra-site-permalink-update-status', 'no' );
 
-		do_action( 'astra_sites_import_complete', $demo_data );
+		// Safely execute import complete action.
+		try {
+			do_action( 'astra_sites_import_complete', $demo_data );
+		} catch ( \Exception $e ) {
+			astra_sites_error_log( 'Import End: Exception in import_complete action - ' . $e->getMessage() );
+			// Continue execution - don't fail the entire import for hook issues.
+		}
 
 		if ( wp_doing_ajax() ) {
 			wp_send_json_success();

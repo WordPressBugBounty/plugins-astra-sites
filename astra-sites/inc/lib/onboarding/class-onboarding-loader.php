@@ -267,6 +267,9 @@ class Intelligent_Starter_Templates_Loader {
 			'reportError' => $this->should_report_error(),
 			'bsfUsageTracking' => get_site_option( 'bsf_analytics_optin', 'no' ) === 'yes',
 			'showOtherBuilders' => get_option( 'st-elementor-builder-flag', false ) || ( self::is_legacy_beaver_builder_enabled() && get_option( 'st-beaver-builder-flag', false ) ),
+			'isMultisite' => is_multisite(),
+			'canInstallPlugins' => current_user_can( 'install_plugins' ),
+			'canActivatePlugins' => current_user_can( 'activate_plugins' ),
 		);
 
 		return apply_filters( 'starter_templates_onboarding_localize_vars', $data );

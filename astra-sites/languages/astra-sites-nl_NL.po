@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: gpt-po v1.2.3\n"
+"Last-Translator: gpt-po v1.1.1\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -109,13 +109,6 @@ msgstr "Nee"
 msgid "You currently have no scheduled cron events."
 msgstr "U heeft momenteel geen geplande cron-evenementen."
 
-#: inc/classes/class-astra-sites-importer.php:93
-#: inc/classes/class-astra-sites-importer.php:137
-#: inc/classes/class-astra-sites-importer.php:176
-#: inc/classes/class-astra-sites-importer.php:330
-#: inc/classes/class-astra-sites-importer.php:435
-#: inc/classes/class-astra-sites-importer.php:499
-#: inc/classes/class-astra-sites-importer.php:549
 #: inc/classes/class-astra-sites-page.php:79
 #: inc/classes/class-astra-sites-page.php:265
 #: inc/classes/class-astra-sites.php:279
@@ -131,20 +124,18 @@ msgstr "U heeft momenteel geen geplande cron-evenementen."
 #: inc/lib/ai-builder/inc/ajax/importer.php:170
 #: inc/lib/ai-builder/inc/ajax/importer.php:222
 #: inc/lib/ai-builder/inc/ajax/importer.php:245
-#: inc/lib/ai-builder/inc/ajax/importer.php:384
-#: inc/lib/ai-builder/inc/ajax/importer.php:436
-#: inc/lib/ai-builder/inc/ajax/importer.php:477
+#: inc/lib/ai-builder/inc/ajax/importer.php:533
+#: inc/lib/ai-builder/inc/ajax/importer.php:574
 #: inc/lib/ai-builder/inc/ajax/plugin.php:119
 #: inc/lib/ai-builder/inc/ajax/plugin.php:335
 #: inc/lib/ai-builder/inc/ajax/plugin.php:372
 #: inc/lib/ai-builder/inc/ajax/plugin.php:377
-#: inc/lib/ai-builder/inc/traits/helper.php:663
-#: inc/lib/ai-builder/inc/traits/helper.php:707
-#: inc/lib/ai-builder/inc/traits/helper.php:747
-#: inc/lib/ai-builder/inc/traits/helper.php:780
-#: inc/lib/ai-builder/inc/traits/helper.php:812
-#: inc/lib/ai-builder/inc/traits/helper.php:846
-#: inc/lib/ai-builder/inc/traits/helper.php:882
+#: inc/lib/ai-builder/inc/traits/helper.php:684
+#: inc/lib/ai-builder/inc/traits/helper.php:728
+#: inc/lib/ai-builder/inc/traits/helper.php:821
+#: inc/lib/ai-builder/inc/traits/helper.php:853
+#: inc/lib/ai-builder/inc/traits/helper.php:887
+#: inc/lib/ai-builder/inc/traits/helper.php:923
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:245
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:293
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:337
@@ -160,39 +151,10 @@ msgstr "U heeft momenteel geen geplande cron-evenementen."
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:43
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:109
 #: inc/lib/gutenberg-templates/inc/traits/upgrade.php:35
-#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:69
-#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:110
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:125
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:261
 msgid "You are not allowed to perform this action"
 msgstr "Je mag deze actie niet uitvoeren"
-
-#. Translators: %s is WP Forms URL.
-#: inc/classes/class-astra-sites-importer.php:342
-#, php-format
-msgid "Invalid WPform Request URL - %s"
-msgstr "Ongeldige WPform-aanvraag-URL - %s"
-
-#: inc/classes/class-astra-sites-importer.php:401
-msgid "Invalid JSON file for WP Forms."
-msgstr "Ongeldig JSON-bestand voor WP Forms."
-
-#: inc/classes/class-astra-sites-importer.php:404
-#: inc/classes/class-astra-sites-importer.php:407
-msgid "There was an error downloading the WP Forms file."
-msgstr "Er is een fout opgetreden bij het downloaden van het WP Forms-bestand."
-
-#: inc/classes/class-astra-sites-importer.php:466
-msgid "Invalid file for CartFlows flows"
-msgstr "Ongeldig bestand voor CartFlows-flows"
-
-#: inc/classes/class-astra-sites-importer.php:469
-#: inc/classes/class-astra-sites-importer.php:472
-msgid "There was an error downloading the CartFlows flows file."
-msgstr "Er is een fout opgetreden bij het downloaden van het CartFlows-flowsbestand."
-
-#: inc/classes/class-astra-sites-importer.php:475
-msgid "Empty file for CartFlows flows"
-msgstr "Leeg bestand voor CartFlows-flows"
 
 #: inc/classes/class-astra-sites-nps-notice.php:91
 msgid "Thanks a lot for your feedback! 😍"
@@ -571,7 +533,6 @@ msgstr "Ongeldige aanvraag-URL - %s"
 msgid "Need to send URL of the image to be downloaded"
 msgstr "Moet de URL van de afbeelding verzenden die gedownload moet worden"
 
-#: inc/classes/class-astra-sites.php:1324
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:284
 msgid "Could not download the image."
 msgstr "Kon de afbeelding niet downloaden."
@@ -598,28 +559,6 @@ msgstr "De sjabloonbibliotheek wordt op de achtergrond gesynchroniseerd. Het pro
 #: inc/classes/class-astra-sites.php:1801
 msgid "Some of the files required during the import process are missing.<br/><br/>Please try again after some time."
 msgstr "Sommige van de bestanden die nodig zijn tijdens het importproces ontbreken.<br/><br/>Probeer het na enige tijd opnieuw."
-
-#: inc/classes/class-astra-sites.php:1802
-msgid "<p>WordPress debug mode is currently enabled on your website. This has interrupted the import process..</p><p>Kindly disable debug mode and try importing Starter Template again.</p><p>You can add the following code into the wp-config.php file to disable debug mode.</p><p><code>define('WP_DEBUG', false);</code></p>"
-msgstr "<p>De debugmodus van WordPress is momenteel ingeschakeld op uw website. Dit heeft het importproces onderbroken.</p><p>Schakel alstublieft de debugmodus uit en probeer de Starter Template opnieuw te importeren.</p><p>U kunt de volgende code toevoegen aan het wp-config.php-bestand om de debugmodus uit te schakelen.</p><p><code>define('WP_DEBUG', false);</code></p>"
-
-#. translators: %s is a documentation link.
-#: inc/classes/class-astra-sites.php:1804
-#, php-format
-msgid "<p>We are facing a temporary issue in importing this template.</p><p>Read <a href=\"%s\" target=\"_blank\">article</a> to resolve the issue and continue importing template.</p>"
-msgstr "<p>We ondervinden een tijdelijk probleem bij het importeren van deze sjabloon.</p><p>Lees het <a href=\"%s\" target=\"_blank\">artikel</a> om het probleem op te lossen en verder te gaan met het importeren van de sjabloon.</p>"
-
-#. translators: %s is a documentation link.
-#: inc/classes/class-astra-sites.php:1806
-#, php-format
-msgid "<p>We are facing a temporary issue in installing the required plugins for this template.</p><p>Read&nbsp;<a href=\"%s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.</p>"
-msgstr "<p>We ondervinden een tijdelijk probleem bij het installeren van de vereiste plugins voor deze template.</p><p>Lees&nbsp;<a href=\"%s\" target=\"_blank\">het artikel</a>&nbsp;om het probleem op te lossen en verder te gaan met het importeren van de template.</p>"
-
-#. translators: %s are white label strings.
-#: inc/classes/class-astra-sites.php:1810
-#, php-format
-msgid "Warning! %1$s Import process is not complete. Don't close the window until import process complete. Do you still want to leave the window?"
-msgstr "Waarschuwing! %1$s Het importproces is niet voltooid. Sluit het venster niet totdat het importproces is voltooid. Wilt u het venster toch verlaten?"
 
 #: inc/classes/class-astra-sites.php:1811
 msgid "Done! View Site"
@@ -665,10 +604,6 @@ msgstr "We hebben je een verrassingscadeau naar je e-mailadres gestuurd! Control
 msgid "Looks like the template you are importing is temporarily not available."
 msgstr "Het lijkt erop dat de sjabloon die je importeert tijdelijk niet beschikbaar is."
 
-#: inc/classes/class-astra-sites.php:1851
-msgid "We could not start the import process and this is the message from WordPress:"
-msgstr "We konden het importproces niet starten en dit is het bericht van WordPress:"
-
 #: inc/classes/class-astra-sites.php:1852
 msgid "There was an error connecting to the Starter Templates API."
 msgstr "Er was een fout bij het verbinden met de Starter Templates API."
@@ -685,23 +620,11 @@ msgstr "Om inhoud te importeren, moet WordPress het XML-bestand opslaan in de ma
 msgid "Looks like your host probably could not store XML file in /wp-content/ folder."
 msgstr "Het lijkt erop dat uw host waarschijnlijk het XML-bestand niet kon opslaan in de map /wp-content/."
 
-#. translators: %s HTML tags
-#: inc/classes/class-astra-sites.php:1857
-#, php-format
-msgid "%1$sWe could not start the import process due to failed AJAX request and this is the message from WordPress:%2$s"
-msgstr "%1$sWe konden het importproces niet starten vanwege een mislukte AJAX-aanvraag en dit is het bericht van WordPress:%2$s"
-
 #. translators: %s URL to document.
 #: inc/classes/class-astra-sites.php:1859
 #, php-format
 msgid "%1$sRead&nbsp;<a href=\"%2$s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.%3$s"
 msgstr "%1$sLees&nbsp;<a href=\"%2$s\" target=\"_blank\">artikel</a>&nbsp;om het probleem op te lossen en verder te gaan met het importeren van de sjabloon.%3$s"
-
-#. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1868
-#, php-format
-msgid "%1$sWe could not complete the import process due to failed AJAX request and this is the message:%2$s"
-msgstr "%1$sWe konden het importproces niet voltooien vanwege een mislukte AJAX-aanvraag en dit is het bericht:%2$s"
 
 #. translators: %s URL to document.
 #: inc/classes/class-astra-sites.php:1870
@@ -753,11 +676,6 @@ msgstr "Schakel het uit om door te gaan met het importeren van de Starter Templa
 #: inc/classes/class-astra-sites.php:2114
 msgid "Update Plugin"
 msgstr "Plugin bijwerken"
-
-#. translators: %s update page link.
-#: inc/classes/class-astra-sites.php:2116
-msgid "Updates are available for plugins used in this starter template."
-msgstr "Er zijn updates beschikbaar voor plugins die in deze startertemplate worden gebruikt."
 
 #. translators: %s update page link.
 #: inc/classes/class-astra-sites.php:2116
@@ -1034,7 +952,6 @@ msgstr "Overslaan & Importeren"
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
 #: inc/lib/gutenberg-templates/dist/main.js:2
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
 msgid "Cancel"
 msgstr "Annuleren"
@@ -1100,12 +1017,10 @@ msgstr "Ontgrendel Volledige Kracht"
 msgid "Contact Support"
 msgstr "Neem contact op met de ondersteuning"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:229
 #: inc/lib/ai-builder/inc/ajax/ajax-errors.php:40
 msgid "Sorry, you are not allowed to do this operation."
 msgstr "Sorry, je mag deze bewerking niet uitvoeren."
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:242
 #: inc/lib/ai-builder/inc/ajax/ajax-errors.php:41
 msgid "Nonce validation failed"
 msgstr "Nonce-validatie mislukt"
@@ -1115,32 +1030,22 @@ msgstr "Nonce-validatie mislukt"
 msgid "Sorry, something went wrong."
 msgstr "Sorry, er is iets misgegaan."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:348
 #: inc/lib/ai-builder/inc/traits/helper.php:281
-#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:144
 msgid "Permission Denied!"
 msgstr "Toestemming geweigerd!"
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:372
-msgid "There was an error importing the Spectra settings."
-msgstr "Er is een fout opgetreden bij het importeren van de Spectra-instellingen."
-
-#: inc/lib/ai-builder/inc/ajax/importer.php:396
-msgid "There was an error cloning the surecart store."
-msgstr "Er is een fout opgetreden bij het klonen van de surecart-winkel."
-
-#: inc/lib/ai-builder/inc/ajax/importer.php:445
-#: inc/lib/ai-builder/inc/ajax/importer.php:483
+#: inc/lib/ai-builder/inc/ajax/importer.php:542
+#: inc/lib/ai-builder/inc/ajax/importer.php:580
 #: inc/lib/ai-builder/inc/ajax/plugin.php:129
 msgid "Required function not found"
 msgstr "Vereiste functie niet gevonden"
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:524
+#: inc/lib/ai-builder/inc/ajax/importer.php:621
 #: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-fse-importer.php:43
 msgid "You are not authorized to perform this action."
 msgstr "U bent niet gemachtigd om deze actie uit te voeren."
 
-#: inc/lib/ai-builder/inc/ajax/importer.php:534
+#: inc/lib/ai-builder/inc/ajax/importer.php:631
 #: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-fse-importer.php:53
 msgid "Received empty parameters."
 msgstr "Ontvangen lege parameters."
@@ -1225,19 +1130,18 @@ msgid "Nonce verification failed."
 msgstr "Verificatie van nonce mislukt."
 
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:954
-#: inc/lib/starter-templates-importer/importer/st-importer.php:242
+#: inc/lib/starter-templates-importer/importer/st-importer.php:282
 msgid "There was an error downloading the XML file."
 msgstr "Er is een fout opgetreden bij het downloaden van het XML-bestand."
 
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:966
-#: inc/lib/ai-builder/inc/traits/helper.php:635
-#: inc/lib/ai-builder/inc/traits/helper.php:671
-#: inc/lib/ai-builder/inc/traits/helper.php:714
-#: inc/lib/ai-builder/inc/traits/helper.php:752
-#: inc/lib/ai-builder/inc/traits/helper.php:787
-#: inc/lib/ai-builder/inc/traits/helper.php:821
-#: inc/lib/ai-builder/inc/traits/helper.php:854
-#: inc/lib/ai-builder/inc/traits/helper.php:897
+#: inc/lib/ai-builder/inc/traits/helper.php:656
+#: inc/lib/ai-builder/inc/traits/helper.php:692
+#: inc/lib/ai-builder/inc/traits/helper.php:735
+#: inc/lib/ai-builder/inc/traits/helper.php:828
+#: inc/lib/ai-builder/inc/traits/helper.php:862
+#: inc/lib/ai-builder/inc/traits/helper.php:895
+#: inc/lib/ai-builder/inc/traits/helper.php:938
 msgid "Required class not found."
 msgstr "Vereiste klasse niet gevonden."
 
@@ -1251,31 +1155,27 @@ msgstr "U heeft geen toestemming om deze actie uit te voeren."
 msgid "Please contact the hosting service provider to help you update the permissions so that you can successfully import a complete template."
 msgstr "Neem contact op met de hostingdienstverlener om u te helpen de permissies bij te werken, zodat u met succes een volledige sjabloon kunt importeren."
 
-#: inc/lib/ai-builder/inc/traits/helper.php:475
+#: inc/lib/ai-builder/inc/traits/helper.php:489
 msgid "Insufficient Permission. Please contact your Super Admin to allow the install required plugin permissions."
 msgstr "Onvoldoende toestemming. Neem contact op met uw Super Admin om de vereiste plug-in toestemmingen voor installatie toe te staan."
 
-#: inc/lib/ai-builder/inc/traits/helper.php:537
-msgid "Error: You don't have the required permissions to install plugins."
-msgstr "Fout: U heeft niet de vereiste rechten om plugins te installeren."
-
-#: inc/lib/ai-builder/inc/traits/helper.php:613
+#: inc/lib/ai-builder/inc/traits/helper.php:634
 msgid "Plugin Activated"
 msgstr "Plugin geactiveerd"
 
-#: inc/lib/ai-builder/inc/traits/helper.php:630
+#: inc/lib/ai-builder/inc/traits/helper.php:651
 msgid "User does not have permission!"
 msgstr "Gebruiker heeft geen toestemming!"
 
-#: inc/lib/ai-builder/inc/traits/helper.php:687
+#: inc/lib/ai-builder/inc/traits/helper.php:708
 msgid "Site options Imported!"
 msgstr "Site-opties geïmporteerd!"
 
-#: inc/lib/ai-builder/inc/traits/helper.php:862
+#: inc/lib/ai-builder/inc/traits/helper.php:903
 msgid "Deleted Widgets!"
 msgstr "Verwijderde widgets!"
 
-#: inc/lib/ai-builder/inc/traits/helper.php:893
+#: inc/lib/ai-builder/inc/traits/helper.php:934
 msgid "Customizer data is empty!"
 msgstr "De gegevens van de aanpasser zijn leeg!"
 
@@ -1346,17 +1246,13 @@ msgstr "De Zip AI Middleware reageert niet."
 msgid "The Zip AI Middleware encountered an error."
 msgstr "De Zip AI Middleware heeft een fout ondervonden."
 
-#: inc/lib/onboarding/class-onboarding-loader.php:343
+#: inc/lib/onboarding/class-onboarding-loader.php:346
 msgid "Disable Elementor Page Builder Templates in Starter Templates"
 msgstr "Elementor Page Builder-sjablonen uitschakelen in Starter Templates"
 
-#: inc/lib/onboarding/class-onboarding-loader.php:350
+#: inc/lib/onboarding/class-onboarding-loader.php:353
 msgid "Disable Beaver Builder Page Builder Templates in Starter Templates"
 msgstr "Schakel Beaver Builder Page Builder-sjablonen uit in Starter Templates"
-
-#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:75
-msgid "The XMLReader library is not available. This library is required to import the content for the website."
-msgstr "De XMLReader-bibliotheek is niet beschikbaar. Deze bibliotheek is vereist om de inhoud voor de website te importeren."
 
 #: inc/lib/starter-templates-importer/importer/batch/st-batch-processing-elementor.php:76
 #: inc/lib/starter-templates-importer/importer/batch/st-batch-processing-gutenberg.php:108
@@ -1409,61 +1305,58 @@ msgstr "Alle processen zijn voltooid"
 msgid "Every %d Minutes"
 msgstr "Elke %d minuten"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:61
+#: inc/lib/starter-templates-importer/importer/st-importer.php:62
 msgid "uuid is empty."
 msgstr "uuid is leeg."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:74
+#: inc/lib/starter-templates-importer/importer/st-importer.php:75
 msgid "Import process start flof set successfully."
 msgstr "Importproces start flof succesvol ingesteld."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:91
-msgid "Can't import Spectra Settings. Spectra Plugin is not activated."
-msgstr "Kan Spectra-instellingen niet importeren. Spectra-plugin is niet geactiveerd."
-
-#: inc/lib/starter-templates-importer/importer/st-importer.php:98
+#: inc/lib/starter-templates-importer/importer/st-importer.php:123
 msgid "Spectra settings are empty."
 msgstr "Spectra-instellingen zijn leeg."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:106
+#: inc/lib/ai-builder/inc/ajax/importer.php:415
+#: inc/lib/starter-templates-importer/importer/st-importer.php:132
 msgid "Spectra settings imported successfully."
 msgstr "Spectra-instellingen succesvol geïmporteerd."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:124
+#: inc/lib/starter-templates-importer/importer/st-importer.php:156
 msgid "SureCart\\Models\\ProvisionalAccount::create function is not callable."
 msgstr "SureCart\\Models\\ProvisionalAccount::create functie is niet aanroepbaar."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:145
+#: inc/lib/starter-templates-importer/importer/st-importer.php:177
 msgid "Id is empty."
 msgstr "Id is leeg."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:180
+#: inc/lib/starter-templates-importer/importer/st-importer.php:212
 msgid "Customizer data is empty."
 msgstr "De gegevens van de aanpasser zijn leeg."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:198
+#: inc/lib/starter-templates-importer/importer/st-importer.php:230
 msgid "Customizer data imported successfully."
 msgstr "Customizer-gegevens succesvol geïmporteerd."
 
 #. Translators: %s is WXR URL.
-#: inc/lib/starter-templates-importer/importer/st-importer.php:217
+#: inc/lib/starter-templates-importer/importer/st-importer.php:249
 #, php-format
 msgid "Invalid WXR Request URL - %s"
 msgstr "Ongeldige WXR-verzoek-URL - %s"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:309
+#: inc/lib/starter-templates-importer/importer/st-importer.php:354
 msgid "Site options are empty!"
 msgstr "Site-opties zijn leeg!"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:360
+#: inc/lib/starter-templates-importer/importer/st-importer.php:405
 msgid "Options imported successfully."
 msgstr "Opties succesvol geïmporteerd."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:393
+#: inc/lib/starter-templates-importer/importer/st-importer.php:438
 msgid "Widget data is empty!"
 msgstr "Widgetgegevens zijn leeg!"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:402
+#: inc/lib/starter-templates-importer/importer/st-importer.php:447
 msgid "Widgets imported successfully."
 msgstr "Widgets succesvol geïmporteerd."
 
@@ -1667,7 +1560,7 @@ msgstr "Reactie %1$d is geïmporteerd met auteur %2$d, maar kon niet worden gevo
 msgid "Could not update comment #%d with mapped data"
 msgstr "Kon opmerking #%d niet bijwerken met gemapte gegevens"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:843
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:979
 msgid "Import complete!"
 msgstr "Import voltooid!"
 
@@ -3285,7 +3178,6 @@ msgid "Buy AI Credits"
 msgstr "Koop AI-credits"
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
 msgid "Revoke Access"
 msgstr "Toegang intrekken"
 
@@ -3298,7 +3190,6 @@ msgid "You will need to re-authorize Zip to use it again."
 msgstr "U moet Zip opnieuw autoriseren om het weer te gebruiken."
 
 #: inc/lib/gutenberg-templates/dist/main.js:2
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
 msgid "Revoke"
 msgstr "Intrekken"
 
@@ -4427,7 +4318,6 @@ msgstr "Vertaal uw pagina's"
 msgid "Write Content for Pages"
 msgstr "Inhoud schrijven voor pagina's"
 
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Generate Custom Code"
 msgstr "Genereer Aangepaste Code"
@@ -4577,7 +4467,7 @@ msgstr "Kies een maat:"
 msgid "Back to All Images"
 msgstr "Terug naar alle afbeeldingen"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:157
+#: inc/lib/starter-templates-importer/importer/st-importer.php:189
 msgid "Account is already created."
 msgstr "Account is al aangemaakt."
 
@@ -4588,41 +4478,6 @@ msgstr "Het lijkt erop dat je al een website hebt gemaakt met Starter Templates.
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:141
 msgid "Keep existing data!"
 msgstr "Behoud bestaande gegevens!"
-
-#: admin/bsf-analytics/class-bsf-analytics.php:244
-msgid "This will be applicable for all sites from the network."
-msgstr "Dit zal van toepassing zijn op alle sites van het netwerk."
-
-#. translators: %s usage doc link
-#: admin/bsf-analytics/class-bsf-analytics.php:268
-msgid " Know More."
-msgstr "Meer weten."
-
-#: admin/bsf-analytics/class-bsf-analytics.php:278
-msgid "Yes! Allow it"
-msgstr "Ja! Sta het toe"
-
-#: admin/bsf-analytics/class-bsf-analytics.php:289
-msgid "No Thanks"
-msgstr "Nee bedankt"
-
-#: admin/bsf-analytics/class-bsf-analytics.php:414
-msgid "Usage Tracking"
-msgstr "Gebruikstracering"
-
-#. translators: %s Product title
-#: admin/bsf-analytics/class-bsf-analytics.php:458
-#, php-format
-msgid "Allow %s products to track non-sensitive usage tracking data."
-msgstr "Sta %s producten toe om niet-gevoelige gebruiksgegevens bij te houden."
-
-#: admin/bsf-analytics/class-bsf-analytics.php:461
-msgid " This will be applicable for all sites from the network."
-msgstr "Dit zal van toepassing zijn op alle sites van het netwerk."
-
-#: admin/bsf-analytics/class-bsf-analytics.php:466
-msgid "Learn More."
-msgstr "Meer informatie."
 
 #: inc/lib/gutenberg-templates/inc/block/dist/index.js:1
 msgid "Spectra AI Block"
@@ -4635,122 +4490,6 @@ msgstr "Ik ben een student die in Nederland studeert."
 #: inc/lib/gutenberg-templates/inc/block/dist/index.js:1
 msgid "Template Kits"
 msgstr "Sjabloonpakketten"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Get Started Now"
-msgstr "Begin nu"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Go back to the dashboard"
-msgstr "Ga terug naar het dashboard"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Welcome to the Zip AI Setup Wizard!"
-msgstr "Welkom bij de Zip AI Installatiewizard!"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Zip AI is your WordPress assistant, accessible right within your backend. Create persuasive content, generate custom code, and get answers to your WordPress queries in seconds. The possibilities are endless!"
-msgstr "Zip AI is je WordPress-assistent, direct toegankelijk binnen je backend. Creëer overtuigende content, genereer aangepaste code en krijg binnen enkele seconden antwoorden op je WordPress-vragen. De mogelijkheden zijn eindeloos!"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Craft Compelling Content"
-msgstr "Creëer Aansprekende Inhoud"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "With Zip, you can effortlessly create persuasive, engaging copy that resonates with your audience."
-msgstr "Met Zip kun je moeiteloos overtuigende, boeiende teksten maken die resoneren met je publiek."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "AI-Powered Block Patterns"
-msgstr "AI-aangedreven blokpatronen"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Zip can personalize and customize the block patterns and section templates tailored to your website's unique needs."
-msgstr "Zip kan de blokpatronen en sectiesjablonen personaliseren en aanpassen aan de unieke behoeften van uw website."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "WordPress Wizardry"
-msgstr "WordPress Toverkunst"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Got questions? Zip has the answers. Whether it's troubleshooting, or customizing your site, Zip has your back."
-msgstr "Vragen? Zip heeft de antwoorden. Of het nu gaat om probleemoplossing of het aanpassen van je site, Zip staat voor je klaar."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Personalized Templates"
-msgstr "Gepersonaliseerde sjablonen"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Say goodbye to generic designs and say hello to Zip's personalized page templates, tailored just for you."
-msgstr "Zeg vaarwel tegen generieke ontwerpen en zeg hallo tegen Zip's gepersonaliseerde paginasjablonen, speciaal voor jou op maat gemaakt."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "No more struggling with complex coding issues. Zip can whip up custom code, functions, and CSS tailored to your needs."
-msgstr "Geen gedoe meer met complexe codeerproblemen. Zip kan op maat gemaakte code, functies en CSS creëren die aan uw behoeften voldoen."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-msgid "Custom Pages with AI"
-msgstr "Aangepaste pagina's met AI"
-
-#. translators: %s: Percentage Ascii Code
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:2
-#, js-format
-msgid "With Zip AI by your side, you can create beautiful, 100%s custom web pages without the need for any design or coding skills."
-msgstr "Met Zip AI aan je zijde kun je prachtige, 100%s op maat gemaakte webpagina's maken zonder dat je ontwerp- of programmeervaardigheden nodig hebt."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:2
-msgid "From the Team Behind Some Iconic WordPress Products"
-msgstr "Van het team achter enkele iconische WordPress-producten"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:2
-msgid "Visit Website"
-msgstr "Bezoek website"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:2
-msgid "Words Written"
-msgstr "Woorden Geschreven"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:2
-msgid "Get more Credits"
-msgstr "Verkrijg meer credits"
-
-#. translators: %s: number of words
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-#, js-format
-msgid "of %s"
-msgstr "van %s"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-msgid "Enable Zip AI"
-msgstr "Zip AI inschakelen"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-msgid "You can easily enable or disable Zip AI from this section. Simply toggle the switch on or off with a single click."
-msgstr "U kunt Zip AI eenvoudig in- of uitschakelen vanuit dit gedeelte. Schakel de schakelaar eenvoudig in of uit met één klik."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-msgid "Zip is Authorized"
-msgstr "Zip is geautoriseerd"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-msgid "Your website is connected to AI. You can disconnect at any time."
-msgstr "Uw website is verbonden met AI. U kunt op elk moment de verbinding verbreken."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-msgid "Are you sure you want to disconnect?"
-msgstr "Weet je zeker dat je de verbinding wilt verbreken?"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-msgid "You will need to reconnect to use AI features again."
-msgstr "U moet opnieuw verbinding maken om AI-functies weer te gebruiken."
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-msgid "Default route fallback"
-msgstr "Standaardroute-terugval"
-
-#: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:3
-msgid "Zip - Your AI Assistant"
-msgstr "Zip - Je AI-assistent"
 
 #. translators: %s Anchor link to support URL.
 #: inc/classes/class-astra-sites.php:1875
@@ -4997,75 +4736,10 @@ msgstr "Vraag me wat je nodig hebt."
 msgid "Get More Credits"
 msgstr "Meer credits krijgen"
 
-#: admin/bsf-analytics/classes/class-bsf-analytics-helper.php:28
-msgid "Oops! Something went wrong. Please refresh the page and try again."
-msgstr "Oeps! Er is iets misgegaan. Vernieuw de pagina en probeer het opnieuw."
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:80
 #: astra-sites.php:145
 msgid "Quick Feedback"
 msgstr "Snelle feedback"
 
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:83
-msgid "If you have a moment, please share why you are deactivating the plugin."
-msgstr "Als je een moment hebt, deel dan alsjeblieft waarom je de plugin deactiveert."
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:112
-msgid "Icon"
-msgstr "Icoon"
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:139
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:314
-msgid "Please tell us more details."
-msgstr "Vertel ons alstublieft meer details."
-
-#. translators: %1$s: link html start, %2$s: link html end
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:148
-#, php-format
-msgid "Need help from our experts? %1$sClick here to contact us.%2$s"
-msgstr "Hulp nodig van onze experts? %1$sKlik hier om contact met ons op te nemen.%2$s"
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:159
-msgid "Submit & Deactivate"
-msgstr "Indienen & Deactiveren"
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:160
-msgid "Skip & Deactivate"
-msgstr "Overslaan & Deactiveren"
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:289
-msgid "This is a temporary deactivation for testing."
-msgstr "Dit is een tijdelijke deactivering voor testen."
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:290
-msgid "How can we assist you?"
-msgstr "Hoe kunnen we u helpen?"
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:295
-msgid "The plugin isn't working properly."
-msgstr "De plugin werkt niet goed."
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:296
-msgid "Please tell us more about what went wrong?"
-msgstr "Kunt u ons meer vertellen over wat er misging?"
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:301
-msgid "I found a better alternative plugin."
-msgstr "Ik heb een beter alternatief plugin gevonden."
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:302
-msgid "Could you please specify which plugin?"
-msgstr "Kunt u alstublieft specificeren welke plugin?"
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:307
-msgid "It's missing a specific feature."
-msgstr "Het mist een specifieke functie."
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:308
-msgid "Please tell us more about the feature."
-msgstr "Vertel ons alstublieft meer over de functie."
-
-#: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:313
 #: inc/classes/class-astra-sites-astra-onboarding.php:237
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "Other"
@@ -5074,23 +4748,6 @@ msgstr "Anders"
 #: astra-sites.php:147
 msgid "If you have a moment, please share why you are deactivating Starter Templates:"
 msgstr "Als je een moment hebt, deel dan alsjeblieft waarom je Starter Templates deactiveert:"
-
-#: inc/classes/class-astra-sites-importer.php:572
-msgid "Invalid file for Latepoint tables"
-msgstr "Ongeldig bestand voor Latepoint-tabellen"
-
-#: inc/classes/class-astra-sites-importer.php:575
-#: inc/classes/class-astra-sites-importer.php:578
-msgid "There was an error downloading the Latepoint tables file."
-msgstr "Er is een fout opgetreden bij het downloaden van het Latepoint-tabellenbestand."
-
-#: inc/classes/class-astra-sites-importer.php:581
-msgid "Empty file for Latepoint tables"
-msgstr "Leeg bestand voor Latepoint-tabellen"
-
-#: inc/classes/class-astra-sites.php:371
-msgid "An error occurred due to insufficient memory. Please increase the memory limit on the server to resolve this issue"
-msgstr "Er is een fout opgetreden door onvoldoende geheugen. Verhoog de geheugengrens op de server om dit probleem op te lossen"
 
 #. translators: %1$s is a terms link, %2$s is a privacy policy link
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:150
@@ -5130,16 +4787,11 @@ msgstr "Afspraken & Boekingen"
 msgid "Easily manage bookings for your services"
 msgstr "Beheer eenvoudig boekingen voor uw diensten"
 
-#: admin/bsf-analytics/class-bsf-analytics.php:238
-#, php-format
-msgid "Help us improve %1$s and our other products!<br><br>With your permission, we'd like to collect <strong>non-sensitive information</strong> from your website — like your PHP version and which features you use — so we can fix bugs faster, make smarter decisions, and build features that actually matter to you. <em>No personal info. Ever.</em>"
-msgstr "Help ons om %1$s en onze andere producten te verbeteren!<br><br>Met uw toestemming willen we <strong>niet-gevoelige informatie</strong> van uw website verzamelen — zoals uw PHP-versie en welke functies u gebruikt — zodat we sneller bugs kunnen oplossen, slimmere beslissingen kunnen nemen en functies kunnen bouwen die echt belangrijk voor u zijn. <em>Nooit persoonlijke info. Ooit.</em>"
-
-#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:114
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:129
 msgid "Missing required parameter."
 msgstr "Ontbrekende vereiste parameter."
 
-#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:121
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:136
 msgid "Usage tracking updated successfully."
 msgstr "Gebruikstracering succesvol bijgewerkt."
 
@@ -5328,18 +4980,6 @@ msgstr "Verzamel niet-gevoelige informatie van je website, zoals de PHP-versie e
 msgid "Contribute to %s"
 msgstr "Draag bij aan %s"
 
-#: inc/classes/class-astra-sites-importer.php:518
-msgid "Invalid file for Cart Abandonment Recovery data."
-msgstr "Ongeldig bestand voor gegevensherstel bij winkelwagenverlating."
-
-#: inc/classes/class-astra-sites-importer.php:521
-msgid "There was an error downloading the Cart Abandonment Recovery data file."
-msgstr "Er was een fout bij het downloaden van het gegevensbestand voor herstel bij winkelwagenverlating."
-
-#: inc/classes/class-astra-sites-importer.php:524
-msgid "Empty file for Cart Abandonment Recovery data."
-msgstr "Leeg bestand voor gegevensherstel bij winkelwagenverlating."
-
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Importing Cart Abandonment Recovery data."
 msgstr "Gegevensherstel bij winkelwagenverlating importeren."
@@ -5352,7 +4992,7 @@ msgstr "Het importeren van gegevensherstel bij winkelwagenverlating is mislukt v
 msgid "Importing Cart Abandonment Recovery data Failed."
 msgstr "Het importeren van gegevensherstel bij winkelwagenverlating is mislukt."
 
-#: inc/lib/ai-builder/inc/traits/helper.php:551
+#: inc/lib/ai-builder/inc/traits/helper.php:572
 msgid "This plugin requires WooCommerce to be installed and activated first."
 msgstr "Deze plugin vereist dat WooCommerce eerst geïnstalleerd en geactiveerd is."
 
@@ -5713,250 +5353,150 @@ msgstr "Begin Online Te Verkopen"
 msgid "Level Up Your Site"
 msgstr "Verhoog Uw Site"
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:75
-msgid "Security verification failed. Please refresh the page and try again."
-msgstr "Beveiligingsverificatie mislukt. Vernieuw de pagina en probeer het opnieuw."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:121
+#. translators: %s is the plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:122
 #, php-format
 msgid "%s plugin is already installed."
 msgstr "%s plugin is al geïnstalleerd."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:154
-#, php-format
-msgid "Plugin %s was installed but could not locate plugin file."
-msgstr "Plugin %s is geïnstalleerd maar kon het pluginbestand niet vinden."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:164
+#. translators: %s is the plugin slug.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:169
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:179
 #, php-format
 msgid "%s plugin installed successfully."
 msgstr "%s plugin succesvol geïnstalleerd."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:182
-msgid "An unexpected error occurred during plugin installation."
-msgstr "Er is een onverwachte fout opgetreden tijdens de installatie van de plugin."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:228
-msgid "You do not have permissions to install plugins."
-msgstr "U heeft geen toestemming om plugins te installeren."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:236
-msgid "You must be logged in to install plugins."
-msgstr "U moet ingelogd zijn om plugins te installeren."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:254
-msgid "Plugin slug is required."
-msgstr "Plugin-slug is vereist."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:262
-msgid "Plugin slug contains invalid characters."
-msgstr "Plugin-slug bevat ongeldige tekens."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:350
-msgid "Plugin slug and name are required for installation."
-msgstr "Plugin-slug en naam zijn vereist voor installatie."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:375
-#, php-format
-msgid "Unexpected error during %s plugin installation: %s"
-msgstr "Onverwachte fout tijdens %s plugin installatie: %s"
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:390
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:400
 msgid "Please try the installation again."
 msgstr "Probeer de installatie opnieuw."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:391
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:401
 msgid "If the problem persists, try installing the plugin manually from the WordPress admin."
 msgstr "Als het probleem aanhoudt, probeer de plugin dan handmatig te installeren vanuit de WordPress-beheerder."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:392
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:905
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:402
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:967
 msgid "Contact your hosting provider if you continue to experience issues."
 msgstr "Neem contact op met uw hostingprovider als u problemen blijft ondervinden."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:419
-#, php-format
-msgid "Failed to load required WordPress files: %s"
-msgstr "Kon vereiste WordPress-bestanden niet laden: %s"
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:471
-#, php-format
-msgid "Plugin API request failed after %d attempts: %s"
-msgstr "Plugin API-verzoek mislukt na %d pogingen: %s"
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:480
-#, php-format
-msgid "Could not retrieve plugin information for %s"
-msgstr "Kon geen plugin-informatie ophalen voor %s"
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:494
-#, php-format
-msgid "Could not connect to WordPress.org plugin repository for %s. Please check your internet connection and try again."
-msgstr "Kon geen verbinding maken met de WordPress.org plugin repository voor %s. Controleer uw internetverbinding en probeer het opnieuw."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:500
-#, php-format
-msgid "Plugin %s was not found in the WordPress.org repository. Please verify the plugin name and try again."
-msgstr "Plugin %s werd niet gevonden in de WordPress.org-repository. Controleer de pluginnaam en probeer het opnieuw."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:506
-#, php-format
-msgid "Could not retrieve plugin information for %s from WordPress.org. Error: %s"
-msgstr "Kon geen plugininformatie voor %s ophalen van WordPress.org. Fout: %s"
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:530
-#, php-format
-msgid "Received invalid response from WordPress.org for plugin %s."
-msgstr "Ongeldig antwoord ontvangen van WordPress.org voor plugin %s."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:540
-#, php-format
-msgid "Could not find download URL for %s. The plugin may not be available in WordPress.org repository or may be a premium plugin."
-msgstr "Kon geen download-URL vinden voor %s. De plugin is mogelijk niet beschikbaar in de WordPress.org-repository of is een premium plugin."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:598
-#, php-format
-msgid "Failed to initialize plugin installer for %s: %s"
-msgstr "Kon plugininstaller voor %s niet initialiseren: %s"
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:615
-#, php-format
-msgid "Plugin %s installation failed with exception: %s"
-msgstr "Installatie van plugin %s is mislukt met uitzondering: %s"
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:652
-#, php-format
-msgid "Plugin %s installation failed: Unknown error occurred during installation. Please try again or install the plugin manually."
-msgstr "Installatie van plugin %s is mislukt: Er is een onbekende fout opgetreden tijdens de installatie. Probeer het opnieuw of installeer de plugin handmatig."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:656
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:864
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:701
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:926
 msgid "Try refreshing the page and attempting the installation again."
 msgstr "Probeer de pagina te vernieuwen en de installatie opnieuw te proberen."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:657
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:702
 msgid "Check if you have sufficient permissions to install plugins."
 msgstr "Controleer of u voldoende rechten heeft om plugins te installeren."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:658
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:703
 msgid "Verify that your WordPress installation has write permissions to the plugins directory."
 msgstr "Controleer of uw WordPress-installatie schrijfrechten heeft voor de plugins-directory."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:694
-#, php-format
-msgid "Plugin %s requires WordPress version %s or higher. You are currently running version %s. Please update WordPress first."
-msgstr "Plugin %s vereist WordPress-versie %s of hoger. U gebruikt momenteel versie %s. Update WordPress eerst."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:708
-#, php-format
-msgid "Plugin %s requires PHP version %s or higher. You are currently running version %s. Please contact your hosting provider to upgrade PHP."
-msgstr "Plugin %s vereist PHP-versie %s of hoger. U gebruikt momenteel versie %s. Neem contact op met uw hostingprovider om PHP te upgraden."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:736
-#, php-format
-msgid "Insufficient disk space to install %s. At least 50MB of free space is required. Please free up some disk space and try again."
-msgstr "Onvoldoende schijfruimte om %s te installeren. Er is minimaal 50MB vrije ruimte vereist. Maak wat schijfruimte vrij en probeer het opnieuw."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:761
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:812
 #, php-format
 msgid "Plugin %s installation verification failed: Plugin directory not found after installation. The installation may have been incomplete."
 msgstr "Installatieverificatie van plugin %s is mislukt: Plugindirectory niet gevonden na installatie. De installatie is mogelijk onvolledig geweest."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:772
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:824
 #, php-format
 msgid "Plugin %s installation verification failed: Could not locate main plugin file after installation."
 msgstr "Installatieverificatie van plugin %s is mislukt: Kon het hoofdpluginbestand niet vinden na installatie."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:783
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:836
 #, php-format
 msgid "Plugin %s installation verification failed: Plugin file exists but is not readable. Please check file permissions."
 msgstr "Installatieverificatie van plugin %s is mislukt: Pluginbestand bestaat maar is niet leesbaar. Controleer de bestandsrechten."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:803
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:858
 #, php-format
 msgid "Plugin %s installation failed: Plugin folder already exists. This usually means the plugin is already installed. Try refreshing the plugins page to see if it appears."
 msgstr "Installatie van plugin %s is mislukt: Pluginmap bestaat al. Dit betekent meestal dat de plugin al is geïnstalleerd. Probeer de pluginpagina te vernieuwen om te zien of deze verschijnt."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:810
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:866
 #, php-format
 msgid "Plugin %s installation failed: WordPress does not have permission to write files. Please check that your web server has write permissions to the plugins directory (/wp-content/plugins/), or contact your hosting provider for assistance."
 msgstr "Installatie van plugin %s is mislukt: WordPress heeft geen toestemming om bestanden te schrijven. Controleer of uw webserver schrijfrechten heeft voor de plugins-directory (/wp-content/plugins/), of neem contact op met uw hostingprovider voor hulp."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:817
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:874
 #, php-format
 msgid "Plugin %s installation failed: Filesystem is not accessible. This is usually a server configuration issue. Please contact your hosting provider to resolve filesystem access problems."
 msgstr "Installatie van plugin %s is mislukt: Bestandsysteem is niet toegankelijk. Dit is meestal een serverconfiguratieprobleem. Neem contact op met uw hostingprovider om problemen met de toegang tot het bestandsysteem op te lossen."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:824
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:882
 #, php-format
 msgid "Plugin %s installation failed: Could not download plugin file from WordPress.org. Please check your internet connection and try again. If the problem persists, your server may be blocking outbound connections."
 msgstr "Plugin %s installatie mislukt: Kan het pluginbestand niet downloaden van WordPress.org. Controleer uw internetverbinding en probeer het opnieuw. Als het probleem aanhoudt, kan het zijn dat uw server uitgaande verbindingen blokkeert."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:831
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:890
 #, php-format
 msgid "Plugin %s installation failed: The downloaded plugin file appears to be corrupted or invalid. Please try the installation again."
 msgstr "Plugin %s installatie mislukt: Het gedownloade pluginbestand lijkt beschadigd of ongeldig. Probeer de installatie opnieuw."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:837
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:897
 #, php-format
 msgid "Plugin %s installation failed: Could not create plugin directory. Please check that your web server has write permissions to the plugins directory."
 msgstr "Plugin %s installatie mislukt: Kan de plugindirectory niet aanmaken. Controleer of uw webserver schrijfrechten heeft voor de plugindirectory."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:843
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:904
 #, php-format
 msgid "Plugin %s installation failed: Could not copy plugin files. This may be due to insufficient disk space or file permission issues."
 msgstr "Plugin %s installatie mislukt: Kan pluginbestanden niet kopiëren. Dit kan te wijten zijn aan onvoldoende schijfruimte of problemen met bestandsrechten."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:849
-#, php-format
-msgid "Plugin %s installation failed: %s. Please try again or install the plugin manually from the WordPress admin area."
-msgstr "Plugin %s installatie mislukt: %s. Probeer het opnieuw of installeer de plugin handmatig vanuit het WordPress-beheergebied."
-
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:865
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:927
 msgid "If the problem persists, try installing the plugin manually from WordPress admin > Plugins > Add New."
 msgstr "Als het probleem aanhoudt, probeer de plugin dan handmatig te installeren via WordPress beheer > Plugins > Nieuwe toevoegen."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:871
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:933
 msgid "Check if the plugin is already installed by going to Plugins > Installed Plugins."
 msgstr "Controleer of de plugin al is geïnstalleerd door naar Plugins > Geïnstalleerde plugins te gaan."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:872
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:934
 msgid "If the plugin appears but is not working, try deactivating and reactivating it."
 msgstr "Als de plugin verschijnt maar niet werkt, probeer deze dan te deactiveren en opnieuw te activeren."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:882
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:944
 msgid "Contact your hosting provider to check file permissions for the /wp-content/plugins/ directory."
 msgstr "Neem contact op met uw hostingprovider om de bestandsrechten voor de /wp-content/plugins/ directory te controleren."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:883
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:945
 msgid "Ensure your web server has write permissions to the WordPress installation directory."
 msgstr "Zorg ervoor dat uw webserver schrijfrechten heeft voor de WordPress-installatiemap."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:884
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:946
 msgid "Check if there is sufficient disk space available on your server."
 msgstr "Controleer of er voldoende schijfruimte beschikbaar is op uw server."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:890
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:952
 msgid "Check your internet connection and try again."
 msgstr "Controleer uw internetverbinding en probeer het opnieuw."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:891
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:953
 msgid "Contact your hosting provider if your server is blocking outbound connections to WordPress.org."
 msgstr "Neem contact op met uw hostingprovider als uw server uitgaande verbindingen naar WordPress.org blokkeert."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:892
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:954
 msgid "Try installing the plugin at a different time when server load might be lower."
 msgstr "Probeer de plugin op een ander tijdstip te installeren wanneer de serverbelasting mogelijk lager is."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:898
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:960
 msgid "The plugin download may have been corrupted. Try the installation again."
 msgstr "Het downloaden van de plugin kan beschadigd zijn. Probeer de installatie opnieuw."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:899
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:961
 msgid "Clear your browser cache and try again."
 msgstr "Wis uw browsercache en probeer het opnieuw."
 
-#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:904
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:966
 msgid "Check the WordPress error logs for more detailed information about the failure."
 msgstr "Controleer de WordPress-foutlogboeken voor meer gedetailleerde informatie over de storing."
 
@@ -6064,6 +5604,7 @@ msgid "Network error occurred during plugin installation."
 msgstr "Netwerkfout opgetreden tijdens plugin-installatie."
 
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:162
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
 msgid "Please check your internet connection and try again."
 msgstr "Controleer uw internetverbinding en probeer het opnieuw."
 
@@ -6624,6 +6165,635 @@ msgstr "Wat je hierna kunt doen:"
 #, js-format
 msgid "By submitting, you agree to our %s"
 msgstr "Door te verzenden, ga je akkoord met onze %s"
+
+#: inc/classes/class-astra-sites-importer.php:93
+msgid "Permission denied: You don't have the required capability to delete imported posts. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet de vereiste bevoegdheid om geïmporteerde berichten te verwijderen. Neem contact op met uw sitebeheerder."
+
+#: inc/classes/class-astra-sites-importer.php:137
+msgid "Permission denied: You don't have the required capability to delete imported forms. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet de vereiste bevoegdheid om geïmporteerde formulieren te verwijderen. Neem contact op met uw sitebeheerder."
+
+#: inc/classes/class-astra-sites-importer.php:176
+msgid "Permission denied: You don't have the required capability to delete imported terms. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet de vereiste bevoegdheid om geïmporteerde termen te verwijderen. Neem contact op met uw sitebeheerder."
+
+#. translators: %s: URL
+#: inc/classes/class-astra-sites-importer.php:339
+#, php-format
+msgid "Invalid URL format - %s"
+msgstr "Ongeldig URL-formaat - %s"
+
+#. translators: %s: URL
+#: inc/classes/class-astra-sites-importer.php:351
+#, php-format
+msgid "Invalid data file URL - %s"
+msgstr "Ongeldige gegevensbestand-URL - %s"
+
+#: inc/classes/class-astra-sites-importer.php:363
+#: inc/lib/starter-templates-importer/importer/st-importer.php:298
+msgid "Could not download data file. Please check your internet connection and try again."
+msgstr "Kon het databestand niet downloaden. Controleer uw internetverbinding en probeer het opnieuw."
+
+#. translators: %s: Error message
+#: inc/classes/class-astra-sites-importer.php:369
+#, php-format
+msgid "File download failed - %s"
+msgstr "Bestand downloaden mislukt - %s"
+
+#: inc/classes/class-astra-sites-importer.php:378
+msgid "Downloaded file path is missing in the response."
+msgstr "Het pad van het gedownloade bestand ontbreekt in de reactie."
+
+#: inc/classes/class-astra-sites-importer.php:388
+msgid "Downloaded file is missing. Please retry the import."
+msgstr "Gedownload bestand ontbreekt. Probeer de import opnieuw."
+
+#: inc/classes/class-astra-sites-importer.php:396
+msgid "Downloaded file is not readable. Please check server file permissions."
+msgstr ""
+
+#: inc/classes/class-astra-sites-importer.php:405
+msgid "The file must be in JSON format."
+msgstr "Het bestand moet in JSON-indeling zijn."
+
+#: inc/classes/class-astra-sites-importer.php:420
+msgid "Could not read the file from the server."
+msgstr "Kon het bestand niet van de server lezen."
+
+#: inc/classes/class-astra-sites-importer.php:427
+msgid "The file is empty."
+msgstr "Het bestand is leeg."
+
+#. translators: %s: JSON error
+#: inc/classes/class-astra-sites-importer.php:440
+#, php-format
+msgid "Invalid JSON format - %s"
+msgstr "Ongeldig JSON-formaat - %s"
+
+#: inc/classes/class-astra-sites-importer.php:465
+msgid "Permission denied: You don't have the required capability to import forms. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet de vereiste bevoegdheid om formulieren te importeren. Neem contact op met uw sitebeheerder."
+
+#. translators: %s is Elementor plugin name.
+#: inc/classes/class-astra-sites-importer.php:479
+#, php-format
+msgid "WPForms import failed: Template ID is missing. Unable to proceed with %s import."
+msgstr "WPForms importeren mislukt: Template-ID ontbreekt. Kan niet doorgaan met %s importeren."
+
+#. translators: %s is the error message.
+#: inc/classes/class-astra-sites-importer.php:496
+#: inc/classes/class-astra-sites-importer.php:638
+#: inc/classes/class-astra-sites-importer.php:709
+#: inc/classes/class-astra-sites-importer.php:772
+#, php-format
+msgid "WPForms import failed: %s"
+msgstr "WPForms importeren mislukt: %s"
+
+#: inc/classes/class-astra-sites-importer.php:508
+msgid "WPForms import failed: WPForms plugin is not installed or not active. Please install/activate WPForms to continue."
+msgstr "WPForms importeren mislukt: WPForms-plugin is niet geïnstalleerd of niet actief. Installeer/activeer WPForms om door te gaan."
+
+#. translators: %s is exception error message.
+#: inc/classes/class-astra-sites-importer.php:592
+#, php-format
+msgid "WPForms import failed: Unexpected error - %s"
+msgstr "WPForms importeren mislukt: Onverwachte fout - %s"
+
+#. translators: %s: Fatal error message.
+#: inc/classes/class-astra-sites-importer.php:598
+#, php-format
+msgid "WPForms import failed: Fatal Error: %s"
+msgstr "WPForms importeren mislukt: Fatale fout: %s"
+
+#: inc/classes/class-astra-sites-importer.php:617
+msgid "Permission Denied: You don't have permission to import CartFlows flows. Please contact your site administrator."
+msgstr "Toestemming Geweigerd: U heeft geen toestemming om CartFlows-flows te importeren. Neem contact op met uw sitebeheerder."
+
+#: inc/classes/class-astra-sites-importer.php:649
+msgid "CartFlows import failed: Importer not found. Please ensure the CartFlows plugin is active and try again."
+msgstr "CartFlows-import mislukt: Importeur niet gevonden. Zorg ervoor dat de CartFlows-plugin actief is en probeer het opnieuw."
+
+#. translators: Sending cartflows import failed.
+#: inc/classes/class-astra-sites-importer.php:659
+#, php-format
+msgid "CartFlows import failed: %s"
+msgstr "CartFlows-import mislukt: %s"
+
+#. translators: %s: Exception error message.
+#: inc/classes/class-astra-sites-importer.php:667
+#, php-format
+msgid "CartFlows import failed: Unexpected error - %s"
+msgstr "CartFlows importeren mislukt: Onverwachte fout - %s"
+
+#. translators: %s: Fatal error message.
+#: inc/classes/class-astra-sites-importer.php:671
+#, php-format
+msgid "CartFlows import failed: Fatal Error - %s"
+msgstr "CartFlows importeren mislukt: Fatale fout - %s"
+
+#: inc/classes/class-astra-sites-importer.php:697
+msgid "Permission denied: You don't have permission to import Cart Abandonment Recovery data. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft geen toestemming om gegevens voor het herstel van verlaten winkelwagentjes te importeren. Neem contact op met uw sitebeheerder."
+
+#: inc/classes/class-astra-sites-importer.php:722
+msgid "Cart Abandonment Recovery import failed: Importer not found. Please ensure the plugin is active."
+msgstr "Herstel van verlaten winkelwagentjes import mislukt: Importeur niet gevonden. Zorg ervoor dat de plugin actief is."
+
+#. translators: %s: Exception error message.
+#: inc/classes/class-astra-sites-importer.php:735
+#, php-format
+msgid "Cart Abandonment Recovery import failed: Unexpected error - %s"
+msgstr "Het importeren van het herstel van verlaten winkelwagentjes is mislukt: Onverwachte fout - %s"
+
+#. translators: %s: Fatal error message.
+#: inc/classes/class-astra-sites-importer.php:738
+#, php-format
+msgid "Cart Abandonment Recovery import failed: Fatal Error - %s"
+msgstr "Importeren van herstel van verlaten winkelwagentjes mislukt: Fatale fout - %s"
+
+#: inc/classes/class-astra-sites-importer.php:758
+msgid "Permission denied: You don't have permission to import LatePoint data. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft geen toestemming om LatePoint-gegevens te importeren. Neem contact op met uw sitebeheerder."
+
+#. translators: %s is exception error message.
+#: inc/classes/class-astra-sites-importer.php:783
+#, php-format
+msgid "LatePoint import failed: %s"
+msgstr "LatePoint importeren mislukt: %s"
+
+#. translators: %s is exception error message.
+#: inc/classes/class-astra-sites-importer.php:789
+#, php-format
+msgid "LatePoint import failed: Unexpected error - %s"
+msgstr "LatePoint importeren mislukt: Onverwachte fout - %s"
+
+#. translators: %s: Fatal error message.
+#: inc/classes/class-astra-sites-importer.php:794
+#, php-format
+msgid "LatePoint import failed: Fatal Error - %s"
+msgstr "LatePoint-import mislukt: Fatale fout - %s"
+
+#: inc/classes/class-astra-sites.php:371
+msgid "Import failed due to insufficient memory. Please increase the PHP memory_limit on your server and retry. If you're unsure how to do this, contact your hosting provider for assistance."
+msgstr "Importeren mislukt vanwege onvoldoende geheugen. Verhoog de PHP memory_limit op uw server en probeer het opnieuw. Als u niet weet hoe u dit moet doen, neem dan contact op met uw hostingprovider voor hulp."
+
+#: inc/classes/class-astra-sites.php:1324
+msgid "Failed to download the image. Please verify the URL and your network connection, then try again."
+msgstr "Kan de afbeelding niet downloaden. Controleer de URL en uw netwerkverbinding en probeer het opnieuw."
+
+#: inc/classes/class-astra-sites.php:1802
+msgid "<p>The import process was interrupted as Debug mode is currently enabled on your site.</p><p>Kindly disable debug mode and try importing Starter Template again.</p><p>You can add the following code into the wp-config.php file to disable debug mode.</p><p><code>define('WP_DEBUG', false);</code></p>"
+msgstr "<p>Het importproces werd onderbroken omdat de Debug-modus momenteel is ingeschakeld op uw site.</p><p>Schakel de debug-modus uit en probeer het Starter Template opnieuw te importeren.</p><p>U kunt de volgende code toevoegen aan het wp-config.php-bestand om de debug-modus uit te schakelen.</p><p><code>define('WP_DEBUG', false);</code></p>"
+
+#. translators: %s is a documentation link.
+#: inc/classes/class-astra-sites.php:1804
+#, php-format
+msgid "<p>Template import was interrupted due to a temporary error.</p><p>Read <a href=\"%s\" target=\"_blank\">article</a> to resolve the issue and continue importing template.</p>"
+msgstr "<p>Het importeren van de sjabloon werd onderbroken vanwege een tijdelijke fout.</p><p>Lees het <a href=\"%s\" target=\"_blank\">artikel</a> om het probleem op te lossen en het importeren van de sjabloon voort te zetten.</p>"
+
+#. translators: %s is a documentation link.
+#: inc/classes/class-astra-sites.php:1806
+#, php-format
+msgid "<p>Failed to install one or more required plugins.</p><p>Read&nbsp;<a href=\"%s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.</p>"
+msgstr "<p>Het is niet gelukt om een of meer vereiste plugins te installeren.</p><p>Lees&nbsp;<a href=\"%s\" target=\"_blank\">het artikel</a>&nbsp;om het probleem op te lossen en verder te gaan met het importeren van de template.</p>"
+
+#. translators: %s are white label strings.
+#: inc/classes/class-astra-sites.php:1810
+#, php-format
+msgid "Warning! %1$s Closing this window will cancel the process. Do you still want to leave?"
+msgstr "Waarschuwing! %1$s Het sluiten van dit venster zal het proces annuleren. Wilt u nog steeds vertrekken?"
+
+#: inc/classes/class-astra-sites.php:1851
+msgid "Couldn't start import process. WordPress returned:"
+msgstr "Kon het importproces niet starten. WordPress gaf het volgende terug:"
+
+#. translators: %s HTML tags
+#: inc/classes/class-astra-sites.php:1857
+#, php-format
+msgid "%1$sAJAX request failed. WordPress returned:%2$s"
+msgstr "%1$sAJAX-verzoek mislukt. WordPress gaf terug:%2$s"
+
+#. translators: %s URL to document.
+#: inc/classes/class-astra-sites.php:1868
+#, php-format
+msgid "%1$sImport process interrupted due to an AJAX error:%2$s"
+msgstr "%1$sImportproces onderbroken vanwege een AJAX-fout:%2$s"
+
+#. translators: %s update page link.
+#: inc/classes/class-astra-sites.php:2116
+msgid "Updates are available for one or more plugins used by this starter template."
+msgstr "Er zijn updates beschikbaar voor een of meer plugins die door deze startertemplate worden gebruikt."
+
+#: inc/lib/ai-builder/inc/ajax/importer.php:352
+msgid "Permission denied: You don't have sufficient permissions to import Spectra settings. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet voldoende rechten om Spectra-instellingen te importeren. Neem contact op met uw sitebeheerder."
+
+#: inc/lib/ai-builder/inc/ajax/importer.php:362
+msgid "Spectra settings import failed: ST_Importer class not found. Please ensure the importer is properly loaded."
+msgstr "Importeren van spectra-instellingen mislukt: ST_Importer-klasse niet gevonden. Zorg ervoor dat de importeur correct is geladen."
+
+#: inc/lib/ai-builder/inc/ajax/importer.php:379
+msgid "No Spectra settings found for this template."
+msgstr "Geen Spectra-instellingen gevonden voor deze sjabloon."
+
+#: inc/lib/ai-builder/inc/ajax/importer.php:395
+msgid "Unknown error occurred during Spectra settings import."
+msgstr "Onbekende fout opgetreden tijdens het importeren van Spectra-instellingen."
+
+#. translators: %s is the error message.
+#. translators: %s is the exception message.
+#: inc/lib/ai-builder/inc/ajax/importer.php:403
+#: inc/lib/starter-templates-importer/importer/st-importer.php:138
+#, php-format
+msgid "Spectra settings import failed: %s"
+msgstr "Importeren van spectra-instellingen mislukt: %s"
+
+#. translators: %s is exception error message.
+#: inc/lib/ai-builder/inc/ajax/importer.php:431
+#, php-format
+msgid "Spectra settings import failed: Unexpected error - %s"
+msgstr "Importeren van spectra-instellingen mislukt: Onverwachte fout - %s"
+
+#. translators: %s is exception error message.
+#: inc/lib/ai-builder/inc/ajax/importer.php:450
+#, php-format
+msgid "Spectra settings import failed: Fatal error - %s"
+msgstr "Importeren van spectra-instellingen mislukt: Fatale fout - %s"
+
+#: inc/lib/ai-builder/inc/ajax/importer.php:478
+msgid "Permission denied: You don't have sufficient permissions to import SureCart settings. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet voldoende rechten om SureCart-instellingen te importeren. Neem contact op met uw sitebeheerder."
+
+#: inc/lib/ai-builder/inc/ajax/importer.php:482
+msgid "SureCart import failed: ST_Importer class not found. Please ensure the importer is properly loaded."
+msgstr "SureCart-import mislukt: ST_Importer-klasse niet gevonden. Zorg ervoor dat de importer correct is geladen."
+
+#. translators: %s: Error message.
+#: inc/lib/ai-builder/inc/ajax/importer.php:490
+#, php-format
+msgid "SureCart import failed: %s"
+msgstr "SureCart importeren mislukt: %s"
+
+#: inc/lib/ai-builder/inc/traits/helper.php:558
+msgid "Error: You don't have the required permissions to activate plugins."
+msgstr "Fout: U heeft niet de vereiste rechten om plugins te activeren."
+
+#: inc/lib/ai-builder/inc/traits/helper.php:768
+msgid "Permission denied: You don't have sufficient permissions to import. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet voldoende rechten om te importeren. Neem contact op met uw sitebeheerder."
+
+#: inc/lib/ai-builder/inc/traits/helper.php:773
+msgid "Import failed: ST_Importer_File_System class not found. Please ensure the importer is properly loaded."
+msgstr "Importeren mislukt: ST_Importer_File_System klasse niet gevonden. Zorg ervoor dat de importeur correct is geladen."
+
+#. translators: %s: Error message.
+#. translators: %s is the exception message.
+#: inc/lib/ai-builder/inc/traits/helper.php:785
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:100
+#, php-format
+msgid "Import failed: Unexpected error - %s"
+msgstr "Importeren mislukt: Onverwachte fout - %s"
+
+#. translators: %s: Error message.
+#: inc/lib/ai-builder/inc/traits/helper.php:788
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:103
+#, php-format
+msgid "Import failed: Fatal error - %s"
+msgstr "Importeren mislukt: Fatale fout - %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:75
+msgid "Nonce verification failed. Your session may have expired — please refresh the page and try again."
+msgstr "Nonce-verificatie mislukt. Je sessie is mogelijk verlopen — ververs de pagina en probeer het opnieuw."
+
+#. translators: %s: Plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:157
+#, php-format
+msgid "Plugin %s was installed but the main plugin file could not be found. The installation may be incomplete or the plugin structure is invalid."
+msgstr "Plugin %s is geïnstalleerd, maar het hoofdpluginbestand kon niet worden gevonden. De installatie is mogelijk onvolledig of de pluginstructuur is ongeldig."
+
+#. translators: %s: Error message.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:189
+#, php-format
+msgid "An unexpected error occurred during plugin installation: %s"
+msgstr "Er is een onverwachte fout opgetreden tijdens de installatie van de plugin: %s"
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:237
+msgid "Permission denied: You do not have the required capability to install plugins. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet de vereiste bevoegdheid om plugins te installeren. Neem contact op met uw sitebeheerder."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:245
+msgid "Login required: You must be logged in to install plugins."
+msgstr "Inloggen vereist: U moet ingelogd zijn om plugins te installeren."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:263
+msgid "Plugin installation failed: Missing plugin slug."
+msgstr "Installatie van de plugin mislukt: Plugin-slug ontbreekt."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:271
+msgid "Plugin installation failed: Invalid plugin slug format. Only alphanumeric, dashes, and underscores are allowed."
+msgstr "Installatie van plugin mislukt: Ongeldig plugin-slugformaat. Alleen alfanumerieke tekens, streepjes en underscores zijn toegestaan."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:359
+msgid "Plugin installation failed: Missing required slug or name."
+msgstr "Installatie van de plugin mislukt: Vereiste slug of naam ontbreekt."
+
+#. translators: 1: Plugin name, 2: Exception message.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:385
+#, php-format
+msgid "Plugin installation error for \"%1$s\": %2$s"
+msgstr "Fout bij het installeren van de plugin voor \"%1$s\": %2$s"
+
+#. translators: %s is the exception message.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:430
+#, php-format
+msgid "Installation failed: Required WordPress files could not be loaded. Error: %s"
+msgstr "Installatie mislukt: Vereiste WordPress-bestanden konden niet worden geladen. Fout: %s"
+
+#. translators: 1: Plugin name, 2: Max attempts, 3: Exception message.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:484
+#, php-format
+msgid "Installation failed: Plugin API request for %1$s failed after %2$d attempts. Error: %3$s"
+msgstr "Installatie mislukt: Plugin API-verzoek voor %1$s is mislukt na %2$d pogingen. Fout: %3$s"
+
+#. translators: %s is the plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:501
+#, php-format
+msgid "Installation failed: Could not retrieve plugin details for %s from WordPress.org. Please try again."
+msgstr "Installatie mislukt: Kon geen plugindetails voor %s ophalen van WordPress.org. Probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:518
+#, php-format
+msgid "Installation failed: Could not connect to WordPress.org plugin repository for %s. Please check your internet connection and try again."
+msgstr "Installatie mislukt: Kon geen verbinding maken met de WordPress.org pluginrepository voor %s. Controleer uw internetverbinding en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:524
+#, php-format
+msgid "Installation failed: Plugin %s was not found in the WordPress.org repository. Please verify the plugin name and try again."
+msgstr "Installatie mislukt: Plugin %s werd niet gevonden in de WordPress.org-repository. Controleer de pluginnaam en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:530
+#, php-format
+msgid "Installation failed: Could not retrieve plugin information for %1$s from WordPress.org. Error: %2$s"
+msgstr "Installatie mislukt: Kon geen plugininformatie ophalen voor %1$s van WordPress.org. Fout: %2$s"
+
+#. translators: %s is the plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:556
+#, php-format
+msgid "Installation failed: Received an invalid response from WordPress.org for %s. Please try again."
+msgstr "Installatie mislukt: Ontving een ongeldig antwoord van WordPress.org voor %s. Probeer het alstublieft opnieuw."
+
+#. translators: %s is the plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:570
+#, php-format
+msgid "Installation failed: Download link not available for %s. The plugin may be premium or removed from WordPress.org."
+msgstr "Installatie mislukt: Downloadlink niet beschikbaar voor %s. De plugin kan premium zijn of verwijderd van WordPress.org."
+
+#. translators: 1: Plugin name, 2: Exception message.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:632
+#, php-format
+msgid "Installation failed: Failed to initialize plugin installer for %1$s: %2$s"
+msgstr "Installatie mislukt: Kan de plugin-installateur voor %1$s niet initialiseren: %2$s"
+
+#. translators: 1: Plugin name, 2: Exception message.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:653
+#, php-format
+msgid "Installation failed: Plugin %1$s failed to installed. Error: %2$s"
+msgstr "Installatie mislukt: Plugin %1$s kon niet worden geïnstalleerd. Fout: %2$s"
+
+#. translators: %s is the plugin name.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:695
+#, php-format
+msgid "Installation failed: Plugin %s installation failed: An unknown error occurred. Please try again or install manually."
+msgstr "Installatie mislukt: Plugin %s installatie mislukt: Er is een onbekende fout opgetreden. Probeer het opnieuw of installeer handmatig."
+
+#. translators: 1: Plugin name, 2: Required WordPress version, 3: Current WordPress version.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:741
+#, php-format
+msgid "Installation failed: Plugin %1$s requires WordPress version %2$s or higher. You are currently running version %3$s. Please update WordPress first."
+msgstr "Installatie mislukt: Plugin %1$s vereist WordPress versie %2$s of hoger. U gebruikt momenteel versie %3$s. Werk WordPress eerst bij."
+
+#. translators: 1: Plugin name, 2: Required PHP version, 3: Current PHP version.
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:756
+#, php-format
+msgid "Installation failed: Plugin %1$s requires PHP version %2$s or higher. You are currently running version %3$s. Please contact your hosting provider to upgrade PHP."
+msgstr "Installatie mislukt: Plugin %1$s vereist PHP versie %2$s of hoger. U gebruikt momenteel versie %3$s. Neem contact op met uw hostingprovider om PHP te upgraden."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:785
+#, php-format
+msgid "Installation failed: Insufficient disk space to install %1$s. At least %2$dMB of free space is required. Please free up some disk space and try again."
+msgstr "Installatie mislukt: Onvoldoende schijfruimte om %1$s te installeren. Er is minstens %2$dMB vrije ruimte nodig. Maak wat schijfruimte vrij en probeer het opnieuw."
+
+#: inc/lib/onboarding/classes/class-astra-sites-install-plugin.php:911
+#, php-format
+msgid "Plugin %1$s installation failed: %2$s. Please try again or install the plugin manually from the WordPress admin area."
+msgstr "Installatie van plugin %1$s is mislukt: %2$s. Probeer het opnieuw of installeer de plugin handmatig vanuit het WordPress-beheergebied."
+
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:69
+msgid "Permission denied: You don't have permission to initiate the import process. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft geen toestemming om het importproces te starten. Neem contact op met uw sitebeheerder."
+
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:76
+msgid "Import failed: The XMLReader PHP extension is missing on your server. Please contact your hosting provider to enable it."
+msgstr "Importeren mislukt: De XMLReader PHP-extensie ontbreekt op uw server. Neem contact op met uw hostingprovider om deze in te schakelen."
+
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:84
+msgid "Import failed: This template does not include site content (posts, pages, media). You can proceed with design-only import or choose a different template."
+msgstr "Importeren mislukt: Deze sjabloon bevat geen site-inhoud (berichten, pagina's, media). U kunt doorgaan met alleen het ontwerp importeren of een andere sjabloon kiezen."
+
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:92
+msgid "Import failed: The required import library is not loaded. This may be due to a plugin conflict. Please deactivate other plugins temporarily and try again, or reinstall the Starter Templates plugin."
+msgstr "Importeren mislukt: De vereiste importbibliotheek is niet geladen. Dit kan te wijten zijn aan een conflict met een plugin. Deactiveer tijdelijk andere plugins en probeer het opnieuw, of installeer de Starter Templates-plugin opnieuw."
+
+#. translators: %s: Error message
+#: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:108
+#, php-format
+msgid "Import failed: %s"
+msgstr "Importeren mislukt: %s"
+
+#. translators: Spectra plugin installation failed message.
+#: inc/lib/starter-templates-importer/importer/st-importer.php:99
+#, php-format
+msgid "Spectra plugin installation failed: %s"
+msgstr "Installatie van de Spectra-plugin mislukt: %s"
+
+#: inc/lib/starter-templates-importer/importer/st-importer.php:115
+msgid "Spectra plugin installed but class not loaded. Please refresh and try again."
+msgstr "Spectra-plugin geïnstalleerd, maar klasse niet geladen. Vernieuw en probeer het opnieuw."
+
+#. translators: %s is the error message.
+#: inc/lib/starter-templates-importer/importer/st-importer.php:275
+#, php-format
+msgid "Error occurred while inserting XML file: %s"
+msgstr "Fout opgetreden bij het invoegen van XML-bestand: %s"
+
+#. translators: %s is the download error message.
+#: inc/lib/starter-templates-importer/importer/st-importer.php:303
+#, php-format
+msgid "File download failed: %s"
+msgstr "Bestand downloaden mislukt: %s"
+
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:34
+msgid "Permission denied: You don't have sufficient permissions to install or activate plugins. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet voldoende rechten om plugins te installeren of activeren. Neem contact op met uw sitebeheerder."
+
+#. translators: %s is the plugin slug.
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:44
+#, php-format
+msgid "%s plugin is already active."
+msgstr "%s plugin is al actief."
+
+#. translators: %s is the plugin slug.
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:55
+#, php-format
+msgid "%s plugin activated successfully."
+msgstr "%s plugin succesvol geactiveerd."
+
+#. translators: %s is the plugin slug.
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:74
+#, php-format
+msgid "%s plugin installed and activated successfully."
+msgstr "%s plugin succesvol geïnstalleerd en geactiveerd."
+
+#. translators: %s is the exception message.
+#. translators: %s is the error message.
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:83
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:165
+#, php-format
+msgid "Plugin installation failed: %s"
+msgstr "Installatie van de plugin mislukt: %s"
+
+#. translators: %s is the error message.
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:152
+#, php-format
+msgid "Plugin information not found: %s"
+msgstr "Plug-ininformatie niet gevonden: %s"
+
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:172
+msgid "Plugin installation failed for unknown reason."
+msgstr "Installatie van de plugin is mislukt om een onbekende reden."
+
+#. translators: %s is the exception message.
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:186
+#, php-format
+msgid "Plugin installation exception: %s"
+msgstr "Plug-in installatie uitzondering: %s"
+
+#. translators: %s is the error message.
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:210
+#, php-format
+msgid "Plugin activation failed: %s"
+msgstr "Plugin activering mislukt: %s"
+
+#: inc/lib/starter-templates-importer/importer/st-plugin-installer.php:216
+msgid "Plugin activated successfully."
+msgstr "Plugin succesvol geactiveerd."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:144
+msgid "Permission denied: You don't have sufficient permissions to perform this action. Please contact your site administrator."
+msgstr "Toestemming geweigerd: U heeft niet voldoende rechten om deze actie uit te voeren. Neem contact op met uw sitebeheerder."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:180
+msgid "Template content file not found or inaccessible. The import process cannot continue without the content file. Please try importing again."
+msgstr "Sjablooninhoudbestand niet gevonden of ontoegankelijk. Het importproces kan niet doorgaan zonder het inhoudsbestand. Probeer het importeren opnieuw."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:193
+msgid "Template content file does not exist on the server. The file may have been deleted or moved. Please try re-importing the template."
+msgstr "Het sjablooninhoudbestand bestaat niet op de server. Het bestand kan zijn verwijderd of verplaatst. Probeer het sjabloon opnieuw te importeren."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:206
+msgid "Template content file cannot be read due to file permission issues. Please contact your hosting provider to fix file permissions."
+msgstr "Het sjablooninhoudbestand kan niet worden gelezen vanwege problemen met bestandsrechten. Neem contact op met uw hostingprovider om de bestandsrechten te herstellen."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:283
+msgid "A fatal error occurred during import, likely due to server resource limitations. Try a different template, or contact your hosting provider to increase server resources."
+msgstr "Er is een fatale fout opgetreden tijdens het importeren, waarschijnlijk door beperkingen in serverbronnen. Probeer een ander sjabloon, of neem contact op met uw hostingprovider om de serverbronnen te verhogen."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:327
+msgid "Import failed due to server memory limitations. This template may be too large for your current server configuration. Try importing a smaller template, or contact your hosting provider to increase memory limits."
+msgstr "Importeren mislukt vanwege servergeheugenbeperkingen. Deze sjabloon is mogelijk te groot voor uw huidige serverconfiguratie. Probeer een kleinere sjabloon te importeren of neem contact op met uw hostingprovider om de geheugenlimieten te verhogen."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:333
+msgid "Import timed out due to server limitations. The template import process took too long to complete. Try again, or contact your hosting provider to increase execution time limits."
+msgstr "Importeren is mislukt vanwege serverbeperkingen. Het importproces van de sjabloon duurde te lang om te voltooien. Probeer het opnieuw, of neem contact op met uw hostingprovider om de tijdslimieten voor uitvoering te verhogen."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:340
+msgid "Import failed due to database issues. This could be due to database connection problems or insufficient database permissions. Please contact your hosting provider."
+msgstr "Importeren mislukt vanwege databaseproblemen. Dit kan komen door problemen met de databaseverbinding of onvoldoende databasepermissies. Neem contact op met uw hostingprovider."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:347
+msgid "Import failed due to file permission issues. The server cannot create or write files needed for the import. Please contact your hosting provider to fix file permissions."
+msgstr "Importeren mislukt vanwege problemen met bestandsrechten. De server kan de benodigde bestanden voor de import niet aanmaken of beschrijven. Neem contact op met uw hostingprovider om de bestandsrechten te herstellen."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:354
+msgid "Import completed but some images or media files could not be downloaded. This could be due to network issues or the original files being unavailable. The template structure has been imported successfully."
+msgstr "Import voltooid, maar sommige afbeeldingen of mediabestanden konden niet worden gedownload. Dit kan te wijten zijn aan netwerkproblemen of het niet beschikbaar zijn van de originele bestanden. De sjabloonstructuur is succesvol geïmporteerd."
+
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:360
+msgid "Import failed due to corrupted template content. The template file appears to be damaged or incomplete. Please try importing again, or select a different template."
+msgstr "Importeren mislukt vanwege corrupte sjablooninhoud. Het sjabloonbestand lijkt beschadigd of onvolledig te zijn. Probeer opnieuw te importeren of kies een andere sjabloon."
+
+#. translators: Import encountered error text.
+#: inc/lib/starter-templates-importer/importer/wxr-importer/st-wxr-importer.php:366
+#, php-format
+msgid "Import process encountered an error: %s. Please try again, or contact support if the issue persists."
+msgstr "Het importproces heeft een fout ondervonden: %s. Probeer het opnieuw, of neem contact op met de ondersteuning als het probleem aanhoudt."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+msgid "Missing Required Plugins or Theme"
+msgstr "Ontbrekende vereiste plugins of thema"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+msgid "In a multisite environment, you need to have all required plugins and themes already installed and activated by your network administrator to import this template."
+msgstr "In een multisite-omgeving moeten alle vereiste plugins en thema's al geïnstalleerd en geactiveerd zijn door uw netwerkbeheerder om deze sjabloon te importeren."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+msgid "Missing Theme:"
+msgstr "Ontbrekend thema:"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+msgid "Missing Plugins:"
+msgstr "Ontbrekende plug-ins:"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+msgid "Please contact your network administrator to install and activate these plugins."
+msgstr "Neem contact op met uw netwerkbeheerder om deze plug-ins te installeren en activeren."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+msgid "Continue Anyway"
+msgstr "Toch doorgaan"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "Unknown error occurred."
+msgstr "Er is een onbekende fout opgetreden."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "Parse error occurred."
+msgstr "Er is een parsefout opgetreden."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "Network error occurred."
+msgstr "Er is een netwerkfout opgetreden."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "The server returned an invalid response. This may be due to server configuration issues or plugin conflicts."
+msgstr "De server gaf een ongeldig antwoord. Dit kan te wijten zijn aan serverconfiguratieproblemen of pluginconflicten."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "Unable to connect to the server. This could be due to internet connectivity issues."
+msgstr "Kan geen verbinding maken met de server. Dit kan te wijten zijn aan problemen met de internetverbinding."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "Connection failed: Failed to connect to the import server. This could be due to network issues or server problems."
+msgstr "Verbinding mislukt: Kan geen verbinding maken met de importserver. Dit kan te wijten zijn aan netwerkproblemen of serverproblemen."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "Request timeout: The import request took too long to complete. This could be due to server load or network issues."
+msgstr "Time-out van verzoek: Het importverzoek duurde te lang om te voltooien. Dit kan te wijten zijn aan serverbelasting of netwerkproblemen."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
+msgid "Please try again. If the problem persists, try a different template."
+msgstr "Probeer het opnieuw. Als het probleem aanhoudt, probeer dan een andere sjabloon."
 
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
 #: inc/classes/class-astra-sites-importer-log.php:302

@@ -368,7 +368,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				return wp_json_encode(
 					array(
 						'data' => array(
-							'message' => __( 'An error occurred due to insufficient memory. Please increase the memory limit on the server to resolve this issue', 'astra-sites' ),
+							'message' => __( "Import failed due to insufficient memory. Please increase the PHP memory_limit on your server and retry. If you're unsure how to do this, contact your hosting provider for assistance.", 'astra-sites' ),
 						),
 					)
 				);
@@ -1302,7 +1302,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			$image  = '';
 			$result = array();
 
-			$name  = preg_replace( '/\.[^.]+$/', '', $name ) . '-' . $photo_id . '.jpg';
+			$name  = pathinfo( $name, PATHINFO_FILENAME ) . '-' . $photo_id . '.jpg';
 			$image = $this->create_image_from_url( $url, $name, $photo_id );
 
 			if ( is_wp_error( $image ) ) {
@@ -1321,7 +1321,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					update_post_meta( $image, '_astra_sites_imported_post', true );
 				}
 			} else {
-				wp_send_json_error( __( 'Could not download the image.', 'astra-sites' ) );
+				wp_send_json_error( __( 'Failed to download the image. Please verify the URL and your network connection, then try again.', 'astra-sites' ) );
 			}
 
 			// Save downloaded image reference to an option.
@@ -1799,15 +1799,15 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					'requiredPlugins'                    => array(),
 					'syncLibraryStart'                   => '<span class="message">' . esc_html__( 'Syncing template library in the background. The process can take anywhere between 2 to 3 minutes. We will notify you once done.', 'astra-sites' ) . '</span>',
 					'xmlRequiredFilesMissing'            => __( 'Some of the files required during the import process are missing.<br/><br/>Please try again after some time.', 'astra-sites' ),
-					'importFailedMessageDueToDebug'      => __( '<p>WordPress debug mode is currently enabled on your website. This has interrupted the import process..</p><p>Kindly disable debug mode and try importing Starter Template again.</p><p>You can add the following code into the wp-config.php file to disable debug mode.</p><p><code>define(\'WP_DEBUG\', false);</code></p>', 'astra-sites' ),
+					'importFailedMessageDueToDebug'      => __( '<p>The import process was interrupted as Debug mode is currently enabled on your site.</p><p>Kindly disable debug mode and try importing Starter Template again.</p><p>You can add the following code into the wp-config.php file to disable debug mode.</p><p><code>define(\'WP_DEBUG\', false);</code></p>', 'astra-sites' ),
 					/* translators: %s is a documentation link. */
-					'importFailedMessage'                => sprintf( __( '<p>We are facing a temporary issue in importing this template.</p><p>Read <a href="%s" target="_blank">article</a> to resolve the issue and continue importing template.</p>', 'astra-sites' ), esc_url( 'https://wpastra.com/docs/fix-starter-template-importing-issues/' ) ),
+					'importFailedMessage'                => sprintf( __( '<p>Template import was interrupted due to a temporary error.</p><p>Read <a href="%s" target="_blank">article</a> to resolve the issue and continue importing template.</p>', 'astra-sites' ), esc_url( 'https://wpastra.com/docs/fix-starter-template-importing-issues/' ) ),
 					/* translators: %s is a documentation link. */
-					'importFailedRequiredPluginsMessage' => sprintf( __( '<p>We are facing a temporary issue in installing the required plugins for this template.</p><p>Read&nbsp;<a href="%s" target="_blank">article</a>&nbsp;to resolve the issue and continue importing template.</p>', 'astra-sites' ), esc_url( 'https://wpastra.com/docs/plugin-installation-failed-multisite/' ) ),
+					'importFailedRequiredPluginsMessage' => sprintf( __( '<p>Failed to install one or more required plugins.</p><p>Read&nbsp;<a href="%s" target="_blank">article</a>&nbsp;to resolve the issue and continue importing template.</p>', 'astra-sites' ), esc_url( 'https://wpastra.com/docs/plugin-installation-failed-multisite/' ) ),
 
 					'strings'                            => array(
 						/* translators: %s are white label strings. */
-						'warningBeforeCloseWindow' => sprintf( __( 'Warning! %1$s Import process is not complete. Don\'t close the window until import process complete. Do you still want to leave the window?', 'astra-sites' ), Astra_Sites_White_Label::get_instance()->get_white_label_name() ),
+						'warningBeforeCloseWindow' => sprintf( __( 'Warning! %1$s Closing this window will cancel the process. Do you still want to leave?', 'astra-sites' ), Astra_Sites_White_Label::get_instance()->get_white_label_name() ),
 						'viewSite'                 => __( 'Done! View Site', 'astra-sites' ),
 						'syncCompleteMessage'      => self::get_instance()->get_sync_complete_message(),
 						/* translators: %s is a template name */
@@ -1848,13 +1848,13 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					'subscriptionSuccessMessage'         => esc_html__( 'We have sent you a surprise gift on your email address! Please check your inbox!', 'astra-sites' ),
 					'first_import_complete'              => get_option( 'astra_sites_import_complete' ),
 					'server_import_primary_error'        => __( 'Looks like the template you are importing is temporarily not available.', 'astra-sites' ),
-					'client_import_primary_error'        => __( 'We could not start the import process and this is the message from WordPress:', 'astra-sites' ),
+					'client_import_primary_error'        => __( "Couldn't start import process. WordPress returned:", 'astra-sites' ),
 					'cloudflare_import_primary_error'    => __( 'There was an error connecting to the Starter Templates API.', 'astra-sites' ),
 					'xml_import_interrupted_primary'     => __( 'There was an error while importing the content.', 'astra-sites' ),
 					'xml_import_interrupted_secondary'   => __( 'To import content, WordPress needs to store XML file in /wp-content/ folder. Please get in touch with your hosting provider.', 'astra-sites' ),
 					'xml_import_interrupted_error'       => __( 'Looks like your host probably could not store XML file in /wp-content/ folder.', 'astra-sites' ),
 					/* translators: %s HTML tags */
-					'ajax_request_failed_primary'        => sprintf( __( '%1$sWe could not start the import process due to failed AJAX request and this is the message from WordPress:%2$s', 'astra-sites' ), '<p>', '</p>' ),
+					'ajax_request_failed_primary'        => sprintf( __( '%1$sAJAX request failed. WordPress returned:%2$s', 'astra-sites' ), '<p>', '</p>' ),
 					/* translators: %s URL to document. */
 					'ajax_request_failed_secondary'      => sprintf( __( '%1$sRead&nbsp;<a href="%2$s" target="_blank">article</a>&nbsp;to resolve the issue and continue importing template.%3$s', 'astra-sites' ), '<p>', esc_url( 'https://wpastra.com/docs/internal-server-error-starter-templates/' ), '</p>' ),
 					'cta_links' => $this->get_cta_links(),
@@ -1865,7 +1865,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					'cta_premium_popup_link' => $this->get_cta_link( 'get-premium-access-popup' ),
 
 					/* translators: %s URL to document. */
-					'process_failed_primary'        => sprintf( __( '%1$sWe could not complete the import process due to failed AJAX request and this is the message:%2$s', 'astra-sites' ), '<p>', '</p>' ),
+					'process_failed_primary'        => sprintf( __( '%1$sImport process interrupted due to an AJAX error:%2$s', 'astra-sites' ), '<p>', '</p>' ),
 					/* translators: %s URL to document. */
 					'process_failed_secondary'      => sprintf( __( '%1$sPlease report this <a href="%2$s" target="_blank">here</a>.%3$s', 'astra-sites' ), '<p>', esc_url( 'https://wpastra.com/starter-templates-support/?url=#DEMO_URL#&subject=#SUBJECT#' ), '</p>' ),
 					'st_page_url' => esc_url( self::get_starter_templates_url() ),
@@ -2113,7 +2113,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				'update-available'     => array(
 					'title'   => esc_html__( 'Update Plugin', 'astra-sites' ),
 					/* translators: %s update page link. */
-					'tooltip' => '<p>' . esc_html__( 'Updates are available for plugins used in this starter template.', 'astra-sites' ) . '</p>##LIST##<p>' . sprintf( __( 'Kindly <a href="%s" target="_blank">update</a> them for a successful import. Skipping this step might break the template design/feature.', 'astra-sites' ), esc_url( network_admin_url( 'update-core.php' ) ) ) . '</p>',
+					'tooltip' => '<p>' . esc_html__( 'Updates are available for one or more plugins used by this starter template.', 'astra-sites' ) . '</p>##LIST##<p>' . sprintf( __( 'Kindly <a href="%s" target="_blank">update</a> them for a successful import. Skipping this step might break the template design/feature.', 'astra-sites' ), esc_url( network_admin_url( 'update-core.php' ) ) ) . '</p>',
 				),
 				'third-party-required' => array(
 					'title'   => esc_html__( 'Required Plugins Missing', 'astra-sites' ),
@@ -2728,7 +2728,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			$query = array();
 
 			if ( isset( $parts['query'] ) ) {
-				parse_str( $parts['query'], $query );
+				$query = wp_parse_args( $parts['query'] );
 			}
 
 			foreach ( $params as $param ) {

@@ -72,8 +72,8 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				if ( ! $this->verify_ajax_nonce() ) {
 					wp_send_json_error(
 						array(
-							'message' => __( 'Security verification failed. Please refresh the page and try again.', 'astra-sites' ),
-							'code'    => 'nonce_verification_failed',
+							'message' => __( 'Nonce verification failed. Your session may have expired — please refresh the page and try again.', 'astra-sites' ),
+							'code'    => 'invalid_nonce',
 						),
 						403
 					);
@@ -118,6 +118,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 					// Plugin already installed.
 					wp_send_json_success(
 						array(
+							// translators: %s is the plugin name.
 							'message' => sprintf( __( '%s plugin is already installed.', 'astra-sites' ), $plugin_name ),
 							'status'  => 'already_installed',
 							'data'    => array(
@@ -151,7 +152,11 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				if ( ! $plugin_file ) {
 					wp_send_json_error(
 						array(
-							'message' => sprintf( __( 'Plugin %s was installed but could not locate plugin file.', 'astra-sites' ), $plugin_name ),
+							'message' => sprintf(
+								// translators: %s: Plugin name.
+								__( 'Plugin %s was installed but the main plugin file could not be found. The installation may be incomplete or the plugin structure is invalid.', 'astra-sites' ),
+								$plugin_name
+							),
 							'code'    => 'plugin_file_not_found_after_install',
 						),
 						500
@@ -179,7 +184,11 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				
 				wp_send_json_error(
 					array(
-						'message' => __( 'An unexpected error occurred during plugin installation.', 'astra-sites' ),
+						'message' => sprintf(
+							// translators: %s: Error message.
+							__( 'An unexpected error occurred during plugin installation: %s', 'astra-sites' ),
+							$e->getMessage()
+						),
 						'code'    => 'unexpected_error',
 					),
 					500
@@ -225,7 +234,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 			if ( ! current_user_can( 'install_plugins' ) ) {
 				return new WP_Error(
 					'insufficient_permissions',
-					__( 'You do not have permissions to install plugins.', 'astra-sites' )
+					__( 'Permission denied: You do not have the required capability to install plugins. Please contact your site administrator.', 'astra-sites' )
 				);
 			}
 
@@ -233,7 +242,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 			if ( ! is_user_logged_in() ) {
 				return new WP_Error(
 					'user_not_logged_in',
-					__( 'You must be logged in to install plugins.', 'astra-sites' )
+					__( 'Login required: You must be logged in to install plugins.', 'astra-sites' )
 				);
 			}
 
@@ -251,7 +260,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 			if ( empty( $plugin_slug ) ) {
 				return new WP_Error(
 					'missing_plugin_slug',
-					__( 'Plugin slug is required.', 'astra-sites' )
+					__( 'Plugin installation failed: Missing plugin slug.', 'astra-sites' )
 				);
 			}
 
@@ -259,7 +268,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 			if ( ! $this->validate_plugin_slug( $plugin_slug ) ) {
 				return new WP_Error(
 					'invalid_plugin_slug',
-					__( 'Plugin slug contains invalid characters.', 'astra-sites' )
+					__( 'Plugin installation failed: Invalid plugin slug format. Only alphanumeric, dashes, and underscores are allowed.', 'astra-sites' )
 				);
 			}
 
@@ -347,7 +356,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				// Validate input parameters
 				if ( empty( $plugin_slug ) || empty( $plugin_name ) ) {
 					throw new Exception(
-						__( 'Plugin slug and name are required for installation.', 'astra-sites' ),
+						__( 'Plugin installation failed: Missing required slug or name.', 'astra-sites' ),
 						0 // code must be int
 					);
 				}
@@ -371,8 +380,9 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 
 			} catch ( Exception $e ) {
 				// Catch any unexpected exceptions
-				$error_message = sprintf( 
-					__( 'Unexpected error during %s plugin installation: %s', 'astra-sites' ), 
+				$error_message = sprintf(
+					// translators: 1: Plugin name, 2: Exception message.
+					__( 'Plugin installation error for "%1$s": %2$s', 'astra-sites' ), 
 					$plugin_name, 
 					$e->getMessage() 
 				);
@@ -416,7 +426,8 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				astra_sites_error_log( sprintf( 'Failed to load required WordPress files for %s: %s', $plugin_slug, $e->getMessage() ) );
 				return new WP_Error(
 					'files_load_failed',
-					sprintf( __( 'Failed to load required WordPress files: %s', 'astra-sites' ), $e->getMessage() ),
+					// translators: %s is the exception message.
+					sprintf( __( 'Installation failed: Required WordPress files could not be loaded. Error: %s', 'astra-sites' ), $e->getMessage() ),
 					array( 'plugin_slug' => $plugin_slug )
 				);
 			}
@@ -468,7 +479,13 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 					if ( $api_attempts >= $max_api_attempts ) {
 						return new WP_Error(
 							'api_exception',
-							sprintf( __( 'Plugin API request failed after %d attempts: %s', 'astra-sites' ), $max_api_attempts, $e->getMessage() ),
+							sprintf(
+								// translators: 1: Plugin name, 2: Max attempts, 3: Exception message.
+								__( 'Installation failed: Plugin API request for %1$s failed after %2$d attempts. Error: %3$s', 'astra-sites' ),
+								$plugin_name,
+								$max_api_attempts,
+								$e->getMessage()
+							),
 							array( 'plugin_slug' => $plugin_slug )
 						);
 					}
@@ -477,7 +494,14 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 
 			if ( ! $api ) {
 				astra_sites_error_log( sprintf( 'API failed to return data for plugin %s', $plugin_slug ) );
-				return new WP_Error( 'plugin_api_failed', sprintf( __( 'Could not retrieve plugin information for %s', 'astra-sites' ), $plugin_name ) );
+				return new WP_Error(
+					'plugin_api_failed',
+					sprintf(
+						// translators: %s is the plugin name.
+						__( 'Installation failed: Could not retrieve plugin details for %s from WordPress.org. Please try again.', 'astra-sites' ),
+						$plugin_name
+					),
+				);
 			}
 
 			// Handle API errors
@@ -489,21 +513,16 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				
 				// Provide specific error messages based on API error codes
 				switch ( $api_error_code ) {
-					case 'plugins_api_failed':
-						$user_message = sprintf( 
-							__( 'Could not connect to WordPress.org plugin repository for %s. Please check your internet connection and try again.', 'astra-sites' ), 
-							$plugin_name 
-						);
-						break;
 					case 'plugin_not_found':
 						$user_message = sprintf( 
-							__( 'Plugin %s was not found in the WordPress.org repository. Please verify the plugin name and try again.', 'astra-sites' ), 
+							__( 'Installation failed: Plugin %s was not found in the WordPress.org repository. Please verify the plugin name and try again.', 'astra-sites' ), 
 							$plugin_name 
 						);
 						break;
+					case 'plugins_api_failed':
 					default:
 						$user_message = sprintf( 
-							__( 'Could not retrieve plugin information for %s from WordPress.org. Error: %s', 'astra-sites' ), 
+							__( 'Installation failed: Could not retrieve plugin information for %1$s from WordPress.org. Error: %2$s', 'astra-sites' ), 
 							$plugin_name, 
 							$api_error_message 
 						);
@@ -527,7 +546,11 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				astra_sites_error_log( sprintf( 'Invalid API response for plugin %s', $plugin_slug ) );
 				return new WP_Error(
 					'invalid_api_response',
-					sprintf( __( 'Received invalid response from WordPress.org for plugin %s.', 'astra-sites' ), $plugin_name ),
+					sprintf(
+						// translators: %s is the plugin name.
+						__( 'Installation failed: Received an invalid response from WordPress.org for %s. Please try again.', 'astra-sites' ),
+						$plugin_name
+					),
 					array( 'plugin_slug' => $plugin_slug )
 				);
 			}
@@ -537,9 +560,13 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				astra_sites_error_log( sprintf( 'No download URL found for plugin %s', $plugin_slug ) );
 				return new WP_Error(
 					'no_download_url',
-					sprintf( __( 'Could not find download URL for %s. The plugin may not be available in WordPress.org repository or may be a premium plugin.', 'astra-sites' ), $plugin_name ),
-					array( 
-						'plugin_slug' => $plugin_slug,
+					sprintf(
+						// translators: %s is the plugin name.
+						__( 'Installation failed: Download link not available for %s. The plugin may be premium or removed from WordPress.org.', 'astra-sites' ),
+						$plugin_name
+					),
+					array(
+						'plugin_slug'  => $plugin_slug,
 						'api_response' => $api,
 					)
 				);
@@ -595,7 +622,11 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				astra_sites_error_log( sprintf( 'Failed to initialize upgrader for plugin %s: %s', $plugin_slug, $e->getMessage() ) );
 				return new WP_Error(
 					'upgrader_init_failed',
-					sprintf( __( 'Failed to initialize plugin installer for %s: %s', 'astra-sites' ), $plugin_name, $e->getMessage() ),
+					sprintf(
+						// translators: 1: Plugin name, 2: Exception message.
+						__( 'Installation failed: Failed to initialize plugin installer for %1$s: %2$s', 'astra-sites' ),
+						$plugin_name, $e->getMessage()
+					),
 					array( 'plugin_slug' => $plugin_slug )
 				);
 			}
@@ -612,8 +643,13 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				astra_sites_error_log( sprintf( 'Installation exception for plugin %s: %s', $plugin_slug, $e->getMessage() ) );
 				return new WP_Error(
 					'installation_exception',
-					sprintf( __( 'Plugin %s installation failed with exception: %s', 'astra-sites' ), $plugin_name, $e->getMessage() ),
-					array( 
+					sprintf(
+						// translators: 1: Plugin name, 2: Exception message.
+						__( 'Installation failed: Plugin %1$s failed to installed. Error: %2$s', 'astra-sites' ),
+						$plugin_name,
+						$e->getMessage()
+					),
+					array(
 						'plugin_slug' => $plugin_slug,
 						'exception_message' => $e->getMessage(),
 					)
@@ -649,7 +685,11 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				astra_sites_error_log( sprintf( 'Installation returned false for plugin %s', $plugin_slug ) );
 				return new WP_Error(
 					'installation_failed',
-					sprintf( __( 'Plugin %s installation failed: Unknown error occurred during installation. Please try again or install the plugin manually.', 'astra-sites' ), $plugin_name ),
+					sprintf(
+						// translators: %s is the plugin name.
+						__( 'Installation failed: Plugin %s installation failed: An unknown error occurred. Please try again or install manually.', 'astra-sites' ),
+						$plugin_name
+					),
 					array( 
 						'plugin_slug' => $plugin_slug,
 						'troubleshooting_tips' => array(
@@ -675,6 +715,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 
 			return true;
 		}
+
 		/**
 		 * Validate plugin requirements against current WordPress and PHP versions
 		 *
@@ -691,7 +732,8 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				if ( version_compare( $wp_version, $api->requires, '<' ) ) {
 					throw new Exception(
 						sprintf(
-							__( 'Plugin %s requires WordPress version %s or higher. You are currently running version %s. Please update WordPress first.', 'astra-sites' ),
+							// translators: 1: Plugin name, 2: Required WordPress version, 3: Current WordPress version.
+							__( 'Installation failed: Plugin %1$s requires WordPress version %2$s or higher. You are currently running version %3$s. Please update WordPress first.', 'astra-sites' ),
 							$plugin_name,
 							$api->requires,
 							$wp_version
@@ -705,7 +747,8 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				if ( version_compare( PHP_VERSION, $api->requires_php, '<' ) ) {
 					throw new Exception(
 						sprintf(
-							__( 'Plugin %s requires PHP version %s or higher. You are currently running version %s. Please contact your hosting provider to upgrade PHP.', 'astra-sites' ),
+							// translators: 1: Plugin name, 2: Required PHP version, 3: Current PHP version.
+							__( 'Installation failed: Plugin %1$s requires PHP version %2$s or higher. You are currently running version %3$s. Please contact your hosting provider to upgrade PHP.', 'astra-sites' ),
 							$plugin_name,
 							$api->requires_php,
 							PHP_VERSION
@@ -729,12 +772,14 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 			if ( function_exists( 'disk_free_space' ) && is_dir( $wp_content_dir ) ) {
 				$free_bytes = disk_free_space( $wp_content_dir );
 				$required_bytes = 50 * 1024 * 1024; // 50MB minimum requirement
+				$required_mb    = 50; // Keep this separately for message clarity.
 				
 				if ( $free_bytes !== false && $free_bytes < $required_bytes ) {
 					throw new Exception(
 						sprintf(
-							__( 'Insufficient disk space to install %s. At least 50MB of free space is required. Please free up some disk space and try again.', 'astra-sites' ),
-							$plugin_name
+							__( 'Installation failed: Insufficient disk space to install %1$s. At least %2$dMB of free space is required. Please free up some disk space and try again.', 'astra-sites' ),
+							$plugin_name,
+							$required_mb
 						)
 					);
 				}
@@ -758,6 +803,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 			if ( ! is_dir( $plugin_dir ) ) {
 				throw new Exception(
 					sprintf(
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation verification failed: Plugin directory not found after installation. The installation may have been incomplete.', 'astra-sites' ),
 						$plugin_name
 					)
@@ -769,6 +815,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 			if ( ! $plugin_file ) {
 				throw new Exception(
 					sprintf(
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation verification failed: Could not locate main plugin file after installation.', 'astra-sites' ),
 						$plugin_name
 					)
@@ -780,6 +827,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 			if ( ! is_readable( $full_plugin_path ) ) {
 				throw new Exception(
 					sprintf(
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation verification failed: Plugin file exists but is not readable. Please check file permissions.', 'astra-sites' ),
 						$plugin_name
 					)
@@ -797,9 +845,11 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 		 */
 		private function get_enhanced_error_message( $error_code, $error_message, $plugin_name ) {
 			$error_code = (string) $error_code;
+
 			switch ( $error_code ) {
 				case 'folder_exists':
 					return sprintf( 
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation failed: Plugin folder already exists. This usually means the plugin is already installed. Try refreshing the plugins page to see if it appears.', 'astra-sites' ), 
 						$plugin_name 
 					);
@@ -807,6 +857,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				case 'no_credentials':
 				case 'request_filesystem_credentials':
 					return sprintf( 
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation failed: WordPress does not have permission to write files. Please check that your web server has write permissions to the plugins directory (/wp-content/plugins/), or contact your hosting provider for assistance.', 'astra-sites' ), 
 						$plugin_name 
 					);
@@ -814,6 +865,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				case 'fs_unavailable':
 				case 'fs_error':
 					return sprintf( 
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation failed: Filesystem is not accessible. This is usually a server configuration issue. Please contact your hosting provider to resolve filesystem access problems.', 'astra-sites' ), 
 						$plugin_name 
 					);
@@ -821,6 +873,7 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				case 'download_failed':
 				case 'http_request_failed':
 					return sprintf( 
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation failed: Could not download plugin file from WordPress.org. Please check your internet connection and try again. If the problem persists, your server may be blocking outbound connections.', 'astra-sites' ), 
 						$plugin_name 
 					);
@@ -828,27 +881,31 @@ if ( ! class_exists( 'Astra_Sites_Install_Plugin' ) ) :
 				case 'incompatible_archive':
 				case 'empty_archive':
 					return sprintf( 
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation failed: The downloaded plugin file appears to be corrupted or invalid. Please try the installation again.', 'astra-sites' ), 
 						$plugin_name 
 					);
 
 				case 'mkdir_failed':
 					return sprintf( 
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation failed: Could not create plugin directory. Please check that your web server has write permissions to the plugins directory.', 'astra-sites' ), 
 						$plugin_name 
 					);
 
 				case 'copy_failed':
 					return sprintf( 
+						// translators: %s: Plugin name.
 						__( 'Plugin %s installation failed: Could not copy plugin files. This may be due to insufficient disk space or file permission issues.', 'astra-sites' ), 
 						$plugin_name 
 					);
 
 				default:
-					return sprintf( 
-						__( 'Plugin %s installation failed: %s. Please try again or install the plugin manually from the WordPress admin area.', 'astra-sites' ), 
-						$plugin_name, 
-						$error_message 
+					// translators: 1: Plugin name, 2: Original error message.
+					return sprintf(
+						__( 'Plugin %1$s installation failed: %2$s. Please try again or install the plugin manually from the WordPress admin area.', 'astra-sites' ),
+						$plugin_name,
+						$error_message
 					);
 			}
 		}

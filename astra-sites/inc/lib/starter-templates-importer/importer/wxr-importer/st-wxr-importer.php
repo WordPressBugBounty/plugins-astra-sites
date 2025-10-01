@@ -141,7 +141,7 @@ class ST_WXR_Importer {
 			if ( ! current_user_can( 'manage_options' ) ) {
 				wp_send_json_error(
 					array(
-						'error' => __( 'Permission Denied!', 'astra-sites' ),
+						'error' => __( "Permission denied: You don't have sufficient permissions to perform this action. Please contact your site administrator.", 'astra-sites' ),
 					)
 				);
 			}
@@ -172,8 +172,44 @@ class ST_WXR_Importer {
 			$xml_url = get_attached_file( $xml_id );
 		}
 
+		// Enhanced XML file validation.
 		if ( empty( $xml_url ) ) {
-			exit;
+			$this->emit_sse_message(
+				array(
+					'action' => 'complete',
+					'error'  => __( 'Template content file not found or inaccessible. The import process cannot continue without the content file. Please try importing again.', 'astra-sites' ),
+				)
+			);
+			if ( wp_doing_ajax() ) {
+				exit;
+			}
+			return;
+		}
+
+		if ( ! file_exists( $xml_url ) ) {
+			$this->emit_sse_message(
+				array(
+					'action' => 'complete',
+					'error'  => __( 'Template content file does not exist on the server. The file may have been deleted or moved. Please try re-importing the template.', 'astra-sites' ),
+				)
+			);
+			if ( wp_doing_ajax() ) {
+				exit;
+			}
+			return;
+		}
+
+		if ( ! is_readable( $xml_url ) ) {
+			$this->emit_sse_message(
+				array(
+					'action' => 'complete',
+					'error'  => __( 'Template content file cannot be read due to file permission issues. Please contact your hosting provider to fix file permissions.', 'astra-sites' ),
+				)
+			);
+			if ( wp_doing_ajax() ) {
+				exit;
+			}
+			return;
 		}
 
 		// Time to run the import!
@@ -211,11 +247,48 @@ class ST_WXR_Importer {
 		add_action( 'wxr_importer.processed.post', array( $this, 'track_post' ), 10, 2 );
 		add_action( 'wxr_importer.processed.term', array( $this, 'track_term' ) );
 
+		// Remove content_save_pr filter to avoid unwanted content filtering. Replicating the same from super admin.
+		$has_content_filter = has_filter( 'content_save_pre', 'wp_filter_post_kses' );
+		if (
+			is_multisite() &&
+			current_user_can( 'activate_plugins' ) &&
+			$has_content_filter
+		) {
+			remove_filter( 'content_save_pre', 'wp_filter_post_kses' );
+		}
+
 		// Flush once more.
 		flush();
 
 		$importer = $this->get_importer();
-		$response = $importer->import( $xml_url );
+
+		try {
+			$response = $importer->import( $xml_url );
+		} catch ( \Exception $e ) {
+			$this->emit_sse_message(
+				array(
+					'action'    => 'complete',
+					'error'     => $this->get_contextual_import_error_message( $e->getMessage() ),
+					'technical' => $e->getMessage(),
+				)
+			);
+			if ( wp_doing_ajax() ) {
+				exit;
+			}
+			return;
+		} catch ( \Error $e ) {
+			$this->emit_sse_message(
+				array(
+					'action'    => 'complete',
+					'error'     => __( 'A fatal error occurred during import, likely due to server resource limitations. Try a different template, or contact your hosting provider to increase server resources.', 'astra-sites' ),
+					'technical' => $e->getMessage(),
+				)
+			);
+			if ( wp_doing_ajax() ) {
+				exit;
+			}
+			return;
+		}
 
 		// Let the browser know we're done.
 		$complete = array(
@@ -223,13 +296,76 @@ class ST_WXR_Importer {
 			'error'  => false,
 		);
 		if ( is_wp_error( $response ) ) {
-			$complete['error'] = $response->get_error_message();
+			$complete['error']     = $this->get_contextual_import_error_message( $response->get_error_message() );
+			$complete['technical'] = $response->get_error_message();
+		}
+
+		// Restore the content filter.
+		if ( is_multisite() && $has_content_filter ) {
+			add_filter( 'content_save_pre', 'wp_filter_post_kses' );
 		}
 
 		$this->emit_sse_message( $complete );
 		if ( wp_doing_ajax() ) {
 			exit;
 		}
+	}
+
+	/**
+	 * Get contextual error message for import errors
+	 *
+	 * @since 1.1.21
+	 * @param string $original_error Original error message.
+	 * @return string Enhanced contextual error message.
+	 */
+	private function get_contextual_import_error_message( $original_error ) {
+		$message_lower = strtolower( $original_error );
+
+		// Memory errors.
+		if ( strpos( $message_lower, 'memory' ) !== false ||
+			strpos( $message_lower, 'fatal error' ) !== false ) {
+			return __( 'Import failed due to server memory limitations. This template may be too large for your current server configuration. Try importing a smaller template, or contact your hosting provider to increase memory limits.', 'astra-sites' );
+		}
+
+		// Timeout errors.
+		if ( strpos( $message_lower, 'timeout' ) !== false ||
+			strpos( $message_lower, 'execution time' ) !== false ) {
+			return __( 'Import timed out due to server limitations. The template import process took too long to complete. Try again, or contact your hosting provider to increase execution time limits.', 'astra-sites' );
+		}
+
+		// Database errors.
+		if ( strpos( $message_lower, 'database' ) !== false ||
+			strpos( $message_lower, 'mysql' ) !== false ||
+			strpos( $message_lower, 'sql' ) !== false ) {
+			return __( 'Import failed due to database issues. This could be due to database connection problems or insufficient database permissions. Please contact your hosting provider.', 'astra-sites' );
+		}
+
+		// File/Permission errors.
+		if ( strpos( $message_lower, 'permission' ) !== false ||
+			strpos( $message_lower, 'write' ) !== false ||
+			strpos( $message_lower, 'upload' ) !== false ) {
+			return __( 'Import failed due to file permission issues. The server cannot create or write files needed for the import. Please contact your hosting provider to fix file permissions.', 'astra-sites' );
+		}
+
+		// Image/Media download errors.
+		if ( strpos( $message_lower, 'image' ) !== false ||
+			strpos( $message_lower, 'media' ) !== false ||
+			strpos( $message_lower, 'download' ) !== false ) {
+			return __( 'Import completed but some images or media files could not be downloaded. This could be due to network issues or the original files being unavailable. The template structure has been imported successfully.', 'astra-sites' );
+		}
+
+		// XML parsing errors.
+		if ( strpos( $message_lower, 'xml' ) !== false ||
+			strpos( $message_lower, 'parse' ) !== false ) {
+			return __( 'Import failed due to corrupted template content. The template file appears to be damaged or incomplete. Please try importing again, or select a different template.', 'astra-sites' );
+		}
+
+		// Default enhanced message.
+		return sprintf(
+			// translators: Import encountered error text.
+			__( 'Import process encountered an error: %s. Please try again, or contact support if the issue persists.', 'astra-sites' ),
+			$original_error
+		);
 	}
 
 	/**
@@ -865,7 +1001,7 @@ class ST_WXR_Importer {
 	 * Get Importer
 	 *
 	 * @since 1.0.0
-	 * @return object   Importer object.
+	 * @return \WXR_Importer WXR_Importer object.
 	 */
 	public static function get_importer() {
 		$options = apply_filters(

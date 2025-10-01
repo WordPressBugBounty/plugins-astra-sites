@@ -690,6 +690,21 @@ const ImportSite = () => {
 	};
 
 	/**
+	 * Check if plugin is in the required plugins list.
+	 *
+	 * @param {string} slug - Plugin slug to check.
+	 * @return {boolean} - true if plugin is in required plugins
+	 */
+	const inRequiredPlugins = ( slug ) => {
+		const plugins = templateResponse?.[ 'required-plugins' ] || [];
+		if ( plugins?.find( ( plugin ) => plugin?.slug === slug ) ) {
+			return true;
+		}
+
+		return false;
+	};
+
+	/**
 	 * 1. Reset.
 	 * The following steps are covered here.
 	 * 		1. Settings backup file store.
@@ -1181,6 +1196,11 @@ const ImportSite = () => {
 	 * 2. Import CartFlows Flows.
 	 */
 	const importCartflowsFlows = async () => {
+		// Skip if CartFlows is not in the required plugins list.
+		if ( ! inRequiredPlugins( 'cartflows' ) ) {
+			return true;
+		}
+
 		const cartflowsUrl =
 			encodeURI( templateResponse?.[ 'astra-site-cartflows-path' ] ) ||
 			'';
@@ -1245,6 +1265,11 @@ const ImportSite = () => {
 	 * 2. Import Cart Abandonment Recovery data.
 	 */
 	const importCartAbandonmentRecovery = async () => {
+		// Skip if Woo Cart Abandonment Recovery is not in the required plugins list.
+		if ( ! inRequiredPlugins( 'woo-cart-abandonment-recovery' ) ) {
+			return true;
+		}
+
 		const wooCARUrl = encodeURI(
 			templateResponse?.[ 'astra-site-cart-abandonment-recovery-path' ] ||
 				''
@@ -1319,6 +1344,11 @@ const ImportSite = () => {
 	 * 3. Import LatePoint Tables.
 	 */
 	const importLatepointTables = async () => {
+		// Skip if LatePoint is not in the required plugins list.
+		if ( ! inRequiredPlugins( 'latepoint' ) ) {
+			return true;
+		}
+
 		const latepointUrl =
 			encodeURI( templateResponse?.[ 'astra-site-latepoint-path' ] ) ||
 			'';
@@ -1383,6 +1413,11 @@ const ImportSite = () => {
 	 * 3. Import WPForms.
 	 */
 	const importForms = async () => {
+		// Skip if WPForms Lite is not in the required plugins list.
+		if ( ! inRequiredPlugins( 'wpforms-lite' ) ) {
+			return true;
+		}
+
 		const wpformsUrl =
 			encodeURI( templateResponse?.[ 'astra-site-wpforms-path' ] ) || '';
 
@@ -1563,31 +1598,87 @@ const ImportSite = () => {
 					} );
 					if ( false === data.success ) {
 						const errorMsg = data.data.error || data.data;
-						throw errorMsg;
-					} else {
-						importXML( data.data );
+						// Use the contextual error message from server
+						report(
+							errorMsg,
+							'',
+							'',
+							data.data?.code || '',
+							'',
+							''
+						);
+						return false;
 					}
+					importXML( data.data );
+
 					return true;
 				} catch ( error ) {
+					const secondaryMessage =
+						error.name === 'SyntaxError'
+							? __(
+									'The server returned an invalid response. This may be due to server configuration issues or plugin conflicts.',
+									'astra-sites'
+							  )
+							: '';
+
+					// Show preview of response for debugging
+					const responsePreview =
+						text.length > 200
+							? text.substring( 0, 200 ) + '...'
+							: text;
+
 					report(
 						__(
 							'Importing Site Content failed due to parse JSON error.',
 							'astra-sites'
 						),
+						secondaryMessage,
+						error.message,
 						'',
-						error,
 						'',
-						'',
-						text
+						responsePreview
 					);
 					return false;
 				}
 			} )
 			.catch( ( error ) => {
+				// Enhanced network error handling
+				let secondaryMessage = __(
+					'Unable to connect to the server. This could be due to internet connectivity issues.',
+					'astra-sites'
+				);
+				let solution = __(
+					'Please check your internet connection and try again.',
+					'astra-sites'
+				);
+
+				// Classify network errors
+				if (
+					error.name === 'TypeError' &&
+					error.message?.includes( 'fetch' )
+				) {
+					secondaryMessage = __(
+						'Connection failed: Failed to connect to the import server. This could be due to network issues or server problems.',
+						'astra-sites'
+					);
+				} else if ( error.message?.includes( 'timeout' ) ) {
+					secondaryMessage = __(
+						'Request timeout: The import request took too long to complete. This could be due to server load or network issues.',
+						'astra-sites'
+					);
+					solution = __(
+						'Please try again. If the problem persists, try a different template.',
+						'astra-sites'
+					);
+				}
+
 				report(
 					__( 'Importing Site Content Failed.', 'astra-sites' ),
-					'',
-					error
+					secondaryMessage,
+					error.message || error,
+					error.code || '',
+					solution,
+					''
 				);
 				return false;
 			} );
@@ -1599,6 +1690,11 @@ const ImportSite = () => {
 	 * 6. Import Spectra Settings.
 	 */
 	const importSpectraSettings = async () => {
+		// Skip if Spectra is not in the required plugins list.
+		if ( ! inRequiredPlugins( 'ultimate-addons-for-gutenberg' ) ) {
+			return true;
+		}
+
 		const spectraSettings =
 			templateResponse?.[ 'astra-site-spectra-options' ] || '';
 
@@ -1631,15 +1727,25 @@ const ImportSite = () => {
 						} );
 						return true;
 					}
-					throw data.data;
+
+					// Extract meaningful error message
+					const errorMsg =
+						data.data?.error ||
+						data.data ||
+						__( 'Unknown error occurred.', 'astra-sites' );
+					throw errorMsg;
 				} catch ( error ) {
+					const errorText =
+						error?.message ||
+						error ||
+						__( 'Parse error occurred.', 'astra-sites' );
 					report(
 						__(
 							'Importing Spectra Settings failed due to parse JSON error.',
 							'astra-sites'
 						),
 						'',
-						error,
+						errorText,
 						'',
 						'',
 						text
@@ -1648,10 +1754,14 @@ const ImportSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				const errorText =
+					error?.message ||
+					error ||
+					__( 'Network error occurred.', 'astra-sites' );
 				report(
 					__( 'Importing Spectra Settings Failed.', 'astra-sites' ),
 					'',
-					error
+					errorText
 				);
 				return false;
 			} );
@@ -1662,6 +1772,11 @@ const ImportSite = () => {
 	 * 7. Import Surecart Settings.
 	 */
 	const importSureCartSettings = async () => {
+		// Skip if SureCart Lite is not in the required plugins list.
+		if ( ! inRequiredPlugins( 'surecart' ) ) {
+			return true;
+		}
+
 		const sourceID =
 			templateResponse?.[ 'astra-site-surecart-settings' ]?.id || '';
 		const sourceCurrency =

@@ -203,17 +203,15 @@ export const checkRequiredPlugins = async ( storedState ) => {
 	} )
 		.then( ( response ) => response.json() )
 		.then( ( response ) => {
-			if ( response.success ) {
-				const rPlugins = response.data?.required_plugins;
-				const notInstalledPlugin = rPlugins.notinstalled || '';
-				const notActivePlugins = rPlugins.inactive || '';
-				dispatch( {
-					type: 'set',
-					requiredPlugins: response.data,
-					notInstalledList: notInstalledPlugin,
-					notActivatedList: notActivePlugins,
-				} );
-			}
+			const rPlugins = response.data?.required_plugins;
+			const notInstalledPlugin = rPlugins.notinstalled || '';
+			const notActivePlugins = rPlugins.inactive || '';
+			dispatch( {
+				type: 'set',
+				requiredPlugins: response.data,
+				notInstalledList: notInstalledPlugin,
+				notActivatedList: notActivePlugins,
+			} );
 		} );
 };
 

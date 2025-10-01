@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.8.1
-Stable tag: 4.4.38
+Stable tag: 4.4.39
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,12 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+
+v4.4.39 - 01-October-2025
+- Improvement:
+    - Enhanced import error handling to ensure more successful imports.
+    - Multisite support enabling sub-site admins to import classic templates.
+    - AI Builder: Fixed page creation conflict with SureCart plugin during import.
 
 v4.4.38 - 12-September-2025
 - Fix:

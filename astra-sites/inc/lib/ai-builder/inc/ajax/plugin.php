@@ -284,7 +284,7 @@ class Plugin extends AjaxBase {
 			$failed_sites
 		);
 
-		if ( is_array( $last_import_site ) && ! in_array( $last_import_site['uuid'], $uuids, true ) ) {
+		if ( is_array( $last_import_site ) && isset( $last_import_site['uuid'] ) && ! in_array( $last_import_site['uuid'], $uuids, true ) ) {
 			$last_import_site['template_id']   = $id;
 			$last_import_site['local_storage'] = $local_storage;
 			$failed_sites[]                    = $last_import_site;

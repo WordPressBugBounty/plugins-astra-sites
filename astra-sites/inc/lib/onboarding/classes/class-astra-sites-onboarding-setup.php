@@ -54,47 +54,62 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 			add_action( 'wp_ajax_bsf_analytics_optin_status', array( $this, 'bsf_analytics_optin_status' ) );
 		}
 
-	/**
-	 * Prepare XML Data.
-	 *
-	 * @since 1.1.0
-	 * @return void
-	 */
-	public function import_prepare_xml() {
+		/**
+		 * Prepare XML Data.
+		 *
+		 * @since 1.1.0
+		 * @return void
+		 */
+		public function import_prepare_xml() {
 
-		// Verify Nonce.
-		check_ajax_referer( 'astra-sites', '_ajax_nonce' );
+			// Verify Nonce.
+			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
-		if ( ! current_user_can( 'customize' ) ) {
-			wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
-		}
+			if ( ! current_user_can( 'customize' ) ) {
+				wp_send_json_error( __( "Permission denied: You don't have permission to initiate the import process. Please contact your site administrator.", 'astra-sites' ) );
+			}
 
-		do_action( 'astra_sites_before_import_prepare_xml' );
+			do_action( 'astra_sites_before_import_prepare_xml' );
 
-		if ( ! class_exists( 'XMLReader' ) ) {
-			wp_send_json_error( __( 'The XMLReader library is not available. This library is required to import the content for the website.', 'astra-sites' ) );
-		}
+			if ( ! class_exists( 'XMLReader' ) ) {
+				astra_sites_error_log( 'XMLReader PHP not exist!' );
+				wp_send_json_error( __( 'Import failed: The XMLReader PHP extension is missing on your server. Please contact your hosting provider to enable it.', 'astra-sites' ) );
+			}
 
-		$wxr_url = astra_get_site_data( 'astra-site-wxr-path' );
+			$wxr_url = astra_get_site_data( 'astra-site-wxr-path' );
 
-		$result = array(
-			'status' => false,
-		);
+			// Enhanced WXR URL validation with context
+			if ( empty( $wxr_url ) || 'null' === $wxr_url || '' === trim( $wxr_url ) ) {
+				astra_sites_error_log( 'Missing WXR url' );
+				wp_send_json_error( __( 'Import failed: This template does not include site content (posts, pages, media). You can proceed with design-only import or choose a different template.', 'astra-sites' ) );
+			}
 
-		if( class_exists( 'STImporter\Importer\ST_Importer' ) ) {
-			$result = ST_Importer::prepare_xml_data( $wxr_url );
-		}
-		
-		if ( false === $result['status'] ) {
-			wp_send_json_error(
-				$result['error']
+			$result = array(
+				'status' => false,
 			);
-		} else {
-			wp_send_json_success(
-				$result['data']
-			);
+
+			if ( ! class_exists( 'STImporter\Importer\ST_Importer' ) ) {
+				wp_send_json_error( __( 'Import failed: The required import library is not loaded. This may be due to a plugin conflict. Please deactivate other plugins temporarily and try again, or reinstall the Starter Templates plugin.', 'astra-sites' ) );
+			}
+
+			try {
+				$result = ST_Importer::prepare_xml_data( $wxr_url );
+			} catch ( \Exception $e ) {
+				astra_sites_error_log( 'ST_Importer::prepare_xml_data Exception: ' . $e->getMessage() );
+				// translators: %s is the exception message.
+				wp_send_json_error( sprintf( __( 'Import failed: Unexpected error - %s', 'astra-sites' ), $e->getMessage() ) );
+			} catch ( \Error $e ) {
+				astra_sites_error_log( 'ST_Importer::prepare_xml_data Fatal Error: ' . $e->getMessage() );
+				wp_send_json_error( sprintf( __( 'Import failed: Fatal error - %s', 'astra-sites' ), $e->getMessage() ) );
+			}
+			
+			if ( false === $result['status'] ) {
+				/* translators: %s: Error message */
+				wp_send_json_error( sprintf( __( 'Import failed: %s', 'astra-sites' ), $result['data'] ) );
+			} else {
+				wp_send_json_success( $result['data'] );
+			}
 		}
-	}
 
 		/**
 		 * BSF Analytics Opt-in.

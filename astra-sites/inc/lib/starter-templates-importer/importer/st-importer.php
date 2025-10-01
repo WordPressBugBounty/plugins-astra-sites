@@ -12,6 +12,7 @@ namespace STImporter\Importer;
 use STImporter\Importer\WXR_Importer\ST_WXR_Importer;
 use STImporter\Importer\ST_Importer_Helper;
 use STImporter\Importer\ST_Widget_Importer;
+use STImporter\Importer\ST_Plugin_Installer;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -85,11 +86,35 @@ class ST_Importer {
 	 */
 	public static function import_spectra_settings( $settings = array() ) {
 
+		// Check if Spectra plugin is available.
 		if ( ! is_callable( 'UAGB_Admin_Helper::get_instance' ) ) {
-			return array(
-				'status' => false,
-				'error'  => __( 'Can\'t import Spectra Settings. Spectra Plugin is not activated.', 'astra-sites' ),
-			);
+			// Try to install and activate Spectra plugin.
+			$install_result = ST_Plugin_Installer::install_spectra_plugin();
+
+			if ( ! $install_result['status'] ) {
+				return array(
+					'status' => false,
+					'error'  => sprintf(
+						// translators: Spectra plugin installation failed message.
+						__( 'Spectra plugin installation failed: %s', 'astra-sites' ),
+						$install_result['error']
+					),
+				);
+			}
+
+			// Manually load the plugin file after activation.
+			$plugin_file = WP_PLUGIN_DIR . '/ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php';
+			if ( file_exists( $plugin_file ) ) {
+				include_once $plugin_file;
+			}
+
+			// Check again after manual loading.
+			if ( ! is_callable( 'UAGB_Admin_Helper::get_instance' ) ) {
+				return array(
+					'status' => false,
+					'error'  => __( 'Spectra plugin installed but class not loaded. Please refresh and try again.', 'astra-sites' ),
+				);
+			}
 		}
 
 		if ( empty( $settings ) ) {
@@ -99,13 +124,20 @@ class ST_Importer {
 			);
 		}
 
-		\UAGB_Admin_Helper::get_instance()->update_admin_settings_shareable_data( $settings ); // @phpstan-ignore-line
+		try {
+			\UAGB_Admin_Helper::get_instance()->update_admin_settings_shareable_data( $settings ); // @phpstan-ignore-line
 
-		return array(
-			'status'  => true,
-			'message' => __( 'Spectra settings imported successfully.', 'astra-sites' ),
-		);
-
+			return array(
+				'status'  => true,
+				'message' => __( 'Spectra settings imported successfully.', 'astra-sites' ),
+			);
+		} catch ( \Exception $e ) {
+			return array(
+				'status' => false,
+				// translators: %s is the exception message.
+				'error'  => sprintf( __( 'Spectra settings import failed: %s', 'astra-sites' ), $e->getMessage() ),
+			);
+		}
 	}
 
 	/**
@@ -236,6 +268,14 @@ class ST_Importer {
 			// As per wp-admin/includes/upload.php.
 			$post_id = wp_insert_attachment( $post, $xml_path['data']['file'] );
 
+			if ( is_wp_error( $post_id ) ) { // @phpstan-ignore-line
+				return array(
+					'status' => false,
+					// translators: %s is the error message.
+					'error'  => sprintf( __( 'Error occurred while inserting XML file: %s', 'astra-sites' ), $post_id->get_error_message() ),
+				);
+			}
+
 			if ( ! is_int( $post_id ) ) {
 				return array(
 					'status' => false,
@@ -253,9 +293,14 @@ class ST_Importer {
 				);
 			}
 		} else {
+			$error_message = isset( $xml_path['data'] )
+				? $xml_path['data']
+				: __( 'Could not download data file. Please check your internet connection and try again.', 'astra-sites' );
+
 			return array(
 				'status' => false,
-				'error'  => $xml_path['data'],
+				// translators: %s is the download error message.
+				'error'  => sprintf( __( 'File download failed: %s', 'astra-sites' ), $error_message ),
 			);
 		}
 	}

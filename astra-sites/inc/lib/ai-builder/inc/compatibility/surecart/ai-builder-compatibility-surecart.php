@@ -119,13 +119,28 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) {
 		 * Why? SureCart creates set of pages on it's activation
 		 * These pages are re created via our XML import step.
 		 * In order to avoid the duplicacy we restrict these page creation process.
+		 * This is applicable for template which are setup with surecart.
 		 *
 		 * @since 3.3.0
 		 * @return void
 		 */
 		public function disable_default_surecart_pages_creation() {
-			if ( astra_sites_has_import_started() ) {
-				add_filter( 'surecart/seed/all', '__return_false' );
+			// Bail if import not started.
+			if ( ! astra_sites_has_import_started() ) {
+				return;
+			}
+
+			// Skip preventing surecart pages creation of AI template import.
+			if ( 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
+				return;
+			}
+
+			$required_plugins_for_site = astra_get_site_data( 'required-plugins' );
+			if ( ! empty( $required_plugins_for_site ) && is_array( $required_plugins_for_site ) ) {
+				$plugin_slugs = array_column( $required_plugins_for_site, 'slug' );
+				if ( in_array( 'surecart', $plugin_slugs, true ) ) {
+					add_filter( 'surecart/seed/all', '__return_false' );
+				}
 			}
 		}
 	}

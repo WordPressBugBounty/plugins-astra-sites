@@ -394,7 +394,7 @@ class GS_Admin {
 						<?php esc_html_e( 'This quick, checklist-style course walks you through the final steps of site settings, essential setups, and more so your website is polished, professional, and ready for the world!', 'astra-sites' ); ?>
 					</p>
 					<a
-						href="<?php echo esc_url( admin_url( 'admin.php?page=getting-started' ) ); ?>"
+						href="<?php echo esc_url( admin_url( 'admin.php?page=getting-started&source=dashboard-banner' ) ); ?>"
 						class="button button-primary gs-finish-setup-button"
 					>
 						<?php esc_html_e( 'Continue to finish setup', 'astra-sites' ); ?>

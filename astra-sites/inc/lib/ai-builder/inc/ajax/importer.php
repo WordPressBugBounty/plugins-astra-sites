@@ -69,7 +69,7 @@ class Importer extends AjaxBase {
 		update_option( 'astra_sites_import_complete', 'yes', false );
 
 		// Mark setup wizard as shown.
-		$option_name = class_exists( '\GS\Classes\GS_Helper' )
+		$option_name = class_exists( '\GS\Classes\GS_Helper' ) && is_callable( [ '\GS\Classes\GS_Helper', 'get_setup_wizard_showing_option_name' ] )
 			? \GS\Classes\GS_Helper::get_setup_wizard_showing_option_name()
 			: 'getting_started_is_setup_wizard_showing';
 
@@ -341,35 +341,129 @@ class Importer extends AjaxBase {
 	 */
 	public function import_spectra_settings( $url = '' ) {
 
-		check_ajax_referer( 'astra-sites', '_ajax_nonce' );
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_send_json_error(
-				array(
-					'error' => __( 'Permission Denied!', 'astra-sites' ),
-				)
-			);
-		}
+		try {
+			// Nonce verification.
+			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
-		$settings = astra_get_site_data( 'astra-site-spectra-options' );
-		if ( class_exists( 'STImporter\Importer\ST_Importer' ) ) {
+			// Permission check.
+			if ( ! current_user_can( 'edit_posts' ) ) {
+				wp_send_json_error(
+					array(
+						'error' => __( "Permission denied: You don't have sufficient permissions to import Spectra settings. Please contact your site administrator.", 'astra-sites' ),
+						'code'  => 'permission_denied',
+					)
+				);
+			}
+
+			// Check if ST_Importer class exists.
+			if ( ! class_exists( 'STImporter\Importer\ST_Importer' ) ) {
+				wp_send_json_error(
+					array(
+						'error' => __( 'Spectra settings import failed: ST_Importer class not found. Please ensure the importer is properly loaded.', 'astra-sites' ),
+						'code'  => 'importer_missing',
+					)
+				);
+			}
+
+			// Get Spectra settings.
+			$settings = astra_get_site_data( 'astra-site-spectra-options' );
+
+			// Validate settings data.
+			if ( empty( $settings ) ) {
+				// This is normal - template might not have Spectra settings.
+				if ( defined( 'WP_CLI' ) ) {
+					\WP_CLI::line( 'No Spectra settings to import.' );
+				} elseif ( wp_doing_ajax() ) {
+					wp_send_json_success(
+						array(
+							'message'  => __( 'No Spectra settings found for this template.', 'astra-sites' ),
+							'skipped'  => true,
+							'settings' => $settings,
+						)
+					);
+				}
+				return;
+			}
+
+			// Import Spectra settings.
 			$result = ST_Importer::import_spectra_settings( $settings );
 
+			// Handle import result.
 			if ( false === $result['status'] ) {
+				$error_message = isset( $result['error'] ) && ! empty( $result['error'] )
+					? $result['error']
+					: __( 'Unknown error occurred during Spectra settings import.', 'astra-sites' );
+
 				if ( defined( 'WP_CLI' ) ) {
-					\WP_CLI::line( $result['error'] );
+					\WP_CLI::line( $error_message );
 				} elseif ( wp_doing_ajax() ) {
-					wp_send_json_error( $result['error'] );
+					wp_send_json_error(
+						array(
+							// translators: %s is the error message.
+							'error'   => sprintf( __( 'Spectra settings import failed: %s', 'astra-sites' ), $error_message ),
+							'code'    => 'import_failed',
+							'details' => $result,
+						)
+					);
 				}
+				return;
 			}
+
+			// Success response.
+			$success_message = isset( $result['message'] ) && ! empty( $result['message'] )
+				? $result['message']
+				: __( 'Spectra settings imported successfully.', 'astra-sites' );
 
 			if ( defined( 'WP_CLI' ) ) {
-				\WP_CLI::line( 'Imported Spectra settings from ' . $url );
+				\WP_CLI::line( $success_message );
 			} elseif ( wp_doing_ajax() ) {
-				wp_send_json_success( $url );
+				wp_send_json_success(
+					array(
+						'message' => $success_message,
+						'url'     => $url,
+					)
+				);
+			}
+		} catch ( \Exception $e ) {
+			// Catch any unexpected errors.
+			$error_message = sprintf(
+				// translators: %s is exception error message.
+				__( 'Spectra settings import failed: Unexpected error - %s', 'astra-sites' ),
+				$e->getMessage()
+			);
+
+			if ( defined( 'WP_CLI' ) ) {
+				\WP_CLI::line( $error_message );
+			} elseif ( wp_doing_ajax() ) {
+				wp_send_json_error(
+					array(
+						'error' => $error_message,
+						'code'  => 'exception',
+						'file'  => $e->getFile(),
+						'line'  => $e->getLine(),
+					)
+				);
+			}
+		} catch ( \Error $e ) {
+			$error_message = sprintf(
+				// translators: %s is exception error message.
+				__( 'Spectra settings import failed: Fatal error - %s', 'astra-sites' ),
+				$e->getMessage()
+			);
+
+			if ( defined( 'WP_CLI' ) ) {
+				\WP_CLI::line( $error_message );
+			} elseif ( wp_doing_ajax() ) {
+				wp_send_json_error(
+					array(
+						'error' => $error_message,
+						'code'  => 'fatal_error',
+						'file'  => $e->getFile(),
+						'line'  => $e->getLine(),
+					)
+				);
 			}
 		}
-
-		wp_send_json_error( __( 'There was an error importing the Spectra settings.', 'astra-sites' ) );
 	}
 
 	/**
@@ -381,19 +475,22 @@ class Importer extends AjaxBase {
 	public function import_surecart_settings() {
 		check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
+			wp_send_json_error( __( "Permission denied: You don't have sufficient permissions to import SureCart settings. Please contact your site administrator.", 'astra-sites' ) );
+		}
+
+		if ( ! class_exists( 'STImporter\Importer\ST_Importer' ) ) {
+			wp_send_json_error( __( 'SureCart import failed: ST_Importer class not found. Please ensure the importer is properly loaded.', 'astra-sites' ) );
 		}
 
 		$id = isset( $_POST['source_id'] ) ? base64_decode( sanitize_text_field( $_POST['source_id'] ) ) : ''; //phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 
-		if ( class_exists( 'STImporter\Importer\ST_Importer' ) ) {
-			$result = ST_Importer::import_surecart_settings( $id );
-			if ( ! is_wp_error( $result ) ) {
-				wp_send_json_success( 'success' );
-			}
+		$result = ST_Importer::import_surecart_settings( $id );
+		if ( is_wp_error( $result ) ) {
+			// translators: %s: Error message.
+			wp_send_json_error( sprintf( __( 'SureCart import failed: %s', 'astra-sites' ), $result->get_error_message() ) );
 		}
 
-		wp_send_json_error( __( 'There was an error cloning the surecart store.', 'astra-sites' ) );
+		wp_send_json_success( 'success' );
 	}
 
 	/**

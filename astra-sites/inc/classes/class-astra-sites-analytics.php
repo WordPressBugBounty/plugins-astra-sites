@@ -505,6 +505,61 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		}
 
 		/**
+		 * Checks if SureRank optimization is done on any post.
+		 *
+		 * ACTIVE CONDITION:
+		 * - Optimizations of 3+ pages/posts (update meta, etc. of 3+ pages)
+		 * - Optimize 3+ things in "site level" SEO settings (change configuration of 3 things from default values)
+		 *
+		 * @since 4.4.39
+		 *
+		 * @return bool True if optimization is done on 3+ posts/pages, false otherwise.
+		 */
+		public static function is_surerank_optimization_done() {
+			if ( ! defined( 'SURERANK_VERSION' ) || ! is_plugin_active( 'surerank/surerank.php' ) ) {
+				return false;
+			}
+
+			// Check if 3 or more site-level settings are changed from default.
+			if ( is_callable( '\SureRank\Inc\Functions\Defaults::get_instance' ) ) {
+				$key               = defined( 'SURERANK_SETTINGS' ) ? SURERANK_SETTINGS : 'surerank_settings';
+				$surerank_defaults = \SureRank\Inc\Functions\Defaults::get_instance()->get_global_defaults();
+				$surerank_settings = get_option( $key, array() );
+
+				if ( is_array( $surerank_settings ) && is_array( $surerank_defaults ) ) {
+					$changed_settings = self::shallow_two_level_diff( $surerank_settings, $surerank_defaults );
+					if ( count( $changed_settings ) >= 3 ) {
+						return true;
+					}
+				}
+			}
+
+			global $wpdb;
+			// Use direct SQL with IN() for multiple meta keys instead of WP_Query to avoid heavy JOINs and improve performance.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$posts = $wpdb->get_col(
+				$wpdb->prepare(
+					"
+						SELECT DISTINCT pm.post_id
+						FROM {$wpdb->postmeta} pm
+						INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+						WHERE pm.meta_key IN (%s, %s, %s, %s, %s, %s)
+						AND p.post_status = 'publish'
+						LIMIT 3
+					",
+					'surerank_settings_general',
+					'surerank_settings_schemas',
+					'surerank_settings_social',
+					'surerank_settings_post_no_index',
+					'surerank_settings_post_no_follow',
+					'surerank_settings_post_no_archive'
+				)
+			);
+
+			return count( $posts ) >= 3;
+		}
+
+		/**
 		 * Add required plugins analytics data.
 		 *
 		 * @param array $stats Stats array.
@@ -541,6 +596,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 					'cartflows_funnel_published'  => self::is_cartflows_funnel_published(),
 					'latepoint_booking_managed'   => self::is_latepoint_booking_managed(),
 					'presto_player_used'          => self::is_presto_player_used(),
+					'surerank_optimization_done'  => self::is_surerank_optimization_done(),
 				)
 			);
 		}
@@ -560,15 +616,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				: 'getting_started_is_setup_wizard_showing';
 			$is_setup_wizard_showing = get_option( $option_name, false );
 			$action_items_status     = get_option( 'getting_started_action_items', array() );
-			$menu_priority_val       = (string) Astra_Sites_Page::get_instance()->get_setting( 'fs_menu_position', '' );
 			$fs_banner_clicked       = (string) Astra_Sites_Page::get_instance()->get_setting( 'fs_banner_clicked', '' );
-
-			// Determine menu position.
-			if ( '1' === $menu_priority_val ) {
-				$menu_priority = 'before-dashboard';
-			} elseif ( '2.00001' === $menu_priority_val ) {
-				$menu_priority = 'after-dashboard';
-			}
  
 			$courses_status          = array();
 			$no_of_completed_courses = 0;
@@ -597,8 +645,6 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			if ( $fs_banner_clicked ) {
 				$stats['boolean_values']['finish_setup_banner_clicked'] = 'yes' === $fs_banner_clicked;
 			}
-
-			$stats['finish_setup_menu_position'] = $menu_priority;
 
 			// Plain Json data.
 			$stats['courses_status'] = ! empty( $courses_status ) ? wp_json_encode( $courses_status ) : '';
@@ -646,6 +692,45 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			}
 
 			return $stats;
+		}
+
+		/**
+		 * Compare top-level and one-level nested settings with defaults.
+		 *
+		 * @param array $settings Current settings.
+		 * @param array $defaults Default settings.
+		 *
+		 * @since 4.4.39
+		 * @return array Changed settings (top-level + one-level deep).
+		 */
+		public static function shallow_two_level_diff( array $settings, array $defaults ) {
+			$difference = array();
+
+			foreach ( $settings as $key => $value ) {
+				// Key missing in defaults = changed.
+				if ( ! array_key_exists( $key, $defaults ) ) {
+					$difference[ $key ] = $value;
+					continue;
+				}
+
+				// If value is an array, only check one level deep.
+				if ( is_array( $value ) && is_array( $defaults[ $key ] ) ) {
+					$nested_diff = array();
+					foreach ( $value as $sub_key => $sub_value ) {
+						if ( ! array_key_exists( $sub_key, $defaults[ $key ] ) || $sub_value !== $defaults[ $key ][ $sub_key ] ) {
+							$nested_diff[ $sub_key ] = $sub_value;
+						}
+					}
+					if ( ! empty( $nested_diff ) ) {
+						$difference[ $key ] = $nested_diff;
+					}
+				} elseif ( $value !== $defaults[ $key ] ) {
+					// Compare scalar values directly.
+					$difference[ $key ] = $value;
+				}
+			}
+
+			return $difference;
 		}
 	}
 

@@ -150,7 +150,13 @@ class Astra_Widget_Importer {
 				$fail = false;
 
 				// Get id_base (remove -# from end) and instance ID number.
-				$id_base            = preg_replace( '/-[0-9]+$/', '', $widget_instance_id );
+				$id_base            = preg_replace_callback(
+					'/-[0-9]+$/',
+					function( $matches ) {
+						return '';
+					},
+					$widget_instance_id
+				);
 				$instance_id_number = str_replace( $id_base . '-', '', $widget_instance_id );
 
 				// Does site support this widget?

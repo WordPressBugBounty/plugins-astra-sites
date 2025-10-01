@@ -265,24 +265,19 @@ const ClassicFeatures = () => {
 	};
 
 	const setNextStep = async () => {
-		dispatch( {
-			type: 'set',
-			currentIndex: currentIndex + 1,
-		} );
-
 		const enabledFeatureIds = siteFeatures
 			.filter( ( component ) => component.enabled )
 			.map( ( component ) => component.id );
-
-		dispatch( {
-			type: 'set',
-			enabledFeatureIds,
-		} );
 
 		storedState[ 0 ].enabledFeatureIds = enabledFeatureIds;
 		storedState[ 0 ].selectedEcommercePlugin = selectedEcom;
 
 		await checkRequiredPlugins( storedState );
+		await dispatch( {
+			type: 'set',
+			enabledFeatureIds,
+			currentIndex: currentIndex + 1,
+		} );
 	};
 	const skipStep = () => {
 		dispatch( {

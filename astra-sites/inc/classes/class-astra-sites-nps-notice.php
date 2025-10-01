@@ -95,6 +95,9 @@ if ( ! class_exists( 'Astra_Sites_Nps_Notice' ) ) :
 						'plugin_rating_title'   => __( 'Thank you for your feedback', 'astra-sites' ),
 						'plugin_rating_content' => __( 'We value your input. How can we improve your experience?', 'astra-sites' ),
 					),
+					'privacy_policy'  => array(
+						'disable' => true, // Enable when we have a privacy policy url.
+					),
 				)
 			);
 		}
