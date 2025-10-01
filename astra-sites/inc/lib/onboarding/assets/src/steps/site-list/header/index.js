@@ -25,6 +25,7 @@ const SiteListHeader = () => {
 	useWhatsNewRSS( {
 		rssFeedURL: 'https://startertemplates.com/whats-new/feed/',
 		selector: '#st-whats-new',
+		uniqueKey: 'astra-sites',
 		triggerButton: {
 			beforeBtn:
 				'<div class="w-4 sm:w-8 h-8 sm:h-10 flex items-center whitespace-nowrap justify-center cursor-pointer rounded-full border border-slate-200">',
