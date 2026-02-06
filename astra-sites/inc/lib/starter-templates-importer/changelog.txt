@@ -1,3 +1,20 @@
+v1.1.25 - 03-February-2026
+- Improvement: Improved import process logging for better traceability.
+
+v1.1.24 - 30-December-2025
+- Improvement: Implemented mechanism to prevent duplicate WXR import requests, ensuring data integrity and avoiding content duplication.
+- Improvement: Enhanced error handling for site content import.
+- Improvement: Added support for SureCart checkout form block ID replacement during batch processing.
+
+v1.1.23 - 05-December-2025
+- Improvement: Enhanced the SureCart product creation flow to use template products when available, providing a smoother setup experience.
+- Improvement: Skip irrelevant site-specific meta keys during import.
+- Improvement: Added WPForms plugin compatibility for Elementor templates.
+
+v1.1.22 - 13-November-2025
+- Security: Enhanced file upload validation to prevent double extension attacks.
+- Fix: Prevented potential fatal errors when updating the site options if an exception occurs from Elementor.
+
 v1.1.21 - 18-September-2025
 - Improvement: Added multisite import compatibility for classic templates.
 - Improvement: Enhanced import error handling to minimize failure rates.

@@ -46,7 +46,7 @@ const AISitesNotice = ( { className, ...props } ) => {
 							className="no-underline"
 						>
 							<div className="p-0 font-semibold  text-sm text-blue-crayola min-w-fit w-max">
-								{ __( 'Buy Add-ons', 'ai-builder' ) }
+								{ __( 'Upgrade Now', 'ai-builder' ) }
 							</div>
 						</a>
 					</div>

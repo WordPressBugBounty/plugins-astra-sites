@@ -30,7 +30,11 @@ import Dropdown from '../components/dropdown';
 import AISitesNotice from '../components/ai-sites-notice';
 import { WooCommerceIcon, SureCartIcon } from '../ui/icons';
 import CreditConfirmModal from '../components/CreditConfirmModal';
-import { getFeaturePluginList } from '../utils/import-site/import-utils';
+import {
+	getFeaturePluginList,
+	fetchRequiredPlugins,
+	checkMultisiteImportPermissions,
+} from '../utils/import-site/import-utils';
 import RequiredPlugins from '../components/RequiredPlugins';
 
 const fetchStatus = {
@@ -60,7 +64,7 @@ const getPluginProps = ( id ) => {
 };
 
 const EcommerceOptions = ( { ecomSupported, selectedEcom, onChange } ) => {
-	const { setSiteFeaturesData } = useDispatch( STORE_KEY );
+	const { setSiteFeaturesData, setEcommerceType } = useDispatch( STORE_KEY );
 	const [ open, setOpen ] = useState( false );
 
 	const isOnlyOneEcom = ecomSupported.length === 1;
@@ -72,6 +76,7 @@ const EcommerceOptions = ( { ecomSupported, selectedEcom, onChange } ) => {
 		event.stopPropagation();
 		onChange( id );
 		setOpen( false );
+		setEcommerceType( id );
 		setSiteFeaturesData( { ecommerce_type: id } );
 	};
 	return (
@@ -153,7 +158,11 @@ const ICON_SET = {
 	'arrow-trending-up': ArrowTrendingUpIcon,
 };
 
-const Features = ( { handleClickStartBuilding, isInProgress } ) => {
+const Features = ( {
+	handleClickStartBuilding,
+	isInProgress,
+	setMultisitePermissionModal,
+} ) => {
 	const { previousStep } = useNavigateSteps();
 	const disabledFeatures = aiBuilderVars?.hide_site_features;
 	const { setSiteFeatures, storeSiteFeatures } = useDispatch( STORE_KEY );
@@ -200,7 +209,16 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 			selectedTemplateData?.features_data?.ecommerce_type,
 		];
 	}, [] );
-	const [ selectedEcom, setSelectedEcom ] = useState( defaultEcom );
+	const selectedEcom = useSelect( ( select ) => {
+		const { getAIStepData } = select( STORE_KEY );
+		const aiStepData = getAIStepData();
+		return aiStepData.siteFeaturesData?.ecommerce_type || defaultEcom;
+	} );
+
+	const { setEcommerceType } = useDispatch( STORE_KEY );
+	const handleEcomChange = ( id ) => {
+		setEcommerceType( id );
+	};
 
 	const [ isFetchingStatus, setIsFetchingStatus ] = useState(
 		fetchStatus.fetching
@@ -240,10 +258,37 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 						enabled: ! f.enabled,
 					};
 				}
+				if (
+					f.id === 'sales-funnels' &&
+					f.enabled &&
+					feature.id === 'ecommerce'
+				) {
+					return {
+						...f,
+						enabled: false,
+					};
+				}
 				return f;
 			} )
 		);
 	};
+
+	useEffect( () => {
+		if ( selectedEcom !== 'woocommerce' ) {
+			setSiteFeatures( 'sales-funnels' );
+			storeSiteFeatures(
+				siteFeatures.map( ( f ) => {
+					if ( f.id === 'sales-funnels' && f.enabled ) {
+						return {
+							...f,
+							enabled: false,
+						};
+					}
+					return f;
+				} )
+			);
+		}
+	}, [ selectedEcom ] );
 
 	useEffect( () => {
 		if ( siteFeatures?.length > 0 ) {
@@ -256,15 +301,56 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 	}, [] );
 
 	const listOfFeatures = useMemo( () => {
+		const isEcommerceEnabled = siteFeatures.some(
+			( feat ) => feat.id === 'ecommerce' && feat.enabled
+		);
 		// Exclude disabled features from UI only when site features have been fetched.
 		return isFetchingStatus === fetchStatus.fetched
-			? siteFeatures?.filter(
-					( feat ) => ! disabledFeatures?.includes( feat.id )
-			  )
-			: [];
-	}, [ siteFeatures, disabledFeatures, isFetchingStatus ] );
+			? siteFeatures?.filter( ( feat ) => {
+					// If feature is not sales-funnels, return it if it's not disabled
+					if ( feat.id !== 'sales-funnels' ) {
+						return ! disabledFeatures?.includes( feat.id );
+					}
 
-	const handleClickNext = ( { skipFeature = false } ) => {
+					// For sales-funnels, only show if e-commerce is enabled and selected ecom is woocommerce
+					const shouldShowSalesFunnels =
+						isEcommerceEnabled && selectedEcom === 'woocommerce';
+
+					return (
+						! disabledFeatures?.includes( feat.id ) &&
+						shouldShowSalesFunnels
+					);
+			  } )
+			: [];
+	}, [ siteFeatures, disabledFeatures, isFetchingStatus, selectedEcom ] );
+
+	// State for tracking if we're checking multisite permissions
+	const [ isCheckingMultisite, setIsCheckingMultisite ] = useState( false );
+
+	// Check multisite permissions when user clicks Start Building
+	const checkMultisitePermissions = async () => {
+		// Only check in multisite environments
+		if ( ! aiBuilderVars.isMultisite ) {
+			return { allowed: true };
+		}
+		setIsCheckingMultisite( true );
+
+		const requiredPluginsResponse = await fetchRequiredPlugins(
+			featurePluginsList,
+			true
+		);
+
+		// Check permissions
+		const permissionResult = checkMultisiteImportPermissions(
+			requiredPluginsResponse.data,
+			aiBuilderVars
+		);
+		setIsCheckingMultisite( false );
+
+		return permissionResult;
+	};
+
+	const handleClickNext = async ( { skipFeature = false } ) => {
 		if ( ! authenticated ) {
 			setSignupLoginModal( {
 				open: true,
@@ -274,6 +360,21 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 				isPremiumTemplate: selectedTemplateIsPremium,
 			} );
 			return;
+		}
+
+		// Check multisite permissions when user clicks Start Building in multisite env.
+		if ( aiBuilderVars.isMultisite ) {
+			const permissionResult = await checkMultisitePermissions();
+
+			// If permissions are not met, show blocking modal
+			if ( ! permissionResult.allowed ) {
+				setMultisitePermissionModal( {
+					open: true,
+					missingThemes: permissionResult.missingThemes || [],
+					missingPlugins: permissionResult.missingPlugins || [],
+				} );
+				return;
+			}
 		}
 
 		// get the start building function from the parent component
@@ -314,6 +415,10 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 					? 'elementor'
 					: 'ultimate-addons-for-gutenberg',
 			compulsory: true,
+			init:
+				pageBuilder === 'elementor'
+					? 'elementor/elementor.php'
+					: 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
 		};
 
 		const formPlugin = {
@@ -322,6 +427,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 			compulsory: siteFeatures?.find(
 				( feature ) => feature.id === 'contact-form'
 			)?.compulsory,
+			init: 'sureforms/sureforms.php',
 		};
 
 		return [
@@ -400,7 +506,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 																selectedEcom
 															}
 															onChange={
-																setSelectedEcom
+																handleEcomChange
 															}
 														/>
 													) }
@@ -476,7 +582,7 @@ const Features = ( { handleClickStartBuilding, isInProgress } ) => {
 					onClickSkip={ () =>
 						handleClickNext( { skipFeature: true } )
 					}
-					loading={ isInProgress }
+					loading={ isInProgress || isCheckingMultisite }
 					skipButtonText={ __(
 						'Skip & Start Building',
 						'ai-builder'

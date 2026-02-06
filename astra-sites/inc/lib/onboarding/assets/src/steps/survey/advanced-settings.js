@@ -5,7 +5,8 @@ import { __ } from '@wordpress/i18n';
 import { useStateValue } from '../../store/store';
 import ICONS from '../../../icons';
 import { whiteLabelEnabled } from '../../utils/functions';
-const { themeStatus, firstImportStatus, analytics } = starterTemplates;
+const { themeStatus, firstImportStatus, analytics, isWPFreshSite } =
+	starterTemplates;
 import ToggleSwitch from '../../components/toggle-switch';
 import FilesAndFolderImg from '../../../images/files-folder.png';
 import { Checkbox, Field, Label } from '@headlessui/react';
@@ -46,6 +47,12 @@ const AdvancedSettings = () => {
 	const showAdvancedOption =
 		( ! whiteLabelEnabled() && analytics !== 'yes' ) ||
 		'installed-and-active' !== themeStatus;
+
+	const showConfirmation = ! isWPFreshSite || ! allowResetSite;
+
+	if ( ! showAdvancedOption && ! showConfirmation ) {
+		return null;
+	}
 
 	return (
 		<div className="survey-form-advanced-wrapper show-section">
@@ -136,8 +143,8 @@ const AdvancedSettings = () => {
 					</div>
 				</div>
 			) }
-			{ 'yes' === firstImportStatus ? (
-				<div className="flex items-center rounded-md p-4 border-solid border gap-6 border-[#FB7E0A1F] bg-[#FB7E0A0F] max-sm:flex-col">
+			{ 'yes' === firstImportStatus && (
+				<div className="flex items-center rounded-md p-4 border-solid border gap-6 bg-st-background-secondary border-button-disabled max-sm:flex-col">
 					<div className="mb-1">
 						<p className="text-sm text-body-text !leading-6 max-sm:text-center">
 							{ __(
@@ -181,12 +188,14 @@ const AdvancedSettings = () => {
 						/>
 					</div>
 				</div>
-			) : (
-				<div className="flex items-center rounded-md p-4 border-solid border gap-6 border-[#FB7E0A1F] bg-[#FB7E0A0F] max-sm:flex-col">
+			) }
+
+			{ 'yes' !== firstImportStatus && showConfirmation && (
+				<div className="flex items-center rounded-md p-4 border-solid border gap-6 bg-st-background-secondary border-button-disabled max-sm:flex-col">
 					<div className="mb-1">
 						<p className="text-sm text-body-text !leading-6 max-sm:text-center">
 							{ __(
-								'This will overwrite your site settings and add new content. You might want to backup your site before proceeding.',
+								'Your current site will be updated with the selected layout, design, content, and pages.',
 								'astra-sites'
 							) }
 						</p>

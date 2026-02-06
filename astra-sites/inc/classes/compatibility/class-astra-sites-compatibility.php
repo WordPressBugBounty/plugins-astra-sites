@@ -67,6 +67,9 @@ if ( ! class_exists( 'Astra_Sites_Compatibility' ) ) :
 
 			// Plugin - Cart Abandonment Recovery for WooCommerce.
 			require_once ASTRA_SITES_DIR . 'inc/classes/compatibility/cart-abandonment-recovery/class-astra-sites-compatibility-cartflows-ca.php';
+
+			// Plugin - Modern Cart.
+			require_once ASTRA_SITES_DIR . 'inc/classes/compatibility/modern-cart/class-astra-sites-compatibility-modern-cart.php';
 		}
 
 	}

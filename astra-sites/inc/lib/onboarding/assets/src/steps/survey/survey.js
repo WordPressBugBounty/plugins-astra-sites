@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { trackOnboardingStep } from '../../utils/functions';
 import { __ } from '@wordpress/i18n';
+
 const SurveyForm = ( { formDetails, updateFormDetails } ) => {
-	const [ selectedIndex, setSelectedIndex ] = useState( {
-		option1: formDetails.wp_user_type
-			? parseInt( formDetails.wp_user_type )
-			: 0,
-		option2: formDetails.build_website_for
-			? parseInt( formDetails.build_website_for )
-			: 0,
-	} );
+	useEffect( () => {
+		// Track survey step when component mounts
+		trackOnboardingStep( 'survey' );
+	}, [] );
+
 	return (
 		<>
 			<p className="label-text row-label !mb-2">
@@ -35,62 +34,6 @@ const SurveyForm = ( { formDetails, updateFormDetails } ) => {
 						updateFormDetails( 'email', e.target.value )
 					}
 				/>
-				<select
-					name="wp_user_type"
-					className={
-						selectedIndex.option1 !== 0
-							? 'survey-select-input'
-							: 'survey-select-input initial'
-					}
-					value={ formDetails.wp_user_type }
-					onChange={ ( e ) => {
-						updateFormDetails( 'wp_user_type', e.target.value );
-						setSelectedIndex( {
-							...selectedIndex,
-							option1: parseInt( e.target.value ),
-						} );
-					} }
-				>
-					<option value="" disabled>
-						{ __( 'I am…', 'astra-sites' ) }
-					</option>
-					<option value="1">
-						{ __( 'Beginner', 'astra-sites' ) }
-					</option>
-					<option value="2">
-						{ __( 'Intermediate', 'astra-sites' ) }
-					</option>
-					<option value="3">{ __( 'Expert', 'astra-sites' ) }</option>
-				</select>
-				<select
-					name="build_website_for"
-					className={
-						selectedIndex.option2 !== 0
-							? 'survey-select-input'
-							: 'survey-select-input initial'
-					}
-					value={ formDetails.build_website_for }
-					onChange={ ( e ) => {
-						updateFormDetails(
-							'build_website_for',
-							e.target.value
-						);
-						setSelectedIndex( {
-							...selectedIndex,
-							option2: parseInt( e.target.value ),
-						} );
-					} }
-				>
-					<option value="" disabled>
-						{ __( 'I am building website for…', 'astra-sites' ) }
-					</option>
-					<option value="1">
-						{ __( 'Myself/My Company', 'astra-sites' ) }
-					</option>
-					<option value="2">
-						{ __( 'My Client', 'astra-sites' ) }
-					</option>
-				</select>
 			</div>
 		</>
 	);

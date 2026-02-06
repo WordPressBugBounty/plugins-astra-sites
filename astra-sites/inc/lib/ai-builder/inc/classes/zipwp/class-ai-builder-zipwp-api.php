@@ -763,8 +763,10 @@ class Ai_Builder_ZipWP_Api {
 				'status' => false,
 			);
 		}
-			$response_code = wp_remote_retrieve_response_code( $response );
-			$response_body = wp_remote_retrieve_body( $response );
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		$response_body = wp_remote_retrieve_body( $response );
+
 		if ( 200 === $response_code ) {
 			$response_data = json_decode( $response_body, true );
 			if ( $response_data ) {
@@ -773,16 +775,39 @@ class Ai_Builder_ZipWP_Api {
 					'status' => true,
 				);
 			}
-				return array(
-					'data'   => $response_data,
-					'status' => false,
-				);
 
+			return array(
+				'error_code' => 'invalid_response',
+				'data'       => $response_data,
+				'status'     => false,
+			);
 		}
-				return array(
-					'data'   => 'Failed',
-					'status' => false,
-				);
+
+		// Handle Unauthenticated response.
+		if ( 401 === $response_code ) {
+			/**
+			 * Filter the unauthenticated message for ZipWP plan.
+			 *
+			 * @param string $unauthenticated_message The unauthenticated message.
+			 * @since 1.2.67
+			 */
+			$unauthenticated_message = apply_filters(
+				'ai_builder_zipwp_plan_unauthenticated_message',
+				__( "We couldn't verify an active plan for your account. Please check your ZipWP subscription.", 'astra-sites' )
+			);
+
+			return array(
+				'error_code' => 'unauthenticated',
+				'data'       => $unauthenticated_message,
+				'status'     => false,
+			);
+		}
+
+		return array(
+			'error_code' => 'failed',
+			'data'       => 'Failed',
+			'status'     => false,
+		);
 	}
 
 	/**

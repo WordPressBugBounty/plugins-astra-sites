@@ -145,7 +145,7 @@ class GS_Api {
 	/**
 	 * Get items content.
 	 *
-	 * @param \WP_REST_Request $request Full details about the request.
+	 * @param \WP_REST_Request<array<string, mixed>> $request Full details about the request.
 	 * @return void
 	 */
 	public function get_action_items_content( $request ) {
@@ -181,7 +181,7 @@ class GS_Api {
 
 						$step_completed = isset( $step['completed'] ) ? (bool) $step['completed'] : false;
 						if ( ! $step_completed ) {
-							$step_completed = $db_step_completed ?? false;
+							$step_completed = $db_step_completed;
 						}
 
 						/**
@@ -228,7 +228,7 @@ class GS_Api {
 	/**
 	 * Update items steps status.
 	 *
-	 * @param \WP_REST_Request $request Full details about the request.
+	 * @param \WP_REST_Request<array<string, mixed>> $request Full details about the request.
 	 * @return void
 	 */
 	public function update_action_item_steps( $request ) {
@@ -281,6 +281,7 @@ class GS_Api {
 
 		// If action items are empty, initialize with default action items.
 		if ( empty( $action_items ) ) {
+			$action_items         = array();
 			$default_action_items = GS_Helper::get_default_action_items();
 			foreach ( $default_action_items as $action_item ) {
 				$action_items[ $action_item['id'] ]['status'] = false;
@@ -355,7 +356,7 @@ class GS_Api {
 	/**
 	 * Remove setup wizard.
 	 *
-	 * @param \WP_REST_Request $request Full details about the request.
+	 * @param \WP_REST_Request<array<string, mixed>> $request Full details about the request.
 	 * @return void
 	 */
 	public function dismiss_setup_wizard( $request ) {

@@ -42,8 +42,10 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 		 * @since 4.2.2
 		 */
 		public function __construct() {
-
 			add_action( 'astra_update_before', __CLASS__ . '::init' );
+
+			// Check for plugin updates on plugins_loaded.
+			self::init();
 		}
 
 		/**
@@ -53,7 +55,6 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 		 * @return void
 		 */
 		public static function init() {
-
 			do_action( 'astra_sites_update_before' );
 
 			// Get auto saved version number.
@@ -71,7 +72,6 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 
 				$site_pages = get_option( 'astra-sites-requests' );
 				if ( ! empty( $site_pages ) ) {
-
 					// Delete all sites.
 					for ( $site_page = 1; $site_page <= $site_pages; $site_page++ ) {
 						delete_site_option( 'astra-sites-and-pages-page-' . $site_page );
@@ -93,7 +93,7 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 				foreach ( $old_options as $option ) {
 					delete_site_option( $option );
 				}
-				
+
 				delete_site_transient( 'astra-sites-import-check' );
 			}
 
@@ -101,16 +101,14 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 				if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
 					delete_site_option( 'astra-sites-fresh-site' );
 					delete_site_option( 'astra-sites-batch-status' );
-					delete_site_transient( 'astra-sites-import-check' );            
+					delete_site_transient( 'astra-sites-import-check' );
 				}
 			}
 
 			if ( version_compare( $saved_version, '4.4.2', '<' ) ) {
-
 				$transient_name = 'nps-survay-form-dismissed';
 				$expiration_time = get_option( '_transient_timeout_' . $transient_name );
 				$nps_transient = get_transient( $transient_name );
-
 
 				if ( $nps_transient && $expiration_time ) {
 					$transient_duration = 2 * WEEK_IN_SECONDS;
@@ -129,7 +127,11 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 				if ( ! empty( $old_dismiss_varible ) ) {
 					update_option( 'nps-survey-astra-sites', $old_dismiss_varible );
 					delete_option( 'nps-survay-form-dismiss-status' );
-				}           
+				}
+			}
+
+			if ( version_compare( $saved_version, '4.4.49', '<' ) ) {
+				self::background_updater_4_4_49();
 			}
 
 			// Auto update product latest version.
@@ -138,7 +140,26 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 			do_action( 'astra_sites_update_after' );
 		}
 
+		/**
+		 * Background updates for version 4.4.49.
+		 *
+		 * @since 4.4.49
+		 * @return void
+		 */
+		public static function background_updater_4_4_49() {
+			// Retrieve the installed time and optin status of BSF Analytics and update it as per product specific key.
+			$analytics_options = array(
+				'bsf_analytics_installed_time' => 'astra_sites_usage_installed_time',
+				'bsf_analytics_optin'          => 'astra_sites_usage_optin',
+			);
 
+			foreach ( $analytics_options as $source => $target ) {
+				$status = get_site_option( $source );
+				if ( ! get_site_option( $target ) && $status ) {
+					update_site_option( $target, $status );
+				}
+			}
+		}
 	}
 
 	/**

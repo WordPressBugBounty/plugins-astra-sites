@@ -42,6 +42,14 @@ export const getRandomUniqueId = () =>
 
 const DESIGN_LOAD_BATCH_COUNT = 4; // how many templates to load at once
 
+// Determine default page builder
+const { supportedPageBuilders = [] } = aiBuilderVars;
+const defaultPageBuilder = ! [ 'block-editor', 'gutenberg' ].includes(
+	supportedPageBuilders?.[ 0 ]
+)
+	? supportedPageBuilders?.[ 0 ] // Could be 'elementor'
+	: 'spectra';
+
 const SelectTemplate = () => {
 	const { previousStep } = useNavigateSteps();
 
@@ -99,7 +107,8 @@ const SelectTemplate = () => {
 
 	const [ isFetching, setIsFetching ] = useState( false );
 	const [ backToTop, setBackToTop ] = useState( false );
-	const [ selectedBuilder, setSelectedBuilder ] = useState( 'spectra' );
+	const [ selectedBuilder, setSelectedBuilder ] =
+		useState( defaultPageBuilder );
 
 	useEffect( () => {
 		setSelectedPageBuilder(

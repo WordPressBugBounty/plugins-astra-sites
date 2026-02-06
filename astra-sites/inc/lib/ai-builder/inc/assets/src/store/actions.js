@@ -272,6 +272,13 @@ const actions = {
 			payload,
 		};
 	},
+
+	setEcommerceType( payload ) {
+		return {
+			type: actionsTypes.SET_ECOMMERCE_TYPE,
+			payload,
+		};
+	},
 };
 
 export default actions;

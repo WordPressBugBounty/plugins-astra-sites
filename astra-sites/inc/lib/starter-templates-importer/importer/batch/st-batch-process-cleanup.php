@@ -58,7 +58,7 @@ if ( ! class_exists( 'ST_Batch_Process_Cleanup' ) ) :
 				\WP_CLI::line( 'Processing "Cleanup" Batch Import' );
 			}
 
-			update_option( 'st_attachments', array(), 'no' );
+			update_option( 'st_attachments', array(), false );
 			delete_option( 'st_attachments_offset' );
 		}
 	}

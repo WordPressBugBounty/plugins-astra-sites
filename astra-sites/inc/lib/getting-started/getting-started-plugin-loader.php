@@ -52,6 +52,7 @@ class Getting_Started_Plugin_Loader {
 		$class_to_load = $class;
 
 		$filename = strtolower(
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- /e modifier not used, safe in autoloader
 			(string) preg_replace(
 				[ '/^' . __NAMESPACE__ . '\\\/', '/([a-z])([A-Z])/', '/_/', '/\\\/' ],
 				[ '', '$1-$2', '-', DIRECTORY_SEPARATOR ],

@@ -1213,6 +1213,12 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 
 			$post['post_mime_type'] = $info['type'];
 
+			// Check if the uploaded file is an image and has extremely large dimensions or file size.
+			if ( $this->has_extremely_large_dimensions( $upload['file'] ) || $this->is_large_image_file( $upload['file'] ) ) {
+				// Return an error.
+				return new WP_Error( 'large_image_processing_error', __( 'The image file is too large to process with the current server memory settings.', 'astra-sites' ) );
+			}
+
 			// WP really likes using the GUID for display. Allow updating it.
 			// See https://core.trac.wordpress.org/ticket/33386.
 			if ( $this->options['update_attachment_guids'] ) {
@@ -2408,8 +2414,31 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 		public function is_valid_meta_key( $key ) {
 			// skip attachment metadata since we'll regenerate it from scratch
 			// skip _edit_lock as not relevant for import.
-			if ( in_array( $key, array( '_wp_attached_file', '_wp_attachment_metadata', '_edit_lock' ) ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict -- 3rd party library.
+			// skip main page id as not relevant for import.
+			$skip_keys = array(
+				'_wp_attached_file',
+				'_wp_attachment_metadata',
+				'_edit_lock',
+				'astra-main-page-id',
+				'_astra_sites_imported_post',
+				'_wxr_import_user_slug',
+				'_astra_sites_enable_for_batch',
+				'_wxr_import_user_slug',
+			);
+
+			if ( in_array( $key, $skip_keys ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict -- 3rd party library.
 				return false;
+			}
+
+			// Skip keys matching these regex patterns (site-specific keys in multisite).
+			$skip_patterns = array(
+				'/^ast_self_id_\d+$/', // To skip `ast_self_id_%d` keys.
+			);
+
+			foreach ( $skip_patterns as $pattern ) {
+				if ( preg_match( $pattern, $key ) ) {
+					return false;
+				}
 			}
 
 			return $key;
@@ -2613,6 +2642,60 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 		protected function mark_term_exists( $data, $term_id ) {
 			$exists_key                          = sha1( $data['taxonomy'] . ':' . $data['slug'] );
 			$this->exists['term'][ $exists_key ] = $term_id;
+		}
+
+		/**
+		 * Check if an image file is considered large and might cause memory issues
+		 *
+		 * @since 1.1.24
+		 *
+		 * @param string $file_path Path to the image file.
+		 * @return bool True if the file is large, false otherwise.
+		 */
+		protected function is_large_image_file( $file_path ) {
+			if ( ! file_exists( $file_path ) ) {
+				return false;
+			}
+
+			// Get file size in bytes.
+			$file_size = filesize( $file_path );
+
+			// Consider files larger than 5MB as large images.
+			// This threshold can be adjusted based on server capabilities.
+			$large_file_threshold = 8 * 1024 * 1024; // 8MB.
+
+			return $file_size > $large_file_threshold;
+		}
+
+		/**
+		 * Check if an image has extremely large dimensions that could cause memory issues
+		 *
+		 * @since 1.1.24
+		 *
+		 * @param string $file_path Path to the image file.
+		 * @return bool True if dimensions are extremely large, false otherwise.
+		 */
+		protected function has_extremely_large_dimensions( $file_path ) {
+			// Check if this is an image file by extension first.
+			$info = wp_check_filetype( $file_path );
+			if ( ! $info || ! in_array( $info['ext'], array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'bmp', 'tif', 'tiff', 'ico' ), true ) ) {
+				return false;
+			}
+
+			// Get image dimensions.
+			$imagesize = getimagesize( $file_path );
+			if ( ! $imagesize ) {
+				return false;
+			}
+
+			$width  = $imagesize[0];
+			$height = $imagesize[1];
+
+			// Define thresholds for extremely large dimensions.
+			$max_dimension = 5000;
+
+			// Check if either dimension exceeds the threshold.
+			return ( $width > $max_dimension || $height > $max_dimension );
 		}
 	}
 endif;

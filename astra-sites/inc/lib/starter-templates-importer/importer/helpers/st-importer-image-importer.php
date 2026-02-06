@@ -20,6 +20,7 @@
 namespace STImporter\Importer\Helpers;
 
 use STImporter\Importer\ST_Importer_Helper;
+use STImporter\Importer\ST_Importer_Log;
 
 if ( ! class_exists( 'ST_Image_Importer' ) ) :
 
@@ -82,6 +83,7 @@ if ( ! class_exists( 'ST_Image_Importer' ) ) :
 		public function defer_image_processing_while_import() {
 			if ( function_exists( 'astra_sites_has_import_started' ) && astra_sites_has_import_started() && 'ai' !== get_option( 'astra_sites_current_import_template_type' ) ) {
 				$this->defer_image_subsizes();
+				ST_Importer_Log::add( 'Image subsizes deferral enabled for import' );
 			}
 		}
 
@@ -224,17 +226,21 @@ if ( ! class_exists( 'ST_Image_Importer' ) ) :
 		 * @return array              Attachment array.
 		 */
 		public function import( $attachment ) {
+			ST_Importer_Log::add( 'Starting image import for URL: ' . ( isset( $attachment['url'] ) ? $attachment['url'] : 'No URL provided' ) );
 
 			if ( isset( $attachment['url'] ) && ! astra_sites_is_valid_url( $attachment['url'] ) ) {
+				ST_Importer_Log::add( 'Invalid image URL provided: ' . $attachment['url'], 'warning' );
 				return $attachment;
 			}
 
 			$saved_image = $this->get_saved_image( $attachment );
 
 			if ( $saved_image['status'] ) {
+				ST_Importer_Log::add( 'Image already exists in media library (ID: ' . $saved_image['attachment']['id'] . '), skipping download' );
 				return $saved_image['attachment'];
 			}
 
+			ST_Importer_Log::add( 'Downloading image from remote URL: ' . $attachment['url'] );
 			$file_content = wp_remote_retrieve_body(
 				wp_safe_remote_get(
 					$attachment['url'],
@@ -247,17 +253,26 @@ if ( ! class_exists( 'ST_Image_Importer' ) ) :
 
 			// Empty file content?
 			if ( empty( $file_content ) ) {
-
+				ST_Importer_Log::add( 'Failed to download image - empty file content received from: ' . $attachment['url'], 'error' );
 				return $attachment;
 			}
 
 			// Extract the file name and extension from the URL.
 			$filename = basename( $attachment['url'] );
+			ST_Importer_Log::add( 'Successfully downloaded image, preparing to upload: ' . $filename );
 
 			$upload = wp_upload_bits( $filename, null, $file_content );
 
 			astra_sites_error_log( $filename );
 			astra_sites_error_log( wp_json_encode( $upload ) );
+
+			// Check if upload was successful.
+			if ( ! empty( $upload['error'] ) || empty( $upload['url'] ) || empty( $upload['file'] ) ) {
+				ST_Importer_Log::add( 'Image upload failed for ' . $filename . ': ' . ( ! empty( $upload['error'] ) ? $upload['error'] : 'Unknown error' ), 'error' );
+				return $attachment;
+			}
+
+			ST_Importer_Log::add( 'Image uploaded successfully: ' . $upload['url'] );
 
 			$post = array(
 				'post_title' => $filename,
@@ -270,21 +285,27 @@ if ( ! class_exists( 'ST_Image_Importer' ) ) :
 				$post['post_mime_type'] = $info['type'];
 			} else {
 				// For now just return the origin attachment.
+				ST_Importer_Log::add( 'Failed to determine file type for: ' . $filename, 'error' );
 				return $attachment;
 			}
 
 			$post_id = wp_insert_attachment( $post, $upload['file'] );
+			ST_Importer_Log::add( 'Attachment post created with ID: ' . $post_id );
+
 			try {
 
 				if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
 					include ABSPATH . 'wp-admin/includes/image.php';
 				}
 
+				ST_Importer_Log::add( 'Generating attachment metadata for attachment ID: ' . $post_id );
 				wp_update_attachment_metadata(
 					$post_id,
 					wp_generate_attachment_metadata( $post_id, $upload['file'] )
 				);
+				ST_Importer_Log::add( 'Attachment metadata generated and saved for attachment ID: ' . $post_id );
 			} catch ( \Exception $e ) {
+				ST_Importer_Log::add( 'Exception during metadata generation for attachment ID ' . $post_id . ': ' . $e->getMessage(), 'error' );
 				throw $e;
 			}
 
@@ -297,6 +318,8 @@ if ( ! class_exists( 'ST_Image_Importer' ) ) :
 			);
 
 			$this->already_imported_ids[] = $post_id;
+
+			ST_Importer_Log::add( 'Image import completed successfully - ID: ' . $post_id . ', URL: ' . $upload['url'] );
 
 			return $new_attachment;
 		}

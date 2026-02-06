@@ -1,4 +1,4 @@
-import { useReducer, useState } from '@wordpress/element';
+import { useState, useReducer } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useNavigateSteps } from '../router';
 import { STORE_KEY } from '../store';
@@ -55,6 +55,18 @@ const useBuildSiteController = () => {
 		),
 		setPrevErrorAlertOpen = ( value ) =>
 			setPrevErrorAlert( { open: value } );
+
+	const [ multisitePermissionModal, setMultisitePermissionModal ] =
+			useReducer(
+				( state, action ) => ( {
+					...state,
+					...action,
+				} ),
+				{ open: false, missingThemes: [], missingPlugins: [] }
+			),
+		setMultisitePermissionModalOpen = ( value ) =>
+			setMultisitePermissionModal( { open: value } );
+
 	const selectedTemplateData = templateList?.find(
 		( item ) => item?.uuid === selectedTemplate
 	);
@@ -308,6 +320,9 @@ const useBuildSiteController = () => {
 		onConfirmErrorAlert,
 		handleClickStartBuilding,
 		isInProgress,
+		multisitePermissionModal,
+		setMultisitePermissionModalOpen,
+		setMultisitePermissionModal,
 	};
 };
 

@@ -134,10 +134,22 @@ class Spectra_AI_Block {
 		);
 
 		// Remove empty tags.
-		$content = preg_replace( '@<([^>]+)\s*>\s*<\/\1\s*>@m', '', $content );
+		$content = preg_replace_callback(
+			'@<([^>]+)\s*>\s*<\/\1\s*>@m',
+			function( $matches ) {
+				return '';
+			},
+			$content
+		);
 
 		// Remove all <p> tags.
-		$content = preg_replace( '/<\/?p[^>]*\>/i', '', $content ?? '' );
+		$content = preg_replace_callback(
+			'/<\/?p[^>]*\>/i',
+			function( $matches ) {
+				return '';
+			},
+			$content ?? ''
+		);
 
 		// Replace special characters.
 		foreach ( $replace as $k => $v ) {

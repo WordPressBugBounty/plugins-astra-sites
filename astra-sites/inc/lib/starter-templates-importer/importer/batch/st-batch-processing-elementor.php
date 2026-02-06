@@ -9,8 +9,7 @@
 namespace STImporter\Importer\Batch;
 
 use STImporter\Importer\Batch\ST_Batch_Processing;
-use STImporter\Importer\ST_Importer_File_System;
-use STImporter\Importer\Helpers\ST_Image_Importer;
+use STImporter\Importer\ST_Importer_Log;
 
 if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 
@@ -58,6 +57,8 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 		 * @return array<string, mixed>
 		 */
 		public function import() {
+			// Log Elementor batch processing start.
+			ST_Importer_Log::add( 'Elementor batch processing started' );
 
 			if ( defined( 'WP_CLI' ) ) {
 				\WP_CLI::line( 'Processing Batch Import' );
@@ -70,7 +71,18 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 
 			$post_ids = St_Batch_Processing::get_pages( $post_types );
 
+			// Log post count.
+			ST_Importer_Log::add(
+				'Elementor posts retrieved for processing',
+				'info',
+				array(
+					'post_count' => count( $post_ids ),
+					'post_types' => implode( ', ', $post_types ),
+				)
+			);
+
 			if ( ! is_array( $post_ids ) ) {
+				ST_Importer_Log::add( 'Elementor batch processing failed - post IDs are empty', 'error' );
 				return array(
 					'success' => false,
 					'msg'     => __( 'Post ids are empty', 'astra-sites' ),
@@ -80,6 +92,8 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 			foreach ( $post_ids as $post_id ) {
 				$this->import_single_post( $post_id );
 			}
+
+			ST_Importer_Log::add( 'Elementor batch processing completed successfully', 'success', array( 'posts_processed' => count( $post_ids ) ) );
 
 			return array(
 				'success' => true,
@@ -94,6 +108,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 		 * @return void
 		 */
 		public function import_single_post( $post_id = 0 ) {
+			ST_Importer_Log::add( 'Processing Elementor post', 'info', array( 'post_id' => $post_id ) );
 
 			if ( defined( 'WP_CLI' ) ) {
 				\WP_CLI::line( 'Elementor - Processing page: ' . $post_id );
@@ -103,6 +118,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 			// If not then skip batch process.
 			$imported_from_demo_site = get_post_meta( $post_id, '_astra_sites_enable_for_batch', true );
 			if ( ! $imported_from_demo_site ) {
+				ST_Importer_Log::add( 'Skipping post - not imported from demo site', 'info', array( 'post_id' => $post_id ) );
 				return;
 			}
 
@@ -110,12 +126,22 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 			$elementor_data    = get_post_meta( $post_id, '_elementor_data', true );
 
 			if ( ! $is_elementor_page || empty( $elementor_data ) ) {
+				ST_Importer_Log::add(
+					'Skipping post - not an Elementor page or missing data',
+					'info',
+					array(
+						'post_id'     => $post_id,
+						'has_version' => ! empty( $is_elementor_page ),
+						'has_data'    => ! empty( $elementor_data ),
+					)
+				);
 				return;
 			}
 
 			$widget_data = is_array( $elementor_data ) ? $elementor_data : json_decode( $elementor_data, true );
 
 			if ( ! is_array( $widget_data ) ) {
+				ST_Importer_Log::add( 'Skipping post - widget data is not an array', 'warning', array( 'post_id' => $post_id ) );
 				return;
 			}
 
@@ -125,12 +151,25 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 
 			if ( json_last_error() === JSON_ERROR_NONE ) {
 				update_metadata( 'post', $post_id, '_elementor_data', wp_slash( $updated_data ) );
+				ST_Importer_Log::add( 'Updated Elementor data successfully', 'success', array( 'post_id' => $post_id ) );
+			} else {
+				ST_Importer_Log::add(
+					'JSON encoding error occurred',
+					'error',
+					array(
+						'post_id'    => $post_id,
+						'json_error' => json_last_error_msg(),
+					)
+				);
 			}
 
 			if ( class_exists( '\Elementor\Plugin' ) ) {
 				$elementor = \Elementor\Plugin::instance();
 				$elementor->files_manager->clear_cache();
+				ST_Importer_Log::add( 'Cleared Elementor cache', 'info', array( 'post_id' => $post_id ) );
 			}
+
+			ST_Importer_Log::add( 'Completed processing Elementor post', 'success', array( 'post_id' => $post_id ) );
 		}
 
 		/**
@@ -141,8 +180,19 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 		 * @return void
 		 */
 		public function process_elementor_widgets( &$widgets ) {
+			ST_Importer_Log::add( 'Processing Elementor widgets', 'info', array( 'widget_count' => count( $widgets ) ) );
+
+			$processed_count = 0;
 
 			foreach ( $widgets as &$widget ) {
+
+				if ( isset( $widget['widgetType'] ) && 'shortcode' === $widget['widgetType'] && has_shortcode( $widget['settings']['shortcode'], 'wpforms' ) ) {
+					$this->replace_wpforms_ids( $widget );
+				}
+
+				if ( isset( $widget['widgetType'] ) && 'wpforms' === $widget['widgetType'] ) {
+					$this->replace_wpforms_widget_ids( $widget );
+				}
 
 				if ( isset( $widget['widgetType'] ) && 'shortcode' === $widget['widgetType'] && has_shortcode( $widget['settings']['shortcode'], 'sureforms' ) ) {
 					$this->replace_sureforms_ids( $widget );
@@ -159,7 +209,51 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 				if ( isset( $widget['elements'] ) && is_array( $widget['elements'] ) ) {
 					$this->process_elementor_widgets( $widget['elements'] );
 				}
+
+				$processed_count++;
 			}
+
+			ST_Importer_Log::add( 'Completed processing Elementor widgets', 'info', array( 'processed_count' => $processed_count ) );
+		}
+
+		/**
+		 * Replace wpforms IDs in shortcode widget.
+		 *
+		 * @since 1.1.23
+		 *
+		 * @param array<string, mixed> $widget Widget data.
+		 * @return void
+		 */
+		public function replace_wpforms_ids( &$widget ) {
+			$ids_mapping = get_option( 'astra_sites_wpforms_ids_mapping', array() );
+
+			if ( empty( $ids_mapping ) ) {
+				return;
+			}
+
+			// Update wpforms_id in shortcode widget.
+			foreach ( $ids_mapping as $old_id => $new_id ) {
+				$widget['settings']['shortcode'] = str_replace( '[wpforms id="' . $old_id . '"]', '[wpforms id="' . $new_id . '"]', $widget['settings']['shortcode'] );
+			}
+		}
+
+		/**
+		 * Replace form IDs in WPForms widget.
+		 *
+		 * @since 1.1.23
+		 *
+		 * @param array<string, mixed> $widget Widget data.
+		 * @return void
+		 */
+		public function replace_wpforms_widget_ids( &$widget ) {
+			$ids_mapping = get_option( 'astra_sites_wpforms_ids_mapping', array() );
+
+			if ( empty( $ids_mapping ) ) {
+				return;
+			}
+
+			// Update form_id for WPForms widget.
+			$widget['settings']['form_id'] = $ids_mapping[ $widget['settings']['form_id'] ] ?? $widget['settings']['form_id'];
 		}
 
 		/**

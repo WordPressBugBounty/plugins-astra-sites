@@ -62,7 +62,7 @@ const DefaultStep = ( { preview, content, controls, actions, stepName } ) => {
 					style={ {
 						padding:
 							currentIndex === getStepIndex( 'site-list' )
-								? '5% 6% 6% 6%'
+								? '5% 6% calc(6% + 60px)'
 								: '',
 					} }
 				>

@@ -387,7 +387,7 @@ class GS_Admin {
 					</svg>
 				</div>
 				<h2>
-					<?php esc_html_e( "You're Website is Almost Ready!", 'astra-sites' ); ?>
+					<?php esc_html_e( 'Your Website is Almost Ready!', 'astra-sites' ); ?>
 				</h2>
 				<div class="gs-banner-inner-content">
 					<p>

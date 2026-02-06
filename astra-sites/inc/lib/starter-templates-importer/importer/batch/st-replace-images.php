@@ -9,6 +9,7 @@
 namespace STImporter\Importer\Batch;
 
 use STImporter\Importer\ST_Importer_Helper;
+use STImporter\Importer\ST_Importer_Log;
 use AiBuilder\Inc\Traits\Helper;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -82,7 +83,11 @@ class ST_Replace_Images {
 	 */
 	public function replace_images() {
 
-		$pages_replacement      = $this->replace_in_pages();
+		ST_Importer_Log::add( 'Starting image replacement process' );
+
+		ST_Importer_Log::add( 'Replacing images in pages' );
+		$pages_replacement = $this->replace_in_pages();
+		ST_Importer_Log::add( 'Replacing images in posts' );
 		$posts_replacement      = $this->replace_in_post();
 		$customizer_replacement = array(
 			'success' => true,
@@ -90,6 +95,7 @@ class ST_Replace_Images {
 
 		// Replace customizer content.
 		if ( function_exists( 'astra_update_option' ) && function_exists( 'astra_get_option' ) ) {
+			ST_Importer_Log::add( 'Replacing images in customizer' );
 			$this->replace_in_customizer();
 		} else {
 			$customizer_replacement = array(
@@ -100,7 +106,10 @@ class ST_Replace_Images {
 
 		$this->cleanup();
 
+		ST_Importer_Log::add( 'Cleanup completed' );
+
 		if ( ! $pages_replacement['success'] ) {
+			ST_Importer_Log::add( 'Pages replacement failed', 'error', array( 'msg' => $pages_replacement['msg'] ) );
 			return array(
 				'success' => false,
 				'msg'     => $pages_replacement['msg'],
@@ -108,6 +117,7 @@ class ST_Replace_Images {
 		}
 
 		if ( ! $posts_replacement['success'] ) {
+			ST_Importer_Log::add( 'Posts replacement failed', 'error', array( 'msg' => $posts_replacement['msg'] ) );
 			return array(
 				'success' => false,
 				'msg'     => $posts_replacement['msg'],
@@ -115,12 +125,14 @@ class ST_Replace_Images {
 		}
 
 		if ( ! $customizer_replacement['success'] ) {
+			ST_Importer_Log::add( 'Customizer replacement failed', 'error', array( 'msg' => $customizer_replacement['msg'] ) );
 			return array(
 				'success' => false,
 				'msg'     => $customizer_replacement['msg'],
 			);
 		}
 
+		ST_Importer_Log::add( 'Image replacement completed successfully', 'success', array() );
 		return array(
 			'success' => true,
 			'msg'     => __( 'Image Replacement completed.', 'astra-sites' ),
@@ -139,20 +151,28 @@ class ST_Replace_Images {
 
 		$posts = $this->get_pages( 'post' );
 
+		ST_Importer_Log::add( 'Starting post image replacement', 'info', array( 'post_count' => count( $posts ) ) );
+
 		if ( empty( $posts ) ) {
+			ST_Importer_Log::add( 'No posts to process' );
 			return array(
 				'success' => true,
 				'msg'     => __( 'Posts are empty. Nothing to process.', 'astra-sites' ),
 			);
 		}
 
+		$success_count = 0;
 		foreach ( $posts as $key => $post ) {
 			if ( ! is_object( $post ) ) {
 				continue;
 			}
 
 			$this->parse_featured_image( $post );
+			$success_count++;
 		}
+
+		ST_Importer_Log::add( 'Post image replacement completed', 'success', array( 'processed_count' => $success_count ) );
+
 		return array(
 			'success' => true,
 			'msg'     => __( 'Posts are replaced', 'astra-sites' ),
@@ -170,21 +190,40 @@ class ST_Replace_Images {
 		$image = $this->get_image( self::$image_index );
 
 		if ( empty( $image ) || ! is_array( $image ) ) {
+			ST_Importer_Log::add( 'No image available for featured image', 'info', array( 'image_index' => self::$image_index ) );
 			return;
 		}
 
 		$image = ST_Importer_Helper::download_image( $image );
 
 		if ( is_wp_error( $image ) ) {
+			ST_Importer_Log::add(
+				'Failed to download featured image',
+				'error',
+				array(
+					'image_index' => self::$image_index,
+					'error'       => $image->get_error_message(),
+				)
+			);
 			return;
 		}
 
 		$attachment = wp_prepare_attachment_for_js( absint( $image ) );
 		if ( ! is_array( $attachment ) ) {
+			ST_Importer_Log::add( 'Failed to prepare attachment for featured image', 'error', array( 'image_id' => $image ) );
 			return;
 		}
 
 		set_post_thumbnail( $post, $attachment['id'] );
+
+		ST_Importer_Log::add(
+			'Successfully set featured image',
+			'success',
+			array(
+				'post_id'       => $post->ID,
+				'attachment_id' => $attachment['id'],
+			)
+		);
 
 		$this->increment_image_index();
 	}
@@ -196,7 +235,13 @@ class ST_Replace_Images {
 	 * @since 4.1.0
 	 */
 	public function cleanup() {
+		ST_Importer_Log::add( 'Starting cleanup of old images' );
+
 		$old_image_urls = self::$old_image_urls;
+
+		ST_Importer_Log::add( 'Processing old image URLs', 'info', array( 'old_image_count' => count( $old_image_urls ) ) );
+
+		$deleted_count = 0;
 		if ( ! empty( $old_image_urls ) ) {
 
 			$guid_list = implode( "', '", $old_image_urls );
@@ -207,12 +252,18 @@ class ST_Replace_Images {
 			$old_image_ids = $wpdb->get_results( $query ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			foreach ( $old_image_ids as $old_image_id ) {
 				wp_delete_attachment( $old_image_id->ID, true );
+				$deleted_count++;
 			}
 		}
+
+		ST_Importer_Log::add( 'Old images deleted', 'info', array( 'deleted_count' => $deleted_count ) );
+
 		delete_option( 'ast_sites_downloaded_images' );
 		delete_option( 'astra_sites_ai_imports' );
 		delete_option( 'astra_sites_sureforms_id_map' );
 		delete_option( 'astra_sites_surecart_forms_id_map' );
+
+		ST_Importer_Log::add( 'Cleanup options removed' );
 	}
 
 	/**
@@ -224,34 +275,41 @@ class ST_Replace_Images {
 	 */
 	public function replace_in_customizer() {
 
+		ST_Importer_Log::add( 'Starting customizer image replacement' );
+
 		$footer_image_obj = astra_get_option( 'footer-bg-obj-responsive' );
 		if ( isset( $footer_image_obj ) && ! empty( $footer_image_obj ) ) {
 			$footer_image_obj = $this->get_updated_astra_option( $footer_image_obj );
 			astra_update_option( 'footer-bg-obj-responsive', $footer_image_obj );
+			ST_Importer_Log::add( 'Updated customizer option', 'info', array( 'option_name' => 'footer-bg-obj-responsive' ) );
 		}
 
 		$header_image_obj = astra_get_option( 'header-bg-obj-responsive' );
 		if ( isset( $header_image_obj ) && ! empty( $header_image_obj ) ) {
 			$header_image_obj = $this->get_updated_astra_option( $header_image_obj );
 			astra_update_option( 'header-bg-obj-responsive', $header_image_obj );
+			ST_Importer_Log::add( 'Updated customizer option', 'info', array( 'option_name' => 'header-bg-obj-responsive' ) );
 		}
 
 		$blog_archieve_image_obj = astra_get_option( 'ast-dynamic-archive-post-banner-custom-bg' );
 		if ( isset( $blog_archieve_image_obj ) && ! empty( $blog_archieve_image_obj ) ) {
 			$blog_archieve_image_obj = $this->get_updated_astra_option( $blog_archieve_image_obj );
 			astra_update_option( 'ast-dynamic-archive-post-banner-custom-bg', $blog_archieve_image_obj );
+			ST_Importer_Log::add( 'Updated customizer option', 'info', array( 'option_name' => 'ast-dynamic-archive-post-banner-custom-bg' ) );
 		}
 
 		$sc_product_banner_image = astra_get_option( 'ast-dynamic-archive-sc_product-banner-custom-bg' );
 		if ( isset( $sc_product_banner_image ) && ! empty( $sc_product_banner_image ) ) {
 			$sc_product_banner_image = $this->get_updated_astra_option( $sc_product_banner_image );
 			astra_update_option( 'ast-dynamic-archive-sc_product-banner-custom-bg', $sc_product_banner_image );
+			ST_Importer_Log::add( 'Updated customizer option', 'info', array( 'option_name' => 'ast-dynamic-archive-sc_product-banner-custom-bg' ) );
 		}
 
 		$wc_shop_banner_image = astra_get_option( 'ast-dynamic-archive-product-banner-custom-bg' );
 		if ( isset( $wc_shop_banner_image ) && ! empty( $wc_shop_banner_image ) ) {
 			$wc_shop_banner_image = $this->get_updated_astra_option( $wc_shop_banner_image );
 			astra_update_option( 'ast-dynamic-archive-product-banner-custom-bg', $wc_shop_banner_image );
+			ST_Importer_Log::add( 'Updated customizer option', 'info', array( 'option_name' => 'ast-dynamic-archive-product-banner-custom-bg' ) );
 		}
 
 		$social_options = $this->get_options();
@@ -260,6 +318,8 @@ class ST_Replace_Images {
 		 * Social Element Options
 		 */
 		$this->update_social_options( $social_options );
+
+		ST_Importer_Log::add( 'Customizer image replacement completed', 'success', array() );
 	}
 
 	/**
@@ -270,11 +330,14 @@ class ST_Replace_Images {
 	 * @return void
 	 */
 	public function update_social_options( $options ) {
+		ST_Importer_Log::add( 'Starting social options update', 'info', array( 'options_count' => count( $options ) ) );
+
 		if ( ! empty( $options ) ) {
 			$social_profiles = ST_Importer_Helper::get_business_details( 'social_profiles' );
 			$business_phone  = ST_Importer_Helper::get_business_details( 'business_phone' );
 			$business_email  = ST_Importer_Helper::get_business_details( 'business_email' );
 			if ( is_array( $options ) && is_array( $social_profiles ) ) {
+				$update_count = 0;
 				foreach ( $options as $key => $name ) {
 					$value        = astra_get_option( $name );
 					$items        = isset( $value['items'] ) ? $value['items'] : array();
@@ -342,9 +405,14 @@ class ST_Replace_Images {
 						}
 						$value['items'] = array_values( $items );
 						astra_update_option( $name, $value );
+						$update_count++;
 					}
 				}
+
+				ST_Importer_Log::add( 'Social options updated', 'success', array( 'update_count' => $update_count ) );
 			}
+		} else {
+			ST_Importer_Log::add( 'No social options to update' );
 		}
 	}
 
@@ -427,17 +495,27 @@ class ST_Replace_Images {
 	public function get_updated_astra_option( $obj ) {
 		$image_id = ( isset( $obj['desktop']['background-media'] ) ) ? $obj['desktop']['background-media'] : 0;
 		if ( 0 === $image_id ) {
+			ST_Importer_Log::add( 'Skipping astra option update - image ID is 0' );
 			return $obj;
 		}
 		$image = $this->get_image( self::$image_index );
 
 		if ( empty( $image ) || ! is_array( $image ) ) {
+			ST_Importer_Log::add( 'No image available for astra option update', 'info', array( 'image_index' => self::$image_index ) );
 			return $obj;
 		}
 
 		$image = ST_Importer_Helper::download_image( $image );
 
 		if ( is_wp_error( $image ) ) {
+			ST_Importer_Log::add(
+				'Failed to download image for astra option',
+				'error',
+				array(
+					'image_index' => self::$image_index,
+					'error'       => $image->get_error_message(),
+				)
+			);
 			return $obj;
 		}
 
@@ -445,6 +523,8 @@ class ST_Replace_Images {
 
 		$obj['desktop']['background-image'] = $attachment['url'] ?? '';
 		$obj['desktop']['background-media'] = $attachment['id'] ?? 0;
+
+		ST_Importer_Log::add( 'Successfully updated astra option', 'success', array( 'attachment_id' => $attachment['id'] ?? 0 ) );
 
 		$this->increment_image_index();
 
@@ -459,9 +539,12 @@ class ST_Replace_Images {
 	 */
 	public function replace_in_pages() {
 
+		ST_Importer_Log::add( 'Starting page image replacement' );
+
 		$pages = $this->get_pages();
 
 		if ( empty( $pages ) ) {
+			ST_Importer_Log::add( 'No pages to process' );
 			return array(
 				'success' => false,
 				'msg'     => __( 'Pages are empty', 'astra-sites' ),
@@ -472,7 +555,18 @@ class ST_Replace_Images {
 		$plugins_slug     = array_column( $required_plugins, 'slug' );
 
 		$plugin_instance = in_array( 'elementor', $plugins_slug, true ) ? ST_Replace_Elementor_Images::get_instance() : ST_Replace_Blocks_Images::get_instance();
+		$plugin_type     = in_array( 'elementor', $plugins_slug, true ) ? 'elementor' : 'blocks';
 
+		ST_Importer_Log::add(
+			'Processing pages',
+			'info',
+			array(
+				'pages_count' => count( $pages ),
+				'plugin_type' => $plugin_type,
+			)
+		);
+
+		$success_count = 0;
 		foreach ( $pages as $key => $post ) {
 
 			if ( ! is_object( $post ) ) {
@@ -491,7 +585,12 @@ class ST_Replace_Images {
 				)
 			);
 
+			ST_Importer_Log::add( 'Updated page content', 'info', array( 'post_id' => $post->ID ) );
+			$success_count++;
+
 		}
+
+		ST_Importer_Log::add( 'Page image replacement completed', 'success', array( 'success_count' => $success_count ) );
 
 		return array(
 			'success' => true,

@@ -88,8 +88,21 @@ class Ai_Builder_Error_Handler {
 		} else {
 			$error = 'Uncaught Error';
 		}
-		Ai_Builder_Importer_Log::add( 'There was an error on website: ' . $error );
-		Ai_Builder_Importer_Log::add( $e );
+
+		// Prepare error context for logging.
+		$error_context = array(
+			'error_type' => $error,
+			'message'    => $e->getMessage(),
+			'file'       => $e->getFile(),
+			'line'       => $e->getLine(),
+			'trace'      => $e->getTraceAsString(),
+		);
+
+		Ai_Builder_Importer_Log::add(
+			'There was an error on website: ' . $error . ' - ' . $e->getMessage(),
+			'fatal',
+			$error_context
+		);
 
 		if ( wp_doing_ajax() ) {
 			wp_send_json_error(
@@ -130,8 +143,20 @@ class Ai_Builder_Error_Handler {
 			$error = 'Fatal error';
 		}
 
-		Ai_Builder_Importer_Log::add( 'There was an error on website: ' . $error );
-		Ai_Builder_Importer_Log::add( $e['message'] );
+		// Prepare error context for logging.
+		$error_context = array(
+			'error_type' => $error,
+			'type'       => $e['type'],
+			'message'    => $e['message'],
+			'file'       => $e['file'],
+			'line'       => $e['line'],
+		);
+
+		Ai_Builder_Importer_Log::add(
+			'There was an error on website: ' . $error . ' - ' . $e['message'],
+			'fatal',
+			$error_context
+		);
 
 		if ( wp_doing_ajax() ) {
 			wp_send_json_error(

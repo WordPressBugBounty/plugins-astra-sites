@@ -11,6 +11,7 @@ namespace STImporter\Resetter;
 
 use Throwable;
 use Exception;
+use STImporter\Importer\ST_Importer_Log;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -52,15 +53,43 @@ class ST_Resetter {
 	 */
 	public static function backup_settings() {
 
+		ST_Importer_Log::add( 'Starting backup of site settings.' );
+
 		$file_name    = 'astra-sites-backup-' . gmdate( 'd-M-Y-h-i-s' ) . '.json';
 		$old_settings = get_option( 'astra-settings', array() );
 		$upload_dir   = self::log_dir();
 		$upload_path  = trailingslashit( $upload_dir['path'] );
 		$log_file     = $upload_path . $file_name;
 		$file_system  = self::get_filesystem();
+
+		ST_Importer_Log::add(
+			sprintf( 'Backup Settings - Backup file path: %s', $log_file ),
+			'info',
+			array(
+				'file_name'      => $file_name,
+				'settings_count' => count( $old_settings ),
+			)
+		);
+
 		// If file system fails? Then take a backup in site option.
 		if ( method_exists( $file_system, 'put_contents' ) && false === $file_system->put_contents( $log_file, wp_json_encode( $old_settings ), FS_CHMOD_FILE ) ) {
-			update_option( 'astra_sites_' . $file_name, $old_settings, 'no' );
+			update_option( 'astra_sites_' . $file_name, $old_settings, false );
+			ST_Importer_Log::add(
+				'Backup Settings - Backup file could not be written to filesystem. Using site option as fallback.',
+				'warning',
+				array(
+					'fallback_option_key' => 'astra_sites_' . $file_name,
+				)
+			);
+		} else {
+			ST_Importer_Log::add(
+				sprintf( 'Backup Settings - Settings backup created successfully at %s', $log_file ),
+				'success',
+				array(
+					'file_path'      => $log_file,
+					'settings_count' => count( $old_settings ),
+				)
+			);
 		}
 
 		return $log_file;
@@ -128,12 +157,50 @@ class ST_Resetter {
 	public static function reset_site_options( $options = array() ) {
 
 		if ( ! is_array( $options ) ) {
+			ST_Importer_Log::add(
+				'Reset Site Options - No options provided or invalid format.',
+				'warning'
+			);
 			return;
 		}
 
-		foreach ( $options as $option_key => $option_value ) {
-			delete_option( $option_key );
+		if ( empty( $options ) ) {
+			ST_Importer_Log::add(
+				'Reset Site Options - No site options to reset.',
+				'warning'
+			);
+			return;
 		}
+
+		ST_Importer_Log::add(
+			sprintf( 'Reset Site Options - Starting reset of %d site options.', count( $options ) ),
+			'info',
+			array(
+				'total_options' => count( $options ),
+			)
+		);
+
+		$deleted_count = 0;
+		$failed_count  = 0;
+
+		foreach ( $options as $option_key => $option_value ) {
+			if ( delete_option( $option_key ) ) {
+				$deleted_count++;
+			} else {
+				$failed_count++;
+			}
+		}
+
+		ST_Importer_Log::add(
+			sprintf( 'Reset Site Options - Site options reset completed. Deleted: %d, Failed or not found: %d', $deleted_count, $failed_count ),
+			'success',
+			array(
+				'total_options' => count( $options ),
+				'deleted_count' => $deleted_count,
+				'failed_count'  => $failed_count,
+				'option_keys'   => array_keys( $options ),
+			)
+		);
 	}
 
 	/**
@@ -143,7 +210,42 @@ class ST_Resetter {
 	 * @return void
 	 */
 	public static function reset_customizer_data() {
-		delete_option( 'astra-settings' );
+
+		ST_Importer_Log::add(
+			'Reset Customizer Data - Starting reset of customizer settings.',
+			'info'
+		);
+
+		$settings       = get_option( 'astra-settings', array() );
+		$settings_count = count( $settings );
+
+		ST_Importer_Log::add(
+			sprintf( 'Reset Customizer Data - Retrieved customizer data with %d settings entries.', $settings_count ),
+			'info',
+			array(
+				'settings_count' => $settings_count,
+			)
+		);
+
+		if ( delete_option( 'astra-settings' ) ) {
+			ST_Importer_Log::add(
+				sprintf( 'Reset Customizer Data - Customizer settings successfully reset. Deleted %d settings entries.', $settings_count ),
+				'success',
+				array(
+					'settings_count' => $settings_count,
+					'option_name'    => 'astra-settings',
+				)
+			);
+		} else {
+			ST_Importer_Log::add(
+				'Reset Customizer Data - Customizer settings reset completed, but option may not have existed or was already empty.',
+				'warning',
+				array(
+					'settings_count' => $settings_count,
+					'option_name'    => 'astra-settings',
+				)
+			);
+		}
 	}
 
 	/**
@@ -156,6 +258,19 @@ class ST_Resetter {
 	 */
 	public static function reset_widgets_data( $old_widgets_data = array() ) {
 
+		ST_Importer_Log::add(
+			'Reset Widgets Data - Starting reset of widgets data.',
+			'info'
+		);
+
+		if ( empty( $old_widgets_data ) ) {
+			ST_Importer_Log::add(
+				'Reset Widgets Data - No old widgets data provided for reset.',
+				'warning'
+			);
+			return;
+		}
+
 		$old_widget_ids = array();
 		foreach ( $old_widgets_data as $old_sidebar_key => $old_widgets ) {
 			if ( ! empty( $old_widgets ) && is_array( $old_widgets ) ) {
@@ -163,31 +278,64 @@ class ST_Resetter {
 			}
 		}
 
+		ST_Importer_Log::add(
+			sprintf( 'Reset Widgets Data - Retrieved %d widgets from %d sidebars.', count( $old_widget_ids ), count( $old_widgets_data ) ),
+			'info',
+			array(
+				'total_widgets'  => count( $old_widget_ids ),
+				'total_sidebars' => count( $old_widgets_data ),
+			)
+		);
+
 		// Process if not empty.
 		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
 
-		if ( ! empty( $old_widget_ids ) && ! empty( $sidebars_widgets ) ) {
+		if ( empty( $old_widget_ids ) || empty( $sidebars_widgets ) ) {
+			ST_Importer_Log::add(
+				'Reset Widgets Data - No widgets or sidebars found to reset.',
+				'warning',
+				array(
+					'old_widget_ids'   => count( $old_widget_ids ),
+					'sidebars_widgets' => count( $sidebars_widgets ),
+				)
+			);
+			return;
+		}
 
-			foreach ( $sidebars_widgets as $sidebar_id => $widgets ) {
-				$widgets = (array) $widgets;
+		$moved_to_inactive     = 0;
+		$removed_from_sidebars = 0;
 
-				if ( ! empty( $widgets ) && is_array( $widgets ) ) {
-					foreach ( $widgets as $widget_id ) {
+		foreach ( $sidebars_widgets as $sidebar_id => $widgets ) {
+			$widgets = (array) $widgets;
 
-						if ( in_array( $widget_id, $old_widget_ids, true ) ) {
+			if ( ! empty( $widgets ) && is_array( $widgets ) ) {
+				foreach ( $widgets as $widget_id ) {
 
-							// Move old widget to inacitve list.
-							$sidebars_widgets['wp_inactive_widgets'][] = $widget_id;
+					if ( in_array( $widget_id, $old_widget_ids, true ) ) {
 
-							// Remove old widget from sidebar.
-							$sidebars_widgets[ $sidebar_id ] = array_diff( $sidebars_widgets[ $sidebar_id ], array( $widget_id ) );
-						}
+						// Move old widget to inacitve list.
+						$sidebars_widgets['wp_inactive_widgets'][] = $widget_id;
+						$moved_to_inactive++;
+
+						// Remove old widget from sidebar.
+						$sidebars_widgets[ $sidebar_id ] = array_diff( $sidebars_widgets[ $sidebar_id ], array( $widget_id ) );
+						$removed_from_sidebars++;
 					}
 				}
 			}
-
-			update_option( 'sidebars_widgets', $sidebars_widgets );
 		}
+
+		update_option( 'sidebars_widgets', $sidebars_widgets );
+
+		ST_Importer_Log::add(
+			sprintf( 'Reset Widgets Data - Widgets reset completed. Moved %d widgets to inactive, removed %d from sidebars.', $moved_to_inactive, $removed_from_sidebars ),
+			'success',
+			array(
+				'total_widgets'         => count( $old_widget_ids ),
+				'moved_to_inactive'     => $moved_to_inactive,
+				'removed_from_sidebars' => $removed_from_sidebars,
+			)
+		);
 	}
 
 	/**
@@ -199,6 +347,11 @@ class ST_Resetter {
 	 */
 	public static function reset_posts() {
 
+		ST_Importer_Log::add(
+			'Reset Posts - Starting post deletion process.',
+			'info'
+		);
+
 		ST_Resetter::get_instance()->start_error_handler();
 
 		// Suspend bunches of stuff in WP core.
@@ -208,13 +361,41 @@ class ST_Resetter {
 
 		$posts = json_decode( stripslashes( sanitize_text_field( $_POST['ids'] ) ), true ); //phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-		if ( ! empty( $posts ) ) {
-			foreach ( $posts as $key => $post_id ) {
-				$post_id = absint( $post_id );
-				if ( $post_id ) {
-					$post_type = get_post_type( $post_id );
-					do_action( 'astra_sites_before_delete_imported_posts', $post_id, $post_type );
-					wp_delete_post( $post_id, true );
+		if ( empty( $posts ) ) {
+			ST_Importer_Log::add(
+				'Reset Posts - No posts provided for deletion.',
+				'warning'
+			);
+			wp_suspend_cache_invalidation( false );
+			wp_defer_term_counting( false );
+			wp_defer_comment_counting( false );
+			self::stop_error_handler();
+			return;
+		}
+
+		ST_Importer_Log::add(
+			sprintf( 'Reset Posts - Retrieved %d posts for deletion.', count( $posts ) ),
+			'info',
+			array(
+				'total_posts' => count( $posts ),
+			)
+		);
+
+		$deleted_count = 0;
+		$post_types    = array();
+
+		foreach ( $posts as $key => $post_id ) {
+			$post_id = absint( $post_id );
+			if ( $post_id ) {
+				$post_type = get_post_type( $post_id );
+				if ( ! isset( $post_types[ $post_type ] ) ) {
+					$post_types[ $post_type ] = 0;
+				}
+				$post_types[ $post_type ]++;
+
+				do_action( 'astra_sites_before_delete_imported_posts', $post_id, $post_type );
+				if ( wp_delete_post( $post_id, true ) ) {
+					$deleted_count++;
 				}
 			}
 		}
@@ -229,6 +410,16 @@ class ST_Resetter {
 
 		wp_defer_term_counting( false );
 		wp_defer_comment_counting( false );
+
+		ST_Importer_Log::add(
+			sprintf( 'Reset Posts - Post deletion completed. Deleted %d of %d posts.', $deleted_count, count( $posts ) ),
+			'success',
+			array(
+				'total_posts'   => count( $posts ),
+				'deleted_count' => $deleted_count,
+				'post_types'    => $post_types,
+			)
+		);
 
 		self::stop_error_handler();
 	}
@@ -338,36 +529,108 @@ class ST_Resetter {
 	 */
 	public static function reset_terms_and_forms() {
 
+		ST_Importer_Log::add(
+			'Reset Terms and Forms - Starting reset of terms and forms.',
+			'info'
+		);
+
 		ST_Resetter::get_instance()->start_error_handler();
 
 		$terms = self::astra_sites_get_reset_term_data();
 
-		if ( ! empty( $terms ) ) {
+		if ( empty( $terms ) ) {
+			ST_Importer_Log::add(
+				'Reset Terms and Forms - No terms found for deletion.',
+				'warning'
+			);
+		} else {
+			ST_Importer_Log::add(
+				sprintf( 'Reset Terms and Forms - Retrieved %d terms for deletion.', count( $terms ) ),
+				'info',
+				array(
+					'total_terms' => count( $terms ),
+				)
+			);
+
+			$deleted_terms   = 0;
+			$failed_terms    = 0;
+			$term_taxonomies = array();
+
 			foreach ( $terms as $key => $term_id ) {
 				$term_id = absint( $term_id );
 				if ( $term_id ) {
 					$term = get_term( $term_id );
 					if ( ! is_wp_error( $term ) && ! empty( $term ) && is_object( $term ) ) {
 
+						if ( ! isset( $term_taxonomies[ $term->taxonomy ] ) ) {
+							$term_taxonomies[ $term->taxonomy ] = 0;
+						}
+						$term_taxonomies[ $term->taxonomy ]++;
+
 						do_action( 'astra_sites_before_delete_imported_terms', $term_id, $term );
 
-						wp_delete_term( $term_id, $term->taxonomy );
+						if ( wp_delete_term( $term_id, $term->taxonomy ) ) {
+							$deleted_terms++;
+						} else {
+							$failed_terms++;
+						}
 					}
 				}
 			}
+
+			ST_Importer_Log::add(
+				sprintf( 'Reset Terms and Forms - Term deletion completed. Deleted %d of %d terms.', $deleted_terms, count( $terms ) ),
+				'success',
+				array(
+					'total_terms'     => count( $terms ),
+					'deleted_count'   => $deleted_terms,
+					'failed_count'    => $failed_terms,
+					'term_taxonomies' => $term_taxonomies,
+				)
+			);
 		}
 
 		$forms = self::astra_sites_get_reset_form_data();
 
-		if ( ! empty( $forms ) ) {
+		if ( empty( $forms ) ) {
+			ST_Importer_Log::add(
+				'Reset Terms and Forms - No forms found for deletion.',
+				'warning'
+			);
+		} else {
+			ST_Importer_Log::add(
+				sprintf( 'Reset Terms and Forms - Retrieved %d forms for deletion.', count( $forms ) ),
+				'info',
+				array(
+					'total_forms' => count( $forms ),
+				)
+			);
+
+			$deleted_forms = 0;
+			$failed_forms  = 0;
+
 			foreach ( $forms as $key => $post_id ) {
 				$post_id = absint( $post_id );
 				if ( $post_id ) {
 
 					do_action( 'astra_sites_before_delete_imported_wp_forms', $post_id );
-					wp_delete_post( $post_id, true );
+					if ( wp_delete_post( $post_id, true ) ) {
+						$deleted_forms++;
+					} else {
+						$failed_forms++;
+					}
 				}
 			}
+
+			ST_Importer_Log::add(
+				sprintf( 'Reset Terms and Forms - Form deletion completed. Deleted %d of %d forms.', $deleted_forms, count( $forms ) ),
+				'success',
+				array(
+					'total_forms'   => count( $forms ),
+					'deleted_count' => $deleted_forms,
+					'failed_count'  => $failed_forms,
+				)
+			);
 		}
 
 		self::stop_error_handler();

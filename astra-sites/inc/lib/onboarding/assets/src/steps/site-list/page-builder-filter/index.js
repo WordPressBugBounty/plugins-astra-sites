@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ToggleDropdown } from '@brainstormforce/starter-templates-components';
 import { __ } from '@wordpress/i18n';
 import { useStateValue } from '../../../store/store';
@@ -31,6 +31,30 @@ const PageBuilder = ( { placement = 'bottom-end', isDisabled } ) => {
 	const [ show, setShow ] = useState(
 		dismissAINotice === 'true' ? false : true
 	);
+
+	const initialMountRef = useRef( true );
+	useEffect( () => {
+		if ( ! initialMountRef.current ) {
+			return;
+		}
+		initialMountRef.current = false;
+
+		if ( currentIndex !== getStepIndex( 'site-list' ) ) {
+			const urlParams = new URLSearchParams( window.location.search );
+			// Removing the query param from url.
+			const newURL = new URL( window.location.href );
+			newURL.searchParams.delete( 'page-builder' );
+			window.history.replaceState( {}, '', newURL );
+
+			let urlBuilder = urlParams.get( 'page-builder' );
+			urlBuilder =
+				'block-editor' === urlBuilder ? 'gutenberg' : urlBuilder;
+
+			if ( urlBuilder && urlBuilder !== builder ) {
+				updateBuilder( urlBuilder );
+			}
+		}
+	}, [ builder, currentIndex, initialMountRef ] );
 
 	const dismissAIPopup = () => {
 		setShow( false );
@@ -191,6 +215,60 @@ const PageBuilder = ( { placement = 'bottom-end', isDisabled } ) => {
 			astraSitesVars?.adminURL + 'themes.php?page=ai-builder';
 	};
 
+	const handleBuilderChange = ( event, option ) => {
+		if ( option.id === 'show-other-builders' ) {
+			handleShowOtherBuilders();
+			return;
+		}
+
+		if ( 'ai-builder' === option.id ) {
+			if ( isLimitReached ) {
+				dispatch( {
+					type: 'set',
+					limitExceedModal: {
+						...limitExceedModal,
+						open: true,
+					},
+					currentIndex: 0,
+				} );
+				return;
+			}
+			return ( window.location = `${ astraSitesVars?.adminURL }themes.php?page=ai-builder` );
+		}
+		dispatch( {
+			type: 'set',
+			siteSearchTerm: '',
+			siteBusinessType: initialState.siteBusinessType,
+			selectedMegaMenu: initialState.selectedMegaMenu,
+			siteType: '',
+			siteOrder: 'popular',
+			onMyFavorite: false,
+			currentIndex: 2,
+		} );
+
+		const pageBuilderOptionId =
+			isLimitReached && 'ai-builder' === option.id
+				? 'gutenberg'
+				: option.id;
+		updateBuilder( pageBuilderOptionId );
+	};
+
+	const updateBuilder = ( option ) => {
+		const content = new FormData();
+		content.append( 'action', 'astra-sites-change-page-builder' );
+		content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+		content.append( 'page_builder', option );
+
+		fetch( ajaxurl, {
+			method: 'post',
+			body: content,
+		} );
+		dispatch( {
+			type: 'set',
+			builder: option,
+		} );
+	};
+
 	return (
 		<div className="relative">
 			<Tippy
@@ -258,61 +336,7 @@ const PageBuilder = ( { placement = 'bottom-end', isDisabled } ) => {
 						value={ builder }
 						options={ buildersList }
 						className="st-page-builder-toggle"
-						onClick={ ( event, option ) => {
-							if ( option.id === 'show-other-builders' ) {
-								handleShowOtherBuilders();
-								return;
-							}
-
-							if ( 'ai-builder' === option.id ) {
-								if ( isLimitReached ) {
-									dispatch( {
-										type: 'set',
-										limitExceedModal: {
-											...limitExceedModal,
-											open: true,
-										},
-										currentIndex: 0,
-									} );
-									return;
-								}
-								return ( window.location = `${ astraSitesVars?.adminURL }themes.php?page=ai-builder` );
-							}
-							dispatch( {
-								type: 'set',
-								builder: option.id,
-								siteSearchTerm: '',
-								siteBusinessType: initialState.siteBusinessType,
-								selectedMegaMenu: initialState.selectedMegaMenu,
-								siteType: '',
-								siteOrder: 'popular',
-								onMyFavorite: false,
-								currentIndex: 2,
-							} );
-
-							const pageBuilderOptionId =
-								isLimitReached && 'ai-builder' === option.id
-									? 'gutenberg'
-									: option.id;
-							const content = new FormData();
-							content.append(
-								'action',
-								'astra-sites-change-page-builder'
-							);
-							content.append(
-								'_ajax_nonce',
-								astraSitesVars?._ajax_nonce
-							);
-							content.append(
-								'page_builder',
-								pageBuilderOptionId
-							);
-
-							fetch( ajaxurl, {
-								method: 'post',
-								body: content,
-							} );
-						} }
+						onClick={ handleBuilderChange }
 						dismissAiPopup={ dismissAiPopup }
 					/>
 				</div>

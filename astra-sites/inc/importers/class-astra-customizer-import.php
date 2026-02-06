@@ -48,16 +48,20 @@ class Astra_Customizer_Import {
 	 * @param  (Array) $options customizer options from the demo.
 	 */
 	public function import( $options ) {
+		Astra_Sites_Importer_Log::add( 'Starting customizer options import' );
 
 		// Update Astra Theme customizer settings.
 		if ( isset( $options['astra-settings'] ) ) {
 			update_option( 'astra-settings', $options['astra-settings'] );
+			Astra_Sites_Importer_Log::add( 'Astra theme customizer settings imported successfully', 'success' );
 		}
 
 		// Add Custom CSS.
 		if ( isset( $options['custom-css'] ) ) {
 			wp_update_custom_css_post( $options['custom-css'] );
+			Astra_Sites_Importer_Log::add( 'Custom CSS imported successfully', 'success' );
 		}
 
+		Astra_Sites_Importer_Log::add( 'Customizer options import completed', 'success' );
 	}
 }

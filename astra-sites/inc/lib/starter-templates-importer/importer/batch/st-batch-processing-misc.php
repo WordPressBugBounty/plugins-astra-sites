@@ -9,6 +9,7 @@
 namespace STImporter\Importer\Batch;
 
 use STImporter\Importer\Batch\ST_Replace_Images;
+use STImporter\Importer\ST_Importer_Log;
 
 if ( ! class_exists( 'ST_Batch_Processing_Misc' ) ) :
 
@@ -35,10 +36,10 @@ if ( ! class_exists( 'ST_Batch_Processing_Misc' ) ) :
 		 * @return object initialized object of class.
 		 */
 		public static function get_instance() {
-
 			if ( null === self::$instance ) {
 				self::$instance = new self();
 			}
+
 			return self::$instance;
 		}
 
@@ -56,12 +57,16 @@ if ( ! class_exists( 'ST_Batch_Processing_Misc' ) ) :
 		 * @return array<string, mixed>
 		 */
 		public function import() {
+			// Log misc batch processing start.
+			ST_Importer_Log::add( 'Misc batch processing started' );
 
 			if ( defined( 'WP_CLI' ) ) {
 				\WP_CLI::line( 'Processing "MISC" Batch Import' );
 			}
 
 			if ( 'ai' !== get_option( 'astra_sites_current_import_template_type' ) ) {
+				ST_Importer_Log::add( 'Misc batch processing skipped (not AI template)' );
+
 				return array(
 					'success' => true,
 					'msg'     => __( 'Template Type is not a AI.', 'astra-sites' ),
@@ -87,9 +92,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Misc' ) ) :
 			}
 
 			return ST_Replace_Images::get_instance()->replace_images();
-
 		}
-
 	}
 
 	/**

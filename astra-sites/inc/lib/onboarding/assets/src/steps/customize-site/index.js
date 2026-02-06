@@ -3,6 +3,7 @@ import { __ } from '@wordpress/i18n';
 import DefaultStep from '../../components/default-step';
 import SitePreview from '../../components/site-preview';
 import { useStateValue } from '../../store/store';
+import { trackOnboardingStep } from '../../utils/functions';
 import { CustomizeSteps } from './customize-steps';
 
 const CustomizeSite = () => {
@@ -35,7 +36,10 @@ const CustomizeSite = () => {
 		document.body.classList.add(
 			CustomizeSteps[ currentCustomizeIndex ].class
 		);
-	} );
+
+		// Track template preview step when component mounts
+		trackOnboardingStep( 'template-preview' );
+	}, [] );
 
 	const setNextStep = () => {
 		if ( CustomizeSteps.length - 1 === currentCustomizeIndex ) {

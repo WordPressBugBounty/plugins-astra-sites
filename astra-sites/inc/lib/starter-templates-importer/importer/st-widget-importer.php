@@ -9,6 +9,8 @@
 
 namespace STImporter\Importer;
 
+use STImporter\Importer\ST_Importer_Log;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -59,6 +61,8 @@ class ST_Widget_Importer {
 
 		$available_widgets = array();
 
+		ST_Importer_Log::add( 'Checking available widgets', 'info', array( 'widget_control_count' => count( $widget_controls ) ) );
+
 		foreach ( $widget_controls as $widget ) {
 
 			if ( ! empty( $widget['id_base'] ) && ! isset( $available_widgets[ $widget['id_base'] ] ) ) { // no dupes.
@@ -68,6 +72,15 @@ class ST_Widget_Importer {
 
 			}
 		}
+
+		ST_Importer_Log::add(
+			'Widget availability check completed',
+			'info',
+			array(
+				'available_widget_count' => count( $available_widgets ),
+				'available_widgets'      => array_keys( $available_widgets ),
+			)
+		);
 
 		return apply_filters( 'wie_available_widgets', $available_widgets );
 	}
@@ -86,9 +99,12 @@ class ST_Widget_Importer {
 
 		global $wp_registered_sidebars;
 
+		ST_Importer_Log::add( 'Starting widget import process' );
+
 		// Have valid data?
 		// If no data or could not decode.
 		if ( ! is_object( $data ) ) {
+			ST_Importer_Log::add( 'Invalid widget import data', 'error', array( 'data_type' => gettype( $data ) ) );
 			wp_die(
 				esc_html__( 'Import data could not be read. Please try a different file.', 'astra-sites' ),
 				'',
@@ -114,8 +130,19 @@ class ST_Widget_Importer {
 			$widget_instances[ $widget_data['id_base'] ] = get_option( 'widget_' . $widget_data['id_base'] );
 		}
 
+		ST_Importer_Log::add(
+			'Loaded widget configuration',
+			'info',
+			array(
+				'available_widget_types' => count( $available_widgets ),
+				'sidebar_count'          => count( $wp_registered_sidebars ),
+			)
+		);
+
 		// Begin results.
 		$results = array();
+
+		ST_Importer_Log::add( 'Processing sidebars from import data', 'info', array( 'sidebar_count_in_data' => count( (array) $data ) ) );
 
 		// Loop import data's sidebars.
 		foreach ( $data as $sidebar_id => $widgets ) {
@@ -133,11 +160,29 @@ class ST_Widget_Importer {
 				$use_sidebar_id       = $sidebar_id;
 				$sidebar_message_type = 'success';
 				$sidebar_message      = '';
+				ST_Importer_Log::add(
+					sprintf( 'Processing sidebar: %s', $sidebar_id ),
+					'info',
+					array(
+						'sidebar_name' => $wp_registered_sidebars[ $sidebar_id ]['name'],
+						'widget_count' => count( (array) $widgets ),
+						'availability' => 'available',
+					)
+				);
 			} else {
 				$sidebar_available    = false;
 				$use_sidebar_id       = 'wp_inactive_widgets'; // add to inactive if sidebar does not exist in theme.
 				$sidebar_message_type = 'error';
-				$sidebar_message      = esc_html__( 'Widget area does not exist in theme (using Inactive)', 'astra-sites' );
+				$sidebar_message      = 'Widget area does not exist in theme (using Inactive)';
+				ST_Importer_Log::add(
+					sprintf( 'Sidebar not available: %s', $sidebar_id ),
+					'warning',
+					array(
+						'widget_count'      => count( (array) $widgets ),
+						'availability'      => 'unavailable',
+						'fallback_location' => 'inactive_widgets',
+					)
+				);
 			}
 
 			// Result for sidebar.
@@ -152,14 +197,38 @@ class ST_Widget_Importer {
 				$fail = false;
 
 				// Get id_base (remove -# from end) and instance ID number.
-				$id_base            = preg_replace( '/-[0-9]+$/', '', $widget_instance_id );
+				$id_base            = preg_replace_callback(
+					'/-[0-9]+$/',
+					function( $matches ) {
+						return '';
+					},
+					$widget_instance_id
+				);
 				$instance_id_number = str_replace( $id_base . '-', '', $widget_instance_id );
+
+				ST_Importer_Log::add(
+					sprintf( 'Processing widget: %s', $widget_instance_id ),
+					'info',
+					array(
+						'widget_type' => $id_base,
+						'instance_id' => $instance_id_number,
+						'sidebar_id'  => $sidebar_id,
+					)
+				);
 
 				// Does site support this widget?
 				if ( ! $fail && ! isset( $available_widgets[ $id_base ] ) ) { // @phpstan-ignore-line
 					$fail                = true;
 					$widget_message_type = 'error';
-					$widget_message      = esc_html__( 'Site does not support widget', 'astra-sites' ); // explain why widget not imported.
+					$widget_message      = 'Site does not support widget'; // explain why widget not imported.
+					ST_Importer_Log::add(
+						sprintf( 'Widget type not available: %s', $id_base ),
+						'warning',
+						array(
+							'widget_instance_id' => $widget_instance_id,
+							'sidebar_id'         => $sidebar_id,
+						)
+					);
 				}
 
 				// Filter to modify settings object before conversion to array and import.
@@ -195,7 +264,17 @@ class ST_Widget_Importer {
 
 							$fail                = true;
 							$widget_message_type = 'warning';
-							$widget_message      = esc_html__( 'Widget already exists', 'astra-sites' ); // explain why widget not imported.
+							$widget_message      = 'Widget already exists'; // explain why widget not imported.
+
+							ST_Importer_Log::add(
+								sprintf( 'Duplicate widget skipped: %s', $widget_instance_id ),
+								'warning',
+								array(
+									'widget_type'          => $id_base,
+									'existing_instance_id' => "$id_base-$check_id",
+									'sidebar_id'           => $use_sidebar_id,
+								)
+							);
 
 							break;
 
@@ -235,6 +314,16 @@ class ST_Widget_Importer {
 					// Update option with new widget.
 					$result = update_option( 'widget_' . $id_base, $single_widget_instances );
 
+					ST_Importer_Log::add(
+						sprintf( 'Widget data formatted and saved: %s', $id_base ),
+						'info',
+						array(
+							'widget_type'    => $id_base,
+							'instance_count' => count( $single_widget_instances ),
+							'update_result'  => $result,
+						)
+					);
+
 					// Assign widget instance to sidebar.
 					$sidebars_widgets = get_option( 'sidebars_widgets' ); // which sidebars have which widgets, get fresh every time.
 
@@ -264,21 +353,70 @@ class ST_Widget_Importer {
 					// Success message.
 					if ( $sidebar_available ) {
 						$widget_message_type = 'success';
-						$widget_message      = esc_html__( 'Imported', 'astra-sites' );
+						$widget_message      = 'Imported';
+						ST_Importer_Log::add(
+							sprintf( 'Widget imported successfully: %s', $new_instance_id ),
+							'success',
+							array(
+								'widget_type'     => $id_base,
+								'new_instance_id' => $new_instance_id,
+								'sidebar_id'      => $sidebar_id,
+								'widget_title'    => ! empty( $widget['title'] ) ? $widget['title'] : 'No Title',
+							)
+						);
 					} else {
 						$widget_message_type = 'warning';
-						$widget_message      = esc_html__( 'Imported to Inactive', 'astra-sites' );
+						$widget_message      = 'Imported to Inactive';
+						ST_Importer_Log::add(
+							sprintf( 'Widget imported to inactive widgets: %s', $new_instance_id ),
+							'info',
+							array(
+								'widget_type'     => $id_base,
+								'new_instance_id' => $new_instance_id,
+								'reason'          => 'sidebar_unavailable',
+								'widget_title'    => ! empty( $widget['title'] ) ? $widget['title'] : 'No Title',
+							)
+						);
 					}
 				}
 
 				// Result for widget instance.
 				$results[ $sidebar_id ]['widgets'][ $widget_instance_id ]['name']         = isset( $available_widgets[ $id_base ]['name'] ) ? $available_widgets[ $id_base ]['name'] : $id_base; // widget name or ID if name not available (not supported by site).
-				$results[ $sidebar_id ]['widgets'][ $widget_instance_id ]['title']        = ! empty( $widget['title'] ) ? $widget['title'] : esc_html__( 'No Title', 'astra-sites' ); // show "No Title" if widget instance is untitled.
+				$results[ $sidebar_id ]['widgets'][ $widget_instance_id ]['title']        = ! empty( $widget['title'] ) ? $widget['title'] : 'No Title'; // show "No Title" if widget instance is untitled.
 				$results[ $sidebar_id ]['widgets'][ $widget_instance_id ]['message_type'] = $widget_message_type;
 				$results[ $sidebar_id ]['widgets'][ $widget_instance_id ]['message']      = $widget_message;
 
 			}
 		}
+
+		// Calculate summary statistics.
+		$success_count = 0;
+		$warning_count = 0;
+		$error_count   = 0;
+
+		foreach ( $results as $sidebar_results ) {
+			foreach ( $sidebar_results['widgets'] as $widget_result ) {
+				if ( 'success' === $widget_result['message_type'] ) {
+					$success_count++;
+				} elseif ( 'warning' === $widget_result['message_type'] ) {
+					$warning_count++;
+				} elseif ( 'error' === $widget_result['message_type'] ) {
+					$error_count++;
+				}
+			}
+		}
+
+		ST_Importer_Log::add(
+			'Widget import process completed',
+			'info',
+			array(
+				'total_sidebars_processed' => count( $results ),
+				'successful_imports'       => $success_count,
+				'warnings'                 => $warning_count,
+				'errors'                   => $error_count,
+				'total_widgets_processed'  => $success_count + $warning_count + $error_count,
+			)
+		);
 
 		// Hook after import.
 		do_action( 'wie_after_import' );

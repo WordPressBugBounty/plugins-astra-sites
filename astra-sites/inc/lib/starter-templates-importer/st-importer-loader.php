@@ -62,6 +62,7 @@ if ( ! class_exists( '\STImporter\ST_Importer_Loader' ) ) {
 			$class_to_load = $class;
 
 			$filename = strtolower(
+				// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- /e modifier not used, safe in autoloader
 				(string) preg_replace(
 					[ '/^' . __NAMESPACE__ . '\\\/', '/([a-z])([A-Z])/', '/_/', '/\\\/' ],
 					[ '', '$1-$2', '-', DIRECTORY_SEPARATOR ],
@@ -147,7 +148,7 @@ if ( ! class_exists( '\STImporter\ST_Importer_Loader' ) ) {
 			define( 'ST_IMPORTER_FILE', __FILE__ );
 			define( 'ST_IMPORTER_DIR', plugin_dir_path( ST_IMPORTER_FILE ) );
 			define( 'ST_IMPORTER_URL', plugins_url( '/', ST_IMPORTER_FILE ) );
-			define( 'ST_IMPORTER_VER', '1.1.21' );
+			define( 'ST_IMPORTER_VER', '1.1.25' );
 		}
 
 		/**
@@ -182,6 +183,7 @@ if ( ! class_exists( '\STImporter\ST_Importer_Loader' ) ) {
 			require_once ST_IMPORTER_DIR . 'importer/helpers/wp-background-process-astra-site-importer.php';
 
 			require_once ST_IMPORTER_DIR . 'importer/st-importer-file-system.php';
+			require_once ST_IMPORTER_DIR . 'importer/st-importer-log.php';
 			require_once ST_IMPORTER_DIR . 'importer/batch/st-batch-processing.php';
 			require_once ST_IMPORTER_DIR . 'importer/batch/st-batch-processing-gutenberg.php';
 			require_once ST_IMPORTER_DIR . 'importer/batch/st-batch-processing-elementor.php';

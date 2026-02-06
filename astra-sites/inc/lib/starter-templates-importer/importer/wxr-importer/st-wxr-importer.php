@@ -10,6 +10,7 @@
 namespace STImporter\Importer\WXR_Importer;
 
 use STImporter\Importer\ST_Importer_Helper;
+use STImporter\Importer\ST_Importer_Log;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,6 +30,14 @@ class ST_WXR_Importer {
 	 * @var object Class object.
 	 */
 	private static $instance = null;
+
+	/**
+	 * Transient key for WXR import progress.
+	 *
+	 * @since 1.1.24
+	 * @var string
+	 */
+	private $wxr_import_progress_key = 'st_wxr_importer_progress';
 
 	/**
 	 * Initiator of this class.
@@ -61,6 +70,9 @@ class ST_WXR_Importer {
 		}
 		add_action( 'wp_import_insert_post', array( $this, 'after_imported_post' ), 10, 4 );
 
+		// To handle the multiple WXR import requests.
+		add_action( 'import_start', array( $this, 'wxr_import_transient_start' ) );
+		add_action( 'import_end', array( $this, 'wxr_import_transient_cleanup' ) );
 	}
 
 	/**
@@ -74,6 +86,23 @@ class ST_WXR_Importer {
 	 * @return void
 	 */
 	public function after_imported_post( $post_id, $original_id, $postdata, $data ) {
+		// Log individual post import.
+		ST_Importer_Log::add(
+			'success',
+			sprintf(
+				'Post imported successfully: ID %d, Type: %s, Original ID: %d',
+				$post_id,
+				$data['post_type'],
+				$original_id
+			),
+			array(
+				'post_id'     => $post_id,
+				'post_type'   => $data['post_type'],
+				'original_id' => $original_id,
+				'post_title'  => isset( $data['post_title'] ) ? $data['post_title'] : '',
+			)
+		);
+
 		if ( in_array( $data['post_type'], [ 'post', 'page' ], true ) && 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
 			$imports                         = get_option(
 				'astra_sites_ai_imports',
@@ -124,6 +153,54 @@ class ST_WXR_Importer {
 	}
 
 	/**
+	 * WXR Import Transient Start
+	 *
+	 * @since 1.1.24
+	 */
+	public function wxr_import_transient_start() {
+		set_transient( $this->wxr_import_progress_key, 'ongoing', 300 ); // 5 minutes.
+	}
+
+	/**
+	 * WXR Import Transient Cleanup
+	 *
+	 * @since 1.1.24
+	 */
+	public function wxr_import_transient_cleanup() {
+		set_transient( $this->wxr_import_progress_key, 'completed', 30 ); // 30 seconds.
+	}
+
+	/**
+	 * Is WXR Import In Progress
+	 *
+	 * @since 1.1.24
+	 * @return bool True if in progress, false otherwise.
+	 */
+	public function is_wxr_import_in_progress() {
+		// Check existing progress.
+		$wxr_progress = get_transient( $this->wxr_import_progress_key );
+		if ( ! $wxr_progress ) {
+			return false;
+		}
+
+		if ( 'completed' === $wxr_progress ) {
+			$data = array(
+				'action' => 'complete',
+				'error'  => false,
+			);
+		} else {
+			$data = array(
+				'action' => 'updatedDelta',
+				'type'   => 'status',
+				'delta'  => 1,
+			);
+		}
+
+		$this->emit_sse_message( $data );
+		return true;
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @since  1.1.0
@@ -132,6 +209,14 @@ class ST_WXR_Importer {
 	 * @param  string $xml_url XML file URL.
 	 */
 	public function sse_import( $xml_url = '' ) {
+		// Log import start.
+		ST_Importer_Log::add(
+			'info',
+			'WXR import process started',
+			array(
+				'xml_url_provided' => ! empty( $xml_url ),
+			)
+		);
 
 		if ( wp_doing_ajax() ) {
 
@@ -139,6 +224,16 @@ class ST_WXR_Importer {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'manage_options' ) ) {
+				// Log permission error.
+				ST_Importer_Log::add(
+					'error',
+					'Permission denied: User lacks manage_options capability',
+					array(
+						'user_id'   => get_current_user_id(),
+						'user_caps' => current_user_can( 'manage_options' ) ? 'true' : 'false',
+					)
+				);
+
 				wp_send_json_error(
 					array(
 						'error' => __( "Permission denied: You don't have sufficient permissions to perform this action. Please contact your site administrator.", 'astra-sites' ),
@@ -152,8 +247,8 @@ class ST_WXR_Importer {
 			header( 'Connection: keep-alive' );
 			// Turn off PHP output compression.
 			$previous = error_reporting( error_reporting() ^ E_WARNING ); //phpcs:ignore WordPress.PHP.DevelopmentFunctions, WordPress.PHP.DiscouragedPHPFunctions -- 3rd party library.
-			ini_set( 'output_buffering', 'off' ); //phpcs:ignore WordPress.PHP.IniSet.Risky -- 3rd party library.
-			ini_set( 'zlib.output_compression', false ); //phpcs:ignore WordPress.PHP.IniSet.Risky -- 3rd party library.
+			ini_set( 'output_buffering', 'off' ); //phpcs:ignore WordPress.PHP.IniSet.Risky, Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- 3rd party library.
+			ini_set( 'zlib.output_compression', false ); //phpcs:ignore WordPress.PHP.IniSet.Risky, Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- 3rd party library.
 			error_reporting( $previous ); //phpcs:ignore WordPress.PHP.DevelopmentFunctions, WordPress.PHP.DiscouragedPHPFunctions -- 3rd party library.
 
 			if ( $GLOBALS['is_nginx'] ) {
@@ -172,8 +267,24 @@ class ST_WXR_Importer {
 			$xml_url = get_attached_file( $xml_id );
 		}
 
+		// Check for existing progress to prevent duplicate content.
+		if ( $this->is_wxr_import_in_progress() ) {
+			return;
+		}
+
 		// Enhanced XML file validation.
 		if ( empty( $xml_url ) ) {
+			// Log validation error - empty XML URL.
+			ST_Importer_Log::add(
+				'fatal',
+				'XML file URL is empty or not provided',
+				array(
+					'xml_url' => $xml_url,
+					'xml_id'  => isset( $_REQUEST['xml_id'] ) ? absint( $_REQUEST['xml_id'] ) : '',
+				)
+			);
+
+			$this->wxr_import_transient_cleanup();
 			$this->emit_sse_message(
 				array(
 					'action' => 'complete',
@@ -187,6 +298,16 @@ class ST_WXR_Importer {
 		}
 
 		if ( ! file_exists( $xml_url ) ) {
+			// Log validation error - file does not exist.
+			ST_Importer_Log::add(
+				'fatal',
+				'XML file does not exist on server',
+				array(
+					'xml_url' => $xml_url,
+				)
+			);
+
+			$this->wxr_import_transient_cleanup();
 			$this->emit_sse_message(
 				array(
 					'action' => 'complete',
@@ -200,6 +321,17 @@ class ST_WXR_Importer {
 		}
 
 		if ( ! is_readable( $xml_url ) ) {
+			// Log validation error - file not readable.
+			ST_Importer_Log::add(
+				'fatal',
+				'XML file is not readable due to file permission issues',
+				array(
+					'xml_url'    => $xml_url,
+					'file_perms' => substr( sprintf( '%o', fileperms( $xml_url ) ), -4 ),
+				)
+			);
+
+			$this->wxr_import_transient_cleanup();
 			$this->emit_sse_message(
 				array(
 					'action' => 'complete',
@@ -213,7 +345,7 @@ class ST_WXR_Importer {
 		}
 
 		// Time to run the import!
-		set_time_limit( 0 );
+		set_time_limit( 0 ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Required for long-running import process.
 
 		// Ensure we're not buffered.
 		wp_ob_end_flush_all();
@@ -260,11 +392,38 @@ class ST_WXR_Importer {
 		// Flush once more.
 		flush();
 
+		/**
+		 * Importer instance.
+		 *
+		 * @var \WXR_Importer $importer Importer instance.
+		 */
 		$importer = $this->get_importer();
+
+		// Log import progress started.
+		ST_Importer_Log::add(
+			'info',
+			'Starting WXR file import process',
+			array(
+				'xml_url'   => $xml_url,
+				'file_size' => filesize( $xml_url ),
+			)
+		);
 
 		try {
 			$response = $importer->import( $xml_url );
 		} catch ( \Exception $e ) {
+			// Log exception during import.
+			ST_Importer_Log::add(
+				'error',
+				'Exception caught during WXR import: ' . $e->getMessage(),
+				array(
+					'exception_message' => $e->getMessage(),
+					'exception_code'    => $e->getCode(),
+					'xml_url'           => $xml_url,
+				)
+			);
+
+			$this->wxr_import_transient_cleanup();
 			$this->emit_sse_message(
 				array(
 					'action'    => 'complete',
@@ -277,6 +436,18 @@ class ST_WXR_Importer {
 			}
 			return;
 		} catch ( \Error $e ) {
+			// Log fatal error during import.
+			ST_Importer_Log::add(
+				'fatal',
+				'Fatal error occurred during WXR import: ' . $e->getMessage(),
+				array(
+					'error_message' => $e->getMessage(),
+					'error_code'    => $e->getCode(),
+					'xml_url'       => $xml_url,
+				)
+			);
+
+			$this->wxr_import_transient_cleanup();
 			$this->emit_sse_message(
 				array(
 					'action'    => 'complete',
@@ -296,8 +467,28 @@ class ST_WXR_Importer {
 			'error'  => false,
 		);
 		if ( is_wp_error( $response ) ) {
+			// Log WP_Error response.
+			ST_Importer_Log::add(
+				'error',
+				'WP_Error returned from WXR importer: ' . $response->get_error_message(),
+				array(
+					'error_message' => $response->get_error_message(),
+					'error_code'    => $response->get_error_code(),
+					'xml_url'       => $xml_url,
+				)
+			);
+
 			$complete['error']     = $this->get_contextual_import_error_message( $response->get_error_message() );
 			$complete['technical'] = $response->get_error_message();
+		} else {
+			// Log successful import completion.
+			ST_Importer_Log::add(
+				'success',
+				'WXR import completed successfully',
+				array(
+					'xml_url' => $xml_url,
+				)
+			);
 		}
 
 		// Restore the content filter.
@@ -517,19 +708,40 @@ class ST_WXR_Importer {
 	 */
 	public function real_mimes( $defaults, $filename, $file ) {
 
+		// Validate file extension using WordPress core function to prevent double extension attacks.
+		$filetype = wp_check_filetype(
+			$filename,
+			array(
+				'xml'  => 'text/xml',
+				'json' => 'application/json',
+				'svg'  => 'image/svg+xml',
+				'svgz' => 'image/svg+xml',
+			)
+		);
+
+		// Get actual file extension.
+		$file_extension = pathinfo( $filename, PATHINFO_EXTENSION );
+
+		// Reject files with no valid extension or mismatched extensions.
+		if ( false === $filetype['type'] || empty( $file_extension ) ) {
+			return $defaults;
+		}
+
 		// Set EXT and real MIME type only for the file name `wxr.xml`.
-		if ( strpos( $filename, 'wxr' ) !== false ) {
+		// Ensure the actual extension is 'xml' to prevent double extension attacks like 'test.wxr.php'.
+		if ( 'xml' === $file_extension && strpos( $filename, 'wxr' ) !== false ) {
 			$defaults['ext']  = 'xml';
 			$defaults['type'] = 'text/xml';
 		}
 
-		// Set EXT and real MIME type only for the file name `wpforms.json` or `wpforms-{page-id}.json`.
-		if ( ( strpos( $filename, 'wpforms' ) !== false ) || ( strpos( $filename, 'cartflows' ) !== false ) || ( strpos( $filename, 'spectra' ) !== false ) ) {
+		// Set EXT and real MIME type only for the file name `wpforms.json`, `cartflows.json`, or `spectra.json`.
+		// Ensure the actual extension is 'json' to prevent double extension attacks.
+		if ( 'json' === $file_extension && ( strpos( $filename, 'wpforms' ) !== false || strpos( $filename, 'cartflows' ) !== false || strpos( $filename, 'spectra' ) !== false ) ) {
 			$defaults['ext']  = 'json';
 			$defaults['type'] = 'text/plain';
 		}
 
-		if ( 'svg' === pathinfo( $filename, PATHINFO_EXTENSION ) ) {
+		if ( 'svg' === $file_extension ) {
 			// Perform SVG sanitization using the sanitize_svg function.
 			$svg_content           = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$sanitized_svg_content = $this->sanitize_svg( $svg_content );
@@ -542,7 +754,7 @@ class ST_WXR_Importer {
 			$defaults['ext']  = 'svg';
 		}
 
-		if ( 'svgz' === pathinfo( $filename, PATHINFO_EXTENSION ) ) {
+		if ( 'svgz' === $file_extension ) {
 			// Perform SVG sanitization using the sanitize_svg function.
 			$svg_content     = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$decoded_content = gzdecode( $svg_content );
@@ -567,6 +779,7 @@ class ST_WXR_Importer {
 
 		return $defaults;
 	}
+
 	/**
 	 * Different MIME type of different PHP version
 	 *
@@ -748,24 +961,24 @@ class ST_WXR_Importer {
 		// phpcs:enable WordPress.PHP.YodaConditions.NotYoda
 
 		// Strip php tags.
-		$content = preg_replace( '/<\?(=|php)(.+?)\?>/i', '', $original_content );
-		$content = preg_replace( '/<\?(.*)\?>/Us', '', $content );
-		$content = preg_replace( '/<\%(.*)\%>/Us', '', $content );
+		$content = preg_replace( '/<\?(=|php)(.+?)\?>/i', '', $original_content ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- -- 3rd party library.
+		$content = preg_replace( '/<\?(.*)\?>/Us', '', $content ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- -- 3rd party library.
+		$content = preg_replace( '/<\%(.*)\%>/Us', '', $content ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- -- 3rd party library.
 
 		if ( ( false !== strpos( $content, '<?' ) ) || ( false !== strpos( $content, '<%' ) ) ) {
 			return '';
 		}
 
 		// Strip comments.
-		$content = preg_replace( '/<!--(.*)-->/Us', '', $content );
-		$content = preg_replace( '/\/\*(.*)\*\//Us', '', $content );
+		$content = preg_replace( '/<!--(.*)-->/Us', '', $content ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- -- 3rd party library.
+		$content = preg_replace( '/\/\*(.*)\*\//Us', '', $content ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- -- 3rd party library.
 
 		if ( ( false !== strpos( $content, '<!--' ) ) || ( false !== strpos( $content, '/*' ) ) ) {
 			return '';
 		}
 
 		// Strip line breaks.
-		$content = preg_replace( '/\r|\n/', '', $content );
+		$content = preg_replace( '/\r|\n/', '', $content ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- -- 3rd party library.
 
 		// Find the start and end tags so we can cut out miscellaneous garbage.
 		$start = strpos( $content, '<svg' );
@@ -882,6 +1095,15 @@ class ST_WXR_Importer {
 	 * @return array        Downloaded file data.
 	 */
 	public static function download_file( $file = '', $overrides = array(), $timeout_seconds = 300 ) {
+		// Log file download attempt.
+		ST_Importer_Log::add(
+			'info',
+			'Attempting to download file: ' . $file,
+			array(
+				'file_url'        => $file,
+				'timeout_seconds' => $timeout_seconds,
+			)
+		);
 
 		// Gives us access to the download_url() and wp_handle_sideload() functions.
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -891,6 +1113,17 @@ class ST_WXR_Importer {
 
 		// WP Error.
 		if ( is_wp_error( $temp_file ) ) {
+			// Log download failure.
+			ST_Importer_Log::add(
+				'error',
+				'File download failed: ' . $temp_file->get_error_message(),
+				array(
+					'file_url'      => $file,
+					'error_message' => $temp_file->get_error_message(),
+					'error_code'    => $temp_file->get_error_code(),
+				)
+			);
+
 			return array(
 				'success' => false,
 				'data'    => $temp_file->get_error_message(),
@@ -933,11 +1166,33 @@ class ST_WXR_Importer {
 		$results = wp_handle_sideload( $file_args, $overrides );
 
 		if ( isset( $results['error'] ) ) {
+			// Log sideload failure.
+			ST_Importer_Log::add(
+				'error',
+				'File sideload failed: ' . ( isset( $results['error'] ) ? $results['error'] : 'Unknown error' ),
+				array(
+					'file_url'  => $file,
+					'file_size' => $file_args['size'],
+					'error'     => isset( $results['error'] ) ? $results['error'] : '',
+				)
+			);
+
 			return array(
 				'success' => false,
 				'data'    => $results,
 			);
 		}
+
+		// Log successful download.
+		ST_Importer_Log::add(
+			'success',
+			'File downloaded and sideloaded successfully: ' . $file,
+			array(
+				'file_url'      => $file,
+				'file_size'     => $file_args['size'],
+				'uploaded_file' => isset( $results['file'] ) ? $results['file'] : '',
+			)
+		);
 
 		// Success.
 		return array(
@@ -955,6 +1210,15 @@ class ST_WXR_Importer {
 	 * @param  int    $post_id Uploaded XML file ID.
 	 */
 	public static function get_xml_data( $path, $post_id ) {
+		// Log XML parsing start.
+		ST_Importer_Log::add(
+			'info',
+			'Starting to parse XML file for import metadata',
+			array(
+				'xml_file_path' => $path,
+				'xml_post_id'   => $post_id,
+			)
+		);
 
 		$args = array(
 			'action'      => 'astra-wxr-import',
@@ -965,6 +1229,35 @@ class ST_WXR_Importer {
 		$url  = add_query_arg( urlencode_deep( $args ), admin_url( 'admin-ajax.php', 'relative' ) );
 
 		$data = self::get_data( $path );
+
+		// Check if XML parsing resulted in an error.
+		if ( is_wp_error( $data ) ) {
+			ST_Importer_Log::add(
+				'error',
+				'XML parsing failed: ' . $data->get_error_message(),
+				array(
+					'xml_file_path' => $path,
+					'error_message' => $data->get_error_message(),
+					'error_code'    => $data->get_error_code(),
+				)
+			);
+
+			return $data;
+		}
+
+		// Log XML metadata parsed successfully.
+		ST_Importer_Log::add(
+			'success',
+			'XML file parsed successfully with import counts',
+			array(
+				'xml_file_path' => $path,
+				'post_count'    => $data->post_count,
+				'media_count'   => $data->media_count,
+				'author_count'  => count( $data->users ),
+				'comment_count' => $data->comment_count,
+				'term_count'    => $data->term_count,
+			)
+		);
 
 		return array(
 			'count'   => array(
@@ -1030,11 +1323,30 @@ class ST_WXR_Importer {
 	 */
 	public static function is_valid_wxr_url( $url = '' ) {
 		if ( empty( $url ) ) {
+			// Log URL validation error - empty URL.
+			ST_Importer_Log::add(
+				'warning',
+				'URL validation failed: Empty or missing URL provided',
+				array(
+					'url' => $url,
+				)
+			);
+
 			return false;
 		}
 
 		$parse_url = wp_parse_url( $url );
 		if ( empty( $parse_url ) || ! is_array( $parse_url ) ) {
+			// Log URL validation error - invalid URL format.
+			ST_Importer_Log::add(
+				'warning',
+				'URL validation failed: Invalid URL format or unable to parse',
+				array(
+					'url'       => $url,
+					'parse_url' => $parse_url,
+				)
+			);
+
 			return false;
 		}
 
@@ -1058,8 +1370,29 @@ class ST_WXR_Importer {
 
 		// Validate host.
 		if ( in_array( $parse_url['host'], $valid_hosts, true ) ) {
+			// Log successful URL validation.
+			ST_Importer_Log::add(
+				'info',
+				'URL validation passed: Host is allowed',
+				array(
+					'url'  => $url,
+					'host' => $parse_url['host'],
+				)
+			);
+
 			return true;
 		}
+
+		// Log URL validation failure - host not in whitelist.
+		ST_Importer_Log::add(
+			'warning',
+			'URL validation failed: Host not in whitelist',
+			array(
+				'url'         => $url,
+				'host'        => $parse_url['host'],
+				'valid_hosts' => implode( ', ', $valid_hosts ),
+			)
+		);
 
 		return false;
 	}

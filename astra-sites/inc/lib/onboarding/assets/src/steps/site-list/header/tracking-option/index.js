@@ -22,7 +22,7 @@ const TrackingOption = () => {
 
 		// Send an API request to enable/disable the usage analytics.
 		const formData = new FormData();
-		formData.append( 'action', 'bsf_analytics_optin_status' );
+		formData.append( 'action', 'astra_sites_usage_optin_status' );
 		formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 		formData.append( 'bsfUsageTracking', ! bsfUsageTracking );
 		fetch( astraSitesVars?.ajaxurl, {

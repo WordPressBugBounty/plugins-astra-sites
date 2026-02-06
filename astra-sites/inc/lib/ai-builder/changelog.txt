@@ -1,3 +1,48 @@
+v1.2.70 - 3rd February 2026
+- Improvement: Improved import process logging for better traceability.
+- Improvement: Added automatic image selection when skipping image selection to import business relevent images.
+
+v1.2.69 - 13th January 2026
+- Fix: Resolved a plugin activation error for Modern Cart for WooCommerce by ensuring it loads after WooCommerce is activated.
+
+v1.2.68 - 06th January 2026
+- Improvement: Added Sales Funnels option for WooCommerce enabled AI templates.
+
+v1.2.67 - 16th December 2025
+- New: Added confirmation modal when proceeding without selecting images in the select-images step.
+- Improvement: Enhanced page builder selection to respect and order builders based on supported page builders filter.
+- Improvement: Added specific handling for unauthorized ZipWP API responses with user-friendly error messages and filter to customize the message.
+- Fix: Resolved an issue where empty or invalid error messages were displayed in error modals.
+
+v1.2.66 - 5th December 2025
+- New: Added switch team and disconnect AI links in the Zip Plan info modal.
+- Fix: Resolved an issue where the search box stopped working after clearing the keyword and searching again.
+
+v1.2.65 - 27th November 2025
+- Fix: Prevented potential fatal errors related to logging when running CLI import processes.
+- Fix: Resolved UI issue affecting visibility of Footer CTAs.
+
+v1.2.64 - 26th November 2025
+- Misc: Added UI Improvements.
+
+v1.2.63 - 25th November 2025
+- New: Added multisite-compatible import permission checks to ensure subsite admins can import AI templates.
+- Fix: Resolved widget import error in CLI import.
+
+v1.2.62 - 14th November 2025
+- Fix: Resolved "folder already exists" error during Astra theme installation by gracefully handling existing theme folders.
+
+v1.2.61 - 13th November 2025
+- Improvement: Sunsetting the Checkout Plugins - Stripe for Woocommerce plugin compatibility.
+- Fix: Prevented potential fatal errors when updating the site options if an exception occurs from Elementor.
+- Fix: Resolved an issue where the ai-builder route was incorrectly replaced with the text domain of the integrated product, causing access errors on certain devices.
+
+v1.2.60 - 31th October 2025
+- Improvement: Image service updated to detect client browsers located in Russia and serve images via Unsplash to avoid blocked requests.
+
+v1.2.59 - 14th October 2025
+- Improvement: Automatically use Unsplash image engine for Russian users as Pexels is blocked in Russia.
+
 v1.2.58 - 26th September 2025
 - Improvement: Fixed page creation conflict with SureCart plugin during import.
 

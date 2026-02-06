@@ -263,7 +263,7 @@ class GS_Helper {
 		if ( is_plugin_active( 'suremails/suremails.php' ) ) {
 			$action_items[] = [
 				'id'          => 'suremails',
-				'title'       => __( 'Set Up Email Delivery Using a Reliable Service', 'astra-sites' ),
+				'title'       => __( 'Setup Emails', 'astra-sites' ),
 				'description' => __( 'Ensure your site’s emails land in inboxes so you never miss an opportunity to connect or sell.', 'astra-sites' ),
 				'category'    => 'basics',
 				'cta'         => [
@@ -306,6 +306,39 @@ class GS_Helper {
 						'cta'       => [
 							'label' => __( 'Review', 'astra-sites' ),
 							'url'   => esc_url( $admin_url ) . 'edit.php?post_type=sureforms_form',
+						],
+					],
+				],
+			];
+		}
+
+		if ( is_plugin_active( 'surerank/surerank.php' ) ) {
+			$action_items[] = [
+				'id'          => 'surerank',
+				'title'       => __( 'Optimize Your Site', 'astra-sites' ),
+				'description' => __( 'Make your pages accessible and optimized for users, AI bots and search engines', 'astra-sites' ),
+				'category'    => 'basics',
+				'cta'         => [
+					'type' => 'video',
+					'url'  => 'https://www.youtube-nocookie.com/embed/O8W3PmgYOiE?modestbranding=1',
+				],
+				'steps'       => [
+					[
+						'id'        => 'review-site-optimization',
+						'completed' => false,
+						'title'     => __( 'Review Site Optimization', 'astra-sites' ),
+						'cta'       => [
+							'label' => __( 'Review', 'astra-sites' ),
+							'url'   => esc_url( $admin_url ) . 'admin.php?page=surerank#/dashboard',
+						],
+					],
+					[
+						'id'        => 'connect-search-console',
+						'completed' => false,
+						'title'     => __( 'Connect Search Console', 'astra-sites' ),
+						'cta'       => [
+							'label' => __( 'Set Up', 'astra-sites' ),
+							'url'   => esc_url( $admin_url ) . 'admin.php?page=surerank#/search-console',
 						],
 					],
 				],
@@ -407,6 +440,30 @@ class GS_Helper {
 						'title'     => __( 'Offer a related product to sell', 'astra-sites' ),
 						'cta'       => [
 							'url' => esc_url( $admin_url ) . 'admin.php?page=cartflows&path=flows',
+						],
+					],
+				],
+			];
+		}
+
+		if ( is_plugin_active( 'modern-cart/modern-cart.php' ) ) {
+			$action_items[] = [
+				'id'          => 'modern-cart',
+				'title'       => __( 'Customize Your Cart Style', 'astra-sites' ),
+				'description' => __( 'Add a sleek, slide-out cart to match your brand style that enhances your WooCommerce store’s shopping experience and boosts conversions', 'astra-sites' ),
+				'category'    => 'sale-online',
+				'cta'         => [
+					'type' => 'video',
+					'url'  => 'https://www.youtube-nocookie.com/embed/jAsON8waa8g?modestbranding=1',
+				],
+				'steps'       => [
+					[
+						'id'        => 'customize-cart-style',
+						'completed' => false,
+						'title'     => __( 'Set and Enable Modern Cart', 'astra-sites' ),
+						'cta'       => [
+							'label' => __( 'Set Up', 'astra-sites' ),
+							'url'   => esc_url( $admin_url ) . 'admin.php?page=moderncart_settings',
 						],
 					],
 				],

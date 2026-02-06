@@ -50,6 +50,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			add_action( 'admin_init', array( $this, 'maybe_update_finish_setup_banner_clicked' ) );
 			add_action( 'wp_ajax_astra_sites_set_woopayments_analytics', array( $this, 'set_woopayments_analytics' ) );
 			add_filter( 'bsf_core_stats', array( $this, 'add_astra_sites_analytics_data' ), 10, 1 );
+			add_action( 'customize_save_after', array( $this, 'track_astra_customizer_update' ) );
 		}
 
 		/**
@@ -166,6 +167,43 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 
 			wp_send_json_success( array( 'message' => 'WooPayments analytics updated!' ) );
 			exit;
+		}
+
+		/**
+		 * Track Astra Customizer updates after template import.
+		 *
+		 * This method tracks when users modify Astra Customizer settings after
+		 * a successful template import. It only tracks once per user to avoid
+		 * repeated logging on every save.
+		 *
+		 * @since 4.4.47
+		 * @return void
+		 */
+		public function track_astra_customizer_update() {
+			// Only track if import has been completed.
+			$import_complete = get_option( 'astra_sites_import_complete', 'no' );
+			if ( 'yes' !== $import_complete ) {
+				return;
+			}
+
+			// Check if we've already tracked this (one-time tracking).
+			$already_tracked = Astra_Sites_Page::get_instance()->get_setting( 'astra_customizer_updated', false );
+			if ( $already_tracked ) {
+				return;
+			}
+
+			// Get the current theme to ensure this is Astra-related.
+			$current_theme = get_stylesheet();
+			if ( 0 !== strpos( $current_theme, 'astra' ) ) {
+				return;
+			}
+
+			// Mark as tracked to ensure one-time logging.
+			Astra_Sites_Page::get_instance()->update_settings(
+				array(
+					'astra_customizer_updated' => true,
+				)
+			);
 		}
 
 		/**
@@ -314,6 +352,32 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			wp_reset_postdata();
 
 			return $found;
+		}
+
+		/**
+		 * Checks if Astra Customizer has been updated after template import.
+		 *
+		 * ACTIVE CONDITION:
+		 * - Astra theme is active.
+		 * - User modified Astra Customizer settings after template import.
+		 *
+		 * @since 4.4.47
+		 * @return bool True if Astra Customizer was updated post-import, false otherwise.
+		 */
+		public static function is_astra_customizer_updated() {
+			// Verify Astra theme is still active.
+			$current_theme = get_stylesheet();
+			if ( 0 !== strpos( $current_theme, 'astra' ) ) {
+				return false;
+			}
+
+			// Check if the setting has been tracked.
+			$customizer_updated = (bool) Astra_Sites_Page::get_instance()->get_setting( 'astra_customizer_updated', false );
+			if ( ! $customizer_updated ) {
+				return false;
+			}
+
+			return true;
 		}
 
 		/**
@@ -467,7 +531,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 
 		/**
 		 * Checks if a Presto Player video is embedded on the site.
-		 * 
+		 *
 		 * ACTIVE CONDITION: Presto Player block/shortcode used on any post/page
 		 *
 		 * @since 4.4.27
@@ -505,15 +569,15 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		}
 
 		/**
-		 * Checks if SureRank optimization is done on any post.
+		 * Checks if SureRank optimization is done on any post or 3+ site level SEO settings.
 		 *
 		 * ACTIVE CONDITION:
-		 * - Optimizations of 3+ pages/posts (update meta, etc. of 3+ pages)
+		 * - Optimization of any pages/posts (update SureRank meta, etc. of any posts/pages)
 		 * - Optimize 3+ things in "site level" SEO settings (change configuration of 3 things from default values)
 		 *
 		 * @since 4.4.39
 		 *
-		 * @return bool True if optimization is done on 3+ posts/pages, false otherwise.
+		 * @return bool True if optimization is done on any post or 3+ site level SEO settings, false otherwise.
 		 */
 		public static function is_surerank_optimization_done() {
 			if ( ! defined( 'SURERANK_VERSION' ) || ! is_plugin_active( 'surerank/surerank.php' ) ) {
@@ -545,7 +609,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 						INNER JOIN {$wpdb->posts} p ON pm.post_id = p.ID
 						WHERE pm.meta_key IN (%s, %s, %s, %s, %s, %s)
 						AND p.post_status = 'publish'
-						LIMIT 3
+						LIMIT 1
 					",
 					'surerank_settings_general',
 					'surerank_settings_schemas',
@@ -556,7 +620,32 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				)
 			);
 
-			return count( $posts ) >= 3;
+			return count( $posts ) >= 1;
+		}
+
+		/**
+		 * Checks if ModernCart is enabled.
+		 *
+		 * ACTIVE CONDITION: Modern Cart setting is enabled.
+		 *
+		 * @since 4.4.41
+		 *
+		 * @return bool True if ModernCart is enabled, false otherwise.
+		 */
+		public static function is_modern_cart_enabled() {
+			if ( ! defined( 'MODERNCART_VER' ) || ! is_plugin_active( 'modern-cart/modern-cart.php' ) ) {
+				return false;
+			}
+
+			$option_name = defined( 'MODERNCART_MAIN_SETTINGS' ) ? MODERNCART_MAIN_SETTINGS : 'moderncart_settings';
+			$settings    = get_option( $option_name, array() );
+
+			if ( ! is_array( $settings ) || ! isset( $settings['enable_moderncart'] ) ) {
+				return true; // Default is set to `all` which indicates that Modern Cart is enabled everywhere.
+			}
+
+			// Check if Modern Cart is enabled on WooCommerce pages or everywhere.
+			return 'wc_pages' === $settings['enable_moderncart'] || 'all' === $settings['enable_moderncart'];
 		}
 
 		/**
@@ -588,6 +677,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			$stats = array_merge(
 				$stats,
 				array(
+					'astra_customizer_updated'    => self::is_astra_customizer_updated(),
 					'spectra_blocks_used'         => self::is_spectra_blocks_used(),
 					'uae_widgets_used'            => self::is_uae_widgets_used(),
 					'sureforms_form_published'    => self::is_sureforms_form_published(),
@@ -597,6 +687,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 					'latepoint_booking_managed'   => self::is_latepoint_booking_managed(),
 					'presto_player_used'          => self::is_presto_player_used(),
 					'surerank_optimization_done'  => self::is_surerank_optimization_done(),
+					'modern_cart_enabled'         => self::is_modern_cart_enabled(),
 				)
 			);
 		}
@@ -683,6 +774,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				'numeric_values' => array(
 					'woopayments_banner_dismissed_count' => Astra_Sites_Page::get_instance()->get_setting( 'woopayments_banner_dismissed_count' ),
 				),
+				'steps_visited' => Astra_Sites_Page::get_instance()->get_setting( 'steps_visited' ),
 			);
 
 			if ( $import_complete ) {

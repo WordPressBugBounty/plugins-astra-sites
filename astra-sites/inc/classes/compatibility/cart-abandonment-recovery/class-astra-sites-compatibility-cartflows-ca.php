@@ -33,6 +33,7 @@ if ( ! class_exists( 'Astra_Sites_Compatibility_Cartflows_CA' ) ) {
 		 * @since 4.4.27
 		 */
 		public function __construct() {
+			add_action( 'astra_sites_after_plugin_activation', array( $this, 'disable_wcar_redirection' ) );
 			add_filter( 'cartflows_ca_skip_default_email_templates', array( $this, 'skip_default_email_templates' ), 10, 2 );
 		}
 
@@ -47,6 +48,21 @@ if ( ! class_exists( 'Astra_Sites_Compatibility_Cartflows_CA' ) ) {
 				self::$instance = new self();
 			}
 			return self::$instance;
+		}
+
+		/**
+		 * Disables Woo Cart Abandonment Recovery redirection during plugin activation.
+		 *
+		 * @param string $plugin_init The path to the plugin file that was just activated.
+		 *
+		 * @since 4.4.48
+		 * @return void
+		 */
+		public function disable_wcar_redirection( $plugin_init ) {
+			if ( 'woo-cart-abandonment-recovery/woo-cart-abandonment-recovery.php' === $plugin_init ) {
+				update_option( 'wcar_do_redirect', false );
+				delete_transient( 'wcar_redirect_to_onboarding' );
+			}
 		}
 
 		/**

@@ -42,7 +42,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_WooCommerce_Payments' ) ) {
 			add_action( 'wp_ajax_dismiss_woopayments_notice', array( $this, 'dismiss_woopayments_notice' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			add_action( 'admin_init', array( $this, 'maybe_append_woopayments_ref' ) );
-			add_filter( 'cpsw_notices_add_args', array( $this, 'hide_cpsw_stripe_connect_notice' ), 10, 1 );
 		}
 
 		/**
@@ -160,23 +159,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_WooCommerce_Payments' ) ) {
 			);
 
 			wp_enqueue_script( 'ai-builder-woopayments' );
-		}
-
-		/**
-		 * Hide CPSW Stripe Connect Notice.
-		 *
-		 * @since 1.2.37
-		 * @param array<string, mixed> $args Notice arguments.
-		 * @return array<string, mixed>|null Modified notice arguments or null to hide.
-		 */
-		public function hide_cpsw_stripe_connect_notice( array $args ) {
-			if (
-				'connect_stripe_notice' === $args['id'] &&
-				$this->can_show_payment_notice( false )
-			) {
-				return null; // Hide the notice.
-			}
-			return $args;
 		}
 
 		/**

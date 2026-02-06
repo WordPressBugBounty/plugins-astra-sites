@@ -30,6 +30,18 @@ const Steps = () => {
 	const current = STEPS[ currentIndex ];
 	const history = useNavigate();
 
+	// Helper function to validate template data exists
+	const hasTemplateData = ( state ) => {
+		return (
+			state &&
+			( state.templateResponse ||
+				state.selectedTemplateID ||
+				state.templateResponse?.id ||
+				( state.selectedTemplateID !== undefined &&
+					state.selectedTemplateID !== '' ) )
+		);
+	};
+
 	useEffect( () => {
 		$( document ).on( 'heartbeat-send', sendHeartbeat );
 		$( document ).on( 'heartbeat-tick', heartbeatDone );
@@ -108,6 +120,18 @@ const Steps = () => {
 				siteSearchTerm: searchTerm,
 				...stateValueUpdates,
 			} );
+
+			// Validate template data exists when at CI index 3 or more
+			if ( urlIndex >= 3 ) {
+				if ( ! hasTemplateData( storedStateValue ) ) {
+					// Template data is missing, prevent user from proceeding beyond current index.
+					dispatch( {
+						type: 'set',
+						// Reset to a safe state where user can reselect template.
+						currentIndex: 2, // Go back to template selection step.
+					} );
+				}
+			}
 		} else {
 			localStorage.removeItem( 'starter-templates-onboarding' );
 		}
@@ -141,6 +165,18 @@ const Steps = () => {
 				urlIndex !== currentIndex ) ||
 			templateResponse !== null
 		) {
+			// Prevent navigation forward if at CI index 3+ and template data is missing.
+			if ( currentIndex >= 3 ) {
+				if ( ! hasTemplateData( stateValue ) ) {
+					// If template data is missing, don't allow forward navigation.
+					// Reset to a safe state.
+					dispatch( {
+						type: 'set',
+						currentIndex: 2, // Go back to template selection step.
+					} );
+					return; // Exit early to prevent state storage.
+				}
+			}
 			storeCurrentState( stateValue );
 			currentUrlParams.set( 'ci', currentIndex );
 			history(

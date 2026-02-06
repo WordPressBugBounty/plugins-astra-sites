@@ -60,7 +60,6 @@ class Intelligent_Starter_Templates_Loader {
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-helper.php';
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-integration.php';
 		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-zipwp-api.php';
-		require_once INTELLIGENT_TEMPLATES_DIR . 'classes/class-astra-sites-install-plugin.php';
 
 		// Admin Menu.
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
@@ -262,14 +261,15 @@ class Intelligent_Starter_Templates_Loader {
 			'supportLink' => 'https://wpastra.com/starter-templates-support/?ip=' . Astra_Sites_Helper::get_client_ip(),
 			'isElementorDisabled'=> get_option( 'st-elementor-builder-flag' ),
 			'isBeaverBuilderDisabled'=> get_option( 'st-beaver-builder-flag' ) || ! self::is_legacy_beaver_builder_enabled(),
-			'analytics' => get_site_option( 'bsf_analytics_optin', false ),
+			'analytics' => get_site_option( 'astra_sites_usage_optin', false ),
 			'phpVersion' => PHP_VERSION,
 			'reportError' => $this->should_report_error(),
-			'bsfUsageTracking' => get_site_option( 'bsf_analytics_optin', 'no' ) === 'yes',
+			'bsfUsageTracking' => get_site_option( 'astra_sites_usage_optin', 'no' ) === 'yes',
 			'showOtherBuilders' => get_option( 'st-elementor-builder-flag', false ) || ( self::is_legacy_beaver_builder_enabled() && get_option( 'st-beaver-builder-flag', false ) ),
 			'isMultisite' => is_multisite(),
 			'canInstallPlugins' => current_user_can( 'install_plugins' ),
 			'canActivatePlugins' => current_user_can( 'activate_plugins' ),
+			'isWPFreshSite' => Astra_Sites::get_instance()->is_wp_fresh_site(),
 		);
 
 		return apply_filters( 'starter_templates_onboarding_localize_vars', $data );

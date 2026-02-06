@@ -187,6 +187,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_filter( 'wp_import_insert_term', array( $this, 'store_original_term_id' ), 10, 2 );
 			add_filter( 'getting_started_is_setup_wizard_showing', array( $this, 'maybe_setup_wizard_showing' ) );
 			add_filter( 'getting_started_logo_url', array( $this, 'starter_templates_logo_url' ) );
+
+			// Enable/disable templates force syncing.
+			add_action( 'ast_block_templates_enable_force_sync', array( __CLASS__, 'enable_force_sync' ) );
+			add_filter( 'ast_block_templates_disable_force_sync', 'astra_sites_has_import_started' );
 		}
 
 		/**
@@ -494,6 +498,45 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			if ( 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
 				return $postdata;
 			}
+
+			// Handle Spectra Blocks v3 content during template import.
+			// Goal:
+			// - If Spectra Blocks v3 is active in the demo template, we need to avoid wp_slash() on post content because it breaks block attributes.
+			// - Also, decode any Unicode sequences (\uXXXX) to UTF-8 characters.
+
+			// Get template/demo content if ST Importer is available.
+			$template_data = class_exists( '\STImporter\Importer\ST_Importer_File_System' )
+				? \STImporter\Importer\ST_Importer_File_System::get_instance()->get_demo_content()
+				: array();
+
+			if ( ! empty( $postdata['post_content'] ) && ! empty( $template_data ) && is_array( $template_data ) ) {
+
+				// Get the Spectra Blocks version info and class list.
+				$spectra_blocks_version = isset( $template_data['spectra-blocks-ver'] ) ? $template_data['spectra-blocks-ver'] : array();
+				$class_list             = isset( $template_data['class_list'] ) ? $template_data['class_list'] : array();
+
+				// Check if Spectra Blocks v3 is active in this template.
+				if ( ! empty( $spectra_blocks_version ) && in_array( 'spectra-blocks-ver-v3', $class_list, true ) ) {
+
+					// Define allowed symbols to decode.
+					$allowed = array( '-', '&', '<', '>' );
+
+					$postdata['post_content'] = preg_replace_callback(
+						'/(?:\s|\\\\)?u([0-9a-fA-F]{4})/',
+						function ( $matches ) use ( $allowed ) {
+							$char = mb_convert_encoding( pack( 'H*', $matches[1] ), 'UTF-8', 'UCS-2BE' );
+
+							// Return char only if in allowed list, else keep original escape.
+							return in_array( $char, $allowed, true ) ? $char : $matches[0];
+						},
+						$postdata['post_content']
+					);
+
+					// Return post data without wp_slash to preserve block JSON integrity.
+					return $postdata;
+				}
+			}
+
 			return wp_slash( $postdata );
 		}
 
@@ -578,7 +621,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			$optin_answer = isset( $_POST['data'] ) ? sanitize_text_field( $_POST['data'] ) : 'no';
 			$optin_answer = 'yes' === $optin_answer ? 'yes' : 'no';
 
-			update_site_option( 'bsf_analytics_optin', $optin_answer );
+			update_site_option( 'astra_sites_usage_optin', $optin_answer );
 
 			wp_send_json_success();
 		}
@@ -686,16 +729,18 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 
 			$error = isset( $_POST['error'] ) ? json_decode( stripslashes( sanitize_text_field( $_POST['error'] ) ), true ) : array();
-			$data  = array(
-				'id' => $id,
-				'import_attempts' => isset( $_POST['try-again-count'] ) ? absint( $_POST['try-again-count'] ) : 0,
-				'import_status'   => isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : 'true',
-				'type'            => isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : 'astra-sites',
-				'page_builder'    => isset( $_POST['page_builder'] ) ? sanitize_text_field( $_POST['page_builder'] ) : 'gutenberg',
-				'template_type'   => isset( $_POST['template_type'] ) ? sanitize_text_field( $_POST['template_type'] ) : '',
-				'failure_reason'  => is_array( $error ) && isset( $error['primaryText'] ) ? sanitize_text_field( $error['primaryText'] ) : '',
-				'secondary_text'  => is_array( $error ) && isset( $error['secondaryText'] ) ? sanitize_text_field( $error['secondaryText'] ) : '',
-				'error_text'      => is_array( $error ) && isset( $error['errorText'] ) ? sanitize_text_field( $error['errorText'] ) : '',
+			
+			$data = array(
+				'id'                 => $id,
+				'import_attempts'    => isset( $_POST['try-again-count'] ) ? absint( $_POST['try-again-count'] ) : 0,
+				'import_status'      => isset( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : 'true',
+				'type'               => isset( $_POST['type'] ) ? sanitize_text_field( $_POST['type'] ) : 'astra-sites',
+				'page_builder'       => isset( $_POST['page_builder'] ) ? sanitize_text_field( $_POST['page_builder'] ) : 'gutenberg',
+				'template_type'      => isset( $_POST['template_type'] ) ? sanitize_text_field( $_POST['template_type'] ) : '',
+				'failure_reason'     => is_array( $error ) && isset( $error['primaryText'] ) ? sanitize_text_field( $error['primaryText'] ) : '',
+				'secondary_text'     => is_array( $error ) && isset( $error['secondaryText'] ) ? sanitize_text_field( $error['secondaryText'] ) : '',
+				'error_text'         => is_array( $error ) && isset( $error['errorText'] ) ? sanitize_text_field( $error['errorText'] ) : '',
+				'spectra_blocks_ver' => get_option( 'astra_sites_current_spectra_blocks_ver' ),
 			);
 
 			$result = Astra_Sites_Reporting::get_instance()->report( $data );
@@ -839,7 +884,15 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				)
 			);
 
-			$api_url = add_query_arg( $api_args, trailingslashit( self::get_instance()->get_api_domain() ) . 'wp-json/wp/v2/' . $url );
+			/**
+			 * Filter to modify the API Request URL.
+			 *
+			 * @param string $api_url The complete API request URL.
+			 *
+			 * @since 4.4.43
+			 */
+			$api_url = apply_filters( 'astra_sites_api_request_' . $url, trailingslashit( self::get_instance()->get_api_domain() ) . 'wp-json/wp/v2/' . $url );
+			$api_url = add_query_arg( $api_args, $api_url );
 
 			if ( ! astra_sites_is_valid_url( $api_url ) ) {
 				wp_send_json_error(
@@ -892,6 +945,16 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			if ( 200 === $code ) {
 				Astra_Sites_File_System::get_instance()->update_json_file( 'astra_sites_import_data.json', $demo_data );
 				update_option( 'astra_sites_current_import_template_type', 'classic' );
+
+				$class_list = isset( $demo_data['class_list'] ) ? $demo_data['class_list'] : array();
+				if ( in_array( 'astra-site-page-builder-gutenberg', $class_list, true ) ) {
+					$spectra_blocks_version = isset( $demo_data['spectra-blocks-ver'] ) ? $demo_data['spectra-blocks-ver'] : array();
+					$spectra_blocks_ver     = empty( $spectra_blocks_version ) || ! in_array( 'spectra-blocks-ver-v3', $class_list, true ) ? 'v2' : 'v3';
+					update_option( 'astra_sites_current_spectra_blocks_ver', $spectra_blocks_ver );
+				} else {
+					delete_option( 'astra_sites_current_spectra_blocks_ver' );
+				}
+
 				wp_send_json_success( $demo_data );
 			}
 
@@ -1887,16 +1950,76 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					'dismiss_ai_notice' => Astra_Sites_Page::get_instance()->get_setting( 'dismiss_ai_promotion' ),
 					'showClassicTemplates' => apply_filters( 'astra_sites_show_classic_templates', true ),
 					'showAiBuilder'        => self::should_show_ai_builder(),
+					'customTemplateData'   => self::get_custom_template_data(),
 					'bgSyncInProgress'     => self::is_sync_in_progress(),
 					'userDetails'          => array(
 						'first_name' => get_user_meta( get_current_user_ID(), 'first_name', true ),
 						'last_name'  => get_user_meta( get_current_user_ID(), 'last_name', true ),
-						'email'     => wp_get_current_user()->user_email,
+						'email'      => wp_get_current_user()->user_email,
 					),
+
+					// Spectra Blocks Vars.
+					'spectraBlocks'        => apply_filters(
+						'astra_sites_spectra_blocks_vars',
+						array(
+							'selectorEnabled' => self::should_display_spectra_blocks_version_selector(),
+							'version'         => self::get_spectra_blocks_version(),
+						)
+					),
+					'isWPFreshSite'        => $this->is_wp_fresh_site(),
 				)
 			);
 
 			return $data;
+		}
+
+		/**
+		 * Check if the site is a fresh WordPress installation.
+		 * Detects if only default WordPress content exists (Hello World post, Sample Page, etc.).
+		 *
+		 * @since 4.4.46
+		 * @return bool True if site is fresh, false otherwise.
+		 */
+		public function is_wp_fresh_site() {
+			// Check if first import has already been completed.
+			if ( get_option( 'astra_sites_import_complete', false ) ) {
+				return false;
+			}
+
+			// Count published posts (excluding auto-drafts).
+			$post_count      = wp_count_posts( 'post' );
+			$published_posts = isset( $post_count->publish ) ? $post_count->publish : 0;
+
+			// Count published pages.
+			$page_count      = wp_count_posts( 'page' );
+			$published_pages = isset( $page_count->publish ) ? $page_count->publish : 0;
+
+			// Check if there are only default posts/pages (1 post "Hello World", 1-2 pages like "Sample Page", "Privacy Policy").
+			$has_default_content_only = $published_posts <= 1 && $published_pages <= 2;
+
+			// Check for media attachments (fresh site typically has 0-1 media items).
+			$media_count       = wp_count_posts( 'attachment' );
+			$total_media       = isset( $media_count->inherit ) ? $media_count->inherit : 0;
+			$has_minimal_media = $total_media <= 1;
+
+			// Check if any custom post types exist (excluding built-in ones).
+			$args                  = array(
+				'public'   => true,
+				'_builtin' => false,
+			);
+			$custom_post_types     = get_post_types( $args, 'names' );
+			$has_no_custom_content = true;
+
+			foreach ( $custom_post_types as $post_type ) {
+				$cpt_count = wp_count_posts( $post_type );
+				if ( isset( $cpt_count->publish ) && $cpt_count->publish > 0 ) {
+					$has_no_custom_content = false;
+					break;
+				}
+			}
+
+			// Site is considered fresh if it has default content, minimal media, and no custom content.
+			return $has_default_content_only && $has_minimal_media && $has_no_custom_content;
 		}
 
 		/**
@@ -2214,7 +2337,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 */
 		public function get_original_memory_limit() {
 			// This will fetch the original memory_limit from the server (php.ini).
-			$memory_limit = get_cfg_var( 'memory_limit' );
+			$memory_limit = false;
+			if ( function_exists( 'get_cfg_var' ) ) {
+				$memory_limit = get_cfg_var( 'memory_limit' );
+			}
 		
 			// If get_cfg_var() fails, try accessing PHP configuration directly.
 			if ( ! $memory_limit ) {
@@ -2356,7 +2482,14 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				}
 			}
 
-			return $sites_and_pages;
+			/**
+			 * Filter to modify all sites and pages data.
+			 *
+			 * @param array $sites_and_pages Array of all sites and pages.
+			 *
+			 * @since 4.4.43
+			 */
+			return apply_filters( 'astra_sites_get_all_sites', $sites_and_pages );
 		}
 
 		/**
@@ -2685,6 +2818,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 							</div>
 						</div>'
 					),
+					'display-with-other-notices' => false,
 				)
 			);
 		}
@@ -2914,6 +3048,24 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		}
 
 		/**
+		 * Get custom template data for Custom Templates step.
+		 *
+		 * @since 4.4.43
+		 * @return array Custom template data.
+		 */
+		public static function get_custom_template_data() {
+			/**
+			 * Filter to provide custom template data for Custom Templates step.
+			 *
+			 * @param array $custom_templates Array of custom template data.
+			 *
+			 * @since 4.4.43
+			 * @param array $custom_templates Array of custom template data.
+			 */
+			return apply_filters( 'astra_sites_show_custom_templates', array() );
+		}
+
+		/**
 		 * Determine the appropriate current index (ci) parameter based on page builder flags.
 		 *
 		 * Mirrors the step-skipping logic used in the site-type/index.js (JavaScript).
@@ -3006,6 +3158,109 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 JS;
 
 			wp_add_inline_script( 'common', $script );
+		}
+
+		/**
+		 * Should display Spectra Blocks version selector
+		 *
+		 * @since 4.4.41
+		 *
+		 * @return bool
+		 */
+		public static function should_display_spectra_blocks_version_selector() {
+			$spectra_blocks_version = self::get_spectra_blocks_version();
+			$legacy_library_enabled = get_option( 'uag_enable_legacy_design_library', 'disabled' ) === 'enabled';
+			$v2_blocks_enabled      = get_option( 'register-v2-blocks', 'no' ) === 'yes';
+
+			// Display selector only if Spectra v3 is enabled and either legacy library or v2 blocks are enabled.
+			$flag = 'v3' === $spectra_blocks_version && ( $legacy_library_enabled || $v2_blocks_enabled );
+
+			/**
+			 * Filter to modify the display of Spectra Blocks version selector.
+			 *
+			 * @param bool $flag Whether to display the version selector.
+			 *
+			 * @since 4.4.41
+			 */
+			return apply_filters( 'astra_sites_display_spectra_blocks_version_selector', $flag );
+		}
+
+		/**
+		 * Get Spectra Blocks Version
+		 *
+		 * Determines the version of the Spectra Blocks plugin (v2 or v3) based on its activation status and defined constants.
+		 *
+		 * @since 4.4.41
+		 *
+		 * @return string Returns 'v2' for Spectra Blocks version 2, 'v3' for version 3, or an empty string if not installed.
+		 */
+		public static function get_spectra_blocks_version() {
+			$spectra_init = 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php';
+
+			// If spectra is active, check for Spectra 3 constant to determine version.
+			if ( is_plugin_active( $spectra_init ) ) {
+				return defined( 'SPECTRA_3_FILE' ) ? 'v3' : 'v2';
+			}
+
+			// Load plugin.php functions if not already available.
+			if ( ! function_exists( 'get_plugins' ) ) {
+				if ( ! defined( 'ABSPATH' ) ) {
+					return '';
+				}
+				require_once ABSPATH . '/wp-admin/includes/plugin.php';
+			}
+
+			$all_plugins = get_plugins();
+
+			// If spectra is installed, check its version.
+			if ( isset( $all_plugins[ $spectra_init ] ) ) {
+				$spectra_plugin  = $all_plugins[ $spectra_init ];
+				$spectra_version = isset( $spectra_plugin['Version'] ) ? $spectra_plugin['Version'] : '';
+
+				// Remove any suffix from the version (e.g., '-beta', '-rc1').
+				$spectra_version = preg_replace_callback(
+					'/-.+$/',
+					function() {
+						return '';
+					},
+					$spectra_version
+				);
+
+				// If spectra version is found, check version to determine v2 or v3.
+				if ( $spectra_version ) {
+					return version_compare( $spectra_version, '3.0.0', '<' ) ? 'v2' : 'v3';
+				}
+			}
+
+			// Default to v3 for fresh installs.
+			return 'v3';
+		}
+
+		/**
+		 * Get spectra blocks version for API requests.
+		 *
+		 * @since 4.4.41
+		 * @return string
+		 */
+		public static function get_rest_spectra_blocks_version() {
+			// Get spectra blocks version.
+			if ( self::should_display_spectra_blocks_version_selector() ) {
+				return 'v2,v3';
+			}
+ 
+			return self::get_spectra_blocks_version();
+		}
+
+		/**
+		 * Enable force sync
+		 *
+		 * Sets the site option to force sync templates.
+		 *
+		 * @since 4.4.44
+		 * @return void
+		 */
+		public static function enable_force_sync() {
+			update_site_option( 'astra-sites-force-sync', 'yes' );
 		}
 	}
 

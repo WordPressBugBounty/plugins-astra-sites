@@ -52,6 +52,8 @@ class Astra_Sites_Elementor_Images {
 	public function get_attachment_data( $image ) {
 
 		if ( ! empty( $image ) ) {
+			\Astra_Sites_Importer_Log::add( 'Getting Elementor attachment data for image ID: ' . $image );
+
 			return array(
 				'content' => array(
 					array(
@@ -84,6 +86,8 @@ class Astra_Sites_Elementor_Images {
 				),
 			);
 		}
+
+		\Astra_Sites_Importer_Log::add( 'Elementor attachment data skipped - Empty image ID', 'warning' );
 		return array();
 	}
 }

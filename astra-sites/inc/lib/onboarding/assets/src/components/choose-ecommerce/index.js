@@ -24,7 +24,24 @@ const ChooseEcommerce = () => {
 	const [ checkedTemplateID, setCheckedTemplateID ] =
 		useState( selectedTemplateID );
 
-	const selectedTemplate = allSitesData[ `id-${ selectedTemplateID }` ];
+	// Handle both array and object structures for allSitesData
+	const getSelectedTemplate = () => {
+		if ( ! allSitesData || ! selectedTemplateID ) {
+			return null;
+		}
+
+		// If allSitesData is an array, find the template by ID
+		if ( Array.isArray( allSitesData ) ) {
+			return allSitesData.find(
+				( site ) => site.id === selectedTemplateID
+			);
+		}
+
+		// If allSitesData is an object, access by key
+		return allSitesData[ `id-${ selectedTemplateID }` ] || null;
+	};
+
+	const selectedTemplate = getSelectedTemplate();
 	const relatedTemplateID =
 		selectedTemplate?.related_ecommerce_template || '';
 

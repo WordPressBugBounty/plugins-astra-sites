@@ -309,6 +309,44 @@ export const deleteCookie = ( name ) => {
 	document.cookie = `${ name }=; Max-Age=0; path=/`;
 };
 
+/**
+ * Gets the client's country code.
+ * First checks if already cached in cookie, otherwise fetches from IP geolocation API.
+ * Country code is stored in a cookie for 30 days to avoid repeated API calls.
+ *
+ * @return {Promise<string>} The country code (e.g., 'RU', 'US') or empty string if detection fails.
+ */
+export const getClientCountryCode = async () => {
+	const cookieName = 'ai_builder_client_country';
+
+	// Check if already cached in cookie.
+	const cachedCountry = getCookie( cookieName );
+	if ( cachedCountry ) {
+		return cachedCountry;
+	}
+
+	try {
+		// Use ipwho.is API to detect client location.
+		const response = await fetch( 'https://ipwho.is/' );
+		if ( response.ok ) {
+			const data = await response.json();
+			const countryCode = data?.country_code || '';
+
+			// Cache for 30 days in cookie (30 days * 24 hours * 60 minutes * 60 seconds).
+			if ( countryCode ) {
+				setCookie( cookieName, countryCode, 30 * 24 * 60 * 60 );
+			}
+
+			return countryCode;
+		}
+	} catch ( error ) {
+		// Silently fail - server will handle location detection as fallback.
+		console.error( 'Failed to detect client country:', error );
+	}
+
+	return '';
+};
+
 export const socialMediaParser = {
 	socialMediaPrefix: {
 		twitter: 'twitter.com/',

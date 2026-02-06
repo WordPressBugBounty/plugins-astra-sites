@@ -25,6 +25,7 @@ import Dropdown from '../components/dropdown';
 import Heading from '../components/heading';
 import ImagePreview from '../components/image-preview';
 import NavigationButtons from '../components/navigation-buttons';
+import SkipImagesModal from '../components/skip-images-modal';
 import SuggestedKeywords from '../components/suggested-keywords';
 import Tile from '../components/tile';
 import UploadImage from '../components/upload-image';
@@ -35,7 +36,11 @@ import usePopper from '../hooks/use-popper';
 import { useNavigateSteps } from '../router';
 import { STORE_KEY } from '../store';
 import { MB_IN_BYTE } from '../utils/constants';
-import { clearSessionStorage, isValidImageURL } from '../utils/helpers';
+import {
+	clearSessionStorage,
+	getClientCountryCode,
+	isValidImageURL,
+} from '../utils/helpers';
 import { USER_KEYWORD } from './select-template';
 
 const ORIENTATIONS = {
@@ -70,7 +75,7 @@ const TABS = [
 ];
 
 const IMAGES_PER_PAGE = 20;
-const IMAGE_ENGINES = [ 'pexels' ];
+const IMAGE_ENGINES = [ aiBuilderVars?.imagesEngine || 'pexels' ];
 const SKELETON_COUNT = 15;
 
 const getImageSkeleton = ( count = SKELETON_COUNT ) => {
@@ -109,8 +114,11 @@ const Images = () => {
 	const { nextStep, previousStep } = useNavigateSteps();
 	const [ uploadingImagesCount, setUploadingImagesCount ] = useState( [ 0 ] );
 
-	const { setWebsiteImagesAIStep, setWebsiteTemplateKeywords } =
-		useDispatch( STORE_KEY );
+	const {
+		setWebsiteImagesAIStep,
+		setWebsiteTemplateKeywords,
+		setLoadingNextStep,
+	} = useDispatch( STORE_KEY );
 
 	const [ uploadedImages, setUploadedImages ] = useState( [] );
 
@@ -268,6 +276,7 @@ const Images = () => {
 
 	const [ openSuggestedKeywords, setOpenSuggestedKeywords ] =
 		useState( false );
+	const [ openSkipModal, setOpenSkipModal ] = useState( false );
 	const [ referenceRef, popperRef ] = usePopper( {
 		placement: 'bottom',
 		modifiers: [ { name: 'offset', options: { offset: [ 0, 0 ] } } ],
@@ -277,7 +286,7 @@ const Images = () => {
 	const scrollContainerRef = useRef( null );
 	const imageRequestCompleted = useRef( false );
 	const blackListedEngines = useRef( new Set() );
-	const previouslySelected = useRef( selectedImages );
+	// const previouslySelected = useRef( selectedImages );
 	const uploadImagesBtn = useRef( null );
 
 	const { register, handleSubmit, setValue, reset, setFocus, watch } =
@@ -441,6 +450,12 @@ const Images = () => {
 			searchKeywords = businessName;
 		}
 
+		// Get client country code (checks cookie first, fetches from API if not cached).
+		const clientCountryCode = await getClientCountryCode();
+
+		// Use Unsplash for Russian clients, otherwise use the provided engine or default from server.
+		const selectedEngine = clientCountryCode === 'RU' ? 'unsplash' : engine;
+
 		const payload = {
 			keywords: searchKeywords,
 			orientation: orientation.value,
@@ -450,7 +465,7 @@ const Images = () => {
 		try {
 			const res = await apiFetch( {
 				path: `zipwp/v1/images`,
-				data: { ...payload, engine },
+				data: { ...payload, engine: selectedEngine },
 				method: 'POST',
 				headers: {
 					'X-WP-Nonce': aiBuilderVars.rest_api_nonce,
@@ -563,6 +578,7 @@ const Images = () => {
 		blackListedEngines.current.clear();
 		setPage( 1 );
 		setImages( [] );
+		setHasMore( true );
 	}, [ keyword, orientation ] );
 
 	// Trigger to load more images.
@@ -657,7 +673,7 @@ const Images = () => {
 				business_name: businessName,
 				business_category: businessType,
 				site_language: siteLanguage,
-				images: skip ? [] : selImages,
+				images: ! skip || selImages.length > 0 ? selImages : [],
 				keywords,
 				business_address: businessContact?.address || '',
 				business_phone: businessContact?.phone || '',
@@ -674,13 +690,63 @@ const Images = () => {
 	const handleClickNext =
 		( skip = false ) =>
 		async () => {
-			await handleSaveDetails( selectedImages, skip );
+			// Show modal if user clicks Next without selecting images
+			if ( skip || ! selectedImages.length ) {
+				setOpenSkipModal( true );
+				return;
+			}
+
+			// Auto-select top 10 images if user is skipping and has no selections
+			let currentSelectedImages = selectedImages;
+			if ( currentSelectedImages.length === 0 ) {
+				currentSelectedImages = autoSelectTopImages();
+			}
+
+			await handleSaveDetails( currentSelectedImages, skip );
 			clearSessionStorage( USER_KEYWORD );
 			nextStep();
-			if ( skip ) {
-				setWebsiteImagesAIStep( previouslySelected.current ?? [] );
-			}
+
+			// Stores - null value on state -> Commented out.
+			// if ( skip ) {
+			// 	setWebsiteImagesAIStep( previouslySelected.current ?? [] );
+			// }
 		};
+
+	const handleConfirmSkip = async () => {
+		// Auto-select top 10 images if no images are currently selected
+		setLoadingNextStep( true );
+		let currentSelectedImages = selectedImages;
+		if ( currentSelectedImages.length === 0 ) {
+			currentSelectedImages = autoSelectTopImages();
+		}
+
+		await handleSaveDetails( currentSelectedImages, true );
+		clearSessionStorage( USER_KEYWORD );
+		nextStep();
+		setLoadingNextStep( false );
+
+		// Stores - null value on state -> Commented out.
+		// setWebsiteImagesAIStep( previouslySelected.current ?? [] );
+	};
+
+	// Auto-select top 10 images when user skips selection
+	const autoSelectTopImages = () => {
+		// Only auto-select if no images are currently selected
+		if ( selectedImages?.length > 0 ) {
+			return selectedImages; // return existing selections
+		}
+
+		const imagesToSelect = images.slice( 0, 10 );
+		imagesToSelect.slice( 0, 10 ).forEach( ( image ) => {
+			handleImageSelection( image );
+		} );
+
+		// Update the state with the selected images
+		const newSelectedImages = imagesToSelect;
+		setWebsiteImagesAIStep( newSelectedImages );
+
+		return newSelectedImages;
+	};
 
 	const handleImageSearch = ( data ) => {
 		setKeyword( data.keyword );
@@ -1127,6 +1193,12 @@ const Images = () => {
 						  } ) }
 				/>
 			</div>
+			<SkipImagesModal
+				open={ openSkipModal }
+				setOpen={ setOpenSkipModal }
+				onConfirmSkip={ handleConfirmSkip }
+				loadingNextStep={ loadingNextStep }
+			/>
 		</div>
 	);
 };

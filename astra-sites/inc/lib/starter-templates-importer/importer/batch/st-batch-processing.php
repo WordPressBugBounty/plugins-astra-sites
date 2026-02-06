@@ -9,6 +9,7 @@
 namespace STImporter\Importer\Batch;
 
 use STImporter\Importer\Batch\ST_Batch_Processing_Gutenberg;
+use STImporter\Importer\ST_Importer_Log;
 
 
 if ( ! class_exists( 'ST_Batch_Processing' ) ) :
@@ -75,6 +76,7 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 			if ( null === self::$instance ) {
 				self::$instance = new self();
 			}
+
 			return self::$instance;
 		}
 
@@ -84,7 +86,6 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 * @since 1.0.14
 		 */
 		public function __construct() {
-
 			$this->includes();
 
 			// Start image importing after site import complete.
@@ -100,7 +101,6 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 * @since 2.5.0
 		 */
 		public function includes() {
-
 			// Core Helpers - Image Downloader.
 			require_once ST_IMPORTER_DIR . 'importer/helpers/st-importer-image-importer.php';
 
@@ -137,7 +137,6 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 * @return void
 		 */
 		public function start_process_single( $page_id ) {
-
 			if ( method_exists( self::$process_single, 'push_to_queue' ) ) {
 				// Add "gutenberg" in import [queue].
 				self::$process_single->push_to_queue(
@@ -202,12 +201,14 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 * @return void
 		 */
 		public function start_process() {
-
 			if ( 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
 				return;
 			}
 
 			update_option( 'astra_sites_batch_process_started', 'yes' );
+
+			// Log batch processing start.
+			ST_Importer_Log::add( 'Batch processing started' );
 
 			/** WordPress Plugin Administration API */
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -225,6 +226,9 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 
 			// Add "gutenberg" in import [queue].
 			$classes[] = ST_Batch_Processing_Gutenberg::get_instance();
+
+			// Add "elementor" in import [queue].
+			$classes[] = ST_Batch_Processing_Elementor::get_instance();
 
 			// Add "brizy" in import [queue].
 
@@ -248,15 +252,30 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 				$classes[] = ST_Batch_Process_Cleanup::get_instance();
 			}
 
+			// Log queue creation.
+			ST_Importer_Log::add(
+				'Batch processing queue created',
+				'info',
+				array(
+					'total_classes'    => count( $classes ),
+					'attachment_count' => $count,
+					'has_images'       => ! empty( $count ),
+				)
+			);
+
 			if ( defined( 'WP_CLI' ) ) {
 				\WP_CLI::line( 'Batch Process Started..' );
 				// Process all classes.
 				foreach ( $classes as $key => $class ) {
 					if ( method_exists( $class, 'import' ) ) {
+						$class_name = get_class( $class );
+						ST_Importer_Log::add( 'Starting batch class: ' . $class_name );
 						$class->import();
+						ST_Importer_Log::add( 'Completed batch class: ' . $class_name, 'success' );
 					}
 				}
 				\WP_CLI::line( 'Batch Process Complete!' );
+				ST_Importer_Log::add( 'Batch processing completed successfully', 'success' );
 			} else {
 				// Add all classes to batch queue.
 				foreach ( $classes as $key => $class ) {
@@ -268,6 +287,7 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 				if ( method_exists( self::$process_all, 'save' ) ) {
 					// Dispatch Queue.
 					self::$process_all->save()->dispatch();
+					ST_Importer_Log::add( 'Batch processing queue dispatched to background' );
 				}
 			}
 		}

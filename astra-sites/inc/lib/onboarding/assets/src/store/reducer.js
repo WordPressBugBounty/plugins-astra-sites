@@ -67,6 +67,7 @@ export const initialState = {
 			enabled: false,
 			compulsory: false,
 			icon: 'ecommerce',
+			plugins: [ 'woocommerce', 'surecart' ],
 		},
 		{
 			title: __( 'SEO & Search Visibility', 'astra-sites' ),
@@ -78,6 +79,7 @@ export const initialState = {
 			enabled: true,
 			compulsory: false,
 			icon: 'arrow-trending-up',
+			plugins: [ 'surerank' ],
 		},
 		// Will be added back.
 		// {
@@ -87,18 +89,21 @@ export const initialState = {
 		// 	enabled: false,
 		// 	compulsory: false,
 		// 	icon: 'squares-plus',
+		// 	plugins: [ 'suretriggers' ],
 		// },
-		{
-			title: __( 'Appointment & Bookings', 'astra-sites' ),
-			id: 'appointment-bookings',
-			description: __(
-				'Easily manage bookings for your services',
-				'astra-sites'
-			),
-			enabled: false,
-			compulsory: false,
-			icon: 'calendar',
-		},
+		// Removing
+		// {
+		// 	title: __( 'Appointment & Bookings', 'astra-sites' ),
+		// 	id: 'appointment-bookings',
+		// 	description: __(
+		// 		'Easily manage bookings for your services',
+		// 		'astra-sites'
+		// 	),
+		// 	enabled: false,
+		// 	compulsory: false,
+		// 	icon: 'calendar',
+		// 	plugins: [ 'latepoint' ],
+		// },
 		{
 			title: __( 'Website Emails & SMTP', 'astra-sites' ),
 			id: 'smtp',
@@ -109,6 +114,7 @@ export const initialState = {
 			enabled: false,
 			compulsory: false,
 			icon: 'envelope',
+			plugins: [ 'suremail' ],
 		},
 		{
 			title: __( 'Free Live Chat', 'astra-sites' ),
@@ -120,13 +126,12 @@ export const initialState = {
 			enabled: false,
 			compulsory: false,
 			icon: 'live-chat',
+			plugins: [ 'wp-live-chat-support' ],
 		},
 	],
 	formDetails: {
-		first_name: astraSitesVars?.userDetails?.first_name || '',
+		first_name: '',
 		email: astraSitesVars?.userDetails?.email || '',
-		wp_user_type: '',
-		build_website_for: '',
 		opt_in: true,
 	},
 	selectedEcommercePlugin: '',
@@ -169,7 +174,7 @@ export const initialState = {
 
 	// Import statuses.
 	reset: 'yes' === starterTemplates.firstImportStatus ? true : false,
-	allowResetSite: false,
+	allowResetSite: true,
 	themeStatus: false,
 	importStatusLog: '',
 	importStatus: '',
@@ -239,6 +244,9 @@ export const initialState = {
 	pageBuilderCache: {
 		timestamp: null,
 	},
+
+	// Spectra Blocks Version
+	spectraBlocksVersion: astraSitesVars?.spectraBlocks?.version || 'v2',
 };
 
 const reducer = ( state = initialState, { type, ...rest } ) => {

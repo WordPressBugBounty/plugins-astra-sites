@@ -51,7 +51,66 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 			add_action( 'st_before_sending_error_report', array( $this, 'delete_transient_for_import_process' ) );
 			add_action( 'st_before_sending_error_report', array( $this, 'temporary_cache_errors' ), 10, 1 );
 			add_action( 'wp_ajax_astra-sites-import_prepare_xml', array( $this, 'import_prepare_xml' ) );
-			add_action( 'wp_ajax_bsf_analytics_optin_status', array( $this, 'bsf_analytics_optin_status' ) );
+			add_action( 'wp_ajax_astra_sites_usage_optin_status', array( $this, 'bsf_analytics_optin_status' ) );
+			add_action( 'wp_ajax_astra_sites_track_onboarding_step', array( $this, 'track_onboarding_step' ) );
+		}
+
+		/**
+		 * Track onboarding step
+		 *
+		 * @return void
+		 * @since 4.4.42
+		 */
+		public function track_onboarding_step() {
+			// Verify Nonce.
+			check_ajax_referer( 'wp_rest', '_ajax_nonce' );
+
+			if ( ! current_user_can( 'customize' ) ) {
+				wp_send_json_error( esc_html__( 'You are not allowed to perform this action', 'astra-sites' ) );
+			}
+
+			if ( empty( $_POST ) || ! isset( $_POST['step_visited'] ) ) {
+				wp_send_json_error( esc_html__( 'Missing required parameter.', 'astra-sites' ) );
+			}
+
+			$step = sanitize_text_field( wp_unslash( $_POST['step_visited'] ) );
+
+			// Valid steps
+			$valid_steps = array(
+				'welcome',
+				'page-builder',
+				'template-listing',
+				'template-preview',
+				'features',
+				'survey',
+				'import'
+			);
+
+			// Validate step key
+			if ( ! in_array( $step, $valid_steps, true ) ) {
+				wp_send_json_error( esc_html__( 'Invalid step.', 'astra-sites' ) );
+			}
+
+			if( ! class_exists( 'Astra_Sites_Page' ) ) {
+				require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-page.php';
+			}
+			// Get existing tracked steps
+			$steps_visited = Astra_Sites_Page::get_instance()->get_setting( 'steps_visited' );
+
+			// Initialize if not array
+			if ( ! is_array( $steps_visited ) ) {
+				$steps_visited = array();
+			}
+			
+			// Check if step is already tracked
+			if ( ! in_array( $step, $steps_visited, true ) ) {
+				// Add step to tracked steps
+				Astra_Sites_Page::get_instance()->update_settings( [
+					'steps_visited' => array_merge( $steps_visited, array( $step ) ),	
+				] );
+			}
+
+			wp_send_json_success();
 		}
 
 		/**
@@ -61,6 +120,8 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 		 * @return void
 		 */
 		public function import_prepare_xml() {
+			Astra_Sites_Importer_Log::add( '---' . PHP_EOL );
+			Astra_Sites_Importer_Log::add( 'Starting XML preparation process' );
 
 			// Verify Nonce.
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
@@ -105,7 +166,7 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 			
 			if ( false === $result['status'] ) {
 				/* translators: %s: Error message */
-				wp_send_json_error( sprintf( __( 'Import failed: %s', 'astra-sites' ), $result['data'] ) );
+				wp_send_json_error( sprintf( __( 'Import failed: %s', 'astra-sites' ), $result['error'] ) );
 			} else {
 				wp_send_json_success( $result['data'] );
 			}
@@ -131,7 +192,7 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 
 			$opt_in = filter_input( INPUT_POST, 'bsfUsageTracking', FILTER_VALIDATE_BOOLEAN ) ? 'yes' : 'no';
 
-			update_site_option( 'bsf_analytics_optin', $opt_in );
+			update_site_option( 'astra_sites_usage_optin', $opt_in );
 
 			wp_send_json_success( esc_html__( 'Usage tracking updated successfully.', 'astra-sites' ) );
 		}

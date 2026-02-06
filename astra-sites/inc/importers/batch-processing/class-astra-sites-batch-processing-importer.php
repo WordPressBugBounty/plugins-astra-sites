@@ -353,8 +353,9 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing_Importer' ) ) :
 			$query_args = apply_filters(
 				'astra_sites_import_sites_query_args',
 				array(
-					'per_page' => 15,
-					'page'     => $page,
+					'per_page'           => 15,
+					'page'               => $page,
+					'spectra-blocks-ver' => Astra_Sites::get_rest_spectra_blocks_version(),
 				)
 			);
 

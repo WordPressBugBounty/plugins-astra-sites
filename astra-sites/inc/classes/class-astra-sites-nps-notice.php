@@ -46,6 +46,41 @@ if ( ! class_exists( 'Astra_Sites_Nps_Notice' ) ) :
 		 */
 		private function __construct() {
 			add_action( 'admin_footer', array( $this, 'render_nps_survey' ), 999 );
+			
+			// Additional data passing via nps survey.
+			add_filter( 'nps_survey_post_data', array( $this, 'nps_survey_post_data' ) );
+		}
+
+		/**
+		 * Add import data to the post survey.
+		 *
+		 * @since 4.4.46
+		 * @param mixed $post_data Post data.
+		 *
+		 * @return mixed
+		 */
+		public function nps_survey_post_data( $post_data ) {
+			if ( isset( $post_data['plugin_slug'] ) && 'astra-sites' !== $post_data['plugin_slug'] ) {
+				return $post_data;
+			}
+
+			$import_type = get_option( 'astra_sites_current_import_template_type' );
+			$post_data['import_type'] = ! empty( $import_type ) ? $import_type : '';
+			
+			// Normalize AI import type to ai-builder.
+			if ( 'ai' === $post_data['import_type'] ) {
+				$post_data['import_type'] = 'ai-builder';
+			}
+			
+			// Add UUID for AI builder imports if available.
+			if ( 'ai-builder' === $post_data['import_type'] ) {
+				$zip_import_data = get_option( 'zipwp_import_site_details' );
+				if ( is_array( $zip_import_data ) && isset( $zip_import_data['uuid'] ) ) {
+					$post_data['uuid'] = sanitize_text_field( $zip_import_data['uuid'] );
+				}
+			}
+
+			return $post_data;
 		}
 
 		/** 

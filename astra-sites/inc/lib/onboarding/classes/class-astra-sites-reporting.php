@@ -121,6 +121,7 @@ class Astra_Sites_Reporting {
         $failure_reason    = isset( $data['failure_reason'] ) ? sanitize_text_field( $data['failure_reason'] ) : '';
         $secondary_text    = isset( $data['secondary_text'] ) ? sanitize_text_field( $data['secondary_text'] ) : '';
         $error_text        = isset( $data['error_text'] ) ? sanitize_text_field( $data['error_text'] ) : '';
+        $spectra_blocks_ver = isset( $data['spectra_blocks_ver'] ) ? sanitize_text_field( $data['spectra_blocks_ver'] ) : '';
 
         // If secondary text is not empty, append it to failure reason.
         if ( ! empty( $secondary_text ) && is_string( $secondary_text ) ) {
@@ -145,11 +146,23 @@ class Astra_Sites_Reporting {
                     'template_type'  => $template_type,
                     'failure_reason' => $failure_reason,
                     'error_text'     => $error_text,
+                    'spectra_blocks_ver' => $spectra_blocks_ver,
+                    'import_log_file'    => Astra_Sites_Importer_Log::get_log_file_url(),
                 ),
             ),
         );
 
         $request = wp_safe_remote_post( Astra_Sites::get_instance()->import_analytics_url, $api_args );
+
+        /**
+         * Action fired after analytics reporting.
+         *
+         * @param array<string, mixed>      $data    The data sent for reporting.
+         * @param WP_Error|array<string,mixed> $request The response from the reporting request.
+         *
+         * @since 4.4.49
+         */
+        do_action( 'astra_sites_after_analytics_reporting', $data, $request );
 
         if ( is_wp_error( $request ) ) {
             return array(

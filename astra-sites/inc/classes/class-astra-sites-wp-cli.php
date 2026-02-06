@@ -13,6 +13,11 @@ use STImporter\Importer\WXR_Importer\ST_WXR_Importer;
 use STImporter\Importer\Batch\ST_Batch_Processing;
 use AiBuilder\Inc\Traits\Helper;
 
+// Include theme functions.
+if ( ! function_exists( 'switch_theme' ) ) {
+	require_once ABSPATH . 'wp-admin/includes/theme.php';
+}
+
 if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) ) :
 
 	/**
@@ -172,6 +177,12 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 
 			// Invalid Site ID.
 			if ( is_wp_error( $demo_data ) ) {
+
+				/** 
+				 * Handle WP_Error response when demo data fetch fails.
+				 * 
+				 * @var WP_Error $demo_data Error object containing failure details.
+				 */
 				/* Translators: %s is the error message. */
 				WP_CLI::error( sprintf( __( 'Site Import failed due to error: %s', 'astra-sites' ), $demo_data->get_error_message() ) );
 			}
@@ -194,6 +205,11 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 			}
 
 			/**
+			 * Install & Activate Astra Theme.
+			 */
+			$this->install_and_activate_astra_theme();
+
+			/**
 			 * Check File System permissions.
 			 */
 			Helper::filesystem_permission();
@@ -206,40 +222,18 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 				if ( ! empty( $plugins ) ) {
 					$plugin_status = Helper::required_plugins( $plugins, $demo_data['astra-site-options-data'], $demo_data['astra-enabled-extensions'] );
 
-					// Install Plugins.
-					if ( ! empty( $plugin_status['required_plugins']['notinstalled'] ) ) {
-						WP_CLI::line( __( 'Installing Plugins..', 'astra-sites' ) );
-						foreach ( $plugin_status['required_plugins']['notinstalled'] as $key => $plugin ) {
-							if ( isset( $plugin['slug'] ) ) {
-
-								// Install plugin.
-								WP_CLI::runcommand( 'plugin install ' . $plugin['slug'] );
-
-								// Activate plugin.
-								WP_CLI::runcommand( 'plugin activate ' . $plugin['slug'] );
-							}
-						}
-					}
-
-					// Activate Plugins.
-					if ( ! empty( $plugin_status['required_plugins']['inactive'] ) ) {
-						WP_CLI::line( __( 'Activating Plugins..', 'astra-sites' ) );
-						foreach ( $plugin_status['required_plugins']['inactive'] as $key => $plugin ) {
-							if ( isset( $plugin['init'] ) ) {
-								Helper::required_plugin_activate( $plugin['init'], $demo_data['astra-site-options-data'], $demo_data['astra-enabled-extensions'] );
-							}
-						}
-					}
+					// Handle plugin dependencies and install/activate in correct order.
+					$this->handle_plugin_dependencies( $plugin_status, $demo_data );
 				}
 			}
 
 			/**
-			 * Backup Customizer Settings
+			 * Backup Customizer Settings.
 			 */
 			Helper::backup_settings();
 
 			/**
-			 * Reset Site Data
+			 * Reset Site Data.
 			 */
 			if ( $reset ) {
 				WP_CLI::runcommand( 'astra-sites reset --yes' );
@@ -249,21 +243,73 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 			 * Import Flows & Steps for CartFlows.
 			 */
 			if ( isset( $demo_data['astra-site-cartflows-path'] ) && ! empty( $demo_data['astra-site-cartflows-path'] ) ) {
-				Astra_Sites_Importer::get_instance()->import_cartflows( $demo_data['astra-site-cartflows-path'] );
+				// Check if CartFlows plugin is in required plugins list before importing.
+				if ( $this->is_plugin_required( $demo_data, 'cartflows' ) ) {
+					Astra_Sites_Importer::get_instance()->import_cartflows( $demo_data['astra-site-cartflows-path'] );
+				} else {
+					WP_CLI::line( __( 'Skipping CartFlows import - plugin not in required list.', 'astra-sites' ) );
+				}
 			}
 
 			/**
 			 * Import Cart Abandonment Recovery data.
 			 */
 			if ( isset( $demo_data['astra-site-cart-abandonment-recovery-path'] ) && ! empty( $demo_data['astra-site-cart-abandonment-recovery-path'] ) ) {
-				Astra_Sites_Importer::get_instance()->import_cart_abandonment_recovery( $demo_data['astra-site-cart-abandonment-recovery-path'] );
+				// Check if Cart Abandonment Recovery plugin is in required plugins list before importing.
+				if ( $this->is_plugin_required( $demo_data, 'cart-abandonment-recovery' ) ) {
+					Astra_Sites_Importer::get_instance()->import_cart_abandonment_recovery( $demo_data['astra-site-cart-abandonment-recovery-path'] );
+				} else {
+					WP_CLI::line( __( 'Skipping Cart Abandonment Recovery import - plugin not in required list.', 'astra-sites' ) );
+				}
 			}
 
 			/**
-			 * Import WP Forms.
+			 * Import WPForms.
 			 */
 			if ( isset( $demo_data['astra-site-wpforms-path'] ) && ! empty( $demo_data['astra-site-wpforms-path'] ) ) {
-				Astra_Sites_Importer::get_instance()->import_wpforms( $demo_data['astra-site-wpforms-path'] );
+				// Check if WPForms plugin is in required plugins list before importing.
+				if ( $this->is_plugin_required( $demo_data, 'wpforms' ) ) {
+					Astra_Sites_Importer::get_instance()->import_wpforms( $demo_data['astra-site-wpforms-path'] );
+				} else {
+					WP_CLI::line( __( 'Skipping WPForms import - plugin not in required list.', 'astra-sites' ) );
+				}
+			}
+
+			/**
+			 * Import LatePoint.
+			 */
+			if ( isset( $demo_data['astra-site-latepoint-path'] ) && ! empty( $demo_data['astra-site-latepoint-path'] ) ) {
+				// Check if LatePoint plugin is in required plugins list before importing.
+				if ( $this->is_plugin_required( $demo_data, 'latepoint' ) ) {
+					Astra_Sites_Importer::get_instance()->import_latepoint( $demo_data['astra-site-latepoint-path'] );
+				} else {
+					WP_CLI::line( __( 'Skipping LatePoint import - plugin not in required list.', 'astra-sites' ) );
+				}
+			}
+
+			/**
+			 * Import SureCart Settings.
+			 */
+			if ( isset( $demo_data['astra-site-surecart-settings'] ) && ! empty( $demo_data['astra-site-surecart-settings']['id'] ) ) {
+
+				// Check if LatePoint plugin is in required plugins list before importing.
+				if ( ! $this->is_plugin_required( $demo_data, 'latepoint' ) ) {
+					WP_CLI::line( __( 'Skipping LatePoint import - plugin not in required list.', 'astra-sites' ) );
+				}
+
+				if ( ! class_exists( 'STImporter\Importer\ST_Importer' ) ) {
+					WP_CLI::line( __( 'SureCart import failed: ST_Importer class not found. Please ensure the importer is properly loaded.', 'astra-sites' ) );
+					return;
+				}
+
+				$result = \STImporter\Importer\ST_Importer::import_surecart_settings( $demo_data['astra-site-surecart-settings']['id'] );
+				if ( isset( $result['status'] ) && ! $result['status'] ) {
+					// translators: %s: Error message.
+					WP_CLI::line( sprintf( __( 'SureCart import failed: %s', 'astra-sites' ), isset( $result['error'] ) ? $result['error'] : __( 'Unknown error', 'astra-sites' ) ) );
+					return;
+				}
+
+				WP_CLI::line( __( 'SureCart Settings imported.', 'astra-sites' ) );
 			}
 
 			/**
@@ -291,6 +337,48 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 			 */
 			if ( isset( $demo_data['astra-site-widgets-data'] ) && ! empty( $demo_data['astra-site-widgets-data'] ) ) {
 				WP_CLI::line( __( 'Importing Widgets..', 'astra-sites' ) );
+				
+				if ( file_exists( ABSPATH . 'wp-content/themes/astra/functions.php' ) ) {
+					require_once ABSPATH . 'wp-content/themes/astra/functions.php';
+				}
+
+				// Initialize Astra Builder Widget Controller.
+				try {
+					if ( class_exists( 'Astra_Builder_Widget_Controller' ) && class_exists( 'Astra_Builder_Helper' ) ) {
+						$widget_controller = \Astra_Builder_Widget_Controller::get_instance();
+						if ( method_exists( $widget_controller, 'widget_init' ) ) {
+							// Check if header/footer builder is active.
+							$is_builder_active = property_exists( 'Astra_Builder_Helper', 'is_header_footer_builder_active' ) ? Astra_Builder_Helper::$is_header_footer_builder_active : true;
+							
+							if ( false !== $is_builder_active ) {
+								// Use fallback values to reduce dependency on Astra_Builder_Helper.
+								$num_of_footer_widgets = property_exists( 'Astra_Builder_Helper', 'num_of_footer_widgets' ) ? Astra_Builder_Helper::$num_of_footer_widgets : 4;
+								$num_of_header_widgets = property_exists( 'Astra_Builder_Helper', 'num_of_header_widgets' ) ? Astra_Builder_Helper::$num_of_header_widgets : 2;
+								$pro_exist             = defined( 'ASTRA_EXT_VER' );
+								$component_limit       = $pro_exist && property_exists( 'Astra_Builder_Helper', 'component_limit' ) ? Astra_Builder_Helper::$component_limit : max( $num_of_footer_widgets, $num_of_header_widgets );
+
+								for ( $index = 1; $index <= ( $pro_exist ? $component_limit : $num_of_footer_widgets ); $index++ ) {
+									$widget_controller->register_sidebar( $index, 'footer' );
+								}
+
+								for ( $index = 1; $index <= ( $pro_exist ? $component_limit : $num_of_header_widgets ); $index++ ) {
+									$widget_controller->register_sidebar( $index, 'header' );
+								}
+							}
+						}
+					}
+				} catch ( \Exception $e ) {
+					// translators: %s is the error.
+					WP_CLI::line( sprintf( __( 'Warning: Failed to initialize Astra Builder Widget Controller. Error: %s', 'astra-sites' ), $e->getMessage() ) );
+				} catch ( \Error $e ) {
+					// translators: %s is the error.
+					WP_CLI::line( sprintf( __( 'Warning: Fatal error encountered while initializing Astra Builder Widget Controller. Error: %s', 'astra-sites' ), $e->getMessage() ) );
+				}
+
+				// Ensure the widgets_init action is fired.
+				if ( function_exists( 'wp_widgets_init' ) ) {
+					wp_widgets_init();
+				}
 				Helper::import_widgets( $demo_data['astra-site-widgets-data'] );
 			}
 
@@ -807,6 +895,301 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 		public static function real_mime_types( $defaults, $file, $filename, $mimes, $real_mime ) {
 			return ST_WXR_Importer::get_instance()->real_mime_types_5_1_0( $defaults, $file, $filename, $mimes, $real_mime );
 		}
+
+		/**
+		 * Install and Activate Astra Theme
+		 *
+		 * @since 4.4.43
+		 * @return void
+		 */
+		private function install_and_activate_astra_theme() {
+			// Check if Astra theme is installed.
+			$astra_theme = wp_get_theme( 'astra' );
+			
+			if ( ! $astra_theme->exists() ) {
+				WP_CLI::line( __( 'Installing Astra Theme..', 'astra-sites' ) );
+				
+				// Install Astra theme.
+				$result = WP_CLI::runcommand( 'theme install astra', array( 'return' => 'all' ) );
+				
+				if ( 0 !== $result->return_code ) {
+					WP_CLI::error( __( 'Failed to install Astra theme.', 'astra-sites' ) );
+				}
+				
+				WP_CLI::line( __( 'Astra Theme installed successfully.', 'astra-sites' ) );
+			}
+			
+			// Activate Astra theme.
+			WP_CLI::line( __( 'Activating Astra Theme..', 'astra-sites' ) );
+			
+			// Use WordPress function to activate theme.
+			switch_theme( 'astra' );
+			
+			WP_CLI::line( __( 'Astra Theme activated successfully.', 'astra-sites' ) );
+		}
+
+		/**
+		 * Handle plugin dependencies by installing and activating plugins using a deferred list approach.
+		 *
+		 * @since 4.4.43
+		 * @param array $plugin_status Plugin status array.
+		 * @param array $demo_data Demo data.
+		 * @return void
+		 */
+		private function handle_plugin_dependencies( $plugin_status, $demo_data ) {
+			// Get all plugins that need to be processed.
+			$all_plugins = array();
+			
+			// Combine all plugin types into a single array.
+			if ( ! empty( $plugin_status['required_plugins']['notinstalled'] ) ) {
+				foreach ( $plugin_status['required_plugins']['notinstalled'] as $plugin ) {
+					$all_plugins[ $plugin['slug'] ] = array(
+						'slug' => $plugin['slug'],
+						'init' => isset( $plugin['init'] ) ? $plugin['init'] : $plugin['slug'] . '/' . $plugin['slug'] . '.php',
+						'name' => isset( $plugin['name'] ) ? $plugin['name'] : $plugin['slug'],
+						'status' => 'notinstalled',
+					);
+				}
+			}
+			
+			if ( ! empty( $plugin_status['required_plugins']['inactive'] ) ) {
+				foreach ( $plugin_status['required_plugins']['inactive'] as $plugin ) {
+					$all_plugins[ $plugin['slug'] ] = array(
+						'slug' => $plugin['slug'],
+						'init' => isset( $plugin['init'] ) ? $plugin['init'] : $plugin['slug'] . '/' . $plugin['slug'] . '.php',
+						'name' => isset( $plugin['name'] ) ? $plugin['name'] : $plugin['slug'],
+						'status' => 'inactive',
+					);
+				}
+			}
+			
+			if ( ! empty( $plugin_status['required_plugins']['active'] ) ) {
+				foreach ( $plugin_status['required_plugins']['active'] as $plugin ) {
+					$all_plugins[ $plugin['slug'] ] = array(
+						'slug' => $plugin['slug'],
+						'init' => isset( $plugin['init'] ) ? $plugin['init'] : $plugin['slug'] . '/' . $plugin['slug'] . '.php',
+						'name' => isset( $plugin['name'] ) ? $plugin['name'] : $plugin['slug'],
+						'status' => 'active',
+					);
+				}
+			}
+
+			// Install all plugins first.
+			WP_CLI::line( __( 'Installing Plugins..', 'astra-sites' ) );
+			$plugins_to_activate = array();
+
+			// 👉 Sort priority before installation.
+			$priority_order = array( 'woocommerce', 'elementor', 'ultimate-addons-for-gutenberg' );
+
+			uksort( $all_plugins, function ( $a, $b ) use ( $priority_order ) {
+				$a_priority = array_search( $a, $priority_order );
+				$b_priority = array_search( $b, $priority_order );
+
+				if ( false === $a_priority ) {
+					$a_priority = PHP_INT_MAX;
+				}
+				if ( false === $b_priority ) {
+					$b_priority = PHP_INT_MAX;
+				}
+
+				return $a_priority - $b_priority;
+			} );
+
+			foreach ( $all_plugins as $plugin ) {
+				if ( 'notinstalled' === $plugin['status'] ) {
+
+					/* translators: %s is the plugin name. */
+					WP_CLI::line( sprintf( __( 'Installing plugin: %s', 'astra-sites' ), $plugin['name'] ) );
+					
+					// Install plugin.
+					$install_result = WP_CLI::runcommand( 'plugin install ' . $plugin['slug'], array( 'return' => 'all' ) );
+					
+					if ( 0 !== $install_result->return_code ) {
+						/* translators: %1$s is the plugin name, %2$s is the error message. */
+						WP_CLI::warning( sprintf( __( 'Failed to install plugin %1$s. Error: %2$s', 'astra-sites' ), $plugin['name'], $install_result->stderr ) );
+						continue;
+					}
+
+					/* translators: %s is the plugin name. */
+					WP_CLI::line( sprintf( __( 'Plugin %s installed successfully.', 'astra-sites' ), $plugin['name'] ) );
+
+					// translators: %s is the plugin name.
+					WP_CLI::line( sprintf( __( 'Activating plugin: %s', 'astra-sites' ), $plugin['name'] ) );
+
+					// Activate plugin.
+					$activate_result = WP_CLI::runcommand( 'plugin activate ' . $plugin['slug'], array( 'return' => 'all' ) );
+
+					if ( 0 !== $activate_result->return_code ) {
+						/* translators: %1$s is the plugin name, %2$s is the error message. */
+						WP_CLI::warning( sprintf( __( 'Failed to activate plugin %1$s. Error: %2$s', 'astra-sites' ), $plugin['name'], $activate_result->stderr ) );
+
+						// Mark plugin as inactive.
+						$plugin['status']      = 'inactive';
+						$plugins_to_activate[] = $plugin;
+						continue;
+					}
+
+					// translators: %s is the plugin name.
+					WP_CLI::line( sprintf( __( 'Plugin %s activated successfully.', 'astra-sites' ), $plugin['name'] ) );
+
+					// Mark plugin as active.
+					$plugin['status'] = 'active';
+				} elseif ( 'inactive' === $plugin['status'] && in_array( $plugin['slug'], $priority_order, true ) ) {
+					$result = $this->attempt_plugin_activation( $plugin, $demo_data );
+					
+					if ( $result['success'] ) {
+						// translators: %s is the plugin name.
+						WP_CLI::line( sprintf( __( 'Plugin %s activated successfully.', 'astra-sites' ), $plugin['name'] ) );
+					} else {
+						// translators: %1$s is the plugin name, %2$s is the error message.
+						WP_CLI::warning( sprintf( __( 'Failed to activate plugin %1$s: %2$s', 'astra-sites' ), $plugin['name'], $result['message'] ) );
+					}
+
+					$plugin['status'] = 'active';
+				} elseif ( 'inactive' === $plugin['status'] ) {
+					$plugins_to_activate[] = $plugin;
+				}
+				// Active plugins don't need to be processed.
+			}
+			
+			// Activate plugins using deferred list approach.
+			WP_CLI::line( __( 'Activating Plugins..', 'astra-sites' ) );
+			$this->activate_plugins_with_deferred_list( $plugins_to_activate, $demo_data );
+		}
+
+		/**
+		 * Activate plugins using a deferred list approach to handle dependencies.
+		 *
+		 * @since 4.4.43
+		 * @param array $plugins Plugins to activate.
+		 * @param array $demo_data Demo data.
+		 * @return void
+		 */
+		private function activate_plugins_with_deferred_list( $plugins, $demo_data ) {
+			$main_list = $plugins;
+			$deferred_list = array();
+			$max_iterations = count( $plugins ) * 2; // Prevent infinite loops.
+			$iteration = 0;
+			
+			while ( ( ! empty( $main_list ) || ! empty( $deferred_list ) ) && $iteration < $max_iterations ) {
+				$iteration++;
+				$processed_in_this_iteration = false;
+				
+				// Process main list.
+				foreach ( $main_list as $index => $plugin ) {
+					$result = $this->attempt_plugin_activation( $plugin, $demo_data );
+					
+					if ( $result['success'] ) {
+						/* translators: %s is the plugin name. */
+						WP_CLI::line( sprintf( __( 'Plugin %s activated successfully.', 'astra-sites' ), $plugin['name'] ) );
+						unset( $main_list[ $index ] );
+						$processed_in_this_iteration = true;
+					} elseif ( $result['defer'] ) {
+						// Add to deferred list.
+						$deferred_list[] = $plugin;
+						unset( $main_list[ $index ] );
+						/* translators: %s is the plugin name. */
+						WP_CLI::line( sprintf( __( 'Deferring plugin %s due to dependency issues.', 'astra-sites' ), $plugin['name'] ) );
+					} else {
+						// Actual error, not dependency related.
+						/* translators: %1$s is the plugin name, %2$s is the error message. */
+						WP_CLI::warning( sprintf( __( 'Failed to activate plugin %1$s: %2$s', 'astra-sites' ), $plugin['name'], $result['message'] ) );
+						unset( $main_list[ $index ] );
+					}
+				}
+				
+				// If main list is empty, move deferred list to main list.
+				if ( empty( $main_list ) && ! empty( $deferred_list ) ) {
+					$main_list = $deferred_list;
+					$deferred_list = array();
+					WP_CLI::line( __( 'Processing deferred plugins...', 'astra-sites' ) );
+				}
+				
+				// If we didn't process anything in this iteration, break to prevent infinite loop.
+				if ( ! $processed_in_this_iteration && empty( $main_list ) && ! empty( $deferred_list ) ) {
+					WP_CLI::warning( __( 'Could not resolve all plugin dependencies. Some plugins may not be activated.', 'astra-sites' ) );
+					break;
+				}
+			}
+			
+			// Report any remaining plugins that couldn't be activated.
+			if ( ! empty( $deferred_list ) ) {
+				$plugin_names = array();
+				foreach ( $deferred_list as $plugin ) {
+					$plugin_names[] = $plugin['name'];
+				}
+				/* translators: %s is a list of plugin names. */
+				WP_CLI::warning( sprintf( __( 'The following plugins could not be activated due to dependency issues: %s', 'astra-sites' ), implode( ', ', $plugin_names ) ) );
+			}
+		}
+
+		/**
+		 * Attempt to activate a plugin and handle dependency errors.
+		 *
+		 * @since 4.4.43
+		 * @param array $plugin Plugin to activate.
+		 * @param array $demo_data Demo data.
+		 * @return array Result with success, defer, and message keys.
+		 */
+		private function attempt_plugin_activation( $plugin, $demo_data ) {
+			/* translators: %s is the plugin name. */
+			WP_CLI::line( sprintf( __( 'Activating plugin: %s', 'astra-sites' ), $plugin['name'] ) );
+			
+			// Capture output to check for dependency errors.
+			ob_start();
+			Helper::required_plugin_activate( $plugin['init'], $demo_data['astra-site-options-data'], $demo_data['astra-enabled-extensions'] );
+			$output = ob_get_clean();
+			
+			// Check if there was a dependency error.
+			if ( strpos( $output, 'requires' ) !== false && ( strpos( $output, 'to be installed and activated' ) !== false || strpos( $output, 'must be activated first' ) !== false ) ) {
+				return array(
+					'success' => false,
+					'defer' => true,
+					'message' => $output,
+				);
+			}
+			
+			// Check if there was any other error.
+			if ( strpos( $output, 'Error:' ) !== false || strpos( $output, 'error' ) !== false ) {
+				return array(
+					'success' => false,
+					'defer' => false,
+					'message' => $output,
+				);
+			}
+			
+			// Success.
+			return array(
+				'success' => true,
+				'defer' => false,
+				'message' => 'Plugin activated successfully.',
+			);
+		}
+
+		/**
+		 * Check if required plugins exist in the demo data.
+		 *
+		 * @since 4.4.43
+		 * @param array  $demo_data Demo data containing required-plugins list.
+		 * @param string $plugin_slug Plugin slug to check for.
+		 * @return bool True if plugin exists in required list, false otherwise.
+		 */
+		private function is_plugin_required( $demo_data, $plugin_slug ) {
+			// Check if required-plugins data exists.
+			if ( ! isset( $demo_data['required-plugins'] ) || ! is_array( $demo_data['required-plugins'] ) ) {
+				return false;
+			}
+
+			// Loop through required plugins to find the specified plugin.
+			foreach ( $demo_data['required-plugins'] as $plugin ) {
+				if ( isset( $plugin['slug'] ) && $plugin['slug'] === $plugin_slug ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 	}
 
 	/**

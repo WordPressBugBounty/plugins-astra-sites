@@ -207,7 +207,7 @@ const Survey = () => {
 
 	const hasAgreedFirstTime = allowResetSite || firstImportStatus;
 
-	const handleSurveyFormSubmit = ( e ) => {
+	const handleSurveyFormSubmit = ( e, skipSubscription = false ) => {
 		e.preventDefault();
 
 		if ( hasAgreedFirstTime ) {
@@ -241,6 +241,11 @@ const Survey = () => {
 							starterTemplates.analytics = answer;
 						}
 					} );
+			}
+
+			// Skip subscription if chose to skip and start building.
+			if ( skipSubscription ) {
+				return;
 			}
 
 			if ( astraSitesVars?.subscribed === 'yes' ) {
@@ -280,8 +285,6 @@ const Survey = () => {
 				EMAIL: formDetails.email,
 				FIRSTNAME: formDetails.first_name,
 				PAGE_BUILDER: builder,
-				WP_USER_TYPE: formDetails.wp_user_type,
-				BUILD_WEBSITE_FOR: formDetails.build_website_for,
 				OPT_IN: formDetails.opt_in,
 				FEATURES: uniqueFeatures,
 			};
@@ -352,6 +355,14 @@ const Survey = () => {
 						? ICONS.arrowRightDisabled
 						: ICONS.arrowRight }
 				</button>
+
+				<button
+					className="p-2 bg-transparent border-none text-classic-button flex justify-self-center text-sm cursor-pointer"
+					onClick={ ( e ) => handleSurveyFormSubmit( e, true ) }
+				>
+					{ __( 'Skip & Start Building', 'astra-sites' ) }
+				</button>
+
 				<p className="!text-zip-app-inactive-icon subscription-agreement-text text-center mt-4">
 					{ beforeTerms }
 					{ terms }
@@ -455,6 +466,7 @@ const Survey = () => {
 		// Cache frequently accessed properties for better performance
 		const isMultisite = starterTemplates?.isMultisite;
 		const canActivatePlugins = starterTemplates?.canActivatePlugins;
+		const canInstallPlugins = starterTemplates?.canInstallPlugins;
 		const themeStatus = starterTemplates?.themeStatus;
 
 		// Helper function to determine if theme is missing based on user permissions
@@ -466,8 +478,9 @@ const Survey = () => {
 
 		// Helper function to check if plugins are missing
 		const checkPluginsMissing = () => {
-			console.table( { notInstalled, allPuginList } );
-
+			if ( canInstallPlugins ) {
+				return false;
+			}
 			return canActivatePlugins
 				? ( notInstalled?.length || 0 ) > 0
 				: ( allPuginList?.length || 0 ) > 0;

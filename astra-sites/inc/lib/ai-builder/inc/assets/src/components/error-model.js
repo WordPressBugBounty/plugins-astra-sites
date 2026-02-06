@@ -40,7 +40,12 @@ const ErrorModel = ( {
 						</div>
 						<div className="text-app-text text-base font-normal leading-6 bg-gray-100 p-4 max-h-[250px] max-w-full overflow-auto">
 							<p>{ error.primaryText }</p>
-							<p>{ error.errorText }</p>
+							{ error.errorText &&
+								error.errorText !== '{}' &&
+								error.errorText !== 'null' &&
+								error.errorText !== 'undefined' && (
+									<p>{ error.errorText }</p>
+								) }
 						</div>
 					</div>
 				) }

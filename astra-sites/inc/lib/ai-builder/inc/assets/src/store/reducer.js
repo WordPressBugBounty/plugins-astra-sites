@@ -429,6 +429,17 @@ const reducer = ( state = initialState, action ) => {
 					),
 				},
 			};
+		case actionTypes.SET_ECOMMERCE_TYPE:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					siteFeaturesData: {
+						...state.stepData.siteFeaturesData,
+						ecommerce_type: action.payload,
+					},
+				},
+			};
 		case actionTypes.SET_WEBSITE_TEMPLATE_KEYWORDS:
 			return {
 				...state,

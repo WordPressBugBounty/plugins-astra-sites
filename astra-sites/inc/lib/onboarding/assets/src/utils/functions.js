@@ -59,6 +59,10 @@ export const getDataUri = ( url, callback ) => {
 };
 
 export const storeCurrentState = ( currentState ) => {
+	// Remove allSitesData from currentState before storing to localStorage to reduce storage usage.
+	// if ( currentState && currentState.allSitesData ) {
+	// delete currentState.allSitesData;
+	// }
 	try {
 		localStorage.setItem(
 			'starter-templates-onboarding',
@@ -293,4 +297,22 @@ export const debounce = ( func, wait, immediate ) => {
  */
 export const getStepIndex = ( name = '' ) => {
 	return STEPS.findIndex( ( step ) => step.name === name );
+};
+
+/**
+ * Track onboarding step
+ *
+ * @param {string} stepKey The step key to track
+ * @return {Promise} Promise that resolves when tracking is complete
+ */
+export const trackOnboardingStep = ( stepKey ) => {
+	const formData = new FormData();
+	formData.append( 'action', 'astra_sites_track_onboarding_step' );
+	formData.append( '_ajax_nonce', starterTemplates?.restNonce );
+	formData.append( 'step_visited', stepKey );
+
+	return fetch( ajaxurl, {
+		method: 'POST',
+		body: formData,
+	} );
 };

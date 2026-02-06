@@ -20,7 +20,7 @@ import {
 	CalendarIcon,
 	ArrowTrendingUpIcon,
 } from '@heroicons/react/24/outline';
-import { classNames } from '../../utils/functions';
+import { classNames, trackOnboardingStep } from '../../utils/functions';
 import {
 	checkRequiredPlugins,
 	getFeaturePluginList,
@@ -127,7 +127,7 @@ const EcommerceOptions = ( {
 							<ChevronUpIcon
 								className={ classNames(
 									'w-3 h-3 text-app-active-icon',
-									open ? 'transform rotate-180' : ''
+									open ? '' : 'transform rotate-180'
 								) }
 							/>
 						) }
@@ -199,53 +199,60 @@ const ClassicFeatures = () => {
 	}, [ templateResponse ] );
 
 	useEffect( () => {
+		const allSlugs =
+			templateRequiredPluginsList?.map( ( plugin ) => plugin.slug ) || [];
+
+		setEcomSupported( [ 'surecart', 'woocommerce' ] );
+
+		// Handle selected ecommerce plugin
 		if ( isEcommerce ) {
-			const allSlugs =
-				templateRequiredPluginsList?.map( ( plugin ) => plugin.slug ) ||
-				[];
-
-			setEcomSupported( [ 'surecart', 'woocommerce' ] );
-
 			if ( ! selectedEcom || selectedEcom !== selectedEcommercePlugin ) {
-				if ( allSlugs?.includes( 'surecart' ) ) {
-					setSelectedEcom( 'surecart' );
-				} else {
-					setSelectedEcom( 'woocommerce' ); // Default to WooCommerce if surecart is not found
-				}
+				setSelectedEcom(
+					allSlugs?.includes( 'surecart' )
+						? 'surecart'
+						: 'woocommerce'
+				);
+			}
+		} else {
+			setSelectedEcom( selectedEcom || 'surecart' );
+		}
+
+		// Update features in a single pass
+		const updatedFeatures = siteFeatures.map( ( feature ) => {
+			const hasRequiredPlugin = feature?.plugins?.some( ( slug ) =>
+				allSlugs.includes( slug )
+			);
+
+			if ( feature.id === 'ecommerce' ) {
+				return {
+					...feature,
+					compulsory: isEcommerce || hasRequiredPlugin,
+					enabled: isEcommerce || hasRequiredPlugin,
+				};
 			}
 
-			const updatedFeatures = siteFeatures.map( ( feature ) => {
-				if ( feature.id === 'ecommerce' ) {
-					return { ...feature, compulsory: true, enabled: true };
-				}
-				return feature;
-			} );
-			dispatch( {
-				type: 'set',
-				siteFeatures: updatedFeatures,
-			} );
-		} else {
-			setEcomSupported( [ 'surecart', 'woocommerce' ] );
-			setSelectedEcom( selectedEcom || 'surecart' ); // Default to 'surecart'
+			return {
+				...feature,
+				compulsory: hasRequiredPlugin || feature.compulsory,
+				enabled: hasRequiredPlugin || feature.enabled,
+			};
+		} );
 
-			// Ensure the ecommerce feature is not compulsory when no plugin is selected
-			const updatedFeatures = siteFeatures.map( ( feature ) => {
-				if ( feature.id === 'ecommerce' ) {
-					return { ...feature, compulsory: false };
-				}
-				return feature;
-			} );
-			dispatch( {
-				type: 'set',
-				siteFeatures: updatedFeatures,
-			} );
-		}
+		dispatch( {
+			type: 'set',
+			siteFeatures: updatedFeatures,
+		} );
 	}, [
 		selectedTemplateID,
 		isEcommerce,
 		selectedEcommercePlugin,
 		templateRequiredPluginsList,
 	] );
+
+	useEffect( () => {
+		// Track features step when component mounts
+		trackOnboardingStep( 'features' );
+	}, [] );
 
 	const handleToggleFeature = ( featureId ) => () => {
 		const updatedFeatures = siteFeatures.map( ( feature ) => {
@@ -293,7 +300,7 @@ const ClassicFeatures = () => {
 				?.filter( ( feature ) => feature.enabled )
 				.map( ( feature ) => feature.id ) ?? [];
 
-		return [
+		const allPlugins = [
 			...templateRequiredPluginsList,
 			...( getFeaturePluginList(
 				enabledFeatureIds,
@@ -301,6 +308,16 @@ const ClassicFeatures = () => {
 				templateRequiredPluginsList?.map( ( plugin ) => plugin.slug )
 			) ?? [] ),
 		];
+
+		// Remove duplicates based on plugin slug
+		const uniquePlugins = allPlugins.reduce( ( acc, plugin ) => {
+			if ( ! acc.some( ( p ) => p.slug === plugin.slug ) ) {
+				acc.push( plugin );
+			}
+			return acc;
+		}, [] );
+
+		return uniquePlugins;
 	}, [ templateRequiredPluginsList, siteFeatures, selectedEcom ] );
 
 	return (
@@ -353,6 +370,10 @@ const ClassicFeatures = () => {
 													selectedEcom={
 														selectedEcom
 													}
+													disabled={
+														feature?.compulsory ===
+														true
+													} // Disabled if feature is compulsory
 													onChange={ setSelectedEcom }
 													dispatch={ dispatch }
 												/>

@@ -480,5 +480,95 @@ class Helper {
 	public function get_sites_templates( $page = 0 ) {
 		return self::get_json_file_content( 'ast-block-templates-sites-' . $page . '.json', true );
 	}
+
+	/**
+	 * Get the server's country code using its public IP.
+	 *
+	 * @param string $provider Optional. GeoIP provider: 'ipwhois', 'ipapi', or 'ipinfo'. Default 'ipwhois'.
+	 * @param string $token    Optional. API token (only needed for ipapi/ipinfo).
+	 *
+	 * @since 2.4.11
+	 * @return string Two-letter ISO country code (e.g., 'RU', 'US'), or 'unknown' on failure.
+	 */
+	public static function get_server_country_code( $provider = 'ipwhois', $token = '' ) {
+		// Step 1: Get server's public IP.
+		$response = wp_safe_remote_get( 'https://api.ipify.org' );
+		if ( is_wp_error( $response ) ) {
+			return 'unknown';
+		}
+
+		$ip = wp_remote_retrieve_body( $response );
+		if ( empty( $ip ) ) {
+			return 'unknown';
+		}
+
+		// Step 2: Select provider endpoint.
+		switch ( strtolower( $provider ) ) {
+			case 'ipapi':
+				// Requires token for higher limits.
+				$url = "https://ipapi.co/{$ip}/country/";
+				if ( ! empty( $token ) ) {
+					$url = "https://ipapi.co/{$ip}/country/?key={$token}";
+				}
+				break;
+
+			case 'ipinfo':
+				$url = "https://ipinfo.io/{$ip}/country";
+				if ( ! empty( $token ) ) {
+					$url .= "?token={$token}";
+				}
+				break;
+
+			case 'ipwhois':
+			default:
+				// Default: ipwho.is (no token needed).
+				$url = "https://ipwho.is/{$ip}";
+				break;
+		}
+
+		// Step 3: Make request.
+		$response = wp_safe_remote_get( $url );
+		if ( is_wp_error( $response ) ) {
+			return 'unknown';
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+
+		// Step 4: Parse response based on provider.
+		if ( 'ipwhois' === $provider ) {
+			$data = json_decode( $body, true );
+			if ( is_array( $data ) && isset( $data['country_code'] ) && is_string( $data['country_code'] ) ) {
+				return $data['country_code'];
+			}
+			return 'unknown';
+		}
+
+		// ipapi and ipinfo return plain text country code.
+		$country = trim( $body );
+		return ! empty( $country ) ? $country : 'unknown';
+	}
+
+	/**
+	 * Get Images Engines
+	 *
+	 * @since 2.4.11
+	 * @return array<string> Image Engines.
+	 */
+	public static function get_images_engines() {
+		$country_code = get_transient( 'zipwp_images_server_country_code' );
+
+		if ( false === $country_code ) {
+			$country_code = self::get_server_country_code();
+			set_transient( 'zipwp_images_server_country_code', $country_code, MONTH_IN_SECONDS );
+		}
+
+		// Use Unsplash for Russia as Pexels is blocked there.
+		if ( 'RU' === $country_code ) {
+			return array( 'unsplash' );
+		}
+
+		// Default to Pexels.
+		return array( 'pexels', 'unsplash' );
+	}
 }
 

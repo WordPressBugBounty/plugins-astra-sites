@@ -65,6 +65,7 @@ class Ast_Block_Plugin_Loader {
 		$class_to_load = $class;
 
 		$filename = strtolower(
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- /e modifier not used, safe in autoloader
 			(string) preg_replace(
 				array( '/^' . __NAMESPACE__ . '\\\/', '/([a-z])([A-Z])/', '/_/', '/\\\/' ),
 				array( '', '$1-$2', '-', DIRECTORY_SEPARATOR ),

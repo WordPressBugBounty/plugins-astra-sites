@@ -25,26 +25,30 @@ const PlanUpgradePromoModal = () => {
 	const [ suggestedPlan, setSuggestedPlan ] = useState( '' );
 	const [ showUpgradeModal, setShowUpgradeModal ] = useState( false );
 
-	useEffect( async () => {
-		// handle not logged in case.
-		if (
-			typeof aiBuilderVars?.zip_plans !== 'object' ||
-			show_zip_plan !== '1'
-		) {
-			return;
-		}
+	useEffect( () => {
+		const checkUpgradePromo = async () => {
+			// handle not logged in case.
+			if (
+				typeof aiBuilderVars?.zip_plans !== 'object' ||
+				show_zip_plan !== '1'
+			) {
+				return;
+			}
 
-		const promoDismissTimeinMS = ( await getPlanPromoDissmissTime() )
-			.dismiss_time;
+			const promoDismissTimeinMS = ( await getPlanPromoDissmissTime() )
+				.dismiss_time;
 
-		// if 2 weeks have not been passed
-		if ( getTimeDiff( promoDismissTimeinMS ) < 2 * WEEKS_IN_SECONDS ) {
-			return;
-		}
+			// if 2 weeks have not been passed
+			if ( getTimeDiff( promoDismissTimeinMS ) < 2 * WEEKS_IN_SECONDS ) {
+				return;
+			}
 
-		if ( showAISitesNotice() && active_plan?.slug !== 'business' ) {
-			setShowUpgradeModal( true );
-		}
+			if ( showAISitesNotice() && active_plan?.slug !== 'business' ) {
+				setShowUpgradeModal( true );
+			}
+		};
+
+		checkUpgradePromo();
 	}, [] );
 
 	const handleDissmiss = async () => {
@@ -151,7 +155,7 @@ const PlanUpgradePromoModal = () => {
 					</div>
 					<div className="pt-2">
 						<a
-							href="https://app.zipwp.com/pricing"
+							href={ `https://app.zipwp.com/st-pricing?source=${ wpApiSettings?.zipwp_auth?.source }` }
 							target="_blank"
 							rel="noreferrer"
 						>

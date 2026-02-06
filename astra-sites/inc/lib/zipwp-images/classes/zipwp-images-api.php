@@ -198,6 +198,10 @@ class Zipwp_Images_Api {
 				$post_data['filter'] = 'popular' === $post_data['filter'] ? 'popular' : 'latest';
 				break;
 
+			case 'unsplash':
+				// order_by=popular or latest.
+				$post_data['filter'] = 'popular' === $post_data['filter'] ? 'popular' : 'latest';
+				break;
 		}
 
 		$request_args = array(
@@ -261,23 +265,28 @@ class Zipwp_Images_Api {
 			wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 		}
 
-		$url      = isset( $_POST['url'] ) ? sanitize_url( $_POST['url'] ) : false; // phpcs:ignore -- We need to remove this ignore once the WPCS has released this issue fix - https://github.com/WordPress/WordPress-Coding-Standards/issues/2189.
+		$url      = isset( $_POST['url'] ) ? sanitize_url( $_POST['url'] ) : ''; // phpcs:ignore -- We need to remove this ignore once the WPCS has released this issue fix - https://github.com/WordPress/WordPress-Coding-Standards/issues/2189.
 		$name     = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : false;
 		$desc     = isset( $_POST['description'] ) ? sanitize_text_field( $_POST['description'] ) : '';
-		$photo_id = isset( $_POST['id'] ) ? absint( sanitize_key( $_POST['id'] ) ) : 0;
+		$photo_id = isset( $_POST['id'] ) ? sanitize_key( $_POST['id'] ) : 0;
+
+		// For unsplash images, photo_id can be alphanumeric.
+		if ( strpos( $url, 'unsplash.com' ) === false ) {
+			$photo_id = absint( $photo_id );
+		}
 
 		if ( 0 === $photo_id ) {
 			wp_send_json_error( __( 'Need to send photo ID', 'astra-sites' ) );
 		}
 
-		if ( false === $url ) {
+		if ( empty( $url ) ) {
 			wp_send_json_error( __( 'Need to send URL of the image to be downloaded', 'astra-sites' ) );
 		}
 
 		$image  = '';
 		$result = array();
 
-		$name  = preg_replace( '/\.[^.]+$/', '', (string) $name ) . '-' . $photo_id . '.jpg';
+		$name  = pathinfo( (string) $name, PATHINFO_FILENAME ) . '-' . $photo_id . '.jpg';
 		$image = $this->create_image_from_url( $url, $name, (string) $photo_id, $desc );
 
 		if ( empty( $image ) ) {
@@ -467,8 +476,13 @@ class Zipwp_Images_Api {
 	 * @return array<string, array<string, string>|string>
 	 */
 	public function get_image_dimensions( $url ) {
-		$clean_url = esc_url_raw( $url );
-		parse_str( explode( '?', $clean_url )[1], $query_params );
+		$clean_url    = esc_url_raw( $url );
+		$query_params = array();
+		$query_string = explode( '?', $clean_url );
+		if ( isset( $query_string[1] ) ) {
+			// phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- parse_str used safely into separate array
+			parse_str( $query_string[1], $query_params );
+		}
 		return array(
 			'width'  => $query_params['w'] ?? '',
 			'height' => $query_params['h'] ?? '',

@@ -7,6 +7,8 @@
 
 namespace STImporter\Importer;
 
+use STImporter\Importer\ST_Importer_Log;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -27,8 +29,27 @@ class ST_Plugin_Installer {
 	 * @return array<string, mixed> Result array with status and message
 	 */
 	public static function install_and_activate_plugin( $plugin_slug, $plugin_file ) {
+		ST_Importer_Log::add(
+			sprintf( 'Starting plugin installation and activation: %s (file: %s)', $plugin_slug, $plugin_file ),
+			'info',
+			array(
+				'plugin_slug' => $plugin_slug,
+				'plugin_file' => $plugin_file,
+			)
+		);
+
 		// Check user capabilities.
 		if ( ! current_user_can( 'install_plugins' ) || ! current_user_can( 'activate_plugins' ) ) {
+			ST_Importer_Log::add(
+				sprintf( 'Permission denied for plugin installation: %s', $plugin_slug ),
+				'error',
+				array(
+					'plugin_slug' => $plugin_slug,
+					'plugin_file' => $plugin_file,
+					'error'       => 'User lacks install_plugins or activate_plugins capability',
+				)
+			);
+
 			return array(
 				'status' => false,
 				'error'  => __( "Permission denied: You don't have sufficient permissions to install or activate plugins. Please contact your site administrator.", 'astra-sites' ),
@@ -38,6 +59,16 @@ class ST_Plugin_Installer {
 		try {
 			// Check if plugin is already active.
 			if ( is_plugin_active( $plugin_file ) ) {
+				ST_Importer_Log::add(
+					sprintf( 'Plugin already active: %s', $plugin_slug ),
+					'info',
+					array(
+						'plugin_slug' => $plugin_slug,
+						'plugin_file' => $plugin_file,
+						'status'      => 'already_active',
+					)
+				);
+
 				return array(
 					'status'  => true,
 					// translators: %s is the plugin slug.
@@ -49,12 +80,32 @@ class ST_Plugin_Installer {
 			if ( self::is_plugin_installed( $plugin_file ) ) {
 				$activation_result = self::activate_plugin( $plugin_file );
 				if ( $activation_result['status'] ) {
+					ST_Importer_Log::add(
+						sprintf( 'Plugin activated successfully: %s', $plugin_slug ),
+						'success',
+						array(
+							'plugin_slug' => $plugin_slug,
+							'plugin_file' => $plugin_file,
+							'status'      => 'activated',
+						)
+					);
+
 					return array(
 						'status'  => true,
 						// translators: %s is the plugin slug.
 						'message' => sprintf( __( '%s plugin activated successfully.', 'astra-sites' ), $plugin_slug ),
 					);
 				} else {
+					ST_Importer_Log::add(
+						sprintf( 'Plugin activation failed: %s', $plugin_slug ),
+						'error',
+						array(
+							'plugin_slug'       => $plugin_slug,
+							'plugin_file'       => $plugin_file,
+							'activation_result' => $activation_result,
+						)
+					);
+
 					return $activation_result;
 				}
 			}
@@ -68,15 +119,46 @@ class ST_Plugin_Installer {
 			// Now activate the plugin.
 			$activation_result = self::activate_plugin( $plugin_file );
 			if ( $activation_result['status'] ) {
+				ST_Importer_Log::add(
+					sprintf( 'Plugin installed and activated successfully: %s', $plugin_slug ),
+					'success',
+					array(
+						'plugin_slug' => $plugin_slug,
+						'plugin_file' => $plugin_file,
+						'status'      => 'installed_and_activated',
+					)
+				);
+
 				return array(
 					'status'  => true,
 					// translators: %s is the plugin slug.
 					'message' => sprintf( __( '%s plugin installed and activated successfully.', 'astra-sites' ), $plugin_slug ),
 				);
 			} else {
+				ST_Importer_Log::add(
+					sprintf( 'Plugin installed but activation failed: %s', $plugin_slug ),
+					'error',
+					array(
+						'plugin_slug'       => $plugin_slug,
+						'plugin_file'       => $plugin_file,
+						'activation_result' => $activation_result,
+					)
+				);
+
 				return $activation_result;
 			}
 		} catch ( \Exception $e ) {
+			ST_Importer_Log::add(
+				sprintf( 'Exception during plugin installation: %s', $plugin_slug ),
+				'error',
+				array(
+					'plugin_slug'     => $plugin_slug,
+					'plugin_file'     => $plugin_file,
+					'exception'       => $e->getMessage(),
+					'exception_trace' => $e->getTraceAsString(),
+				)
+			);
+
 			return array(
 				'status' => false,
 				// translators: %s is the exception message.
@@ -111,6 +193,14 @@ class ST_Plugin_Installer {
 	 * @return array<string, mixed> Result array
 	 */
 	private static function install_plugin( $plugin_slug ) {
+		ST_Importer_Log::add(
+			sprintf( 'Starting plugin installation: %s', $plugin_slug ),
+			'info',
+			array(
+				'plugin_slug' => $plugin_slug,
+			)
+		);
+
 		// Include necessary WordPress files.
 		if ( ! function_exists( 'plugins_api' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
@@ -146,6 +236,16 @@ class ST_Plugin_Installer {
 			);
 
 			if ( is_wp_error( $api ) ) {
+				ST_Importer_Log::add(
+					sprintf( 'Plugin information not found: %s', $plugin_slug ),
+					'error',
+					array(
+						'plugin_slug'   => $plugin_slug,
+						'error_message' => $api->get_error_message(),
+						'error_code'    => $api->get_error_code(),
+					)
+				);
+
 				return array(
 					'status' => false,
 					// translators: %s is the error message.
@@ -159,6 +259,17 @@ class ST_Plugin_Installer {
 			$install_result = $upgrader->install( $download_link );
 
 			if ( is_wp_error( $install_result ) ) {
+				ST_Importer_Log::add(
+					sprintf( 'Plugin installation failed (WP_Error): %s', $plugin_slug ),
+					'error',
+					array(
+						'plugin_slug'   => $plugin_slug,
+						'download_link' => $download_link,
+						'error_message' => $install_result->get_error_message(),
+						'error_code'    => $install_result->get_error_code(),
+					)
+				);
+
 				return array(
 					'status' => false,
 					// translators: %s is the error message.
@@ -167,11 +278,30 @@ class ST_Plugin_Installer {
 			}
 
 			if ( ! $install_result ) {
+				ST_Importer_Log::add(
+					sprintf( 'Plugin installation failed (unknown reason): %s', $plugin_slug ),
+					'error',
+					array(
+						'plugin_slug'   => $plugin_slug,
+						'download_link' => $download_link,
+						'error'         => 'install_result returned false',
+					)
+				);
+
 				return array(
 					'status' => false,
 					'error'  => __( 'Plugin installation failed for unknown reason.', 'astra-sites' ),
 				);
 			}
+
+			ST_Importer_Log::add(
+				sprintf( 'Plugin installed successfully: %s', $plugin_slug ),
+				'success',
+				array(
+					'plugin_slug'   => $plugin_slug,
+					'download_link' => $download_link,
+				)
+			);
 
 			return array(
 				'status'  => true,
@@ -180,6 +310,16 @@ class ST_Plugin_Installer {
 			);
 
 		} catch ( \Exception $e ) {
+			ST_Importer_Log::add(
+				sprintf( 'Exception during plugin installation: %s', $plugin_slug ),
+				'error',
+				array(
+					'plugin_slug'     => $plugin_slug,
+					'exception'       => $e->getMessage(),
+					'exception_trace' => $e->getTraceAsString(),
+				)
+			);
+
 			return array(
 				'status' => false,
 				// translators: %s is the exception message.
@@ -197,6 +337,14 @@ class ST_Plugin_Installer {
 	 * @return array<string, mixed> Result array
 	 */
 	private static function activate_plugin( $plugin_file ) {
+		ST_Importer_Log::add(
+			sprintf( 'Starting plugin activation: %s', $plugin_file ),
+			'info',
+			array(
+				'plugin_file' => $plugin_file,
+			)
+		);
+
 		if ( ! function_exists( 'activate_plugin' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
@@ -204,6 +352,16 @@ class ST_Plugin_Installer {
 		$activation_result = activate_plugin( $plugin_file );
 
 		if ( is_wp_error( $activation_result ) ) {
+			ST_Importer_Log::add(
+				sprintf( 'Plugin activation failed: %s', $plugin_file ),
+				'error',
+				array(
+					'plugin_file'   => $plugin_file,
+					'error_message' => $activation_result->get_error_message(),
+					'error_code'    => $activation_result->get_error_code(),
+				)
+			);
+
 			return array(
 				'status' => false,
 				// translators: %s is the error message.
@@ -212,6 +370,14 @@ class ST_Plugin_Installer {
 		}
 
 		self::after_plugin_activate( $plugin_file );
+
+		ST_Importer_Log::add(
+			sprintf( 'Plugin activated successfully: %s', $plugin_file ),
+			'success',
+			array(
+				'plugin_file' => $plugin_file,
+			)
+		);
 
 		return array(
 			'status'  => true,

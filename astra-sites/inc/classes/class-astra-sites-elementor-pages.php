@@ -46,12 +46,14 @@ class Astra_Sites_Elementor_Pages extends Source_Local {
 	public function import( $post_id = 0, $data = array() ) {
 
 		if ( ! empty( $post_id ) && ! empty( $data ) ) {
+			\Astra_Sites_Importer_Log::add( 'Starting Elementor page import for post ID: ' . $post_id );
 
 			$data = wp_json_encode( $data );
 
 			// Update WP form IDs.
 			$ids_mapping = get_option( 'astra_sites_wpforms_ids_mapping', array() );
 			if ( $ids_mapping ) {
+				\Astra_Sites_Importer_Log::add( 'Updating WPForms IDs in Elementor page - Total mappings: ' . count( $ids_mapping ) );
 				foreach ( $ids_mapping as $old_id => $new_id ) {
 					$data = str_replace( '[wpforms id=\"' . $old_id, '[wpforms id=\"' . $new_id, $data );
 					$data = str_replace( '"select_form":"' . $old_id, '"select_form":"' . $new_id, $data );
@@ -70,6 +72,7 @@ class Astra_Sites_Elementor_Pages extends Source_Local {
 				$site_url      = str_replace( '/', '\/', $site_url );
 				$demo_site_url = 'https:' . $demo_data['astra-site-url'];
 				$demo_site_url = str_replace( '/', '\/', $demo_site_url );
+				\Astra_Sites_Importer_Log::add( 'Replacing template demo URLs with site URLs in Elementor data' );
 				if ( ! is_array( $data ) ) {
 					$data = str_replace( $demo_site_url, $site_url, $data );
 				} else {
@@ -87,9 +90,11 @@ class Astra_Sites_Elementor_Pages extends Source_Local {
 			// !important, Clear the cache after images import.
 			Plugin::$instance->posts_css_manager->clear_cache();
 
+			\Astra_Sites_Importer_Log::add( 'Elementor page imported successfully for post ID: ' . $post_id, 'success' );
 			return $data;
 		}
 
+		\Astra_Sites_Importer_Log::add( 'Elementor page import skipped - Empty post ID or data', 'warning' );
 		return array();
 	}
 }

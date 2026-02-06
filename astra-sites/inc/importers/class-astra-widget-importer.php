@@ -87,9 +87,12 @@ class Astra_Widget_Importer {
 
 		global $wp_registered_sidebars;
 
+		Astra_Sites_Importer_Log::add( 'Starting widgets data import' );
+
 		// Have valid data?
 		// If no data or could not decode.
 		if ( empty( $data ) || ! is_object( $data ) ) {
+			Astra_Sites_Importer_Log::add( 'Widget import data could not be read or is empty', 'error' );
 			wp_die(
 				esc_html__( 'Import data could not be read. Please try a different file.', 'astra-sites' ),
 				'',
@@ -164,6 +167,7 @@ class Astra_Widget_Importer {
 					$fail                = true;
 					$widget_message_type = 'error';
 					$widget_message      = esc_html__( 'Site does not support widget', 'astra-sites' ); // explain why widget not imported.
+					Astra_Sites_Importer_Log::add( 'Widget not supported: ' . $id_base, 'warning' );
 				}
 
 				// Filter to modify settings object before conversion to array and import.
@@ -269,9 +273,11 @@ class Astra_Widget_Importer {
 					if ( $sidebar_available ) {
 						$widget_message_type = 'success';
 						$widget_message      = esc_html__( 'Imported', 'astra-sites' );
+						Astra_Sites_Importer_Log::add( 'Widget imported: ' . $id_base . ' to sidebar: ' . $use_sidebar_id, 'success' );
 					} else {
 						$widget_message_type = 'warning';
 						$widget_message      = esc_html__( 'Imported to Inactive', 'astra-sites' );
+						Astra_Sites_Importer_Log::add( 'Widget imported to inactive: ' . $id_base, 'warning' );
 					}
 				}
 
@@ -287,9 +293,9 @@ class Astra_Widget_Importer {
 		// Hook after import.
 		do_action( 'wie_after_import' );
 
+		Astra_Sites_Importer_Log::add( 'Widgets data import completed successfully', 'success' );
+
 		// Return results.
 		return apply_filters( 'wie_import_results', $results );
-
 	}
-
 }

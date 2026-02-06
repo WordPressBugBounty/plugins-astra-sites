@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
 import { DefaultStep, PreviousStepLink } from '../../components/index';
 import { useStateValue } from '../../store/store';
+import { trackOnboardingStep } from '../../utils/functions';
 import './style.scss';
 const {
 	imageDir,
@@ -21,7 +22,10 @@ const PageBuilder = () => {
 			localStorage.removeItem( 'st-import-start' );
 			localStorage.removeItem( 'st-import-end' );
 		}
-	} );
+
+		// Track page builder step when component mounts
+		trackOnboardingStep( 'page-builder' );
+	}, [] );
 
 	const update = ( builder ) => {
 		const content = new FormData();
