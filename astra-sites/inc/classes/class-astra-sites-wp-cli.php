@@ -288,6 +288,18 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 			}
 
 			/**
+			 * Import Customizer Settings.
+			 */
+			WP_CLI::runcommand( 'astra-sites import_customizer_settings ' . $id );
+
+			/**
+			 * Import Content from XML/WXR.
+			 */
+			if ( isset( $demo_data['astra-site-wxr-path'] ) && ! empty( $demo_data['astra-site-wxr-path'] ) ) {
+				WP_CLI::runcommand( 'astra-sites import_wxr ' . $demo_data['astra-site-wxr-path'] );
+			}
+
+			/**
 			 * Import SureCart Settings.
 			 */
 			if ( isset( $demo_data['astra-site-surecart-settings'] ) && ! empty( $demo_data['astra-site-surecart-settings']['id'] ) ) {
@@ -310,18 +322,6 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 				}
 
 				WP_CLI::line( __( 'SureCart Settings imported.', 'astra-sites' ) );
-			}
-
-			/**
-			 * Import Customizer Settings.
-			 */
-			WP_CLI::runcommand( 'astra-sites import_customizer_settings ' . $id );
-
-			/**
-			 * Import Content from XML/WXR.
-			 */
-			if ( isset( $demo_data['astra-site-wxr-path'] ) && ! empty( $demo_data['astra-site-wxr-path'] ) ) {
-				WP_CLI::runcommand( 'astra-sites import_wxr ' . $demo_data['astra-site-wxr-path'] );
 			}
 
 			/**

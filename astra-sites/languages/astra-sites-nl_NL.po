@@ -16,7 +16,7 @@ msgstr ""
 #: astra-sites.php:133
 #: inc/classes/class-astra-sites-nps-notice.php:115
 #: inc/classes/class-astra-sites-utils.php:87
-#: inc/classes/class-astra-sites.php:2807
+#: inc/classes/class-astra-sites.php:2862
 #: inc/lib/onboarding/class-onboarding-loader.php:105
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
@@ -54,13 +54,13 @@ msgstr "Essentiële Toolkit verkrijgen"
 
 #: inc/classes/class-astra-sites-error-handler.php:110
 #: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-error-handler.php:110
-#: inc/lib/starter-templates-importer/resetter/st-resetter.php:505
+#: inc/lib/starter-templates-importer/resetter/st-resetter.php:523
 msgid "There was an error on your website."
 msgstr "Er was een fout op uw website."
 
 #: inc/classes/class-astra-sites-error-handler.php:150
 #: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-error-handler.php:164
-#: inc/lib/starter-templates-importer/resetter/st-resetter.php:474
+#: inc/lib/starter-templates-importer/resetter/st-resetter.php:492
 msgid "There was an error your website."
 msgstr "Er was een fout op uw website."
 
@@ -103,11 +103,11 @@ msgstr "U heeft momenteel geen geplande cron-evenementen."
 #: inc/classes/class-astra-sites-page.php:78
 #: inc/classes/class-astra-sites-page.php:232
 #: inc/classes/class-astra-sites.php:283
-#: inc/classes/class-astra-sites.php:796
-#: inc/classes/class-astra-sites.php:1228
-#: inc/classes/class-astra-sites.php:1323
-#: inc/classes/class-astra-sites.php:1354
-#: inc/classes/class-astra-sites.php:1554
+#: inc/classes/class-astra-sites.php:851
+#: inc/classes/class-astra-sites.php:1283
+#: inc/classes/class-astra-sites.php:1378
+#: inc/classes/class-astra-sites.php:1409
+#: inc/classes/class-astra-sites.php:1609
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1008
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1028
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1046
@@ -447,73 +447,73 @@ msgid "%s: XMLReader extension is missing! To import templates, please get in to
 msgstr "%s: XMLReader-extensie ontbreekt! Neem contact op met uw hostingprovider om deze extensie in te schakelen om sjablonen te importeren."
 
 #. translators: %d is the Template ID.
-#: inc/classes/class-astra-sites.php:725
+#: inc/classes/class-astra-sites.php:780
 #, php-format
 msgid "Invalid Template ID - %d"
 msgstr "Ongeldige Template-ID - %d"
 
-#: inc/classes/class-astra-sites.php:811
-#: inc/classes/class-astra-sites.php:1249
+#: inc/classes/class-astra-sites.php:866
+#: inc/classes/class-astra-sites.php:1304
 msgid "Invalid API URL."
 msgstr "Ongeldige API-URL."
 
-#: inc/classes/class-astra-sites.php:823
+#: inc/classes/class-astra-sites.php:878
 msgid "Invalid Post Meta"
 msgstr "Ongeldige Post Meta"
 
-#: inc/classes/class-astra-sites.php:830
+#: inc/classes/class-astra-sites.php:885
 msgid "Invalid Post ID or Elementor Meta"
 msgstr "Ongeldige Post-ID of Elementor Meta"
 
-#: inc/classes/class-astra-sites.php:874
+#: inc/classes/class-astra-sites.php:929
 msgid "Provided API URL is empty! Please try again!"
 msgstr "De opgegeven API-URL is leeg! Probeer het opnieuw!"
 
 #. Translators: %s is API URL.
-#: inc/classes/class-astra-sites.php:901
+#: inc/classes/class-astra-sites.php:956
 #, php-format
 msgid "Invalid API Request URL - %s"
 msgstr "Ongeldige API-verzoek-URL - %s"
 
 #. translators: %s Error Message
-#: inc/classes/class-astra-sites.php:924
-#: inc/classes/class-astra-sites.php:1050
+#: inc/classes/class-astra-sites.php:979
+#: inc/classes/class-astra-sites.php:1105
 #, php-format
 msgid "API Request could not be performed - %s"
 msgstr "API-verzoek kon niet worden uitgevoerd - %s"
 
 #. translators: %s Error Message
-#: inc/classes/class-astra-sites.php:929
-#: inc/classes/class-astra-sites.php:1055
+#: inc/classes/class-astra-sites.php:984
+#: inc/classes/class-astra-sites.php:1110
 #, php-format
 msgid "API Request has failed - %s"
 msgstr "API-verzoek is mislukt - %s"
 
-#: inc/classes/class-astra-sites.php:969
-#: inc/classes/class-astra-sites.php:1084
+#: inc/classes/class-astra-sites.php:1024
+#: inc/classes/class-astra-sites.php:1139
 msgid "Internal Server Error."
 msgstr "Interne serverfout."
 
 #. translators: %s IP address.
-#: inc/classes/class-astra-sites.php:975
-#: inc/classes/class-astra-sites.php:1090
+#: inc/classes/class-astra-sites.php:1030
+#: inc/classes/class-astra-sites.php:1145
 #, php-format
 msgid "Client IP: %1$s </br> Error code: %2$s"
 msgstr "Client-IP: %1$s </br> Foutcode: %2$s"
 
-#: inc/classes/class-astra-sites.php:1008
+#: inc/classes/class-astra-sites.php:1063
 msgid "Provided API details are empty! Please try again!"
 msgstr "De verstrekte API-gegevens zijn leeg! Probeer het opnieuw!"
 
 #. Translators: %s is Request URL.
 #. Translators: %s is API URL.
-#: inc/classes/class-astra-sites.php:1027
+#: inc/classes/class-astra-sites.php:1082
 #: inc/lib/gutenberg-templates/inc/importer/template-kit-importer.php:56
 #, php-format
 msgid "Invalid Request URL - %s"
 msgstr "Ongeldige aanvraag-URL - %s"
 
-#: inc/classes/class-astra-sites.php:1362
+#: inc/classes/class-astra-sites.php:1417
 #: inc/lib/zipwp-images/classes/zipwp-images-api.php:283
 msgid "Need to send URL of the image to be downloaded"
 msgstr "Moet de URL van de afbeelding verzenden die gedownload moet worden"
@@ -522,249 +522,249 @@ msgstr "Moet de URL van de afbeelding verzenden die gedownload moet worden"
 msgid "Could not download the image."
 msgstr "Kon de afbeelding niet downloaden."
 
-#: inc/classes/class-astra-sites.php:1644
+#: inc/classes/class-astra-sites.php:1699
 msgid "Get Started"
 msgstr "Beginnen"
 
-#: inc/classes/class-astra-sites.php:1857
-#: inc/classes/class-astra-sites.php:2430
+#: inc/classes/class-astra-sites.php:1912
+#: inc/classes/class-astra-sites.php:2485
 #: inc/includes/templates.php:321
 msgid "Get Access!"
 msgstr "Toegang krijgen!"
 
-#: inc/classes/class-astra-sites.php:1859
+#: inc/classes/class-astra-sites.php:1914
 #: inc/lib/one-onboarding/build/main.js:25
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: inc/classes/class-astra-sites.php:1863
+#: inc/classes/class-astra-sites.php:1918
 msgid "Syncing template library in the background. The process can take anywhere between 2 to 3 minutes. We will notify you once done."
 msgstr "De sjabloonbibliotheek wordt op de achtergrond gesynchroniseerd. Het proces kan tussen de 2 en 3 minuten duren. We laten het u weten zodra het klaar is."
 
-#: inc/classes/class-astra-sites.php:1864
+#: inc/classes/class-astra-sites.php:1919
 msgid "Some of the files required during the import process are missing.<br/><br/>Please try again after some time."
 msgstr "Sommige van de bestanden die nodig zijn tijdens het importproces ontbreken.<br/><br/>Probeer het na enige tijd opnieuw."
 
-#: inc/classes/class-astra-sites.php:1874
+#: inc/classes/class-astra-sites.php:1929
 msgid "Done! View Site"
 msgstr "Klaar! Bekijk site"
 
 #. translators: %s is a template name
-#: inc/classes/class-astra-sites.php:1877
+#: inc/classes/class-astra-sites.php:1932
 #, php-format
 msgid "Import \"%s\" Template"
 msgstr "Importeer \"%s\" sjabloon"
 
-#: inc/classes/class-astra-sites.php:1880
+#: inc/classes/class-astra-sites.php:1935
 msgid "Installing Required Plugins.."
 msgstr "Vereiste plugins installeren.."
 
 #. translators: %s are white label strings.
-#: inc/classes/class-astra-sites.php:1882
+#: inc/classes/class-astra-sites.php:1937
 #, php-format
 msgid "Installing %1$s Theme.."
 msgstr "Installeren van %1$s-thema.."
 
-#: inc/classes/class-astra-sites.php:1905
+#: inc/classes/class-astra-sites.php:1960
 msgid "Dismiss this notice."
 msgstr "Negeer deze melding."
 
-#: inc/classes/class-astra-sites.php:1907
+#: inc/classes/class-astra-sites.php:1962
 msgid "One Last Step.."
 msgstr "Eén laatste stap.."
 
-#: inc/classes/class-astra-sites.php:1908
+#: inc/classes/class-astra-sites.php:1963
 msgid "Your Selected Website is Being Imported."
 msgstr "Uw geselecteerde website wordt geïmporteerd."
 
-#: inc/classes/class-astra-sites.php:1909
+#: inc/classes/class-astra-sites.php:1964
 msgid "Your Selected Template is Being Imported."
 msgstr "Uw geselecteerde sjabloon wordt geïmporteerd."
 
-#: inc/classes/class-astra-sites.php:1911
+#: inc/classes/class-astra-sites.php:1966
 msgid "We have sent you a surprise gift on your email address! Please check your inbox!"
 msgstr "We hebben je een verrassingscadeau naar je e-mailadres gestuurd! Controleer je inbox!"
 
-#: inc/classes/class-astra-sites.php:1913
+#: inc/classes/class-astra-sites.php:1968
 msgid "Looks like the template you are importing is temporarily not available."
 msgstr "Het lijkt erop dat de sjabloon die je importeert tijdelijk niet beschikbaar is."
 
-#: inc/classes/class-astra-sites.php:1915
+#: inc/classes/class-astra-sites.php:1970
 msgid "There was an error connecting to the Starter Templates API."
 msgstr "Er was een fout bij het verbinden met de Starter Templates API."
 
-#: inc/classes/class-astra-sites.php:1916
+#: inc/classes/class-astra-sites.php:1971
 msgid "There was an error while importing the content."
 msgstr "Er is een fout opgetreden bij het importeren van de inhoud."
 
-#: inc/classes/class-astra-sites.php:1917
+#: inc/classes/class-astra-sites.php:1972
 msgid "To import content, WordPress needs to store XML file in /wp-content/ folder. Please get in touch with your hosting provider."
 msgstr "Om inhoud te importeren, moet WordPress het XML-bestand opslaan in de map /wp-content/. Neem contact op met uw hostingprovider."
 
-#: inc/classes/class-astra-sites.php:1918
+#: inc/classes/class-astra-sites.php:1973
 msgid "Looks like your host probably could not store XML file in /wp-content/ folder."
 msgstr "Het lijkt erop dat uw host waarschijnlijk het XML-bestand niet kon opslaan in de map /wp-content/."
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1922
+#: inc/classes/class-astra-sites.php:1977
 #, php-format
 msgid "%1$sRead&nbsp;<a href=\"%2$s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.%3$s"
 msgstr "%1$sLees&nbsp;<a href=\"%2$s\" target=\"_blank\">artikel</a>&nbsp;om het probleem op te lossen en verder te gaan met het importeren van de sjabloon.%3$s"
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1933
+#: inc/classes/class-astra-sites.php:1988
 #, php-format
 msgid "%1$sPlease report this <a href=\"%2$s\" target=\"_blank\">here</a>.%3$s"
 msgstr "%1$sRapporteer dit alstublieft <a href=\"%2$s\" target=\"_blank\">hier</a>.%3$s"
 
-#: inc/classes/class-astra-sites.php:2222
+#: inc/classes/class-astra-sites.php:2277
 msgid "XMLReader Support Missing"
 msgstr "Ondersteuning voor XMLReader ontbreekt"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2224
+#: inc/classes/class-astra-sites.php:2279
 msgid "You're close to importing the template. To complete the process, enable XMLReader support on your website.."
 msgstr "Je bent dicht bij het importeren van de sjabloon. Om het proces te voltooien, schakel XMLReader-ondersteuning in op je website."
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2224
-#: inc/classes/class-astra-sites.php:2229
-#: inc/classes/class-astra-sites.php:2234
-#: inc/classes/class-astra-sites.php:2252
+#: inc/classes/class-astra-sites.php:2279
+#: inc/classes/class-astra-sites.php:2284
+#: inc/classes/class-astra-sites.php:2289
+#: inc/classes/class-astra-sites.php:2307
 #, php-format
 msgid "Read an article <a href=\"%s\" target=\"_blank\">here</a> to resolve the issue."
 msgstr "Lees een artikel <a href=\"%s\" target=\"_blank\">hier</a> om het probleem op te lossen."
 
-#: inc/classes/class-astra-sites.php:2227
+#: inc/classes/class-astra-sites.php:2282
 msgid "cURL Support Missing"
 msgstr "cURL-ondersteuning ontbreekt"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2229
+#: inc/classes/class-astra-sites.php:2284
 msgid "To run a smooth import, kindly enable cURL support on your website."
 msgstr "Om een soepele import te laten verlopen, schakel cURL-ondersteuning in op uw website."
 
-#: inc/classes/class-astra-sites.php:2232
+#: inc/classes/class-astra-sites.php:2287
 msgid "Disable Debug Mode"
 msgstr "Debugmodus uitschakelen"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2234
+#: inc/classes/class-astra-sites.php:2289
 msgid "WordPress debug mode is currently enabled on your website. With this, any errors from third-party plugins might affect the import process."
 msgstr "De debugmodus van WordPress is momenteel ingeschakeld op uw website. Hierdoor kunnen eventuele fouten van plug-ins van derden het importproces beïnvloeden."
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2234
+#: inc/classes/class-astra-sites.php:2289
 msgid "Kindly disable it to continue importing the Starter Template. To do so, you can add the following code into the wp-config.php file."
 msgstr "Schakel het uit om door te gaan met het importeren van de Starter Template. Om dit te doen, kunt u de volgende code toevoegen aan het wp-config.php-bestand."
 
-#: inc/classes/class-astra-sites.php:2237
+#: inc/classes/class-astra-sites.php:2292
 msgid "Update Plugin"
 msgstr "Plugin bijwerken"
 
 #. translators: %s update page link.
-#: inc/classes/class-astra-sites.php:2239
+#: inc/classes/class-astra-sites.php:2294
 #, php-format
 msgid "Kindly <a href=\"%s\" target=\"_blank\">update</a> them for a successful import. Skipping this step might break the template design/feature."
 msgstr "Werk ze alstublieft <a href=\"%s\" target=\"_blank\">bij</a> voor een succesvolle import. Het overslaan van deze stap kan het sjabloonontwerp of de functie verstoren."
 
-#: inc/classes/class-astra-sites.php:2242
+#: inc/classes/class-astra-sites.php:2297
 #: inc/includes/templates.php:468
 msgid "Required Plugins Missing"
 msgstr "Vereiste plugins ontbreken"
 
-#: inc/classes/class-astra-sites.php:2243
+#: inc/classes/class-astra-sites.php:2298
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:150
 msgid "This starter template requires premium plugins. As these are third party premium plugins, you'll need to purchase, install and activate them first."
 msgstr "Deze starttemplate vereist premium plugins. Aangezien dit premium plugins van derden zijn, moet je ze eerst aanschaffen, installeren en activeren."
 
-#: inc/classes/class-astra-sites.php:2246
+#: inc/classes/class-astra-sites.php:2301
 msgid "Dynamic Page"
 msgstr "Dynamische pagina"
 
-#: inc/classes/class-astra-sites.php:2247
+#: inc/classes/class-astra-sites.php:2302
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "The page template you are about to import contains a dynamic widget/module. Please note this dynamic data will not be available with the imported page."
 msgstr "Het paginasjabloon dat u gaat importeren bevat een dynamische widget/module. Houd er rekening mee dat deze dynamische gegevens niet beschikbaar zullen zijn bij de geïmporteerde pagina."
 
-#: inc/classes/class-astra-sites.php:2247
+#: inc/classes/class-astra-sites.php:2302
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "You will need to add it manually on the page."
 msgstr "Je zult het handmatig op de pagina moeten toevoegen."
 
-#: inc/classes/class-astra-sites.php:2247
+#: inc/classes/class-astra-sites.php:2302
 msgid "This dynamic content will be available when you import the entire site."
 msgstr "Deze dynamische inhoud zal beschikbaar zijn wanneer je de hele site importeert."
 
-#: inc/classes/class-astra-sites.php:2250
+#: inc/classes/class-astra-sites.php:2305
 msgid "Enable Flexbox Container from Elementor"
 msgstr "Flexbox-container inschakelen vanuit Elementor"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2252
+#: inc/classes/class-astra-sites.php:2307
 msgid "The Flexbox Container widget is disabled on your website. With this disabled, the import process will be affected. Kindly enable it to continue importing the Starter Template."
 msgstr "De Flexbox Container-widget is uitgeschakeld op uw website. Als dit is uitgeschakeld, wordt het importproces beïnvloed. Schakel het in om door te gaan met het importeren van de Starter Template."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2397
+#: inc/classes/class-astra-sites.php:2452
 #, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. you can purchase it from <a href=\"%s\" target=\"_blank\">here</a>."
 msgstr "Dit is een premium sjabloon dat beschikbaar is met Essential en Business Toolkits. Je kunt het <a href=\"%s\" target=\"_blank\">hier</a> aanschaffen."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2401
+#: inc/classes/class-astra-sites.php:2456
 #, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">Validate Your License</a> Key to import this template."
 msgstr "Dit is een premium sjabloon beschikbaar met Essential en Business Toolkits. <a href=\"%s\" target=\"_blank\">Valideer uw licentiesleutel</a> om dit sjabloon te importeren."
 
-#: inc/classes/class-astra-sites.php:2434
+#: inc/classes/class-astra-sites.php:2489
 msgid "Template"
 msgstr "Sjabloon"
 
-#: inc/classes/class-astra-sites.php:2435
+#: inc/classes/class-astra-sites.php:2490
 msgid "Block"
 msgstr "Blok"
 
-#: inc/classes/class-astra-sites.php:2436
+#: inc/classes/class-astra-sites.php:2491
 #: inc/includes/templates.php:78
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
 msgid "Dismiss"
 msgstr "Afwijzen"
 
-#: inc/classes/class-astra-sites.php:2437
+#: inc/classes/class-astra-sites.php:2492
 msgid "Install Required Plugins"
 msgstr "Vereiste plugins installeren"
 
-#: inc/classes/class-astra-sites.php:2441
+#: inc/classes/class-astra-sites.php:2496
 msgid "You can locate <strong>Starter Templates Settings</strong> under the <strong>Page Settings</strong> of the Style Tab."
 msgstr "U kunt <strong>Starter Templates Instellingen</strong> vinden onder de <strong>Pagina-instellingen</strong> van het Stijl-tabblad."
 
-#: inc/classes/class-astra-sites.php:2443
+#: inc/classes/class-astra-sites.php:2498
 msgid "Read More →"
 msgstr "Lees meer →"
 
-#: inc/classes/class-astra-sites.php:2735
+#: inc/classes/class-astra-sites.php:2790
 msgid "Template library refreshed!"
 msgstr "Sjabloonbibliotheek vernieuwd!"
 
-#: inc/classes/class-astra-sites.php:2809
+#: inc/classes/class-astra-sites.php:2864
 msgid "Build Your Dream Site in Minutes With AI"
 msgstr "Bouw uw droomsite in enkele minuten met AI"
 
-#: inc/classes/class-astra-sites.php:2810
+#: inc/classes/class-astra-sites.php:2865
 msgid "Say goodbye to the days of spending weeks designing and building your website.<br/> You can now create professional-grade websites in minutes."
 msgstr "Zeg vaarwel tegen de dagen van wekenlang ontwerpen en bouwen van je website.<br/> Je kunt nu binnen enkele minuten websites van professionele kwaliteit maken."
 
-#: inc/classes/class-astra-sites.php:2812
+#: inc/classes/class-astra-sites.php:2867
 #: inc/lib/one-onboarding/build/main.js:16
 msgid "Let’s Get Started"
 msgstr "Laten we beginnen"
 
-#: inc/classes/class-astra-sites.php:2813
+#: inc/classes/class-astra-sites.php:2868
 msgid "I want to build this website from scratch"
 msgstr "Ik wil deze website helemaal opnieuw bouwen"
 
-#: inc/classes/class-astra-sites.php:2848
+#: inc/classes/class-astra-sites.php:2903
 msgid "Required WP_Filesystem Permissions to import the templates from Starter Templates are missing."
 msgstr "Vereiste WP_Filesystem-machtigingen om de sjablonen van Starter Templates te importeren ontbreken."
 
@@ -1113,7 +1113,7 @@ msgid "Nonce verification failed."
 msgstr "Verificatie van nonce mislukt."
 
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:979
-#: inc/lib/starter-templates-importer/importer/st-importer.php:440
+#: inc/lib/starter-templates-importer/importer/st-importer.php:467
 msgid "There was an error downloading the XML file."
 msgstr "Er is een fout opgetreden bij het downloaden van het XML-bestand."
 
@@ -1313,232 +1313,232 @@ msgstr "SureCart\\Models\\ProvisionalAccount::create functie is niet aanroepbaar
 msgid "Id is empty."
 msgstr "Id is leeg."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:340
+#: inc/lib/starter-templates-importer/importer/st-importer.php:367
 msgid "Customizer data is empty."
 msgstr "De gegevens van de aanpasser zijn leeg."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:370
+#: inc/lib/starter-templates-importer/importer/st-importer.php:397
 msgid "Customizer data imported successfully."
 msgstr "Customizer-gegevens succesvol geïmporteerd."
 
 #. Translators: %s is WXR URL.
-#: inc/lib/starter-templates-importer/importer/st-importer.php:399
+#: inc/lib/starter-templates-importer/importer/st-importer.php:426
 #, php-format
 msgid "Invalid WXR Request URL - %s"
 msgstr "Ongeldige WXR-verzoek-URL - %s"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:542
+#: inc/lib/starter-templates-importer/importer/st-importer.php:569
 msgid "Site options are empty!"
 msgstr "Site-opties zijn leeg!"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:642
+#: inc/lib/starter-templates-importer/importer/st-importer.php:669
 msgid "Options imported successfully."
 msgstr "Opties succesvol geïmporteerd."
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:691
+#: inc/lib/starter-templates-importer/importer/st-importer.php:718
 msgid "Widget data is empty!"
 msgstr "Widgetgegevens zijn leeg!"
 
-#: inc/lib/starter-templates-importer/importer/st-importer.php:709
+#: inc/lib/starter-templates-importer/importer/st-importer.php:736
 msgid "Widgets imported successfully."
 msgstr "Widgets succesvol geïmporteerd."
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:238
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:240
 msgid "Could not open the file for parsing"
 msgstr "Kon het bestand niet openen voor het parseren"
 
 #. translators: %1$s is WXR version, %2$s is max supported WXR version.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:276
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:395
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:471
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:278
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:397
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:473
 #, php-format
 msgid "This WXR file (version %1$s) is newer than the importer (version %2$s) and may not be supported. Please consider updating."
 msgstr "Dit WXR-bestand (versie %1$s) is nieuwer dan de importeur (versie %2$s) en wordt mogelijk niet ondersteund. Overweeg alstublieft om te updaten."
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:622
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:624
 msgid "The file does not exist, please try again."
 msgstr "Het bestand bestaat niet, probeer het alstublieft opnieuw."
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:682
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:684
 msgid "Invalid author mapping"
 msgstr "Ongeldige auteurstoewijzing"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:783
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:785
 msgid "Cannot import auto-draft posts"
 msgstr "Kan geen automatische conceptberichten importeren"
 
 #. translators: %1$s is the import message, %2$s is post type.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:883
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:885
 #, php-format
 msgid "Failed to import \"%1$s\": Invalid post type %2$s"
 msgstr "Kon \"%1$s\" niet importeren: Ongeldig berichttype %2$s"
 
 #. translators: %1$s single post type, %2$s is post title.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:895
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:897
 #, php-format
 msgid "%1$s \"%2$s\" already exists."
 msgstr "%1$s \"%2$s\" bestaat al."
 
 #. translators: %s is post title
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:993
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:995
 #, php-format
 msgid "Skipping attachment \"%s\", fetching attachments disabled"
 msgstr "Bijlage \"%s\" wordt overgeslagen, ophalen van bijlagen is uitgeschakeld"
 
 #. translators: %1$s is the post title, %2$s is post type.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1017
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1019
 #, php-format
 msgid "Failed to import \"%1$s\" (%2$s)"
 msgstr "Kon \"%1$s\" (%2$s) niet importeren"
 
 #. translators: %1$s is the post title, %2$s is post type.
 #. translators: %1$s is the taxonomy name, %2$s is taxonomy.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1052
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1950
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1054
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1965
 #, php-format
 msgid "Imported \"%1$s\" (%2$s)"
 msgstr "Geïmporteerd \"%1$s\" (%2$s)"
 
 #. translators: %1$s is the original post id, %2$s is old post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1060
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1062
 #, php-format
 msgid "Post %1$d remapped to %2$d"
 msgstr "Bericht %1$d opnieuw toegewezen aan %2$d"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1211
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1226
 msgid "Invalid file type"
 msgstr "Ongeldig bestandstype"
 
 #. translators: %s user login name
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1722
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1737
 #, php-format
 msgid "Failed to import user \"%s\""
 msgstr "Kan gebruiker \"%s\" niet importeren"
 
 #. translators: %s user login name
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1746
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1761
 #, php-format
 msgid "Imported user \"%s\""
 msgstr "Geïmporteerde gebruiker \"%s\""
 
 #. translators: %1$s original user Id, %2$s old user Id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1753
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1768
 #, php-format
 msgid "User %1$d remapped to %2$d"
 msgstr "Gebruiker %1$d opnieuw toegewezen aan %2$d"
 
 #. translators: %1$s is the taxonomy, %2$s is taxonomy name.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1923
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1938
 #, php-format
 msgid "Failed to import %1$s %2$s"
 msgstr "Kon %1$s %2$s niet importeren"
 
 #. translators: %1$s is term original id, %2$s is term id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1958
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1973
 #, php-format
 msgid "Term %1$d remapped to %2$d"
 msgstr "Term %1$d opnieuw toegewezen aan %2$d"
 
 #. translators: %1$s is error code, %2$s is error code header, %3$s is url.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2062
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2077
 #, php-format
 msgid "Remote server returned %1$d %2$s for %3$s"
 msgstr "Externe server gaf %1$d %2$s terug voor %3$s"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2075
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2090
 msgid "Remote file is incorrect size"
 msgstr "Extern bestand heeft een onjuiste grootte"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2080
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2095
 msgid "Zero size file downloaded"
 msgstr "Bestand van nul grootte gedownload"
 
 #. translators: %s max file size.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2087
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2102
 #, php-format
 msgid "Remote file is too large, limit is %s"
 msgstr "Extern bestand is te groot, de limiet is %s"
 
 #. translators: %d is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2120
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2135
 #, php-format
 msgid "Running post-processing for post %d"
 msgstr "Post-processing uitvoeren voor bericht %d"
 
 #. translators: %1$s is post title, %2$s is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2136
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2151
 #, php-format
 msgid "Could not find the post parent for \"%1$s\" (post #%2$d)"
 msgstr "Kon de bovenliggende post voor \"%1$s\" (post #%2$d) niet vinden"
 
 #. translators: %1$d is post id, %2$d is parent post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2144
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2159
 #, php-format
 msgid "Post %1$d was imported with parent %2$d, but could not be found"
 msgstr "Post %1$d is geïmporteerd met ouder %2$d, maar kon niet worden gevonden"
 
 #. translators: %1$s is the post title, %2$s is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2161
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2176
 #, php-format
 msgid "Could not find the author for \"%1$s\" (post #%2$d)"
 msgstr "Kon de auteur niet vinden voor \"%1$s\" (bericht #%2$d)"
 
 #. translators: %1$d is post id, %2$s is author slug.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2169
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2184
 #, php-format
 msgid "Post %1$d was imported with author \"%2$s\", but could not be found"
 msgstr "Bericht %1$d is geïmporteerd met auteur \"%2$s\", maar kon niet worden gevonden"
 
 #. translators: %d is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2198
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2213
 #, php-format
 msgid "Post %d was marked for post-processing, but none was required."
 msgstr "Bericht %d was gemarkeerd voor nabewerking, maar dat was niet nodig."
 
 #. translators: %1$s is the post title, %2$s is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2215
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2230
 #, php-format
 msgid "Could not update \"%1$s\" (post #%2$d) with mapped data"
 msgstr "Kon \"%1$s\" (bericht #%2$d) niet bijwerken met gemapte gegevens"
 
 #. translators: %1$s is the post title, %2$s is post id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2269
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2284
 #, php-format
 msgid "Could not find the menu object for \"%1$s\" (post #%2$d)"
 msgstr "Kon het menu-object voor \"%1$s\" (bericht #%2$d) niet vinden"
 
 #. translators: %1$s is post id, %2$s is post object id, %3$s is menu type.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2277
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2292
 #, php-format
 msgid "Post %1$d was imported with object \"%2$d\" of type \"%3$s\", but could not be found"
 msgstr "Bericht %1$d is geïmporteerd met object \"%2$d\" van het type \"%3$s\", maar kon niet worden gevonden"
 
 #. translators: %d is comment id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2308
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2323
 #, php-format
 msgid "Could not find the comment parent for comment #%d"
 msgstr "Kon de bovenliggende opmerking voor opmerking #%d niet vinden"
 
 #. translators: %1$s is comment id, %2$s is parent comment id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2315
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2330
 #, php-format
 msgid "Comment %1$d was imported with parent %2$d, but could not be found"
 msgstr "Reactie %1$d is geïmporteerd met ouder %2$d, maar kon niet worden gevonden"
 
 #. translators: %d is comment id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2332
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2347
 #, php-format
 msgid "Could not find the author for comment #%d"
 msgstr "Kon de auteur voor opmerking #%d niet vinden"
 
 #. translators: %1$d is comment id, %2$d is author id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2339
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2354
 #, php-format
 msgid "Comment %1$d was imported with author %2$d, but could not be found"
 msgstr "Reactie %1$d is geïmporteerd met auteur %2$d, maar kon niet worden gevonden"
 
 #. translators: %d is comment id.
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2359
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:2374
 #, php-format
 msgid "Could not update comment #%d with mapped data"
 msgstr "Kon opmerking #%d niet bijwerken met gemapte gegevens"
@@ -4444,35 +4444,35 @@ msgid "Template Kits"
 msgstr "Sjabloonpakketten"
 
 #. translators: %s Anchor link to support URL.
-#: inc/classes/class-astra-sites.php:1938
+#: inc/classes/class-astra-sites.php:1993
 #, php-format
 msgid "Please report this error%1$s here %2$s, so we can fix it."
 msgstr "Rapporteer deze fout%1$s hier %2$s, zodat we het kunnen oplossen."
 
-#: inc/classes/class-astra-sites.php:2255
+#: inc/classes/class-astra-sites.php:2310
 msgid "Missing plugin installation permission"
 msgstr "Ontbrekende toestemming voor het installeren van de plugin"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2257
+#: inc/classes/class-astra-sites.php:2312
 msgid "You do not have permission to install the required plugin. You must have install permissions to proceed with the required plugin."
 msgstr "U heeft geen toestemming om de vereiste plugin te installeren. U moet installatierechten hebben om door te gaan met de vereiste plugin."
 
-#: inc/classes/class-astra-sites.php:2260
+#: inc/classes/class-astra-sites.php:2315
 msgid "Missing plugin activation permission"
 msgstr "Ontbrekende toestemming voor plugin-activatie"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2262
+#: inc/classes/class-astra-sites.php:2317
 msgid "You do not have permission to activate the required plugin. You must have activate permissions to proceed with the required plugin."
 msgstr "U heeft geen toestemming om de vereiste plugin te activeren. U moet activeringsrechten hebben om door te gaan met de vereiste plugin."
 
-#: inc/classes/class-astra-sites.php:2265
+#: inc/classes/class-astra-sites.php:2320
 msgid "Insufficient Memory Limit"
 msgstr "Onvoldoende geheugengrens"
 
 #. translators: %s doc link.
-#: inc/classes/class-astra-sites.php:2267
+#: inc/classes/class-astra-sites.php:2322
 msgid "The memory limit of your site is below the recommended 256MB. While you can proceed, increasing the memory limit is advised for a seamless import experience."
 msgstr "De geheugengrens van uw site is lager dan de aanbevolen 256MB. Hoewel u kunt doorgaan, wordt het verhogen van de geheugengrens aangeraden voor een naadloze importervaring."
 
@@ -4815,7 +4815,7 @@ msgstr "(Maximaal 20)"
 msgid "Batch process failed."
 msgstr "Batchproces mislukt."
 
-#: inc/classes/class-astra-sites.php:1652
+#: inc/classes/class-astra-sites.php:1707
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:147
 msgid "Get Premium Templates"
 msgstr "Ontvang Premium Sjablonen"
@@ -6084,7 +6084,7 @@ msgid "Invalid data file URL - %s"
 msgstr "Ongeldige gegevensbestand-URL - %s"
 
 #: inc/classes/class-astra-sites-importer.php:399
-#: inc/lib/starter-templates-importer/importer/st-importer.php:472
+#: inc/lib/starter-templates-importer/importer/st-importer.php:499
 msgid "Could not download data file. Please check your internet connection and try again."
 msgstr "Kon het databestand niet downloaden. Controleer uw internetverbinding en probeer het opnieuw."
 
@@ -6217,54 +6217,54 @@ msgstr "LatePoint importeren mislukt: Onverwachte fout - %s"
 msgid "LatePoint import failed: Fatal Error - %s"
 msgstr "LatePoint-import mislukt: Fatale fout - %s"
 
-#: inc/classes/class-astra-sites.php:375
+#: inc/classes/class-astra-sites.php:430
 msgid "Import failed due to insufficient memory. Please increase the PHP memory_limit on your server and retry. If you're unsure how to do this, contact your hosting provider for assistance."
 msgstr "Importeren mislukt vanwege onvoldoende geheugen. Verhoog de PHP memory_limit op uw server en probeer het opnieuw. Als u niet weet hoe u dit moet doen, neem dan contact op met uw hostingprovider voor hulp."
 
-#: inc/classes/class-astra-sites.php:1387
+#: inc/classes/class-astra-sites.php:1442
 msgid "Failed to download the image. Please verify the URL and your network connection, then try again."
 msgstr "Kan de afbeelding niet downloaden. Controleer de URL en uw netwerkverbinding en probeer het opnieuw."
 
-#: inc/classes/class-astra-sites.php:1865
+#: inc/classes/class-astra-sites.php:1920
 msgid "<p>The import process was interrupted as Debug mode is currently enabled on your site.</p><p>Kindly disable debug mode and try importing Starter Template again.</p><p>You can add the following code into the wp-config.php file to disable debug mode.</p><p><code>define('WP_DEBUG', false);</code></p>"
 msgstr "<p>Het importproces werd onderbroken omdat de Debug-modus momenteel is ingeschakeld op uw site.</p><p>Schakel de debug-modus uit en probeer het Starter Template opnieuw te importeren.</p><p>U kunt de volgende code toevoegen aan het wp-config.php-bestand om de debug-modus uit te schakelen.</p><p><code>define('WP_DEBUG', false);</code></p>"
 
 #. translators: %s is a documentation link.
-#: inc/classes/class-astra-sites.php:1867
+#: inc/classes/class-astra-sites.php:1922
 #, php-format
 msgid "<p>Template import was interrupted due to a temporary error.</p><p>Read <a href=\"%s\" target=\"_blank\">article</a> to resolve the issue and continue importing template.</p>"
 msgstr "<p>Het importeren van de sjabloon werd onderbroken vanwege een tijdelijke fout.</p><p>Lees het <a href=\"%s\" target=\"_blank\">artikel</a> om het probleem op te lossen en het importeren van de sjabloon voort te zetten.</p>"
 
 #. translators: %s is a documentation link.
-#: inc/classes/class-astra-sites.php:1869
+#: inc/classes/class-astra-sites.php:1924
 #, php-format
 msgid "<p>Failed to install one or more required plugins.</p><p>Read&nbsp;<a href=\"%s\" target=\"_blank\">article</a>&nbsp;to resolve the issue and continue importing template.</p>"
 msgstr "<p>Het is niet gelukt om een of meer vereiste plugins te installeren.</p><p>Lees&nbsp;<a href=\"%s\" target=\"_blank\">het artikel</a>&nbsp;om het probleem op te lossen en verder te gaan met het importeren van de template.</p>"
 
 #. translators: %s are white label strings.
-#: inc/classes/class-astra-sites.php:1873
+#: inc/classes/class-astra-sites.php:1928
 #, php-format
 msgid "Warning! %1$s Closing this window will cancel the process. Do you still want to leave?"
 msgstr "Waarschuwing! %1$s Het sluiten van dit venster zal het proces annuleren. Wilt u nog steeds vertrekken?"
 
-#: inc/classes/class-astra-sites.php:1914
+#: inc/classes/class-astra-sites.php:1969
 msgid "Couldn't start import process. WordPress returned:"
 msgstr "Kon het importproces niet starten. WordPress gaf het volgende terug:"
 
 #. translators: %s HTML tags
-#: inc/classes/class-astra-sites.php:1920
+#: inc/classes/class-astra-sites.php:1975
 #, php-format
 msgid "%1$sAJAX request failed. WordPress returned:%2$s"
 msgstr "%1$sAJAX-verzoek mislukt. WordPress gaf terug:%2$s"
 
 #. translators: %s URL to document.
-#: inc/classes/class-astra-sites.php:1931
+#: inc/classes/class-astra-sites.php:1986
 #, php-format
 msgid "%1$sImport process interrupted due to an AJAX error:%2$s"
 msgstr "%1$sImportproces onderbroken vanwege een AJAX-fout:%2$s"
 
 #. translators: %s update page link.
-#: inc/classes/class-astra-sites.php:2239
+#: inc/classes/class-astra-sites.php:2294
 msgid "Updates are available for one or more plugins used by this starter template."
 msgstr "Er zijn updates beschikbaar voor een of meer plugins die door deze startertemplate worden gebruikt."
 
@@ -6308,13 +6308,13 @@ msgstr "Importeren van spectra-instellingen mislukt: Fatale fout - %s"
 msgid "Permission denied: You don't have sufficient permissions to import SureCart settings. Please contact your site administrator."
 msgstr "Toestemming geweigerd: U heeft niet voldoende rechten om SureCart-instellingen te importeren. Neem contact op met uw sitebeheerder."
 
-#: inc/classes/class-astra-sites-wp-cli.php:301
+#: inc/classes/class-astra-sites-wp-cli.php:313
 #: inc/lib/ai-builder/inc/ajax/importer.php:450
 msgid "SureCart import failed: ST_Importer class not found. Please ensure the importer is properly loaded."
 msgstr "SureCart-import mislukt: ST_Importer-klasse niet gevonden. Zorg ervoor dat de importer correct is geladen."
 
 #. translators: %s: Error message.
-#: inc/classes/class-astra-sites-wp-cli.php:308
+#: inc/classes/class-astra-sites-wp-cli.php:320
 #: inc/lib/ai-builder/inc/ajax/importer.php:460
 #, php-format
 msgid "SureCart import failed: %s"
@@ -6502,13 +6502,13 @@ msgid "Spectra plugin installed but class not loaded. Please refresh and try aga
 msgstr "Spectra-plugin geïnstalleerd, maar klasse niet geladen. Vernieuw en probeer het opnieuw."
 
 #. translators: %s is the error message.
-#: inc/lib/starter-templates-importer/importer/st-importer.php:432
+#: inc/lib/starter-templates-importer/importer/st-importer.php:459
 #, php-format
 msgid "Error occurred while inserting XML file: %s"
 msgstr "Fout opgetreden bij het invoegen van XML-bestand: %s"
 
 #. translators: %s is the download error message.
-#: inc/lib/starter-templates-importer/importer/st-importer.php:479
+#: inc/lib/starter-templates-importer/importer/st-importer.php:506
 #, php-format
 msgid "File download failed: %s"
 msgstr "Bestand downloaden mislukt: %s"
@@ -7067,16 +7067,16 @@ msgid "Skipping WPForms import - plugin not in required list."
 msgstr "WPForms-import overslaan - plugin niet in vereiste lijst."
 
 #: inc/classes/class-astra-sites-wp-cli.php:286
-#: inc/classes/class-astra-sites-wp-cli.php:297
+#: inc/classes/class-astra-sites-wp-cli.php:309
 msgid "Skipping LatePoint import - plugin not in required list."
 msgstr "LatePoint-import overslaan - plugin niet in vereiste lijst."
 
 #. translators: %s: Error message.
-#: inc/classes/class-astra-sites-wp-cli.php:308
+#: inc/classes/class-astra-sites-wp-cli.php:320
 msgid "Unknown error"
 msgstr "Onbekende fout"
 
-#: inc/classes/class-astra-sites-wp-cli.php:312
+#: inc/classes/class-astra-sites-wp-cli.php:324
 msgid "SureCart Settings imported."
 msgstr "SureCart-instellingen geïmporteerd."
 
@@ -7342,7 +7342,7 @@ msgstr "We konden geen actief plan voor uw account verifiëren. Controleer uw Zi
 msgid "Highlight"
 msgstr "Markeren"
 
-#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1219
+#: inc/lib/starter-templates-importer/importer/wxr-importer.php:1234
 msgid "The image file is too large to process with the current server memory settings."
 msgstr "Het afbeeldingsbestand is te groot om te verwerken met de huidige servergeheugeninstellingen."
 

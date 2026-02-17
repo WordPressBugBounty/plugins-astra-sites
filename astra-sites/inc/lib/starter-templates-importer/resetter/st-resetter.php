@@ -180,6 +180,24 @@ class ST_Resetter {
 			)
 		);
 
+		// Check if SureCart is required plugin, then clear API token and account cache.
+		$required_plugins = (array) astra_get_site_data( 'required-plugins' );
+		$plugins_slug     = array_column( $required_plugins, 'slug' );
+		if ( in_array( 'surecart', $plugins_slug, true ) ) {
+			ST_Importer_Log::add( 'Reset Site Options - SureCart detected as required plugin. Clearing API token and account cache.', 'info' );
+
+			if ( class_exists( '\SureCart' ) && class_exists( '\SureCart\Models\ApiToken' ) ) {
+				// 1. Clear the API token
+				\SureCart\Models\ApiToken::clear();
+
+				// 2. Clear the account cache.
+				\SureCart::account()->clearCache();
+			}
+
+			// Optionally, clear the option value to ensure it's reset.
+			$options['sc_api_token'] = '';
+		}
+
 		$deleted_count = 0;
 		$failed_count  = 0;
 

@@ -11,6 +11,8 @@
  * https://github.com/humanmade/WordPress-Importer/blob/master/LICENSE
  */
 
+use STImporter\Importer\ST_Importer_File_System;
+
 /**
  * All the PHPCS errors are ignored in this file as it is a third party file.
  * Forked from WP importer v2 - https://github.com/humanmade/WordPress-Importer
@@ -1151,6 +1153,19 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 				case 'custom':
 					// Custom refers to itself, wonderfully easy.
 					$object_id = $post_id;
+
+					// Replace websitedemos.net URL with current site URL.
+					$menu_item_url = get_post_meta( $post_id, '_menu_item_url', true );
+					if ( ! empty( $menu_item_url ) && strpos( $menu_item_url, 'websitedemos.net' ) !== false ) {
+						// Attempt to get the original demo site URL from the demo data, and replace it with the current site URL.
+						$demo_data = ST_Importer_File_System::get_instance()->get_demo_content();
+						if ( isset( $demo_data['astra-site-url'] ) ) {
+							$current_site_url = get_site_url();
+							$updated_url      = str_replace( 'https:' . $demo_data['astra-site-url'], $current_site_url, $menu_item_url );
+							update_post_meta( $post_id, '_menu_item_url', $updated_url );
+							$this->logger->debug( sprintf( 'Updated menu item URL from %s to %s', $menu_item_url, $updated_url ) );
+						}
+					}
 					break;
 
 				default:

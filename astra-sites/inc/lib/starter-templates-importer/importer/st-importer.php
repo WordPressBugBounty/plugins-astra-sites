@@ -275,6 +275,10 @@ class ST_Importer {
 				ST_Importer_Log::add( 'SureCart attachment IDs resolved', 'info', array( 'resolved_count' => count( $hash_map ) ) );
 			}
 
+			// Save products data to options for use when SureCart products are created.
+			// Format: [slug => [old_post_id => int, old_sc_id => string, prices => array]].
+			$surecart_mapping_data = array();
+
 			// Build final products array with resolved gallery IDs.
 			foreach ( $products as $index => $product ) {
 				$gallery_ids = [];
@@ -293,6 +297,29 @@ class ST_Importer {
 				$products[ $index ]['variants']            = ! empty( $product['variants']['data'] ) ? $product['variants']['data'] : array();
 				$products[ $index ]['variant_options']     = ! empty( $product['variant_options']['data'] ) ? $product['variant_options']['data'] : array();
 				$products[ $index ]['product_collections'] = ! empty( $product['product_collections']['data'] ) ? $product['product_collections']['data'] : array();
+
+				$product_slug = $product['slug'] ?? '';
+				$old_post_id  = $product['post']['ID'] ?? null;
+				$old_sc_id    = $product['id'] ?? null;
+				$prices       = $product['prices']['data'] ?? array();
+
+				if ( ! empty( $product_slug ) ) {
+					$surecart_mapping_data[ $product_slug ] = array(
+						'old_post_id' => $old_post_id,
+						'old_sc_id'   => $old_sc_id,
+						'prices'      => array(),
+					);
+
+					foreach ( $prices as $price ) {
+						$surecart_mapping_data[ $product_slug ]['prices'][] = array(
+							'old_price_id' => $price['id'],
+						);
+					}
+				}
+			}
+
+			if ( ! empty( $surecart_mapping_data ) ) {
+				update_option( 'astra_sites_surecart_mapping_data', $surecart_mapping_data, false );
 			}
 
 			$data['products'] = $products;

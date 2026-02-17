@@ -303,7 +303,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 
 		/**
 		 * Theme product activation utm event.
-		 * 
+		 *
 		 * @param string $theme_slug Theme slug.
 		 * @return void
 		 *
@@ -324,7 +324,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 
 		/**
 		 * Plugin product activation utm event.
-		 * 
+		 *
 		 * @param string $plugin_init plugin init file.
 		 * @param mixed  $data activation data.
 		 * @return void
@@ -349,8 +349,63 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					// Set the referer to 'zipwp' for AI Builder and 'astra-sites' otherwise.
 					$referer = 'ai-builder' === $page_builder ? 'zipwp' : 'astra-sites';
 					BSF_UTM_Analytics::update_referer( $referer, $data['plugin_slug'] );
+
+					if ( 'sureforms' === $data['plugin_slug'] ) {
+						$this->update_sureforms_referer();
+					}
 				}
 			}
+		}
+
+		/**
+		 * Update Sureforms referer based on the imported template.
+		 *
+		 * This function checks if the imported template is one of the top templates and updates the referer for Sureforms accordingly.
+		 *
+		 * @return void
+		 * @since 4.4.50
+		 * @todo Remove this function after few releases after observations.
+		 */
+		public function update_sureforms_referer() {
+			$template_data = Astra_Sites_File_System::get_instance()->get_demo_content();
+
+			// Top templates -- All Elementor templates.
+			$top_templates_ids = array(
+				17988, // Brandstore!
+				58716, // Love Nature!
+				17534, // Digital Agency!
+				31992, // Organic Store!
+				19808, // Outdoor Adventure!
+				69715, // Planet Earth!
+				87989, // Clothing Store!
+				59264, // Personal Portfolio!
+				59455, // Construction Company!
+				46177, // Mountain!
+				71669, // Planet Earth Store!
+				54398, // Digital Agency!
+				88164, // Galatic!
+				58172, // Skin Cleanser Store!
+				83885, // Hope!
+			);
+
+			// Bail early if template ID is not set or if it's not in the list of top templates to avoid unnecessary referer updates.
+			if ( ! isset( $template_data['id'] ) || ! in_array( $template_data['id'], $top_templates_ids, true ) ) {
+				return;
+			}
+
+			$referer_option       = defined( 'BSF_UTM_ANALYTICS_REFERER' ) ? BSF_UTM_ANALYTICS_REFERER : 'bsf_product_referers';
+			$bsf_product_referers = get_option( $referer_option, array() );
+			if ( ! is_array( $bsf_product_referers ) ) {
+				$bsf_product_referers = array();
+			}
+	
+			// Set referer based on template slug if available, otherwise default to 'astra-sites'.
+			$template_slug = isset( $template_data['astra-site-url'] ) ? str_replace( array( 'https:', '//websitedemos.net/' ), '', $template_data['astra-site-url'] ) : '';
+			$referer       = $template_slug ? 'astra-sites-' . $template_slug : 'astra-sites';
+
+			$bsf_product_referers['sureforms'] = $referer;
+	
+			update_option( BSF_UTM_ANALYTICS_REFERER, $bsf_product_referers );
 		}
 
 		/**

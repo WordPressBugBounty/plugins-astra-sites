@@ -148,7 +148,7 @@ if ( ! class_exists( '\STImporter\ST_Importer_Loader' ) ) {
 			define( 'ST_IMPORTER_FILE', __FILE__ );
 			define( 'ST_IMPORTER_DIR', plugin_dir_path( ST_IMPORTER_FILE ) );
 			define( 'ST_IMPORTER_URL', plugins_url( '/', ST_IMPORTER_FILE ) );
-			define( 'ST_IMPORTER_VER', '1.1.25' );
+			define( 'ST_IMPORTER_VER', '1.1.26' );
 		}
 
 		/**
@@ -193,6 +193,7 @@ if ( ! class_exists( '\STImporter\ST_Importer_Loader' ) ) {
 			require_once ST_IMPORTER_DIR . 'importer/batch/st-batch-ce-process-images.php';
 			require_once ST_IMPORTER_DIR . 'importer/batch/st-batch-process-cleanup.php';
 			require_once ST_IMPORTER_DIR . 'importer/batch/st-batch-processing-customizer.php';
+			require_once ST_IMPORTER_DIR . 'importer/batch/st-batch-surecart-blocks.php';
 		}
 	}
 

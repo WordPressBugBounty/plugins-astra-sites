@@ -89,7 +89,7 @@ if ( ! class_exists( 'Astra_Sites_Admin' ) ) :
 			}
 
 			wp_enqueue_style( 'astra-sites-admin-page', ASTRA_SITES_URI . 'assets/css/admin.css', array(), ASTRA_SITES_VER );
-			wp_enqueue_script( 'astra-sites-admin-js', ASTRA_SITES_URI . 'assets/js/admin.js', array( 'astra-sites-admin-page', 'jquery' ), ASTRA_SITES_VER, true );
+			wp_enqueue_script( 'astra-sites-admin-js', ASTRA_SITES_URI . 'assets/js/admin.js', array( 'jquery' ), ASTRA_SITES_VER, true );
 		}
 
 		/**

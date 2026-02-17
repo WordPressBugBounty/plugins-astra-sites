@@ -151,11 +151,89 @@ if ( ! class_exists( 'ST_Image_Importer' ) ) :
 		}
 
 		/**
+		 * Remove dimensions from filename if present.
+		 * Pattern: filename-widthxheight.extension (e.g., services-1-150x150.jpg)
+		 *
+		 * @since 1.1.26
+		 * @param  string $filename Filename with potential dimensions.
+		 * @return array|false Array of base filename without dimensions or false if no dimensions found.
+		 */
+		public function get_filename_without_dimensions( $filename ) {
+			// Match pattern: filename-widthxheight.extension
+			// For example: services-1-150x150.jpg -> services-1.jpg.
+
+			$pattern = '/^(.+?)-(\d+x\d+)\.(.+)$/i';
+			if ( preg_match( $pattern, $filename, $matches ) ) {
+				// Return the base filename with extension and dimensions.
+				return [
+					'filename'   => $matches[1] . '.' . $matches[3],
+					'base'       => $matches[1],
+					'dimensions' => $matches[2],
+					'ext'        => $matches[3],
+				];
+			}
+			return false;
+		}
+
+		/**
+		 * Create a successful response for an existing attachment.
+		 *
+		 * @since 1.1.26
+		 *
+		 * @param int    $post_id The attachment ID.
+		 * @param string $url     The attachment URL.
+		 * @return array          The response array.
+		 */
+		private function create_successful_response( $post_id, $url ) {
+			$new_attachment               = array(
+				'id'  => $post_id,
+				'url' => $url,
+			);
+			$this->already_imported_ids[] = $post_id;
+
+			return array(
+				'status'     => true,
+				'attachment' => $new_attachment,
+			);
+		}
+
+		/**
+		 * Get the URL for a dimensioned file if it exists, otherwise return the original attachment URL.
+		 *
+		 * @since 1.1.26
+		 * @param int    $post_id   The attachment ID.
+		 * @param string $filename  The requested filename with dimensions.
+		 * @param string $dimensions The dimensions part (e.g. '150x150').
+		 * @return string|false     The URL if found, false otherwise.
+		 */
+		private function get_dimensioned_or_original_url( $post_id, $filename, $dimensions ) {
+			$upload_dir    = wp_upload_dir();
+			$attached_file = get_post_meta( $post_id, '_wp_attached_file', true );
+			if ( ! $attached_file ) {
+				return wp_get_attachment_url( $post_id );
+			}
+
+			$file_pathinfo         = pathinfo( $attached_file );
+			$dimension_file_name   = $file_pathinfo['filename'] . '-' . $dimensions . '.' . $file_pathinfo['extension'];
+			$original_file_path    = $upload_dir['basedir'] . '/' . $attached_file;
+			$dimensioned_file_path = str_replace( basename( $attached_file ), $dimension_file_name, $original_file_path );
+
+			if ( file_exists( $dimensioned_file_path ) ) {
+				// If the dimensioned file exists, construct its URL.
+				$relative_path = str_replace( $upload_dir['basedir'], '', $dimensioned_file_path );
+				return $upload_dir['baseurl'] . $relative_path;
+			}
+
+			// Otherwise, use the default attachment URL.
+			return wp_get_attachment_url( $post_id );
+		}
+
+		/**
 		 * Get Saved Image.
 		 *
 		 * @since 1.0.14
 		 * @param  string $attachment   Attachment Data.
-		 * @return string                 Hash string.
+		 * @return array                Attachment Data.
 		 */
 		private function get_saved_image( $attachment ) {
 
@@ -196,18 +274,66 @@ if ( ! class_exists( 'ST_Image_Importer' ) ) :
 						'%/' . $filename . '%'
 					)
 				);
+
+				// 3. Check if the filename contains dimensions and try to find the original image.
+				if ( empty( $post_id ) ) {
+					$base_filename_data = $this->get_filename_without_dimensions( $filename );
+					if ( false !== $base_filename_data && $base_filename_data['filename'] !== $filename ) {
+						$base_filename  = $base_filename_data['filename'];
+						$base_name_only = $base_filename_data['base'];
+						$dimensions     = $base_filename_data['dimensions'];
+
+						// First, try to find by meta value (higher priority).
+						$post_id = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- We are checking if this attachment is already processed. WO_Query would have been overkill.
+							$wpdb->prepare(
+								"SELECT post_id FROM {$wpdb->postmeta}
+								WHERE meta_key = '_wp_attached_file'
+								AND meta_value LIKE %s",
+								'%/' . $base_filename . '%'
+							)
+						);
+
+						if ( ! empty( $post_id ) ) {
+							// Found by meta, now check if dimensioned version exists.
+							$original_attachment_path = get_attached_file( $post_id );
+							$original_dir             = dirname( $original_attachment_path );
+							$dimensioned_file_path    = $original_dir . '/' . $filename;
+
+							if ( file_exists( $dimensioned_file_path ) ) {
+								// Return URL for the specific dimensioned file.
+								$upload_dir            = wp_upload_dir();
+								$relative_path         = str_replace( $upload_dir['basedir'], '', $dimensioned_file_path );
+								$dimensioned_image_url = $upload_dir['baseurl'] . $relative_path;
+
+								return $this->create_successful_response( $post_id, $dimensioned_image_url );
+							}
+						} else {
+							// Not found by meta, try by post_title (lower priority).
+							$post_id = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- We are checking if this attachment is already processed. WO_Query would have been overkill.
+								$wpdb->prepare(
+									"SELECT ID FROM {$wpdb->posts}
+									WHERE post_type = 'attachment'
+									AND post_title = %s",
+									$base_name_only
+								)
+							);
+
+							if ( $post_id ) {
+								// Check if dimensioned file exists for the found attachment.
+								$attachment_url = $this->get_dimensioned_or_original_url( $post_id, $filename, $dimensions );
+								if ( $attachment_url ) {
+									return $this->create_successful_response( $post_id, $attachment_url );
+								}
+							}
+						}
+					}
+				}
 			}
 
 			if ( $post_id ) {
-				$new_attachment               = array(
-					'id'  => $post_id,
-					'url' => wp_get_attachment_url( $post_id ),
-				);
-				$this->already_imported_ids[] = $post_id;
-
-				return array(
-					'status'     => true,
-					'attachment' => $new_attachment,
+				return $this->create_successful_response(
+					$post_id,
+					wp_get_attachment_url( $post_id )
 				);
 			}
 
