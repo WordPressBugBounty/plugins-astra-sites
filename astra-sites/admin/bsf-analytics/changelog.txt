@@ -1,4 +1,11 @@
-v1.1.17 - 29-January-2025
+v1.1.19 - 1-March-2026
+- Fix: Resolved dead-code form ID fallback and reduced AJAX timeout from 90s to 15s in deactivation survey.
+- Fix: Moved nonce verification before $_GET access in handle_optin_optout() to comply with WordPress.org coding standards.
+
+v1.1.18 - 19-February-2026
+- Improvement: Added `modern-cart` slug to UTM analytics.
+
+v1.1.17 - 29-January-2026
 - Improvement: Renamed options from `*_analytics_*` to `*_usage_*`.
 
 v1.1.16 - 15-July-2025

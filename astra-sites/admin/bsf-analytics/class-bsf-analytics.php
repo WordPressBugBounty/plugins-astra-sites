@@ -314,13 +314,18 @@ if ( ! class_exists( 'BSF_Analytics' ) ) {
 				return;
 			}
 
-			$source = isset( $_GET['bsf_analytics_source'] ) ? sanitize_text_field( wp_unslash( $_GET['bsf_analytics_source'] ) ) : '';
-
-			if ( ! isset( $_GET[ $source . '_analytics_nonce' ] ) ) {
-				return;
+			// Verify nonce before accessing any $_GET data.
+			// The nonce key is dynamic per entity, so iterate to find a valid one.
+			$source = '';
+			foreach ( $this->entities as $key => $data ) {
+				$nonce_key = $key . '_analytics_nonce';
+				if ( isset( $_GET[ $nonce_key ] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET[ $nonce_key ] ) ), $key . '_analytics_optin' ) ) {
+					$source = $key;
+					break;
+				}
 			}
 
-			if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET[ $source . '_analytics_nonce' ] ) ), $source . '_analytics_optin' ) ) {
+			if ( empty( $source ) ) {
 				return;
 			}
 
@@ -343,6 +348,7 @@ if ( ! class_exists( 'BSF_Analytics' ) ) {
 					)
 				)
 			);
+			exit;
 		}
 
 		/**

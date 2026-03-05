@@ -162,6 +162,8 @@ class Helper {
 			'woo-cart-abandonment-recovery/woo-cart-abandonment-recovery.php',
 			'modern-cart',
 			'modern-cart/modern-cart.php',
+			'power-coupons',
+			'power-coupons/power-coupons.php',
 		);
 
 		return in_array( $plugin, $wc_plugins, true );

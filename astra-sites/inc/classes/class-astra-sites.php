@@ -2603,7 +2603,8 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-wp-cli.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-file-system.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-nps-notice.php';
-			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-analytics.php'; 
+			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-analytics-events.php';
+			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-analytics.php';
 
 			// Astra Onboarding Integration.
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-astra-onboarding.php';
