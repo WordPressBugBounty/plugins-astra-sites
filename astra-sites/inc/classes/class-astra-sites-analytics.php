@@ -108,6 +108,11 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 * @return void
 		 */
 		public function maybe_update_finish_setup_banner_clicked() {
+			// Only allow administrators to update this setting.
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
 			// Bail early if the source is not dashboard-banner.
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification not needed here.
 			if ( ! isset( $_GET['source'] ) || 'dashboard-banner' !== sanitize_text_field( $_GET['source'] ) ) {
@@ -158,6 +163,12 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 * @return void
 		 */
 		public function set_woopayments_analytics() {
+			// Verify user has permission to modify settings.
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( array( 'message' => __( 'You do not have permission to perform this action.', 'astra-sites' ) ) );
+				exit;
+			}
+
 			// Verify nonce.
 			if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'woopayments_nonce' ) ) {
 				wp_send_json_error( array( 'message' => __( 'Invalid nonce', 'astra-sites' ) ) );

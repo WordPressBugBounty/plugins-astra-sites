@@ -571,7 +571,7 @@ if ( ! class_exists( 'ST_Replace_Blocks_Images' ) ) :
 				ST_Importer_Log::add( 'Updated alt text to: ' . $alt_text );
 			}
 
-			if ( isset( $block['alt'] ) && isset( $attachment['alt'] ) ) {
+			if ( isset( $block['alt'] ) ) {
 				$block['innerHTML'] = str_replace( $block['alt'], $attachment['alt'], $block['innerHTML'] );
 			}
 

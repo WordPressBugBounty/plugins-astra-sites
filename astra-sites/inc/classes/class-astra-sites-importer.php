@@ -538,6 +538,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 							$forms->get_error_message()
 						)
 					);
+					return;
 				}
 
 				if ( empty( $forms ) ) {
@@ -975,6 +976,13 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 				}
 
 				$plugin_init = sanitize_text_field( $plugin['init'] );
+
+				// Reject path traversal attempts.
+				if ( false !== strpos( $plugin_init, '..' ) || false !== strpos( $plugin_init, '\\' ) ) {
+					Astra_Sites_Importer_Log::add( 'Plugin verification blocked - invalid path: ' . $plugin_init );
+					continue;
+				}
+
 				$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_init;
 
 				if ( ! file_exists( $plugin_file ) ) {

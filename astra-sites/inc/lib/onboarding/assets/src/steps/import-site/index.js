@@ -54,6 +54,7 @@ const ImportSite = () => {
 			builder,
 			pluginInstallationAttempts,
 			awaitingPluginCheck,
+			skippedPlugins,
 		},
 		dispatch,
 	] = storedState;
@@ -157,8 +158,20 @@ const ImportSite = () => {
 	 * @return {Promise<Object>} Object with verified status and failed plugin details.
 	 */
 	const verifyPluginsBeforeImport = async () => {
-		const requiredPluginsList =
+		const allRequiredPlugins =
 			templateResponse?.[ 'required-plugins' ] || [];
+
+		// Exclude plugins the user explicitly skipped on the
+		// "Required Plugins Missing" screen.
+		// Match on `init` (e.g. "sfwd-lms/sfwd_lms.php") because
+		// third-party plugin objects from PHP have { init, name, link }
+		// but no `slug` property.
+		const skippedInits = new Set(
+			( skippedPlugins || [] ).map( ( p ) => p.init )
+		);
+		const requiredPluginsList = allRequiredPlugins.filter(
+			( p ) => ! skippedInits.has( p.init )
+		);
 
 		if ( requiredPluginsList.length === 0 ) {
 			return { verified: true, missing: [], notActivated: [] };

@@ -182,6 +182,7 @@ export const initialState = {
 	requiredPluginsDone: false,
 	notInstalledList: [],
 	notActivatedList: [],
+	skippedPlugins: [],
 	awaitingPluginCheck: false,
 	resetData: [],
 	importStart: false,
