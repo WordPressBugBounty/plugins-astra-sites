@@ -10,6 +10,10 @@ namespace Gutenberg_Templates\Inc\Classes;
 
 use Gutenberg_Templates\Inc\Traits\Instance;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'Ast_Block_Templates_Notices' ) ) :
 
 	/**
@@ -69,7 +73,9 @@ if ( ! class_exists( 'Ast_Block_Templates_Notices' ) ) :
 		public static function get_filesystem() {
 			global $wp_filesystem;
 
-			require_once ABSPATH . '/wp-admin/includes/file.php';
+			if ( ! function_exists( 'WP_Filesystem' ) ) {
+				require_once ABSPATH . '/wp-admin/includes/file.php';
+			}
 
 			WP_Filesystem();
 

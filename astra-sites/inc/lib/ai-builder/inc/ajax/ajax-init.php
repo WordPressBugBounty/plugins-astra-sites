@@ -73,6 +73,7 @@ class AjaxInit {
 		$controllers = array(
 			'AiBuilder\Inc\Ajax\Importer',
 			'AiBuilder\Inc\Ajax\Plugin',
+			'AiBuilder\Inc\Ajax\Auth',
 		);
 
 		foreach ( $controllers as $controller ) {

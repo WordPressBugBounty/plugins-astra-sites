@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 4.4.52
+Stable tag: 4.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,24 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.5.0 - 01-April-2026
+- New:
+    - AI Builder: Added shuffle colors feature and image selection hint on design and images screens.
+    - AI Builder: Added site goals selection and content tone customization for more personalized AI-generated content.
+    - Finish Setup: Added Connect Domain section for AI-generated sites.
+- Improvement:
+    - AI Builder: ZipWP authentication now opens in a popup window, keeping users on the builder page instead of redirecting away.
+- Fix:
+    - Fixed fatal error on PHP 8.2+ during background import caused by safe_unserialize blocking object instantiation.
+    - Resolved `__PHP_Incomplete_Class` issues after secure unserialize by converting them to arrays.
+    - Design Kit: Resolved click behavior issue on AI dropdown toggle options.
+    - Importer: Preserve JSON unicode escape sequences during WXR import and batch processing to prevent block content corruption.
+    - Importer: Resolved null alt text crash in Spectra image block importer on PHP 8.2+ that caused site generation failures.
+- Security:
+    - Free Images: Improved security for external data requests (better protection when fetching location/IP-related data).
+    - Free Images: Improved data handling security when submitting forms.
+    - Free Images: Improved plugin security to prevent unauthorized access to internal files.
+
 v4.4.52 - 19-March-2026
 - Fix:
     - Fixed import stalling when user skips third-party plugins on the Required Plugins Missing screen.

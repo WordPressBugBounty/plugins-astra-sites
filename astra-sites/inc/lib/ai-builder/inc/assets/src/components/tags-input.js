@@ -156,7 +156,7 @@ const TagsInput = ( {
 
 		if (
 			tags.length > 0 &&
-			tags.every( ( tag ) => tagValues.includes( tag ) )
+			tagValues.every( ( tag ) => tags.includes( tag ) )
 		) {
 			return;
 		}
@@ -181,7 +181,7 @@ const TagsInput = ( {
 			onClick={ handleClickInputContainer }
 			onKeyDown={ ( event ) => {
 				if ( event.key === 'Enter' || event.key === ' ' ) {
-					handleClickInputContainer();
+					handleClickInputContainer( event );
 				}
 			} }
 		>

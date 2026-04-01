@@ -10,6 +10,10 @@ namespace Gutenberg_Templates\Inc\Traits;
 
 use Gutenberg_Templates\Inc\Traits\Instance;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Trait Instance.
  */
@@ -55,7 +59,9 @@ class Helper {
 	public function ast_block_templates_get_filesystem() {
 		global $wp_filesystem;
 
-		require_once ABSPATH . '/wp-admin/includes/file.php';
+		if ( ! function_exists( 'WP_Filesystem' ) ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+		}
 
 		WP_Filesystem();
 
@@ -344,10 +350,12 @@ class Helper {
 	 */
 	public function create_single_file( $file ) {
 		if ( wp_mkdir_p( $file['file_base'] ) && ! file_exists( trailingslashit( $file['file_base'] ) . $file['file_name'] ) ) {
-			$file_handle = @fopen( trailingslashit( $file['file_base'] ) . $file['file_name'], 'w' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_read_fopen
-			if ( $file_handle ) {
-				fwrite( $file_handle, $file['file_content'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fwrite, WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fwrite
-				fclose( $file_handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+			global $wp_filesystem;
+			if ( ! function_exists( 'WP_Filesystem' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+			WP_Filesystem();
+			if ( $wp_filesystem && $wp_filesystem->put_contents( trailingslashit( $file['file_base'] ) . $file['file_name'], $file['file_content'], FS_CHMOD_FILE ) ) {
 				self::ast_block_templates_log( 'File: ' . $file['file_name'] . ' Created Successfully!' );
 			}
 		}
@@ -375,7 +383,12 @@ class Helper {
 			$this->create_single_file( $file_data );
 		}
 
-		if ( file_exists( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name ) && file_put_contents( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name, wp_json_encode( $file_content ) ) !== false ) { //phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
+		global $wp_filesystem;
+		if ( ! function_exists( 'WP_Filesystem' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+		WP_Filesystem();
+		if ( file_exists( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name ) && $wp_filesystem && $wp_filesystem->put_contents( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name, wp_json_encode( $file_content ), FS_CHMOD_FILE ) ) {
 			self::ast_block_templates_log( 'File: ' . $file_name . ' Updated Successfully!' );
 		} else {
 			self::ast_block_templates_log( 'File: ' . $file_name . ' Not Updated!' );

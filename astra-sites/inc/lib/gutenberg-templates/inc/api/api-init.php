@@ -10,6 +10,10 @@ namespace Gutenberg_Templates\Inc\Api;
 
 use Gutenberg_Templates\Inc\Traits\Instance;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Api_Base
  *

@@ -88,7 +88,7 @@ class Nps_Survey {
 		$show_on_screen = ! empty( $vars['show_on_screens'] ) && is_array( $vars['show_on_screens'] ) ? $vars['show_on_screens'] : [ 'dashboard' ];
 
 		if ( ! function_exists( 'get_current_screen' ) ) {
-			require_once ABSPATH . '/wp-admin/includes/screen.php';
+			return;
 		}
 		$current_screen = get_current_screen();
 
@@ -181,7 +181,7 @@ class Nps_Survey {
 		// Add localize JS.
 		wp_localize_script(
 			'nps-survey-script',
-			'npsSurvey',
+			'nps_survey_data',
 			$data
 		);
 
@@ -329,7 +329,7 @@ class Nps_Survey {
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new \WP_Error(
-				'gt_rest_cannot_access',
+				'nps_survey_rest_cannot_access',
 				__( 'Sorry, you are not allowed to do that.', 'astra-sites' ),
 				array( 'status' => rest_authorization_required_code() )
 			);

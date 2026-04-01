@@ -6,6 +6,7 @@ import {
 	MagnifyingGlassIcon,
 	SparklesIcon,
 	XMarkIcon,
+	InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 
 import apiFetch from '@wordpress/api-fetch';
@@ -213,6 +214,8 @@ const Images = () => {
 			businessContact,
 			templateList,
 			siteLanguage,
+			userKeywords,
+			siteTone,
 		},
 		updateImages,
 		loadingNextStep,
@@ -679,6 +682,8 @@ const Images = () => {
 				business_phone: businessContact?.phone || '',
 				business_email: businessContact?.email || '',
 				social_profiles: businessContact?.socialMedia || [],
+				user_keywords: userKeywords || [],
+				site_tone: siteTone || '',
 			},
 		} )
 			.then( () => {} )
@@ -898,7 +903,7 @@ const Images = () => {
 						</div>
 					</div>
 				</form>
-				<div className=" rounded-t-lg py-4 !mt-0">
+				<div className=" rounded-t-lg pt-4 !mt-0">
 					<div className="flex sm:flex-row flex-col items-start sm:items-center justify-between">
 						<div className="flex items-center gap-1 text-sm font-normal leading-[21px] sm:mb-0 mb-5 w-full h-[67px]">
 							{ /* Tabs */ }
@@ -1027,6 +1032,13 @@ const Images = () => {
 						) }
 					</div>
 				</div>
+				<p className="text-start text-zip-body-text text-sm px-1 pb-2 items-center flex !mt-0">
+					<InformationCircleIcon className="w-4 h-4 inline-block mr-1 mb-0.5 shrink-0" />
+					{ __(
+						'Select 15 to 18 images for best results.',
+						'ai-builder'
+					) }
+				</p>
 			</div>
 			<div
 				className="rounded-b-lg py-4 flex flex-col flex-auto relative px-5 md:px-10 lg:px-14 xl:px-15"

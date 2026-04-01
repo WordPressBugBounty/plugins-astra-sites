@@ -21,6 +21,10 @@ export const defaultOnboardingAIState = {
 		businessType: aiBuilderVars?.default_business_type,
 		siteLanguage: aiBuilderVars?.default_website_language,
 		businessName: '',
+		siteGoals: [],
+		siteGoalsOther: '',
+		siteTone: 'balanced',
+		userKeywords: [],
 		businessDetails: '',
 		keywords: [],
 		selectedImages: [],
@@ -121,6 +125,10 @@ updatedInitialValue = {
 		siteLanguage:
 			aiStepValues?.language || aiBuilderVars?.default_website_language,
 		businessName: aiStepValues?.business_name || '',
+		siteGoals: aiStepValues?.site_goals || [],
+		siteGoalsOther: aiStepValues?.site_goals_other || '',
+		siteTone: aiStepValues?.site_tone || 'balanced',
+		userKeywords: aiStepValues?.user_keywords || [],
 		businessDetails: aiStepValues?.business_description || '',
 		keywords: aiStepValues?.image_keyword || [],
 		selectedImages: !! selectedImages?.length
@@ -251,6 +259,31 @@ const reducer = ( state = initialState, action ) => {
 				stepData: {
 					...state.stepData,
 					businessName: action.payload,
+				},
+			};
+		case actionTypes.SET_SITE_GOALS_AI_STEP:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					siteGoals: action.payload.siteGoals,
+					siteGoalsOther: action.payload.siteGoalsOther,
+				},
+			};
+		case actionTypes.SET_SITE_TONE_AI_STEP:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					siteTone: action.payload,
+				},
+			};
+		case actionTypes.SET_USER_KEYWORDS_AI_STEP:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					userKeywords: action.payload,
 				},
 			};
 		case actionTypes.SET_WEBSITE_DETAILS_AI_STEP:

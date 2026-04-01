@@ -257,21 +257,23 @@ class ST_Importer_Helper {
 	}
 
 	/**
-	 * Recursively convert __PHP_Incomplete_Class instances to arrays.
+	 * Recursively nullify __PHP_Incomplete_Class instances.
 	 *
 	 * When unserialize() is called with allowed_classes => false, any serialized
-	 * objects become __PHP_Incomplete_Class. These break map_deep() and similar
-	 * WordPress internals, so we convert them to plain arrays.
+	 * objects become __PHP_Incomplete_Class. These cannot have methods called on
+	 * them and break map_deep() and similar WordPress internals.
+	 *
+	 * Converting to empty string ensures that existing guards like
+	 * method_exists() and is_object() properly return false, matching the
+	 * behavior of maybe_unserialize() when a class is not available.
 	 *
 	 * @since 1.1.28
 	 * @param mixed $data Data to convert.
-	 * @return mixed Converted data with no incomplete class instances.
+	 * @return mixed Data with __PHP_Incomplete_Class instances replaced by empty string.
 	 */
 	private static function convert_incomplete_class( $data ) {
 		if ( $data instanceof \__PHP_Incomplete_Class ) {
-			$array = (array) $data;
-			unset( $array['__PHP_Incomplete_Class_Name'] );
-			return array_map( array( __CLASS__, 'convert_incomplete_class' ), $array );
+			return '';
 		}
 
 		if ( is_array( $data ) ) {
@@ -325,5 +327,34 @@ class ST_Importer_Helper {
 		}
 
 		return $details;
+	}
+
+	/**
+	 * Preserve JSON unicode escape sequences in block content before saving.
+	 *
+	 * WordPress's wp_insert_post() and wp_update_post() run wp_unslash() internally,
+	 * which calls stripslashes(). This corrupts \uXXXX sequences (e.g. \u0022, \u003e)
+	 * used in Gutenberg block comment JSON by stripping the backslash.
+	 *
+	 * This method double-escapes \uXXXX to \\uXXXX so that after stripslashes()
+	 * runs, the original \uXXXX is restored.
+	 *
+	 * @since 1.1.28
+	 *
+	 * @param string $content Post content containing block markup.
+	 * @return string Content with \uXXXX sequences preserved for safe saving.
+	 */
+	public static function preserve_block_unicode_escapes( $content ) {
+		if ( ! $content ) {
+			return $content;
+		}
+		$result = preg_replace_callback(
+			'/\\\\u([0-9a-fA-F]{4})/',
+			function ( $matches ) {
+				return '\\\\u' . $matches[1];
+			},
+			$content
+		);
+		return is_string( $result ) ? $result : $content;
 	}
 }

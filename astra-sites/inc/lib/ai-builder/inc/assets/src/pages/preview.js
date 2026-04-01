@@ -23,7 +23,6 @@ import { classNames } from '../helpers';
 import ColorPalettes from '../components/color-palettes';
 import FontSelector from '../components/font-selector';
 import SiteLogo from '../components/site-logo';
-import AiBuilderExitButton from '../components/ai-builder-exit-button';
 import ResponsiveButtons, {
 	RESPONSIVE_MODES,
 } from '../components/responsive-buttons';
@@ -384,10 +383,6 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 							src={ logoUrlDark }
 							alt={ __( 'Build with AI', 'ai-builder' ) }
 						/>
-						{ /* Exit button */ }
-						<div className="absolute top-3 right-0">
-							<AiBuilderExitButton exitButtonClassName="text-icon-tertiary" />
-						</div>
 					</div>
 					<nav className="flex flex-1 flex-col gap-y-1">
 						<div className="w-full mt-2">

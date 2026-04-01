@@ -1007,6 +1007,9 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 				$remote_url = ! empty( $data['attachment_url'] ) ? $data['attachment_url'] : $data['guid'];
 				$post_id    = $this->process_attachment( $postdata, $meta, $remote_url );
 			} else {
+				// Preserve \uXXXX JSON unicode escapes so they survive stripslashes() inside wp_insert_post().
+				$postdata['post_content'] = ST_Importer_Helper::preserve_block_unicode_escapes( $postdata['post_content'] ?? '' );
+
 				$post_id = wp_insert_post( $postdata, true );
 				do_action( 'wp_import_insert_post', $post_id, $original_id, $postdata, $data );
 			}

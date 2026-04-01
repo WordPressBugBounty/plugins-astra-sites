@@ -981,19 +981,21 @@ if ( class_exists( 'WP_CLI_Command' ) && ! class_exists( 'Astra_Sites_WP_CLI' ) 
 			// 👉 Sort priority before installation.
 			$priority_order = array( 'woocommerce', 'elementor', 'ultimate-addons-for-gutenberg' );
 
-			uksort( $all_plugins, function ( $a, $b ) use ( $priority_order ) {
-				$a_priority = array_search( $a, $priority_order );
-				$b_priority = array_search( $b, $priority_order );
+			uksort(
+				$all_plugins, function ( $a, $b ) use ( $priority_order ) {
+					$a_priority = array_search( $a, $priority_order );
+					$b_priority = array_search( $b, $priority_order );
 
-				if ( false === $a_priority ) {
-					$a_priority = PHP_INT_MAX;
-				}
-				if ( false === $b_priority ) {
-					$b_priority = PHP_INT_MAX;
-				}
+					if ( false === $a_priority ) {
+						$a_priority = PHP_INT_MAX;
+					}
+					if ( false === $b_priority ) {
+						$b_priority = PHP_INT_MAX;
+					}
 
-				return $a_priority - $b_priority;
-			} );
+					return $a_priority - $b_priority;
+				} 
+			);
 
 			foreach ( $all_plugins as $plugin ) {
 				if ( 'notinstalled' === $plugin['status'] ) {

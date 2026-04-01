@@ -2,6 +2,7 @@
 import { __ } from '@wordpress/i18n';
 import GetStarted from '../pages/authorize-account';
 import BusinessDetails from '../pages/business-details';
+import SiteGoals from '../pages/site-goals';
 import DescribeBusiness from '../pages/describe-business';
 import BusinessContact from '../pages/business-contact';
 import Images from '../pages/images';
@@ -38,10 +39,22 @@ const steps = [
 		requiredStates: [ 'businessType', 'businessName' ],
 	},
 	{
+		path: '/goals',
+		component: SiteGoals,
+		layoutConfig: {
+			stepNumber: 2,
+			name: __( 'Goals', 'ai-builder' ),
+			description: __( 'What do you want to achieve', 'ai-builder' ),
+			screen: 'goals',
+			hideCredits: false,
+		},
+		requiredStates: [],
+	},
+	{
 		path: '/description',
 		component: DescribeBusiness,
 		layoutConfig: {
-			stepNumber: 2,
+			stepNumber: 3,
 			name: __( 'Describe', 'ai-builder' ),
 			description: __( 'Some details please', 'ai-builder' ),
 			screen: 'details',
@@ -53,7 +66,7 @@ const steps = [
 		path: '/contact-details',
 		component: BusinessContact,
 		layoutConfig: {
-			stepNumber: 3,
+			stepNumber: 4,
 			name: __( 'Contact', 'ai-builder' ),
 			description: __( 'How can people get in touch', 'ai-builder' ),
 			screen: 'contact-details',
@@ -65,7 +78,7 @@ const steps = [
 		path: '/select-images',
 		component: Images,
 		layoutConfig: {
-			stepNumber: 4,
+			stepNumber: 5,
 			name: __( 'Images', 'ai-builder' ),
 			description: __( 'Select relevant images as needed', 'ai-builder' ),
 			screen: 'images',
@@ -79,7 +92,7 @@ const steps = [
 		path: '/design',
 		component: SelectTemplate,
 		layoutConfig: {
-			stepNumber: 5,
+			stepNumber: 6,
 			name: __( 'Design', 'ai-builder' ),
 			description: __(
 				'Choose a structure for your website',
@@ -99,7 +112,7 @@ const steps = [
 					path: '/features',
 					component: Features,
 					layoutConfig: {
-						stepNumber: 6,
+						stepNumber: 7,
 						name: __( 'Features', 'ai-builder' ),
 						description: __(
 							'Select features as you need',
@@ -118,7 +131,7 @@ const steps = [
 		path: '/building-website',
 		component: ImportAiSite,
 		layoutConfig: {
-			stepNumber: 8,
+			stepNumber: 9,
 			name: __( 'Done', 'ai-builder' ),
 			description: __( 'Your website is ready!', 'ai-builder' ),
 			screen: 'done',

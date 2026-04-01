@@ -130,51 +130,73 @@ class Astra_Sites_ZipWP_Integration {
         }
     }
 
-    /**
-     * Get ZIP Plans.
-	 * 
+	/**
+	 * Make an authenticated GET request to the ZipWP API.
+	 *
+	 * @param string $endpoint Full API endpoint URL.
 	 * @return array<string, mixed>
-     */
-    public function get_zip_plans() {
-        $api_endpoint = Astra_Sites_ZipWP_Api::get_instance()->get_api_domain() . '/plan/current-plan';
-
-		$request_args = array(
-			'headers' => Astra_Sites_ZipWP_Api::get_instance()->get_api_headers(),
-			'timeout' => 100,
-            'sslverify' => false,
+	 * @since 4.0.0
+	 */
+	private function make_api_request( $endpoint ) {
+		$response = wp_safe_remote_get(
+			$endpoint,
+			array(
+				'headers'   => Astra_Sites_ZipWP_Api::get_instance()->get_api_headers(),
+				'timeout'   => 100,
+				'sslverify' => false,
+			)
 		);
-		$response = wp_safe_remote_get( $api_endpoint, $request_args );
 
 		if ( is_wp_error( $response ) ) {
-			// There was an error in the request.
 			return array(
-                'data' => 'Failed ' . $response->get_error_message(),
-                'status'  => false,
-            );
-		} else {
-			$response_code = wp_remote_retrieve_response_code( $response );
-			$response_body = wp_remote_retrieve_body( $response );
-			if ( 200 === $response_code ) {
-				$response_data = json_decode( $response_body, true );
-				if ( $response_data ) {
-                    return array(
-                        'data' => $response_data,
-                        'status'  => true,
-                    );
-				} else {
-					return array(
-                        'data' => $response_data,
-                        'status'  => false,
-                    );
-				}
-			} else {
-				return array(
-                    'data' => 'Failed',
-                    'status'  => false,
-                );
-			}
+				'data'   => 'Failed ' . $response->get_error_message(),
+				'status' => false,
+			);
 		}
-    }
+
+		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return array(
+				'data'   => 'Failed',
+				'status' => false,
+			);
+		}
+
+		$data = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			return array(
+				'data'   => 'Failed: Invalid JSON response',
+				'status' => false,
+			);
+		}
+
+		return array(
+			'data'   => $data ?: array(),
+			'status' => true,
+		);
+	}
+
+	/**
+	 * Get ZIP Plans.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function get_zip_plans() {
+		return $this->make_api_request(
+			Astra_Sites_ZipWP_Api::get_instance()->get_api_domain() . '/plan/current-plan'
+		);
+	}
+
+	/**
+	 * Get ZIP Addons.
+	 *
+	 * @return array<string, mixed>
+	 */
+	public function get_zip_addons() {
+		return $this->make_api_request(
+			Astra_Sites_ZipWP_Api::get_instance()->get_api_domain() . '/user/addons'
+		);
+	}
 }
 
 Astra_Sites_ZipWP_Integration::get_instance();

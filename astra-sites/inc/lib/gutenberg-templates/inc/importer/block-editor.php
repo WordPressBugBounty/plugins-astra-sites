@@ -13,6 +13,10 @@ use Gutenberg_Templates\Inc\Traits\Helper;
 use Gutenberg_Templates\Inc\Importer\Importer_Helper;
 use Gutenberg_Templates\Inc\Importer\Images;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Block Editor Blocks Replacer
  *

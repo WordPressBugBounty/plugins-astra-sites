@@ -9,12 +9,14 @@ import DotsLoader from './dots-loader';
 import { siteLogoDefault } from '../store/reducer';
 import { GemIcon } from '../ui/icons';
 import { useState } from 'react';
+import { getRandomColorPaletteForTemplate } from '../utils/color-palette-utils';
 
 export const ColumnItem = ( {
 	template,
 	position,
 	onIframeLoaded,
 	shouldLoad,
+	shuffleCount = 0,
 } ) => {
 	const { businessName, selectedImages, templateList, businessContact } =
 		useSelect( ( select ) => {
@@ -37,6 +39,9 @@ export const ColumnItem = ( {
 
 	const [ isLoaded, setIsLoaded ] = useState( false );
 	const [ isLoading, setIsLoading ] = useState( false );
+	const [ previewPalette, setPreviewPalette ] = useState( () =>
+		getRandomColorPaletteForTemplate( template )
+	);
 
 	const handleScaling = () => {
 		if ( ! containerRef.current ) {
@@ -64,6 +69,27 @@ export const ColumnItem = ( {
 			window.removeEventListener( 'resize', handleScaling );
 		};
 	}, [] );
+
+	// Regenerate random palette when shuffle is triggered.
+	useEffect( () => {
+		if ( shuffleCount > 0 ) {
+			setPreviewPalette( getRandomColorPaletteForTemplate( template ) );
+		}
+	}, [ shuffleCount ] ); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Send palette to iframe when it changes and iframe is loaded.
+	useEffect( () => {
+		if ( ! isLoaded || ! previewPalette ) {
+			return;
+		}
+		sendPostMessage(
+			{
+				param: 'colorPalette',
+				data: previewPalette,
+			},
+			template.uuid
+		);
+	}, [ previewPalette, isLoaded ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleRemoveLoadingSkeleton = ( uuid ) => {
 		if ( ! loadingSkeleton.current ) {
@@ -210,7 +236,7 @@ export const ColumnItem = ( {
 							setSelectedTemplateIsPremium( template.is_premium );
 							setWebsiteLogo( siteLogoDefault );
 							setWebsiteTypography( null );
-							setWebsiteColorPalette( null );
+							setWebsiteColorPalette( previewPalette );
 							setSiteTitleVisible( true );
 						} }
 						onMouseEnter={ () => {

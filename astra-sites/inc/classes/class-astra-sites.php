@@ -703,7 +703,12 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			);
 			$arguments['PAGE_BUILDER'] = isset( $page_builder_mapping[ $arguments['PAGE_BUILDER'] ] ) ? $page_builder_mapping[ $arguments['PAGE_BUILDER'] ] : '';
 
-			$url = apply_filters( 'astra_sites_subscription_url', $this->api_domain . 'wp-json/starter-templates/v1/subscribe/' );
+			$arguments['email']      = isset( $arguments['EMAIL'] ) ? $arguments['EMAIL'] : '';
+			$arguments['first_name'] = isset( $arguments['FIRSTNAME'] ) ? $arguments['FIRSTNAME'] : '';
+			$arguments['domain']     = site_url();
+			$arguments['source']     = 'astra-sites';
+
+			$url = apply_filters( 'astra_sites_subscription_url', self::get_metrics_api_domain() . 'wp-json/bsf-metrics-server/v1/subscribe' );
 
 			$args = array(
 				'timeout' => 30,

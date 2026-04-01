@@ -348,6 +348,7 @@ if ( ! class_exists( 'Astra_Sites_Astra_Onboarding' ) ) {
 				'email'        => isset( $user_info['email'] ) ? $user_info['email'] : '',
 				'first_name'   => isset( $user_info['firstName'] ) ? $user_info['firstName'] : '',
 				'last_name'    => isset( $user_info['lastName'] ) ? $user_info['lastName'] : '',
+				'domain'       => wp_parse_url( home_url(), PHP_URL_HOST ),
 				'source'       => isset( $user_info['source'] ) ? $user_info['source'] : '',
 				'new_user'     => isset( $user_info['newUser'] ) ? $user_info['newUser'] : '',
 				'benefit_id'   => isset( $user_info['benefitId'] ) ? $user_info['benefitId'] : '',

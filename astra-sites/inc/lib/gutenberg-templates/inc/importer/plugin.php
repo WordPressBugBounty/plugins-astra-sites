@@ -56,7 +56,7 @@ class Plugin {
 		add_action( 'admin_init', array( $this, 'init' ), 999 );
 		add_action( 'admin_init', array( $this, 'add_custom_capabilities' ), 10 );
 
-		if ( ( isset( $_GET['action'] ) && 'edit' === $_GET['action'] ) || ( isset( $_SERVER['PHP_SELF'] ) && 'site-editor.php' === basename( sanitize_text_field( $_SERVER['PHP_SELF'] ) ) ) || ( isset( $_SERVER['REQUEST_URI'] ) && strpos( esc_url_raw( $_SERVER['REQUEST_URI'] ), 'post-new.php' ) !== false ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ( isset( $_GET['action'] ) && 'edit' === $_GET['action'] ) || ( isset( $_SERVER['PHP_SELF'] ) && 'site-editor.php' === basename( sanitize_text_field( wp_unslash( $_SERVER['PHP_SELF'] ) ) ) ) || ( isset( $_SERVER['REQUEST_URI'] ) && strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), 'post-new.php' ) !== false ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			add_filter( 'zip_ai_auth_redirection_flag', '__return_false', 999 );
 		}
 		add_action( 'wp_ajax_ast_block_templates_importer', array( $this, 'template_importer' ) );
@@ -179,7 +179,7 @@ class Plugin {
 		// Add token when user authorized from GT library.
 		if ( isset( $_GET['ast_action'] ) && 'auth' === $_GET['ast_action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			// Get the nonce.
-			$nonce = ( isset( $_GET['nonce'] ) ) ? sanitize_key( $_GET['nonce'] ) : '';
+			$nonce = ( isset( $_GET['nonce'] ) ) ? sanitize_key( wp_unslash( $_GET['nonce'] ) ) : '';
 
 			// If the nonce is not valid, or if there's no token, then abandon ship.
 			if ( false === wp_verify_nonce( $nonce, 'zip_ai_auth_nonce' ) ) {
@@ -191,17 +191,17 @@ class Plugin {
 
 			// Update the auth token if needed.
 			if ( isset( $_GET['credit_token'] ) && is_string( $_GET['credit_token'] ) ) {
-				$spec_ai_settings['auth_token'] = Helper::encrypt( sanitize_text_field( $_GET['credit_token'] ) );
+				$spec_ai_settings['auth_token'] = Helper::encrypt( sanitize_text_field( wp_unslash( $_GET['credit_token'] ) ) );
 			}
 
 			// Update the Zip token if needed.
 			if ( isset( $_GET['token'] ) && is_string( $_GET['token'] ) ) {
-				$spec_ai_settings['zip_token'] = Helper::encrypt( sanitize_text_field( $_GET['token'] ) );
+				$spec_ai_settings['zip_token'] = Helper::encrypt( sanitize_text_field( wp_unslash( $_GET['token'] ) ) );
 			}
 
 			// Update the email if needed.
 			if ( isset( $_GET['email'] ) && is_string( $_GET['email'] ) ) {
-				$spec_ai_settings['email'] = sanitize_email( $_GET['email'] );
+				$spec_ai_settings['email'] = sanitize_email( wp_unslash( $_GET['email'] ) );
 			}
 
 			update_option( 'zip_ai_settings', $spec_ai_settings );
@@ -251,7 +251,7 @@ class Plugin {
 		// Verify Nonce.
 		check_ajax_referer( 'ast-block-templates-ajax-nonce', '_ajax_nonce' );
 		$block_id     = isset( $_REQUEST['id'] ) ? absint( $_REQUEST['id'] ) : '';
-		$block_type   = isset( $_REQUEST['type'] ) ? sanitize_text_field( $_REQUEST['type'] ) : '';
+		$block_type   = isset( $_REQUEST['type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['type'] ) ) : '';
 
 		if ( 'site-pages' === $block_type ) {
 			// Use this for premium pages.
@@ -317,7 +317,7 @@ class Plugin {
 
 		check_ajax_referer( 'ast-block-templates-ajax-nonce', '_ajax_nonce' );
 
-		$notice_type = isset( $_REQUEST['notice_type'] ) ? sanitize_text_field( $_REQUEST['notice_type'] ) : '';
+		$notice_type = isset( $_REQUEST['notice_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['notice_type'] ) ) : '';
 
 		if ( ! empty( $notice_type ) ) {
 
@@ -585,7 +585,8 @@ class Plugin {
 		$ids_mapping = get_option( 'ast_block_templates_wpforms_ids_mapping', array() );
 
 		// Post content.
-		$content = isset( $_REQUEST['content'] ) ? stripslashes( $_REQUEST['content'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$content = isset( $_REQUEST['content'] ) ? wp_unslash( $_REQUEST['content'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Block content contains HTML comments with JSON attributes that wp_kses_post() would mangle.
+		$content = (string) ( is_array( $content ) ? implode( '', $content ) : $content );
 		$category = isset( $_REQUEST['category'] ) ? intval( $_REQUEST['category'] ) : '';
 
 		// Fix invalid escaped single quotes.
@@ -616,8 +617,8 @@ class Plugin {
 			}
 		}
 
-		$style = isset( $_REQUEST['style'] ) ? sanitize_text_field( $_REQUEST['style'] ) : 'style-1';
-		$block_type = isset( $_REQUEST['block_type'] ) ? sanitize_text_field( $_REQUEST['block_type'] ) : 'block';
+		$style = isset( $_REQUEST['style'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['style'] ) ) : 'style-1';
+		$block_type = isset( $_REQUEST['block_type'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['block_type'] ) ) : 'block';
 		$adaptive_mode = $this->get_adaptive_mode();
 
 		$color_palettes = array();
@@ -658,9 +659,11 @@ class Plugin {
 			// Add border radius properties after inheritFromTheme is set to false.
 			if ( $content && is_string( $content ) ) {
 				$border_properties = ',"btnBorderBottomLeftRadius":4,"btnBorderBottomRightRadius":4,"btnBorderTopLeftRadius":4,"btnBorderTopRightRadius":4';
-				$content = preg_replace_callback( '/("inheritFromTheme"\s*:\s*false)/', function( $matches ) use ( $border_properties ) {
-					return $matches[1] . $border_properties;
-				}, $content );
+				$content = preg_replace_callback(
+					'/("inheritFromTheme"\s*:\s*false)/', function( $matches ) use ( $border_properties ) {
+						return $matches[1] . $border_properties;
+					}, $content 
+				);
 			}
 		} else {
 			for ( $i = 0; $i < 9; $i++ ) {
@@ -1050,7 +1053,7 @@ class Plugin {
 
 		wp_clean_plugins_cache();
 
-		$plugin_init = ( isset( $_POST['init'] ) ) ? sanitize_text_field( $_POST['init'] ) : '';
+		$plugin_init = ( isset( $_POST['init'] ) ) ? sanitize_text_field( wp_unslash( $_POST['init'] ) ) : '';
 
 		$activate = activate_plugin( $plugin_init, '', false, true );
 
@@ -1235,7 +1238,7 @@ class Plugin {
 		);
 
 		$credit_request_params = array(
-			'success_url' => isset( $_SERVER['REQUEST_URI'] ) ? urlencode( $this->remove_query_params( network_home_url() . $_SERVER['REQUEST_URI'], $remove_parameters ) . '&ast_action=credits' ) : '', // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			'success_url' => isset( $_SERVER['REQUEST_URI'] ) ? urlencode( $this->remove_query_params( network_home_url() . sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), $remove_parameters ) . '&ast_action=credits' ) : '',
 			'source' => 'spectra',
 		);
 
@@ -1254,7 +1257,7 @@ class Plugin {
 		}
 		$pro_url = apply_filters( 'ast_block_templates_pro_url', 'https://wpastra.com/starter-templates-plans/?utm_source=gutenberg-templates&utm_medium=dashboard&utm_campaign=Starter-Template-Backend' );
 
-		$wp_stylesheet_path = ABSPATH . 'wp-includes/css/dist/block-library/style.min.css';
+		$wp_stylesheet_path = ABSPATH . WPINC . '/css/dist/block-library/style.min.css';
 
 		$wp_stylesheet = '';
 		if ( file_exists( $wp_stylesheet_path ) ) {
@@ -1355,8 +1358,8 @@ class Plugin {
 					'images' => AST_BLOCK_TEMPLATES_URI . 'admin-assets/images/',
 					'spec_ai_auth_url' => $spec_ai_auth_url,
 					'spec_ai_signup_url' => $spec_ai_signup_url,
-					'open_ai_auth' => isset( $_GET['ast_action'] ) && 'auth' === sanitize_text_field( $_GET['ast_action'] ) ? true : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-					'credit_purchased' => isset( $_GET['ast_action'] ) && 'credits' === sanitize_text_field( $_GET['ast_action'] ) ? true : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					'open_ai_auth' => isset( $_GET['ast_action'] ) && 'auth' === sanitize_text_field( wp_unslash( $_GET['ast_action'] ) ) ? true : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					'credit_purchased' => isset( $_GET['ast_action'] ) && 'credits' === sanitize_text_field( wp_unslash( $_GET['ast_action'] ) ) ? true : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					'show_pages_onboarding' => get_option( 'ast-show-pages-onboarding', 'yes' ) === 'yes',
 					'flat_rates' => array(
 						'patterns_library' => 5000,
@@ -1534,7 +1537,7 @@ class Plugin {
 		$default_palette_color = self::$color_palette;
 		// Checking the nonce already.
 		if ( isset( $_REQUEST['adaptive_mode'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$adaptive_mode = 'true' === sanitize_text_field( $_REQUEST['adaptive_mode'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$adaptive_mode = 'true' === sanitize_text_field( wp_unslash( $_REQUEST['adaptive_mode'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		} else {
 			$settings = get_option( 'ast_block_templates_ai_settings', array() );
 			$adaptive_mode = isset( $settings['adaptive_mode'] ) ? $settings['adaptive_mode'] : true;
@@ -1603,7 +1606,7 @@ class Plugin {
 	public function get_adaptive_mode() {
 		// Checking the nonce already.
 		if ( isset( $_REQUEST['adaptive_mode'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$adaptive_mode = 'true' === sanitize_text_field( $_REQUEST['adaptive_mode'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$adaptive_mode = 'true' === sanitize_text_field( wp_unslash( $_REQUEST['adaptive_mode'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		} else {
 			$settings = get_option( 'ast_block_templates_ai_settings', array() );
 			$adaptive_mode = isset( $settings['adaptive_mode'] ) ? $settings['adaptive_mode'] : true;
@@ -1987,7 +1990,9 @@ class Plugin {
 	public function download_file( $file = '', $overrides = array(), $timeout_seconds = 300 ) {
 
 		// Gives us access to the download_url() and wp_handle_sideload() functions.
-		require_once ABSPATH . 'wp-admin/includes/file.php';
+		if ( ! function_exists( 'download_url' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
 
 		// Download file to temp dir.
 		$temp_file = download_url( $file, $timeout_seconds );
@@ -2141,7 +2146,7 @@ class Plugin {
 	 */
 	public function save_auto_open_setting() {
 		// Verify nonce.
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'ast-block-templates-ajax-nonce' ) ) {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ast-block-templates-ajax-nonce' ) ) {
 			wp_die( 'Security check failed' );
 		}
 
@@ -2151,7 +2156,7 @@ class Plugin {
 		}
 
 		// Get and validate the value from POST.
-		$raw       = isset( $_POST['auto_open'] ) ? sanitize_text_field( $_POST['auto_open'] ) : null;
+		$raw       = isset( $_POST['auto_open'] ) ? sanitize_text_field( wp_unslash( $_POST['auto_open'] ) ) : null;
 		$auto_open = filter_var(
 			$raw,
 			FILTER_VALIDATE_BOOLEAN,

@@ -36,7 +36,7 @@ if ( class_exists( 'WP_Background_Process' ) ) :
 		 */
 		protected function task( $process ) {
 
-			if ( method_exists( $process, 'import' ) ) {
+			if ( is_object( $process ) && method_exists( $process, 'import' ) ) {
 				$process->import();
 			}
 

@@ -11,6 +11,57 @@ const {
 	supportedPageBuilders = [],
 } = aiBuilderVars;
 
+/**
+ * Get the list of supported page builders for the select template page.
+ * Shared by SelectTemplatePageBuilderDropdown and the design page pill filters.
+ *
+ * @return {Array} List of builder objects with id, title, and image.
+ */
+export const getBuildersList = () => {
+	const buildersList = [
+		{
+			id: 'spectra',
+			title: __( 'Block Editor', 'ai-builder' ),
+			image: `${ imageDir }block-editor.svg`,
+		},
+	];
+
+	if (
+		! isElementorDisabled &&
+		supportedPageBuilders?.length &&
+		supportedPageBuilders.includes( 'elementor' )
+	) {
+		buildersList.push( {
+			id: 'elementor',
+			title: __( 'Elementor', 'ai-builder' ),
+			image: `${ imageDir }elementor.svg`,
+		} );
+	}
+
+	// Filter and order by supported page builders.
+	if ( supportedPageBuilders?.length ) {
+		// Map 'spectra' to 'block-editor' for comparison with supportedPageBuilders.
+		const mapBuilderId = ( id ) =>
+			id === 'spectra' ? 'block-editor' : id;
+
+		buildersList.splice(
+			0,
+			buildersList.length,
+			...buildersList
+				.filter( ( builder ) =>
+					supportedPageBuilders.includes( mapBuilderId( builder.id ) )
+				)
+				.sort(
+					( a, b ) =>
+						supportedPageBuilders.indexOf( mapBuilderId( a.id ) ) -
+						supportedPageBuilders.indexOf( mapBuilderId( b.id ) )
+				)
+		);
+	}
+
+	return buildersList;
+};
+
 const PageBuilderDropdown = () => {
 	const buildersList = [
 		{
@@ -100,46 +151,7 @@ export const SelectTemplatePageBuilderDropdown = ( {
 	selectedBuilder,
 	onChange,
 } ) => {
-	const buildersList = [
-		{
-			id: 'spectra',
-			title: __( 'Block Editor', 'ai-builder' ),
-			image: `${ imageDir }block-editor.svg`,
-		},
-	];
-
-	if (
-		! isElementorDisabled &&
-		supportedPageBuilders?.length &&
-		supportedPageBuilders.includes( 'elementor' )
-	) {
-		buildersList.push( {
-			id: 'elementor',
-			title: __( 'Elementor', 'ai-builder' ),
-			image: `${ imageDir }elementor.svg`,
-		} );
-	}
-
-	// Filter and order by supported page builders.
-	if ( supportedPageBuilders?.length ) {
-		// Map 'spectra' to 'block-editor' for comparison with supportedPageBuilders.
-		const mapBuilderId = ( id ) =>
-			id === 'spectra' ? 'block-editor' : id;
-
-		buildersList.splice(
-			0,
-			buildersList.length,
-			...buildersList
-				.filter( ( builder ) =>
-					supportedPageBuilders.includes( mapBuilderId( builder.id ) )
-				)
-				.sort(
-					( a, b ) =>
-						supportedPageBuilders.indexOf( mapBuilderId( a.id ) ) -
-						supportedPageBuilders.indexOf( mapBuilderId( b.id ) )
-				)
-		);
-	}
+	const buildersList = getBuildersList();
 
 	return (
 		<>

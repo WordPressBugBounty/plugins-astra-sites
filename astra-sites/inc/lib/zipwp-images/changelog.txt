@@ -1,3 +1,22 @@
+v1.0.26 - 25-March-2026
+- Security: Replaced wp_remote_get() with wp_safe_remote_get() for external HTTP requests (ipify, geolocation API).
+
+v1.0.25 - 24-March-2026
+- Fix: Added `function_exists()` guards around core file includes for WordPress.org compliance.
+
+v1.0.24 - 24-March-2026
+- Improvement: Updated build process to add ABSPATH guards to generated .asset.php files.
+- Improvement: Added README.md documenting external service usage (ipinfo.io, ipify, ipwhois, ipapi, api.zipwp.com).
+- Fix: Removed deprecated `load_plugin_textdomain()` call — WordPress auto-loads translations since 4.6.
+- Security: Added `wp_unslash()` before sanitization on `$_POST` superglobal accesses.
+
+v1.0.23 - 23-March-2026
+- Fix: Replaced `unlink()` with `wp_delete_file()` for WordPress coding standards compliance.
+
+v1.0.22 - 20-March-2026
+- Fix: Replaced custom translation loading with `load_plugin_textdomain()` for proper WordPress.org translation support.
+- Security: Added missing ABSPATH guards to class files to prevent direct file access.
+
 v1.0.21 - 03-March-2026
 - ABSPATH guard added to zipwp-images.php — prevents direct file access by exiting early if ABSPATH is not defined.
 

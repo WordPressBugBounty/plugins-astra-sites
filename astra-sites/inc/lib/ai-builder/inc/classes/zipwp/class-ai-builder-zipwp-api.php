@@ -1159,6 +1159,8 @@ class Ai_Builder_ZipWP_Api {
 			'business_category_name' => isset( $request['business_category'] ) ? sanitize_text_field( $request['business_category'] ) : '',
 			'image_keyword'          => isset( $request['keywords'] ) ? $request['keywords'] : [],
 			'images'                 => isset( $request['images'] ) ? $request['images'] : [],
+			'keywords'               => isset( $request['user_keywords'] ) ? $request['user_keywords'] : [],
+			'tone'                   => isset( $request['site_tone'] ) ? $request['site_tone'] : '',
 			'social_profiles'        => isset( $request['social_profiles'] ) ? $request['social_profiles'] : [],
 			'language'               => isset( $request['site_language'] ) ? sanitize_text_field( $request['site_language'] ) : 'en',
 			'templates'              => get_option( 'zipwp_selection_templates', array() ),
@@ -1244,6 +1246,8 @@ class Ai_Builder_ZipWP_Api {
 			'business_desc'     => isset( $request['business_description'] ) ? sanitize_text_field( $request['business_description'] ) : '',
 			'business_category' => isset( $request['category'] ) ? sanitize_text_field( $request['category'] ) : '',
 			'language'          => isset( $request['language'] ) ? sanitize_text_field( $request['language'] ) : 'en',
+			'site_goals'        => isset( $request['site_goals'] ) ? $request['site_goals'] : [],
+			'site_goals_other'  => isset( $request['site_goals_other'] ) ? $request['site_goals_other'] : '',
 		);
 
 		$body = wp_json_encode( $post_data );

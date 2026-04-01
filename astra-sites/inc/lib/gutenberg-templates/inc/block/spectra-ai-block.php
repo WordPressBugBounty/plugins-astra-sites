@@ -7,6 +7,10 @@
 
 namespace Gutenberg_Templates\Inc\Block;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Spectra_AI_Block
  *

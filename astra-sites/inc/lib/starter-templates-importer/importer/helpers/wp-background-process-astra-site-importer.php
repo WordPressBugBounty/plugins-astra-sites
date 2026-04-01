@@ -40,6 +40,12 @@ if ( class_exists( 'WP_Background_Process' ) ) :
 			$process = $object['instance'];
 			$method  = $object['method'];
 
+			// Bail early if the instance was not unserialized as a valid object.
+			// This happens when safe_unserialize() blocks class instantiation.
+			if ( ! is_object( $process ) ) {
+				return false;
+			}
+
 			if ( 'import_page_builders' === $method ) {
 				astra_sites_error_log( '-------- Importing Page Builders --------' );
 				update_site_option( 'astra-sites-batch-status-string', 'Importing Page Builders' );

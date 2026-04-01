@@ -11,6 +11,7 @@ namespace STImporter\Importer\Batch;
 use STImporter\Importer\Batch\ST_Batch_Processing;
 use STImporter\Importer\ST_Importer_File_System;
 use STImporter\Importer\Helpers\ST_Image_Importer;
+use STImporter\Importer\ST_Importer_Helper;
 use STImporter\Importer\ST_Importer_Log;
 
 if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
@@ -258,6 +259,9 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 				)
 			);
 
+			// Preserve \uXXXX JSON unicode escapes so they survive stripslashes() inside wp_update_post().
+			$content = ST_Importer_Helper::preserve_block_unicode_escapes( $content );
+
 			wp_update_post(
 				array(
 					'ID'           => $post_id,
@@ -283,6 +287,9 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 			);
 
 			// Update content.
+			// Preserve \uXXXX JSON unicode escapes so they survive stripslashes() inside wp_update_post().
+			$content = ST_Importer_Helper::preserve_block_unicode_escapes( $content );
+
 			wp_update_post(
 				array(
 					'ID'           => $post_id,

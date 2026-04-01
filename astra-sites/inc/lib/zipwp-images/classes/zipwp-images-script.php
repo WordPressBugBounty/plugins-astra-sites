@@ -8,6 +8,10 @@
 
 namespace ZipWP_Images\Classes;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Ai_Builder
  */
@@ -166,7 +170,7 @@ class Zipwp_Images_Script {
 	 */
 	public static function get_server_country_code( $provider = 'ipwhois', $token = '' ) {
 		// Step 1: Get server's public IP.
-		$response = wp_remote_get( 'https://api.ipify.org' );
+		$response = wp_safe_remote_get( 'https://api.ipify.org' );
 		if ( is_wp_error( $response ) ) {
 			return 'unknown';
 		}
@@ -201,7 +205,7 @@ class Zipwp_Images_Script {
 		}
 
 		// Step 3: Make request.
-		$response = wp_remote_get( $url );
+		$response = wp_safe_remote_get( $url );
 		if ( is_wp_error( $response ) ) {
 			return 'unknown';
 		}

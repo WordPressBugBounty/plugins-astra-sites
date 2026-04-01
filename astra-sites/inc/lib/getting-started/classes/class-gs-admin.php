@@ -184,6 +184,16 @@ class GS_Admin {
 
 		$content = $this->getting_started_content();
 
+		$zip_plans  = array();
+		$zip_addons = array();
+		if ( class_exists( 'Astra_Sites_ZipWP_Integration' ) ) {
+			$instance   = \Astra_Sites_ZipWP_Integration::get_instance();
+			$plans      = $instance->get_zip_plans();
+			$zip_plans  = ( $plans && isset( $plans['data'] ) ) ? $plans['data'] : array();
+			$addons     = $instance->get_zip_addons();
+			$zip_addons = ( $addons && isset( $addons['data'] ) ) ? $addons['data'] : array();
+		}
+
 		$data = apply_filters(
 			'getting_started_vars',
 			array(
@@ -200,6 +210,9 @@ class GS_Admin {
 				'congratulationsTitle'   => sanitize_text_field( $content['congratulations_title'] ),
 				'congratulationsContent' => sanitize_text_field( $content['congratulations_content'] ),
 				'adminDashboardURL'      => admin_url(),
+				'zip_plans'              => $zip_plans,
+				'zip_addons'             => $zip_addons,
+				'importTemplateType'     => get_option( 'astra_sites_current_import_template_type', '' ),
 			)
 		);
 

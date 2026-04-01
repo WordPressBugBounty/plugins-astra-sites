@@ -158,7 +158,7 @@ class Sidebar_Configurations {
 		if ( ! empty( $last_message_tone ) ) {
 			$current_options['last_used']['changeTone'] = [
 				'value' => $last_message_tone,
-				'label' => __( ucfirst( $last_message_tone ), 'astra-sites' ), //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+				'label' => self::get_tone_label( $last_message_tone ),
 			];
 		}
 
@@ -750,7 +750,34 @@ class Sidebar_Configurations {
 	}
 
 	/**
-	 * A small private function to take in any given content, and return a formatted array for OpenAI as a system message.
+	 * Get a translatable label for a message tone value.
+	 *
+	 * @since 2.0.9
+	 *
+	 * @param string $tone The tone key (e.g. 'formal', 'casual').
+	 * @return string Translated tone label, or escaped ucfirst fallback.
+	 */
+	private static function get_tone_label( $tone ) {
+		$labels = array(
+			'formal'       => __( 'Formal', 'astra-sites' ),
+			'casual'       => __( 'Casual', 'astra-sites' ),
+			'friendly'     => __( 'Friendly', 'astra-sites' ),
+			'informative'  => __( 'Informative', 'astra-sites' ),
+			'professional' => __( 'Professional', 'astra-sites' ),
+			'playful'      => __( 'Playful', 'astra-sites' ),
+			'serious'      => __( 'Serious', 'astra-sites' ),
+			'humorous'     => __( 'Humorous', 'astra-sites' ),
+			'polite'       => __( 'Polite', 'astra-sites' ),
+			'emotional'    => __( 'Emotional', 'astra-sites' ),
+		);
+
+		// Safety net for legacy or unknown tone values (e.g. stale DB entries from older plugin versions).
+		// Not translatable by design — add new tones to $labels above instead.
+		return isset( $labels[ $tone ] ) ? $labels[ $tone ] : esc_html( ucfirst( $tone ) );
+	}
+
+	/**
+	 * Format content as a system role message for OpenAI.
 	 *
 	 * @param string $content The content to be put as the message.
 	 * @param string $role    The role of the message, as per OpenAI standards.

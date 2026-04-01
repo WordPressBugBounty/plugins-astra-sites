@@ -168,7 +168,7 @@ const Features = ( {
 	const { setSiteFeatures, storeSiteFeatures } = useDispatch( STORE_KEY );
 	const { setSignupLoginModal } = useDispatch( STORE_KEY );
 
-	const authenticated = aiBuilderVars?.zip_token_exists;
+	const isAuthenticated = () => !! aiBuilderVars?.zip_token_exists;
 
 	const { siteFeatures, loadingNextStep } = useSelect( ( select ) => {
 		const { getSiteFeatures, getLoadingNextStep } = select( STORE_KEY );
@@ -351,13 +351,16 @@ const Features = ( {
 	};
 
 	const handleClickNext = async ( { skipFeature = false } ) => {
-		if ( ! authenticated ) {
+		if ( ! isAuthenticated() ) {
 			setSignupLoginModal( {
 				open: true,
 				type: 'register',
 				ask: 'register',
 				shouldResume: true,
 				isPremiumTemplate: selectedTemplateIsPremium,
+				onAuthSuccess: () => {
+					handleClickNext( { skipFeature } );
+				},
 			} );
 			return;
 		}

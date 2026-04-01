@@ -1,3 +1,15 @@
+v.2.4.23 - 24-March-2026
+- Improvement: Updated build process to add ABSPATH guards to generated .asset.php files.
+- Improvement: Added README.md documenting external service usage (support.brainstormforce.com, ipinfo.io, and others).
+- Fix: Removed deprecated `load_plugin_textdomain()` call — WordPress auto-loads translations since 4.6.
+- Fix: Fixed broken `$_POST['block_type']` reference in ai-content.php.
+- Security: Added `wp_unslash()` before sanitization on all `$_GET`/`$_POST`/`$_REQUEST` superglobal accesses.
+- Security: Updated BSF API URL from http:// to https:// in license.php.
+- Fix: Added `function_exists()` guards around core file includes for WordPress.org compliance.
+
+v.2.4.22 - 23-March-2026
+Fix: WordPress.org plugin compliance improvements including ABSPATH guards, input sanitization, WP_Filesystem usage, and textdomain fixes.
+
 v.2.4.21 - 02-March-2026
 Improvement: Added `ast_block_templates_after_block_import` action hook fired after a block is imported.
 Improvement: Added `ast_block_templates_after_kit_import` action hook fired after a template kit is imported.

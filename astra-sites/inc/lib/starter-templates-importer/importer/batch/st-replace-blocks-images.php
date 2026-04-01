@@ -127,10 +127,14 @@ if ( ! class_exists( 'ST_Replace_Blocks_Images' ) ) :
 						ST_Importer_Log::add( 'Added reusable block to tracking list: ' . $reusable_block_id );
 
 						// Update content.
+						$reusable_content = $this->parse_replace_images( $reusable_block );
+						// Preserve \uXXXX JSON unicode escapes so they survive stripslashes() inside wp_update_post().
+						$reusable_content = ST_Importer_Helper::preserve_block_unicode_escapes( $reusable_content );
+
 						$update_result = wp_update_post(
 							array(
 								'ID'           => $reusable_block->ID,
-								'post_content' => $this->parse_replace_images( $reusable_block ),
+								'post_content' => $reusable_content,
 							)
 						);
 
@@ -571,8 +575,12 @@ if ( ! class_exists( 'ST_Replace_Blocks_Images' ) ) :
 				ST_Importer_Log::add( 'Updated alt text to: ' . $alt_text );
 			}
 
-			if ( isset( $block['alt'] ) ) {
-				$block['innerHTML'] = str_replace( $block['alt'], $attachment['alt'], $block['innerHTML'] );
+			if ( ! empty( $block['attrs']['alt'] ) && ! empty( $attachment['alt'] ) ) {
+				$block['innerHTML'] = str_replace(
+					'alt="' . esc_attr( $block['attrs']['alt'] ) . '"',
+					'alt="' . esc_attr( $attachment['alt'] ) . '"',
+					$block['innerHTML']
+				);
 			}
 
 			$tablet_size_slug = ! empty( $block['attrs']['sizeSlugTablet'] ) ? $block['attrs']['sizeSlugTablet'] : '';
@@ -631,7 +639,7 @@ if ( ! class_exists( 'ST_Replace_Blocks_Images' ) ) :
 
 			$block['attrs']['url'] = $attachment['url'];
 			$block['attrs']['id']  = $attachment['id'];
-			$block['attrs']['alt'] = $attachment['alt'];
+			$block['attrs']['alt'] = ! empty( $attachment['alt'] ) ? $attachment['alt'] : '';
 
 			ST_Replace_Images::get_instance()->increment_image_index();
 

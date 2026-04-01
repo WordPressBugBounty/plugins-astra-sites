@@ -8,6 +8,8 @@
 
 namespace STImporter\Importer\Batch;
 
+use STImporter\Importer\ST_Importer_Helper;
+
 if ( class_exists( 'ST_Batch_SureCart_Blocks' ) ) {
 	return;
 }
@@ -144,6 +146,9 @@ class ST_Batch_SureCart_Blocks {
 			// Update post content if changes were made.
 			if ( $content_updated ) {
 				$new_content = serialize_blocks( $blocks );
+				// Preserve \uXXXX JSON unicode escapes so they survive stripslashes() inside wp_update_post().
+				$new_content = ST_Importer_Helper::preserve_block_unicode_escapes( $new_content );
+
 				wp_update_post(
 					array(
 						'ID'           => $post->ID,

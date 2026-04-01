@@ -1,3 +1,9 @@
+v1.1.28 - 31-March-2026
+- Fix: Preserve JSON unicode escape sequences during WXR import and batch processing to prevent block content corruption.
+- Fix: Resolved null alt text crash in Spectra image block importer on PHP 8.2+ that caused site generation failures.
+- Fix: Resolved `__PHP_Incomplete_Class` issues after secure unserialize by converting them to arrays.
+- Fix: Fixed fatal error on PHP 8.2+ during background import caused by safe_unserialize blocking object instantiation.
+
 v1.1.27 - 18-March-2026
 - Security: Strengthen security and harden against potential vulnerabilities.
 

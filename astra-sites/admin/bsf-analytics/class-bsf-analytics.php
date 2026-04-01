@@ -380,6 +380,7 @@ if ( ! class_exists( 'BSF_Analytics' ) ) {
 		private function includes() {
 			require_once __DIR__ . '/classes/class-bsf-analytics-helper.php';
 			require_once __DIR__ . '/class-bsf-analytics-stats.php';
+			require_once __DIR__ . '/class-bsf-analytics-events.php';
 
 			// Loads all the modules.
 			require_once __DIR__ . '/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php';

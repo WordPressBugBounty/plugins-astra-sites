@@ -8,7 +8,6 @@ import { ChartColorfulIcon } from '../ui/icons';
 import Divider from './divider';
 import Button from './button';
 import { useMemo } from 'react';
-// import { handleClickBillingSite } from '../utils/helpers';
 
 const PlanInformationModal = ( { onOpenChange } ) => {
 	const { setPlanInformationModal } = useDispatch( STORE_KEY );
@@ -20,11 +19,8 @@ const PlanInformationModal = ( { onOpenChange } ) => {
 		};
 	} );
 
-	const { active_plan, plan_data } = aiBuilderVars?.zip_plans;
-
-	if ( typeof plan_data !== 'object' ) {
-		return null;
-	}
+	const { active_plan, plan_data } = aiBuilderVars?.zip_plans ?? {};
+	const isValidPlanData = typeof plan_data === 'object' && plan_data !== null;
 
 	const {
 		limit: {
@@ -33,16 +29,53 @@ const PlanInformationModal = ( { onOpenChange } ) => {
 			blueprint_sites_count,
 			disk_space_size,
 			team_members_count,
-		},
+		} = {},
 		usage: {
 			all_sites_count: all_sites_count_used,
 			ai_sites_count: ai_sites_count_used,
 			blueprint_sites_count: blueprint_sites_count_used,
 			disk_space_size: disk_space_size_used,
 			team_members_count: team_members_count_used,
-		},
-		features: { can_ai_credits_reset, can_ai_site_reset },
-	} = plan_data;
+		} = {},
+		features: { can_ai_credits_reset, can_ai_site_reset } = {},
+	} = isValidPlanData ? plan_data : { limit: {}, usage: {}, features: {} };
+
+	const usageTooltipText = useMemo( () => {
+		const getTooltipText = ( resetType ) => {
+			switch ( resetType ) {
+				case 'lifetime':
+					return __( 'This is the total usage quota', 'ai-builder' );
+				case 'monthly':
+					return __(
+						'This usage quota will reset monthly',
+						'ai-builder'
+					);
+				case 'daily':
+					return __(
+						'This usage quota will reset daily',
+						'ai-builder'
+					);
+				default:
+					return sprintf(
+						// translators: Reset Type
+						__( 'This usage quota will reset %s', 'ai-builder' ),
+						resetType
+					);
+			}
+		};
+
+		return {
+			aiCreditsTooltipText: getTooltipText( can_ai_credits_reset ),
+			aiSiteTooltipText: getTooltipText( can_ai_site_reset ),
+		};
+	}, [ can_ai_credits_reset, can_ai_site_reset ] );
+
+	const { aiSiteTooltipText } = usageTooltipText;
+
+	// Early return AFTER all hooks to avoid React hooks rule violation.
+	if ( ! isValidPlanData ) {
+		return null;
+	}
 
 	const handleManageUpgrade = () => {
 		if ( active_plan.name === 'Free' ) {
@@ -55,8 +88,6 @@ const PlanInformationModal = ( { onOpenChange } ) => {
 				`https://billing.zipwp.com/customer-dashboard/?source=${ wpApiSettings?.zipwp_auth?.source }`,
 				'_blank'
 			);
-			// TODO: add api call later when available
-			// handleClickBillingSite( 'dashboard' );
 		}
 	};
 
@@ -100,39 +131,6 @@ const PlanInformationModal = ( { onOpenChange } ) => {
 		window.location.href = authRevokeUrl.toString();
 		setPlanInformationModal( { ...planInformationModal, open: false } );
 	};
-
-	// eslint-disable-next-line
-	const usageTooltipText = useMemo( () => {
-		const getTooltipText = ( resetType ) => {
-			switch ( resetType ) {
-				case 'lifetime':
-					return __( 'This is the total usage quota', 'ai-builder' );
-				case 'monthly':
-					return __(
-						'This usage quota will reset monthly',
-						'ai-builder'
-					);
-				case 'daily':
-					return __(
-						'This usage quota will reset daily',
-						'ai-builder'
-					);
-				default:
-					return sprintf(
-						// translators: Reset Type
-						__( 'This usage quota will reset %s', 'ai-builder' ),
-						resetType
-					);
-			}
-		};
-
-		return {
-			aiCreditsTooltipText: getTooltipText( can_ai_credits_reset ),
-			aiSiteTooltipText: getTooltipText( can_ai_site_reset ),
-		};
-	}, [ can_ai_credits_reset, can_ai_site_reset ] );
-
-	const { aiSiteTooltipText } = usageTooltipText;
 
 	return (
 		<Modal

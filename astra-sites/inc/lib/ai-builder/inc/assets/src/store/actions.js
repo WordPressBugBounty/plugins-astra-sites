@@ -86,6 +86,27 @@ const actions = {
 		};
 	},
 
+	setSiteGoalsAIStep( siteGoals ) {
+		return {
+			type: actionsTypes.SET_SITE_GOALS_AI_STEP,
+			payload: siteGoals,
+		};
+	},
+
+	setSiteToneAIStep( siteTone ) {
+		return {
+			type: actionsTypes.SET_SITE_TONE_AI_STEP,
+			payload: siteTone,
+		};
+	},
+
+	setUserKeywordsAIStep( userKeywords ) {
+		return {
+			type: actionsTypes.SET_USER_KEYWORDS_AI_STEP,
+			payload: userKeywords,
+		};
+	},
+
 	setWebsiteDetailsAIStep( websiteDetails ) {
 		return {
 			type: actionsTypes.SET_WEBSITE_DETAILS_AI_STEP,

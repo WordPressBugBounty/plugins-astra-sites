@@ -12,6 +12,10 @@ use Gutenberg_Templates\Inc\Traits\Instance;
 use Gutenberg_Templates\Inc\Traits\Helper;
 use Gutenberg_Templates\Inc\Importer\Plugin;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Sync Library
  *

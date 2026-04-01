@@ -229,14 +229,19 @@ function astra_sites_is_valid_url( $url = '' ) {
 
 if ( ! function_exists( 'astra_sites_safe_unserialize' ) ) {
 	/**
-	 * Safely unserialize data without allowing PHP object instantiation.
+	 * Recursively nullify __PHP_Incomplete_Class instances.
 	 *
-	 * Prevents object injection (CWE-502) by blocking class instantiation
-	 * during deserialization. Objects are converted to __PHP_Incomplete_Class.
+	 * When unserialize() is called with allowed_classes => false, any serialized
+	 * objects become __PHP_Incomplete_Class. These cannot have methods called on
+	 * them and break map_deep() and similar WordPress internals.
+	 *
+	 * Converting to empty string ensures that existing guards like
+	 * method_exists() and is_object() properly return false, matching the
+	 * behavior of maybe_unserialize() when a class is not available.
 	 *
 	 * @since 1.2.72
-	 * @param mixed $data Data to unserialize.
-	 * @return mixed Unserialized data with no objects, or original data if not serialized.
+	 * @param mixed $data Data to convert.
+	 * @return mixed Data with __PHP_Incomplete_Class instances replaced by empty string.
 	 */
 	function astra_sites_safe_unserialize( $data ) {
 		if ( ! is_string( $data ) || ! is_serialized( $data, true ) ) {
@@ -262,9 +267,7 @@ if ( ! function_exists( 'astra_sites_convert_incomplete_class' ) ) {
 	 */
 	function astra_sites_convert_incomplete_class( $data ) {
 		if ( $data instanceof \__PHP_Incomplete_Class ) {
-			$array = (array) $data;
-			unset( $array['__PHP_Incomplete_Class_Name'] );
-			return array_map( 'astra_sites_convert_incomplete_class', $array );
+			return '';
 		}
 
 		if ( is_array( $data ) ) {

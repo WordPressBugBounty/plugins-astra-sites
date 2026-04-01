@@ -578,10 +578,13 @@ class ST_Replace_Images {
 			$new_content = $plugin_instance->parse_replace_images( $post );
 
 			// Update content.
+			// Preserve \uXXXX JSON unicode escapes so they survive stripslashes() inside wp_update_post().
+			$new_content = ST_Importer_Helper::preserve_block_unicode_escapes( $new_content ?? '' );
+
 			wp_update_post(
 				array(
 					'ID'           => $post->ID,
-					'post_content' => $new_content ?? '',
+					'post_content' => $new_content,
 				)
 			);
 

@@ -8,6 +8,10 @@
 
 namespace Gutenberg_Templates\Inc\Api;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * License API Class
  */
@@ -137,7 +141,7 @@ class License extends Api_Base {
 		if ( defined( 'BSF_API_URL' ) ) {
 			$bsf_api_site = BSF_API_URL . $rest_api_endpoint;
 		} else {
-			$bsf_api_site = 'http://support.brainstormforce.com/' . $rest_api_endpoint;
+			$bsf_api_site = 'https://support.brainstormforce.com/' . $rest_api_endpoint;
 
 			if ( false === $prefer_unsecure && wp_http_supports( array( 'ssl' ) ) ) {
 				$bsf_api_site = set_url_scheme( $bsf_api_site, 'https' );

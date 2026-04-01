@@ -89,7 +89,18 @@ const ColorPalettes = () => {
 		if ( ! selectedPalette ) {
 			setDefaultColorPalette( defaultPaletteValues[ 0 ] );
 		}
-	}, [] );
+	}, [ selectedTemplate, selectedPalette ] ); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Sync selected palette to the preview iframe when it changes.
+	useEffect( () => {
+		if ( ! selectedPalette?.slug ) {
+			return;
+		}
+		sendPostMessage( {
+			param: 'colorPalette',
+			data: selectedPalette,
+		} );
+	}, [ selectedPalette?.slug ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const handleReset = () => {
 		const defaultPalette = colorScheme[ 0 ];

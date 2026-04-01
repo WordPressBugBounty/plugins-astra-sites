@@ -11,6 +11,10 @@ namespace Gutenberg_Templates\Inc\Classes;
 use Gutenberg_Templates\Inc\Traits\Helper;
 use Gutenberg_Templates\Inc\Traits\Instance;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * AST Block Templates ZipWP API
  *

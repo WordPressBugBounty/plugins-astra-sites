@@ -208,7 +208,7 @@ class Admin_Configurations {
 		}
 
 		// Get the nonce.
-		$nonce = ( isset( $_GET['nonce'] ) ) ? sanitize_key( $_GET['nonce'] ) : '';
+		$nonce = ( isset( $_GET['nonce'] ) ) ? sanitize_key( wp_unslash( $_GET['nonce'] ) ) : '';
 
 		// If the nonce is not valid, or if there's no token, then abandon ship.
 		if ( false === wp_verify_nonce( $nonce, 'zip_ai_auth_nonce' ) ) {
@@ -216,7 +216,7 @@ class Admin_Configurations {
 		}
 
 		// Redirect to the settings page if the user is trying to revoke the token.
-		if ( isset( $_GET['revoke_zip_ai_authorization_token'] ) && 'definitely' === sanitize_text_field( $_GET['revoke_zip_ai_authorization_token'] ) ) {
+		if ( isset( $_GET['revoke_zip_ai_authorization_token'] ) && 'definitely' === sanitize_text_field( wp_unslash( $_GET['revoke_zip_ai_authorization_token'] ) ) ) {
 
 			// Clear out the Zip AI settings and disconnect the user.
 			Helper::update_admin_settings_option( 'zip_ai_settings', [ 'status' => 'disconnected' ] );
@@ -240,17 +240,17 @@ class Admin_Configurations {
 
 		// Update the auth token if needed.
 		if ( isset( $_GET['credit_token'] ) && is_string( $_GET['credit_token'] ) ) {
-			$db_settings_options['auth_token'] = Utils::encrypt( sanitize_text_field( $_GET['credit_token'] ) );
+			$db_settings_options['auth_token'] = Utils::encrypt( sanitize_text_field( wp_unslash( $_GET['credit_token'] ) ) );
 		}
 
 		// Update the Zip token if needed.
 		if ( isset( $_GET['token'] ) && is_string( $_GET['token'] ) ) {
-			$db_settings_options['zip_token'] = Utils::encrypt( sanitize_text_field( $_GET['token'] ) );
+			$db_settings_options['zip_token'] = Utils::encrypt( sanitize_text_field( wp_unslash( $_GET['token'] ) ) );
 		}
 
 		// Update the email if needed.
 		if ( isset( $_GET['email'] ) && is_string( $_GET['email'] ) ) {
-			$db_settings_options['email'] = sanitize_email( $_GET['email'] );
+			$db_settings_options['email'] = sanitize_email( wp_unslash( $_GET['email'] ) );
 		}
 
 		// Update the Zip AI settings.
@@ -319,7 +319,7 @@ class Admin_Configurations {
 		$is_module_toggled = false;
 
 		// Update the enabled status.
-		if ( 'enabled' === sanitize_text_field( $_POST['enable_zip_chat'] ) ) {
+		if ( 'enabled' === sanitize_text_field( wp_unslash( $_POST['enable_zip_chat'] ) ) ) {
 			$is_module_toggled = Module::enable( 'ai_assistant' );
 		} else {
 			$is_module_toggled = Module::disable( 'ai_assistant' );
