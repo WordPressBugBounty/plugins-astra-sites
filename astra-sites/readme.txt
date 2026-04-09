@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 4.5.0
+Stable tag: 4.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,13 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.5.1 - 09-April-2026
+- Improvement:
+    - Added improvements in the import process.
+    - AI Builder: Upgraded preview browser frame to a realistic Chrome-style design.
+-Fix:
+    - Importer: Prevented double-escaping of unicode sequences in block content during multi-pass import processing. 
+
 v4.5.0 - 01-April-2026
 - New:
     - AI Builder: Added shuffle colors feature and image selection hint on design and images screens.

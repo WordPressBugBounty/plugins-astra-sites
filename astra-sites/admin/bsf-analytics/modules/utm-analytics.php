@@ -60,7 +60,7 @@ if ( ! class_exists( 'BSF_UTM_Analytics' ) ) {
 			'variation-swatches-woo',
 			'woo-cart-abandonment-recovery',
 			'wp-schema-pro',
-			'zipwp',
+			'zipwp'
 		];
 
 		/**

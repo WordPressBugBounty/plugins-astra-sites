@@ -216,6 +216,14 @@ class GS_Api {
 			);
 		}
 
+		/**
+		 * Fires when finish setup action items are served to the user.
+		 *
+		 * @since 1.0.5
+		 * @param array $default_action_items The action items being served.
+		 */
+		do_action( 'getting_started_action_items_served', $default_action_items );
+
 		wp_send_json_success(
 			array(
 				'items'      => $default_action_items,
@@ -383,6 +391,14 @@ class GS_Api {
 		}
 
 		delete_option( GS_Helper::get_setup_wizard_showing_option_name() );
+
+		/**
+		 * Fires after the finish setup wizard is dismissed.
+		 *
+		 * @since 1.0.5
+		 */
+		do_action( 'getting_started_setup_wizard_dismissed' );
+
 		wp_send_json_success(
 			array(
 				'status' => true,

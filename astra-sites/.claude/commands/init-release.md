@@ -39,13 +39,14 @@ Run these steps sequentially, reporting progress after each. If any step fails, 
 1. **Update package.json & package-lock.json** — use `sed` to replace the old version string with the new one
 2. **npm install** — run `npm install --legacy-peer-deps`
 3. **Build React apps** — run `npm run build:onboarding` then `npm run build:preview`
-4. **npm update & audit** — run `npm update` then `npm audit fix` (audit fix may return non-zero, that's usually OK)
-5. **grunt version-bump** — run `npx grunt version-bump --ver=NEW_VERSION`
-6. **grunt rtl** — run `npx grunt rtl`
-7. **Update readme.txt** — use `sed` to update "Tested up to" to the WP version provided by the user, and "Stable tag" to NEW_VERSION
-8. **grunt readme** — run `npx grunt readme` (converts readme.txt to README.md)
-9. **PHPCBF** — run `composer run format` (exit code 1 means files were fixed, that's OK; exit code 2+ is an error)
-10. **PHPCS** — run `composer run lint`
+4. **grunt version-bump** — run `npx grunt version-bump --ver=NEW_VERSION`
+5. **grunt rtl** — run `npx grunt rtl`
+6. **Update readme.txt** — use `sed` to update "Tested up to" to the WP version provided by the user, and "Stable tag" to NEW_VERSION
+7. **grunt readme** — run `npx grunt readme` (converts readme.txt to README.md)
+8. **PHPCBF** — run `composer run format` (exit code 1 means files were fixed, that's OK; exit code 2+ is an error)
+9. **PHPCS** — run `composer run lint`
+10. **PHPStan** — run `composer run phpstan`
+11. **Update stubs** — run `composer run update-stubs`
 
 After all build steps, show a summary of what succeeded and what failed.
 
@@ -67,8 +68,7 @@ If it fails, **[ASK]** the user to resolve and confirm before continuing.
 
 Run these steps sequentially:
 
-1. **Update stubs** — run `composer run update-stubs`
-2. **Build full package** — run `npm run build-package`
+1. **Build full package** — run `npm run build-package`
 3. **Create release zip** — run `npx grunt release`
 
 After packaging, show a summary of what succeeded.
@@ -104,7 +104,7 @@ If user said Yes (create PR too):
 - [ ] Finalize readme.txt
 - [ ] Add doc links in the readme.txt
 - [ ] Check if Gutenberg Blocks/Astra Notices library is updated to latest - Run `composer update`
-- [x] Run to update packages        : `npm update` & `npm audit fix`
+- [x] Run `npm audit fix`
 - [x] Run to produce rtl files : `grunt rtl`
 - [ ] Run to update the Template Library    : `wp astra-sites sync --force`
 - [ ] Run to test the CLI import    : `wp astra-sites import <template id>`

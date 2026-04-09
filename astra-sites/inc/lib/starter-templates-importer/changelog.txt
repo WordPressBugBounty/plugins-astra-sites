@@ -1,3 +1,9 @@
+v1.1.30 - 08-April-2026
+- Fix: Prevented double-escaping of unicode sequences in block content during multi-pass import processing.
+
+v1.1.29 - 03-April-2026
+- Improvement: Tightened safe unserialize by class whitelisting.
+
 v1.1.28 - 31-March-2026
 - Fix: Preserve JSON unicode escape sequences during WXR import and batch processing to prevent block content corruption.
 - Fix: Resolved null alt text crash in Spectra image block importer on PHP 8.2+ that caused site generation failures.

@@ -1,5 +1,13 @@
 import { useState, useLayoutEffect, useRef } from '@wordpress/element';
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import {
+	ChevronLeftIcon,
+	ChevronRightIcon,
+	ArrowPathIcon,
+	LockClosedIcon,
+	MagnifyingGlassIcon,
+	StarIcon,
+	EllipsisVerticalIcon,
+} from '@heroicons/react/24/outline';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import SiteSkeleton from '../components/site-skeleton';
@@ -10,7 +18,6 @@ import {
 } from '../utils/helpers';
 import { classNames } from '../helpers';
 import { getDataUri } from '../utils/functions';
-import Tooltip from '../components/tooltip';
 import { useSearch } from '@tanstack/react-router';
 
 const FullPagePreview = () => {
@@ -191,33 +198,37 @@ const FullPagePreview = () => {
 			'ai-builder'
 		);
 
-		const TooltipContent = () => <p>{ message }</p>;
-
 		return (
 			<div
 				className={ classNames(
-					'flex items-center py-3 px-4 bg-white shadow-sm rounded-t-lg mx-auto h-[44px] z-[1] group',
-					'w-full mx-0 relative justify-between md:justify-start'
+					'flex items-center gap-2.5 py-0 px-3 bg-white shadow-sm rounded-t-lg mx-auto h-[44px] z-[1] relative',
+					'w-full mx-0'
 				) }
 			>
-				<div className="flex gap-2 py-[3px] w-20">
-					<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
-					<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
-					<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
+				{ /* Traffic light dots */ }
+				<div className="flex gap-2 items-center shrink-0">
+					<div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
+					<div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+					<div className="w-3 h-3 rounded-full bg-[#28C840]" />
 				</div>
-				<div className="flex-grow flex justify-end md:justify-center items-center relative">
-					<p className="absolute md:static top-1 sm:top-2 right-10 sm:right md:right-80 lg:right-24 xl:right-52 px-2 py-1 bg-white rounded-md max-md:shadow-lg text-center !text-sm !text-zip-body-text !m-0 max-md:hidden">
+				{ /* Navigation buttons */ }
+				<div className="flex gap-1 items-center shrink-0 text-gray-500">
+					<ChevronLeftIcon className="w-4 h-4" />
+					<ChevronRightIcon className="w-4 h-4" />
+					<ArrowPathIcon className="w-3.5 h-3.5" />
+				</div>
+				{ /* Address bar */ }
+				<div className="flex items-center gap-1.5 flex-1 min-w-0 bg-[#F1F3F4] rounded-md px-3 py-1">
+					<LockClosedIcon className="w-3.5 h-3.5 text-gray-500 shrink-0" />
+					<p className="!m-0 truncate !text-xs !text-zip-body-text">
 						{ message }
 					</p>
-					<Tooltip
-						content={ <TooltipContent /> }
-						placement="right"
-						offset={ [ 10, 0 ] }
-						className="zw-tooltip__material"
-						arrow={ false }
-					>
-						<ExclamationCircleIcon className="w-[18px] text-gray-600 cursor-pointer block md:hidden" />
-					</Tooltip>
+				</div>
+				{ /* Right-side icons */ }
+				<div className="flex gap-1.5 items-center shrink-0 text-gray-500">
+					<MagnifyingGlassIcon className="w-4 h-4" />
+					<StarIcon className="w-4 h-4" />
+					<EllipsisVerticalIcon className="w-4 h-4" />
 				</div>
 			</div>
 		);

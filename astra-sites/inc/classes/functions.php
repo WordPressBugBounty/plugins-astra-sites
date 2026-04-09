@@ -155,32 +155,78 @@ endif;
 
 if ( ! function_exists( 'astra_sites_safe_unserialize' ) ) :
 	/**
-	 * Safely unserialize data without allowing PHP object instantiation.
+	 * Safely unserialize data with a controlled class whitelist.
 	 *
-	 * Prevents object injection (CWE-502) by blocking class instantiation
-	 * during deserialization. Objects are converted to __PHP_Incomplete_Class.
+	 * Prevents object injection (CWE-502) by only allowing known plugin classes
+	 * during deserialization. Unrecognized classes become __PHP_Incomplete_Class
+	 * and are converted to arrays.
 	 *
 	 * @since 4.4.52
 	 * @param mixed $data Data to unserialize.
-	 * @return mixed Unserialized data with no objects, or original data if not serialized.
+	 * @return mixed Unserialized data, or original data if not serialized.
 	 */
 	function astra_sites_safe_unserialize( $data ) {
 		if ( ! is_string( $data ) || ! is_serialized( $data, true ) ) {
 			return $data;
 		}
+
+		$allowed = astra_sites_get_allowed_unserialize_classes( $data );
+
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize, PHPCompatibility.FunctionUse.NewFunctionParameters.unserialize_optionsFound -- Plugin requires PHP 7.4+.
-		$result = unserialize( $data, array( 'allowed_classes' => false ) );
+		$result = unserialize( $data, array( 'allowed_classes' => $allowed ) );
 		return astra_sites_convert_incomplete_class( $result );
+	}
+endif;
+
+if ( ! function_exists( 'astra_sites_get_allowed_unserialize_classes' ) ) :
+	/**
+	 * Extract and filter allowed class names from a serialized string.
+	 *
+	 * Delegates to ST_Importer_Helper as the single source of truth
+	 * for the allowed class prefix list.
+	 *
+	 * @since 4.5.1
+	 * @param string $data Serialized string.
+	 * @return array<int, string> List of allowed class names found in the data.
+	 */
+	function astra_sites_get_allowed_unserialize_classes( $data ) {
+		if ( class_exists( '\STImporter\Importer\ST_Importer_Helper' ) ) {
+			return \STImporter\Importer\ST_Importer_Helper::get_allowed_classes_from_serialized( $data );
+		}
+
+		// Fallback when starter-templates-importer is not loaded.
+		$allowed = array();
+
+		if ( preg_match_all( '/O:\d+:"([^"]+)"/', $data, $matches ) ) {
+			$allowed_prefixes = array(
+				'Astra_Sites_',
+				'AI_Builder_',
+				'ST_Importer_',
+				'ST_Resetter_',
+				'STImporter\\',
+			);
+
+			foreach ( $matches[1] as $class_name ) {
+				foreach ( $allowed_prefixes as $prefix ) {
+					if ( str_starts_with( $class_name, $prefix ) ) {
+						$allowed[] = $class_name;
+						break;
+					}
+				}
+			}
+		}
+
+		return $allowed;
 	}
 endif;
 
 if ( ! function_exists( 'astra_sites_convert_incomplete_class' ) ) :
 	/**
-	 * Recursively convert __PHP_Incomplete_Class instances to arrays.
+	 * Recursively nullify __PHP_Incomplete_Class instances.
 	 *
-	 * When unserialize() is called with allowed_classes => false, any serialized
+	 * When unserialize() is called with allowed_classes, any unrecognized
 	 * objects become __PHP_Incomplete_Class. These break map_deep() and similar
-	 * WordPress internals, so we convert them to plain arrays.
+	 * WordPress internals, so we convert them to empty strings.
 	 *
 	 * @since 4.4.52
 	 * @param mixed $data Data to convert.
@@ -188,9 +234,7 @@ if ( ! function_exists( 'astra_sites_convert_incomplete_class' ) ) :
 	 */
 	function astra_sites_convert_incomplete_class( $data ) {
 		if ( $data instanceof \__PHP_Incomplete_Class ) {
-			$array = (array) $data;
-			unset( $array['__PHP_Incomplete_Class_Name'] );
-			return array_map( 'astra_sites_convert_incomplete_class', $array );
+			return '';
 		}
 
 		if ( is_array( $data ) ) {

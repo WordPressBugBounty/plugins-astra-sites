@@ -195,6 +195,13 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_WooCommerce_Payments' ) ) {
 				);
 			}
 
+			/**
+			 * Fires after the WooPayments banner is dismissed.
+			 *
+			 * @since 1.2.74
+			 */
+			do_action( 'astra_sites_woopayments_banner_dismissed' );
+
 			wp_send_json_success( 'Notice dismissed successfully' );
 		}
 

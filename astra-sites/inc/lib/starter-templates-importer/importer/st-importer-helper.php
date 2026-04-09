@@ -28,6 +28,20 @@ class ST_Importer_Helper {
 	 */
 	private static $instance = null;
 
+	/**
+	 * Allowed class prefixes for safe unserialization.
+	 *
+	 * @since 1.1.29
+	 * @var array<int, string>
+	 */
+	private static $allowed_prefixes = array(
+		'Astra_Sites_',
+		'AI_Builder_',
+		'ST_Importer_',
+		'ST_Resetter_',
+		'STImporter\\',
+	);
+
 
 
 	/**
@@ -238,22 +252,67 @@ class ST_Importer_Helper {
 	}
 
 	/**
-	 * Safely unserialize data without allowing PHP object instantiation.
+	 * Safely unserialize data with a controlled class whitelist.
 	 *
-	 * Prevents object injection (CWE-502) by blocking class instantiation
-	 * during deserialization. Objects are converted to __PHP_Incomplete_Class.
+	 * Prevents object injection (CWE-502) by only allowing known plugin classes
+	 * during deserialization. Unrecognized classes become __PHP_Incomplete_Class
+	 * and are converted to empty strings.
 	 *
 	 * @since 1.1.27
 	 * @param mixed $data Data to unserialize.
-	 * @return mixed Unserialized data with no objects, or original data if not serialized.
+	 * @return mixed Unserialized data, or original data if not serialized.
 	 */
 	public static function safe_unserialize( $data ) {
 		if ( ! is_string( $data ) || ! is_serialized( $data, true ) ) {
 			return $data;
 		}
+
+		$allowed = self::get_allowed_classes_from_serialized( $data );
+
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize, PHPCompatibility.FunctionUse.NewFunctionParameters.unserialize_optionsFound -- Plugin requires PHP 7.4+.
-		$result = unserialize( $data, array( 'allowed_classes' => false ) );
+		$result = unserialize( $data, array( 'allowed_classes' => $allowed ) );
 		return self::convert_incomplete_class( $result );
+	}
+
+	/**
+	 * Extract and filter allowed class names from a serialized string.
+	 *
+	 * Parses the serialized format to find class references (O:<len>:"<class>")
+	 * and returns only those matching known plugin prefixes.
+	 *
+	 * @since 1.1.29
+	 * @param string $data Serialized string.
+	 * @return array<int, string> List of allowed class names found in the data.
+	 */
+	public static function get_allowed_classes_from_serialized( $data ) {
+		$allowed = array();
+
+		if ( preg_match_all( '/O:\d+:"([^"]+)"/', $data, $matches ) ) {
+			foreach ( $matches[1] as $class_name ) {
+				if ( self::is_allowed_class( $class_name ) ) {
+					$allowed[] = $class_name;
+				}
+			}
+		}
+
+		return $allowed;
+	}
+
+	/**
+	 * Check if a class name is allowed for unserialization.
+	 *
+	 * @since 1.1.29
+	 * @param string $class_name Class name to check.
+	 * @return bool Whether the class is allowed.
+	 */
+	private static function is_allowed_class( $class_name ) {
+		foreach ( self::$allowed_prefixes as $prefix ) {
+			if ( str_starts_with( $class_name, $prefix ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -348,8 +407,10 @@ class ST_Importer_Helper {
 		if ( ! $content ) {
 			return $content;
 		}
+		// Negative lookbehind ensures already-escaped \\uXXXX is not escaped again,
+		// making this function safe to call multiple times on the same content.
 		$result = preg_replace_callback(
-			'/\\\\u([0-9a-fA-F]{4})/',
+			'/(?<!\\\\)\\\\u([0-9a-fA-F]{4})/',
 			function ( $matches ) {
 				return '\\\\u' . $matches[1];
 			},
