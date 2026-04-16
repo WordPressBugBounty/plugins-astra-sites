@@ -457,10 +457,13 @@ if ( ! class_exists( 'Api' ) ) {
 				$completion_data['user_info'] = array();
 			}
 
+			$opt_in = isset( $user_info['optIn'] ) ? rest_sanitize_boolean( $user_info['optIn'] ) : false;
+
 			$completion_data['user_info']['source']      = $source;
 			$completion_data['user_info']['benefitId']   = $benefit_id;
 			$completion_data['user_info']['benefitText'] = $benefit_text;
 			$completion_data['user_info']['newUser']     = $new_user;
+			$completion_data['user_info']['optIn']       = $opt_in;
 
 			/**
 			 * Onboarding completion action

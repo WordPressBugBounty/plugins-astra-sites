@@ -1334,7 +1334,7 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 				if ( $key ) {
 					// export gets meta straight from the DB so could have a serialized string.
 					if ( ! $value ) {
-						$value = ST_Importer_Helper::safe_unserialize( $meta_item['value'] );
+						$value = maybe_unserialize( $meta_item['value'] );
 					}
 
 					add_post_meta( $post_id, $key, $value );
@@ -1545,7 +1545,7 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 
 				// Process the meta items.
 				foreach ( $meta as $meta_item ) {
-					$value = ST_Importer_Helper::safe_unserialize( $meta_item['value'] );
+					$value = maybe_unserialize( $meta_item['value'] );
 					add_comment_meta( $comment_id, wp_slash( $meta_item['key'] ), wp_slash( $value ) );
 				}
 
@@ -2026,7 +2026,7 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 				}
 
 				// export gets meta straight from the DB so could have a serialized string.
-				$value = ST_Importer_Helper::safe_unserialize( $meta_item['value'] );
+				$value = maybe_unserialize( $meta_item['value'] );
 
 				add_term_meta( $term_id, $key, $value );
 				do_action( 'import_term_meta', $term_id, $key, $value );

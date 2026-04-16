@@ -28,20 +28,6 @@ class ST_Importer_Helper {
 	 */
 	private static $instance = null;
 
-	/**
-	 * Allowed class prefixes for safe unserialization.
-	 *
-	 * @since 1.1.29
-	 * @var array<int, string>
-	 */
-	private static $allowed_prefixes = array(
-		'Astra_Sites_',
-		'AI_Builder_',
-		'ST_Importer_',
-		'ST_Resetter_',
-		'STImporter\\',
-	);
-
 
 
 	/**
@@ -249,97 +235,6 @@ class ST_Importer_Helper {
 		update_post_meta( $id, '_wp_attachment_image_alt', $alt );
 		update_post_meta( $id, '_astra_sites_imported_post', true );
 		return $id;
-	}
-
-	/**
-	 * Safely unserialize data with a controlled class whitelist.
-	 *
-	 * Prevents object injection (CWE-502) by only allowing known plugin classes
-	 * during deserialization. Unrecognized classes become __PHP_Incomplete_Class
-	 * and are converted to empty strings.
-	 *
-	 * @since 1.1.27
-	 * @param mixed $data Data to unserialize.
-	 * @return mixed Unserialized data, or original data if not serialized.
-	 */
-	public static function safe_unserialize( $data ) {
-		if ( ! is_string( $data ) || ! is_serialized( $data, true ) ) {
-			return $data;
-		}
-
-		$allowed = self::get_allowed_classes_from_serialized( $data );
-
-		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize, PHPCompatibility.FunctionUse.NewFunctionParameters.unserialize_optionsFound -- Plugin requires PHP 7.4+.
-		$result = unserialize( $data, array( 'allowed_classes' => $allowed ) );
-		return self::convert_incomplete_class( $result );
-	}
-
-	/**
-	 * Extract and filter allowed class names from a serialized string.
-	 *
-	 * Parses the serialized format to find class references (O:<len>:"<class>")
-	 * and returns only those matching known plugin prefixes.
-	 *
-	 * @since 1.1.29
-	 * @param string $data Serialized string.
-	 * @return array<int, string> List of allowed class names found in the data.
-	 */
-	public static function get_allowed_classes_from_serialized( $data ) {
-		$allowed = array();
-
-		if ( preg_match_all( '/O:\d+:"([^"]+)"/', $data, $matches ) ) {
-			foreach ( $matches[1] as $class_name ) {
-				if ( self::is_allowed_class( $class_name ) ) {
-					$allowed[] = $class_name;
-				}
-			}
-		}
-
-		return $allowed;
-	}
-
-	/**
-	 * Check if a class name is allowed for unserialization.
-	 *
-	 * @since 1.1.29
-	 * @param string $class_name Class name to check.
-	 * @return bool Whether the class is allowed.
-	 */
-	private static function is_allowed_class( $class_name ) {
-		foreach ( self::$allowed_prefixes as $prefix ) {
-			if ( str_starts_with( $class_name, $prefix ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Recursively nullify __PHP_Incomplete_Class instances.
-	 *
-	 * When unserialize() is called with allowed_classes => false, any serialized
-	 * objects become __PHP_Incomplete_Class. These cannot have methods called on
-	 * them and break map_deep() and similar WordPress internals.
-	 *
-	 * Converting to empty string ensures that existing guards like
-	 * method_exists() and is_object() properly return false, matching the
-	 * behavior of maybe_unserialize() when a class is not available.
-	 *
-	 * @since 1.1.28
-	 * @param mixed $data Data to convert.
-	 * @return mixed Data with __PHP_Incomplete_Class instances replaced by empty string.
-	 */
-	private static function convert_incomplete_class( $data ) {
-		if ( $data instanceof \__PHP_Incomplete_Class ) {
-			return '';
-		}
-
-		if ( is_array( $data ) ) {
-			return array_map( array( __CLASS__, 'convert_incomplete_class' ), $data );
-		}
-
-		return $data;
 	}
 
 	/**

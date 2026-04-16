@@ -247,6 +247,10 @@ if ( ! class_exists( 'Astra_Sites_Astra_Onboarding' ) ) {
 								'url'   => 'https://wpastra.com/privacy-policy/?utm_source=starter-templates&utm_medium=astra-onboarding&utm_campaign=link',
 								'label' => __( 'Privacy Policy', 'astra-sites' ),
 							),
+							'optIn' => array(
+								'description'  => __( 'Get helpful updates, new features, and tips to make your website better, while helping us improve Astra by sharing how you use it.', 'astra-sites' ),
+								'learnMoreUrl' => 'https://wpastra.com/privacy-policy/?utm_source=starter-templates&utm_medium=astra-onboarding&utm_campaign=link',
+							),
 						),
 						'features'          => array(
 							// Use default heading.
@@ -322,6 +326,11 @@ if ( ! class_exists( 'Astra_Sites_Astra_Onboarding' ) ) {
 			// Send user info to subscription webhook if the screen was not skipped.
 			if ( ! $is_user_info_screen_skipped ) {
 				self::generate_lead( $completion_data );
+
+				// Update analytics opt-in based on user's choice during onboarding.
+				$user_info       = isset( $completion_data['user_info'] ) ? $completion_data['user_info'] : array();
+				$analytics_optin = ! empty( $user_info['optIn'] ) ? 'yes' : 'no';
+				update_site_option( 'astra_sites_usage_optin', $analytics_optin );
 			}
 
 			// Handle pro features selection if the screen was not skipped.
@@ -353,6 +362,7 @@ if ( ! class_exists( 'Astra_Sites_Astra_Onboarding' ) ) {
 				'new_user'     => isset( $user_info['newUser'] ) ? $user_info['newUser'] : '',
 				'benefit_id'   => isset( $user_info['benefitId'] ) ? $user_info['benefitId'] : '',
 				'benefit_text' => isset( $user_info['benefitText'] ) ? $user_info['benefitText'] : '',
+				'opt_in'       => ! empty( $user_info['optIn'] ),
 			);
 
 			$response = wp_safe_remote_post(

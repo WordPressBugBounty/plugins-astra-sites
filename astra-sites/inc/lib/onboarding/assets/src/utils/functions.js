@@ -303,13 +303,15 @@ export const getStepIndex = ( name = '' ) => {
  * Track onboarding step
  *
  * @param {string} stepKey The step key to track
+ * @param {string} status
  * @return {Promise} Promise that resolves when tracking is complete
  */
-export const trackOnboardingStep = ( stepKey ) => {
+export const trackOnboardingStep = ( stepKey, status = 'yes' ) => {
 	const formData = new FormData();
 	formData.append( 'action', 'astra_sites_track_onboarding_step' );
 	formData.append( '_ajax_nonce', starterTemplates?.restNonce );
 	formData.append( 'step_visited', stepKey );
+	formData.append( 'step_status', status );
 
 	return fetch( ajaxurl, {
 		method: 'POST',

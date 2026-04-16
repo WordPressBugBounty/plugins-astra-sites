@@ -111,7 +111,7 @@ const AdvancedSettings = () => {
 													'astra-sites'
 												) }{ ' ' }
 												<a
-													href="https://store.brainstormforce.com/usage-tracking/?utm_source=wp_dashboard&utm_medium=general_settings&utm_campaign=usage_tracking"
+													href="https://store.brainstormforce.com/privacy-policy/?utm_source=wp_dashboard&utm_medium=general_settings&utm_campaign=usage_tracking"
 													target="_blank"
 													rel="noreferrer noopener"
 													className="!text-[color-mix(in_srgb,var(--st-color-accent),white_50%)]"

@@ -313,10 +313,16 @@ if ( ! class_exists( 'Admin' ) ) {
 		private static function get_current_user_info(): array {
 			$user = wp_get_current_user();
 
+			// Fallback: first_name → display_name → user_login.
+			$first_name = ! empty( $user->user_firstname ) ? $user->user_firstname : '';
+			if ( '' === $first_name ) {
+				$first_name = ! empty( $user->display_name ) ? $user->display_name : $user->user_login;
+			}
+
 			return array(
 				'id'        => $user->ID,
 				'email'     => $user->user_email,
-				'firstName' => $user->user_firstname ?? $user->display_name ?? '',
+				'firstName' => $first_name,
 				'lastName'  => $user->user_lastname ?? '',
 			);
 		}

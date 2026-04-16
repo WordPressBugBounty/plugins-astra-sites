@@ -983,6 +983,12 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 					continue;
 				}
 
+				// Check if a pro equivalent of this lite plugin is active.
+				$pro_plugin = Astra_Sites::get_instance()->pro_plugin_exist( $plugin_init );
+				if ( is_array( $pro_plugin ) && is_plugin_active( $pro_plugin['init'] ) ) {
+					continue;
+				}
+
 				$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_init;
 
 				if ( ! file_exists( $plugin_file ) ) {

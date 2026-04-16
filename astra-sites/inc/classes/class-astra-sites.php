@@ -1549,7 +1549,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					} else {
 
 						if ( is_serialized( $meta_value, true ) ) {
-							$raw_data = astra_sites_safe_unserialize( stripslashes( $meta_value ) );
+							$raw_data = maybe_unserialize( stripslashes( $meta_value ) );
 						} elseif ( is_array( $meta_value ) ) {
 							$raw_data = json_decode( stripslashes( $meta_value ), true );
 						} else {
@@ -1591,7 +1591,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					} else {
 
 						if ( is_serialized( $meta_value, true ) ) {
-							$raw_data = astra_sites_safe_unserialize( stripslashes( $meta_value ) );
+							$raw_data = maybe_unserialize( stripslashes( $meta_value ) );
 						} elseif ( is_array( $meta_value ) ) {
 							$raw_data = json_decode( stripslashes( $meta_value ), true );
 						} else {
@@ -2622,7 +2622,6 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			require_once ASTRA_SITES_DIR . 'inc/classes/compatibility/class-astra-sites-compatibility.php';
 
 			// classes 'inc/classes/class-astra-sites-'.
-			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-update.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-utils.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-error-handler.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-white-label.php';
@@ -2633,8 +2632,8 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-wp-cli.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-file-system.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-nps-notice.php';
-			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-analytics-events.php';
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-analytics.php';
+			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-update.php';
 
 			// Astra Onboarding Integration.
 			require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-astra-onboarding.php';
@@ -2878,7 +2877,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 */
 		public function admin_welcome_notices() {
 			$first_import_status = get_option( 'astra_sites_import_complete', false );
-			Astra_Notices::add_notice(
+			BSF_Admin_Notices::add_notice(
 				array(
 					'id'      => 'astra-sites-welcome-notice',
 					'type'    => 'notice',

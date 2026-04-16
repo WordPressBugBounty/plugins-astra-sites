@@ -26,6 +26,14 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		private static $instance = null;
 
 		/**
+		 * Analytics Events instance for tracking one-time milestone events.
+		 *
+		 * @since 4.5.2
+		 * @var BSF_Analytics_Events
+		 */
+		private static $events;
+
+		/**
 		 * Instance of Astra_Sites_Analytics.
 		 *
 		 * @since  4.4.27
@@ -46,6 +54,11 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 * @since  4.4.27
 		 */
 		private function __construct() {
+			if ( ! class_exists( 'BSF_Analytics_Events' ) ) {
+				require_once ASTRA_SITES_DIR . 'admin/bsf-analytics/class-bsf-analytics-events.php';
+			}
+			self::$events = new BSF_Analytics_Events( 'astra_sites' );
+
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'update_settings_after_plugin_activation' ), 10, 2 );
 			add_action( 'admin_init', array( $this, 'maybe_update_finish_setup_banner_clicked' ) );
 			add_action( 'wp_ajax_astra_sites_set_woopayments_analytics', array( $this, 'set_woopayments_analytics' ) );
@@ -57,8 +70,26 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			add_action( 'ast_block_templates_after_block_import', array( $this, 'track_block_pattern_imported_event' ), 10, 2 );
 			add_action( 'ast_block_templates_after_kit_import', array( $this, 'track_kit_imported_event' ) );
 
+			// Track onboarding step visits.
+			add_action( 'astra_sites_onboarding_step_visited', array( $this, 'track_onboarding_step_visited_event' ) );
+
 			// Track content edits for KPI records.
 			add_action( 'save_post', array( $this, 'track_content_edited' ), 10, 2 );
+
+			// Track setup/onboarding milestone events.
+			add_action( 'getting_started_action_items_served', array( $this, 'track_finish_setup_initiated_event' ) );
+			add_action( 'update_option_getting_started_action_items', array( $this, 'track_finish_setup_course_progress_event' ), 10, 2 );
+			add_action( 'getting_started_setup_wizard_dismissed', array( $this, 'track_finish_setup_dismissed_event' ) );
+
+			// Track WooPayments banner dismissal.
+			add_action( 'astra_sites_woopayments_banner_dismissed', array( $this, 'track_woopayments_banner_dismissed_event' ) );
+
+			// Track license activation/deactivation events.
+			add_action( 'bsf_activate_license_astra-pro-sites_after_success', array( $this, 'track_license_activated_event' ) );
+			add_action( 'bsf_deactivate_license_astra-pro-sites_after_success', array( $this, 'track_license_deactivated_event' ) );
+
+			// Track plugin version updates (hooked before update class overwrites the version option).
+			add_action( 'astra_sites_update_before', array( $this, 'track_plugin_updated_event' ) );
 		}
 
 		/**
@@ -125,6 +156,9 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 					'fs_banner_clicked' => 'yes',
 				)
 			);
+
+			// Track as a one-time event.
+			self::$events->track( 'finish_setup_banner_clicked', ASTRA_SITES_VER );
 		}
 
 		/**
@@ -184,6 +218,13 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			$key = "woopayments_{$source}_clicked";
 			Astra_Sites_Page::get_instance()->update_settings( array( $key => true ) );
 
+			// Track as a one-time event.
+			self::$events->track(
+				$key,
+				ASTRA_SITES_VER,
+				array( 'source' => $source )
+			);
+
 			wp_send_json_success( array( 'message' => 'WooPayments analytics updated!' ) );
 			exit;
 		}
@@ -197,16 +238,20 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 * @return void
 		 */
 		public function track_template_imported_event( $demo_data = array() ) {
+			$required_plugins = Astra_Sites_Page::get_instance()->get_setting( 'required_plugins', array() );
+
 			$properties = array(
 				'template_id'  => ! empty( $demo_data['id'] ) ? $demo_data['id'] : '',
 				'template_url' => ! empty( $demo_data['astra-site-url'] ) ? $demo_data['astra-site-url'] : '',
 				'title'        => ! empty( $demo_data['title']['rendered'] ) ? sanitize_text_field( $demo_data['title']['rendered'] ) : '',
 				'site_type'    => ! empty( $demo_data['astra-site-type'] ) ? $demo_data['astra-site-type'] : '',
+				'page_builder' => Astra_Sites_Page::get_instance()->get_setting( 'page_builder' ),
+				'plugins'      => is_array( $required_plugins ) && ! empty( $required_plugins ) ? $required_plugins : array(),
 			);
 
-			Astra_Sites_Analytics_Events::track(
+			self::$events->track(
 				'template_imported',
-				defined( 'ASTRA_SITES_VER' ) ? ASTRA_SITES_VER : 'unknown',
+				ASTRA_SITES_VER,
 				$properties
 			);
 
@@ -229,9 +274,9 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				'type'     => $type,
 			);
 
-			Astra_Sites_Analytics_Events::track(
+			self::$events->track(
 				'block_pattern_imported',
-				defined( 'ASTRA_SITES_VER' ) ? ASTRA_SITES_VER : 'unknown',
+				ASTRA_SITES_VER,
 				$properties
 			);
 
@@ -246,13 +291,44 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		 * @return void
 		 */
 		public function track_kit_imported_event() {
-			Astra_Sites_Analytics_Events::track(
+			self::$events->track(
 				'kit_imported',
-				defined( 'ASTRA_SITES_VER' ) ? ASTRA_SITES_VER : 'unknown'
+				ASTRA_SITES_VER
 			);
 
 			// Store timestamp for KPI records.
 			$this->store_kpi_timestamp( 'kit' );
+		}
+
+		/**
+		 * Track cumulative onboarding steps visited state.
+		 *
+		 * Reads all visited steps from settings and retracks with full state.
+		 * Uses track() with $force=true so the server always has the latest cumulative snapshot.
+		 *
+		 * @param string $step The step identifier (e.g. 'welcome', 'template-listing').
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		public function track_onboarding_step_visited_event( $step ) {
+			// Get all visited steps from settings (cumulative state).
+			$steps_visited = Astra_Sites_Page::get_instance()->get_setting( 'steps_visited' );
+			$steps_visited = is_array( $steps_visited ) ? $steps_visited : array();
+
+			// Build properties map: each step as key with its status (yes/skipped).
+			$properties = array();
+			foreach ( $steps_visited as $visited_step => $status ) {
+				$properties[ sanitize_key( $visited_step ) ] = $status;
+			}
+
+			// Replace any existing pending/pushed entry with updated state.
+			self::$events->track(
+				'onboarding_step_visited',
+				ASTRA_SITES_VER,
+				$properties,
+				true
+			);
 		}
 
 		/**
@@ -351,6 +427,231 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 		}
 
 		/**
+		 * Track cumulative course progress state (done / not_done per course).
+		 *
+		 * Fires on `update_option_getting_started_action_items`. Compares old vs new
+		 * to detect status changes, then retracks with full state of all courses.
+		 * Uses track() with $force=true so the server always has the latest cumulative snapshot.
+		 *
+		 * @param mixed $old_value The old option value.
+		 * @param mixed $new_value The new option value.
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		public function track_finish_setup_course_progress_event( $old_value, $new_value ) {
+			if ( ! is_array( $new_value ) || empty( $new_value ) ) {
+				return;
+			}
+
+			$old_value = is_array( $old_value ) ? $old_value : array();
+
+			// Check if any course status actually changed.
+			$has_change = false;
+			foreach ( $new_value as $key => $action_item ) {
+				$is_done  = ! empty( $action_item['status'] );
+				$was_done = isset( $old_value[ $key ] ) && ! empty( $old_value[ $key ]['status'] );
+
+				if ( $is_done !== $was_done ) {
+					$has_change = true;
+					break;
+				}
+			}
+
+			if ( ! $has_change ) {
+				return;
+			}
+
+			// Get full course list from default action items.
+			if ( ! class_exists( '\GS\Classes\GS_Helper' ) ) {
+				return;
+			}
+
+			$all_courses = \GS\Classes\GS_Helper::get_default_action_items();
+			if ( ! is_array( $all_courses ) || empty( $all_courses ) ) {
+				return;
+			}
+
+			// Build properties map from full course list, checking status in DB state.
+			$properties   = array();
+			$all_complete = true;
+			foreach ( $all_courses as $course ) {
+				$course_id = isset( $course['id'] ) ? $course['id'] : '';
+				if ( empty( $course_id ) ) {
+					continue;
+				}
+				$is_done                              = isset( $new_value[ $course_id ] ) && ! empty( $new_value[ $course_id ]['status'] );
+				$properties[ sanitize_key( $course_id ) ] = $is_done ? 'completed' : 'pending';
+				if ( ! $is_done ) {
+					$all_complete = false;
+				}
+			}
+
+			$event_value = $all_complete ? 'completed' : 'in_progress';
+
+			// Replace any existing pending/pushed entry with updated state.
+			self::$events->track(
+				'finish_setup_course_progress',
+				$event_value,
+				$properties,
+				true
+			);
+		}
+
+		/**
+		 * Track when the finish setup wizard is dismissed.
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		public function track_finish_setup_dismissed_event() {
+			self::$events->track(
+				'finish_setup_dismissed',
+				ASTRA_SITES_VER
+			);
+		}
+
+		/**
+		 * Track when the WooPayments banner is dismissed.
+		 * Non-unique so each dismissal is counted separately.
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		public function track_woopayments_banner_dismissed_event() {
+			self::$events->track(
+				'woopayments_banner_dismissed',
+				ASTRA_SITES_VER,
+				array(),
+				false
+			);
+		}
+
+		/**
+		 * Track finish setup initiated when courses are first served to the user.
+		 * Dedup ensures this fires only once even if the endpoint is called multiple times.
+		 *
+		 * @param array $action_items The action items being served.
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		public function track_finish_setup_initiated_event( $action_items ) {
+			if ( empty( $action_items ) || ! is_array( $action_items ) ) {
+				return;
+			}
+
+			$course_names = array();
+			foreach ( $action_items as $action_item ) {
+				if ( ! empty( $action_item['id'] ) ) {
+					$course_names[] = sanitize_key( $action_item['id'] );
+				}
+			}
+
+			if ( empty( $course_names ) ) {
+				return;
+			}
+
+			self::$events->track(
+				'finish_setup_initiated',
+				ASTRA_SITES_VER,
+				array(
+					'courses' => $course_names,
+				)
+			);
+		}
+
+		/**
+		 * Track when the product license is activated.
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		public function track_license_activated_event() {
+			self::$events->track(
+				'license_activated',
+				ASTRA_SITES_VER
+			);
+		}
+
+		/**
+		 * Track when the product license is deactivated.
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		public function track_license_deactivated_event() {
+			self::$events->track(
+				'license_deactivated',
+				ASTRA_SITES_VER
+			);
+		}
+
+		/**
+		 * Track plugin version updates.
+		 *
+		 * Fires on `astra_sites_update_before` — before the update class
+		 * overwrites `astra-sites-auto-version` with the new version.
+		 * Uses track() with $force=true so each version transition is tracked.
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		public function track_plugin_updated_event() {
+			$old_version = get_option( 'astra-sites-auto-version', '' );
+			if ( empty( $old_version ) || version_compare( $old_version, ASTRA_SITES_VER, '>=' ) ) {
+				return;
+			}
+
+			self::$events->track(
+				'plugin_updated',
+				ASTRA_SITES_VER,
+				array(
+					'from_version' => $old_version,
+				),
+				true
+			);
+		}
+
+		/**
+		 * Detect state-based milestone events from already-computed stats.
+		 * Dedup in BSF_Analytics_Events::track() ensures each fires only once.
+		 *
+		 * @since 4.5.2
+		 * @return void
+		 */
+		private function detect_state_events() {
+			// plugin_activated: track once with install source and time-to-value.
+			$referer_key   = defined( 'BSF_UTM_ANALYTICS_REFERER' ) ? BSF_UTM_ANALYTICS_REFERER : 'bsf_product_referers';
+			$bsf_referrers = get_option( $referer_key, array() );
+			$source        = ! empty( $bsf_referrers['astra-sites'] ) ? $bsf_referrers['astra-sites'] : 'self';
+			$is_pro        = defined( 'ASTRA_PRO_SITES_NAME' );
+
+			$install_time      = get_option( 'astra_sites_usage_installed_time', 0 );
+			$days_since_install = 0;
+			if ( $install_time > 0 ) {
+				$days_since_install = (int) floor( ( time() - $install_time ) / DAY_IN_SECONDS );
+			}
+
+			self::$events->track(
+				'plugin_activated',
+				ASTRA_SITES_VER,
+				array(
+					'source'             => $source,
+					'is_pro'             => $is_pro ? 'yes' : 'no',
+					'days_since_install' => (string) $days_since_install,
+				)
+			);
+
+			// woopayments_referred: track once if WooPayments was newly activated via template.
+			if ( get_option( 'astra_sites_import_complete', 'no' ) === 'yes'
+				&& Astra_Sites_Page::get_instance()->get_setting( 'woopayments_ref' ) ) {
+				self::$events->track( 'woopayments_referred', ASTRA_SITES_VER );
+			}
+
+		}
+
+		/**
 		 * Check if WooPayments is configured and connected to Stripe.
 		 *
 		 * @since 4.4.24
@@ -360,8 +661,12 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			// Check if WCPay account is connected to Stripe.
 			if ( class_exists( 'WC_Payments' ) && method_exists( 'WC_Payments', 'get_account_service' ) ) {
 				$account_service = WC_Payments::get_account_service();
-				if ( method_exists( $account_service, 'is_stripe_connected' ) ) {
-					return $account_service->is_stripe_connected();
+				if ( method_exists( $account_service, 'is_stripe_connected' ) && $account_service->is_stripe_connected() ) {
+					self::$events->track(
+						'woopayments_configured',
+						ASTRA_SITES_VER
+					);
+					return true;
 				}
 			}
 
@@ -405,7 +710,15 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 				)
 			);
 
-			return ! empty( $orders );
+			if ( ! empty( $orders ) ) {
+				self::$events->track(
+					'woopayments_transaction_completed',
+					ASTRA_SITES_VER
+				);
+				return true;
+			}
+
+			return false;
 		}
 
 		/**
@@ -996,7 +1309,7 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			$stats['plugin_data']['astra_sites'] = array(
 				'version'        => defined( 'ASTRA_PRO_SITES_NAME' ) ? 'premium' : 'free',
 				'site_language'  => get_locale(),
-				'plugin_version' => defined( 'ASTRA_SITES_VER' ) ? ASTRA_SITES_VER : 'unknown',
+				'plugin_version' => ASTRA_SITES_VER,
 				'page_builder'   => Astra_Sites_Page::get_instance()->get_setting( 'page_builder' ),
 				'boolean_values' => array(
 					'import_complete'                => $import_complete,
@@ -1022,8 +1335,11 @@ if ( ! class_exists( 'Astra_Sites_Analytics' ) ) {
 			// Add KPI tracking data.
 			self::add_kpi_tracking_data( $stats['plugin_data']['astra_sites'] );
 
+			// Detect state-based milestone events (dedup in track() ensures each fires only once).
+			$this->detect_state_events();
+
 			// Flush pending events into payload (only if any exist).
-			$pending_events = Astra_Sites_Analytics_Events::flush_pending();
+			$pending_events = self::$events->flush_pending();
 			if ( ! empty( $pending_events ) ) {
 				$stats['plugin_data']['astra_sites']['events_record'] = $pending_events;
 			}

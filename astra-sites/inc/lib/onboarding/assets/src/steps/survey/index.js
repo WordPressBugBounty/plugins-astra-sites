@@ -5,6 +5,7 @@ import { PreviousStepLink, DefaultStep } from '../../components/index';
 import ICONS from '../../../icons';
 import { useStateValue } from '../../store/store';
 import { checkRequiredPlugins } from '../../steps/import-site/import-utils';
+import { trackOnboardingStep } from '../../utils/functions';
 import SurveyForm from './survey';
 import AdvancedSettings from './advanced-settings';
 import './style.scss';
@@ -220,9 +221,9 @@ const Survey = () => {
 				} );
 			}, 500 );
 
-			if ( analytics !== 'yes' ) {
-				// Send data to analytics.
-				const answer = analyticsFlag ? 'yes' : 'no';
+			// Always send analytics opt-in/opt-out preference so the user can change their choice.
+			const answer = analyticsFlag ? 'yes' : 'no';
+			if ( answer !== analytics ) {
 				const optinAnswer = new FormData();
 				optinAnswer.append( 'action', 'astra-sites-update-analytics' );
 				optinAnswer.append(
@@ -245,6 +246,7 @@ const Survey = () => {
 
 			// Skip subscription if chose to skip and start building.
 			if ( skipSubscription ) {
+				trackOnboardingStep( 'survey', 'skipped' );
 				return;
 			}
 

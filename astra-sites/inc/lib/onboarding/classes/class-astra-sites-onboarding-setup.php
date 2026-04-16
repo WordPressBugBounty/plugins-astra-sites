@@ -91,6 +91,13 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 				wp_send_json_error( esc_html__( 'Invalid step.', 'astra-sites' ) );
 			}
 
+			$step_status = isset( $_POST['step_status'] ) ? sanitize_text_field( $_POST['step_status'] ) : 'yes';
+
+			// Validate step status.
+			if ( ! in_array( $step_status, array( 'yes', 'skipped' ), true ) ) {
+				$step_status = 'yes';
+			}
+
 			if( ! class_exists( 'Astra_Sites_Page' ) ) {
 				require_once ASTRA_SITES_DIR . 'inc/classes/class-astra-sites-page.php';
 			}
@@ -101,13 +108,23 @@ if ( ! class_exists( 'Astra_Sites_Onboarding_Setup' ) ) :
 			if ( ! is_array( $steps_visited ) ) {
 				$steps_visited = array();
 			}
-			
-			// Check if step is already tracked
-			if ( ! in_array( $step, $steps_visited, true ) ) {
-				// Add step to tracked steps
+
+			// Check if step is already tracked or status is being updated to skipped.
+			$existing_status = isset( $steps_visited[ $step ] ) ? $steps_visited[ $step ] : null;
+			if ( null === $existing_status || ( 'skipped' === $step_status && 'skipped' !== $existing_status ) ) {
+				$steps_visited[ $step ] = $step_status;
+
 				Astra_Sites_Page::get_instance()->update_settings( [
-					'steps_visited' => array_merge( $steps_visited, array( $step ) ),	
+					'steps_visited' => $steps_visited,
 				] );
+
+				/**
+				 * Fires when an onboarding step is visited for the first time or its status changes.
+				 *
+				 * @since 4.5.2
+				 * @param string $step The step identifier.
+				 */
+				do_action( 'astra_sites_onboarding_step_visited', $step );
 			}
 
 			wp_send_json_success();
