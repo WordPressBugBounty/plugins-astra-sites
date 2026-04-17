@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 4.5.2
+Stable tag: 4.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,10 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.5.3 - 17-April-2026
+- Fix:
+    - Resolved a fatal error caused by a missing Astra_Notices class.
+
 v4.5.2 - 16-April-2026
 - Fix:
     - Fixed infinite retry loop during template import when Beaver Builder Pro is active instead of Lite.

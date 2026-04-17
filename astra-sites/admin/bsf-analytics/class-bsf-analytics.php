@@ -240,6 +240,10 @@ if ( ! class_exists( 'BSF_Analytics' ) ) {
 				return;
 			}
 
+			if ( ! class_exists( 'BSF_Admin_Notices' ) ) {
+				return;
+			}
+
 			if( $this->is_tracking_enabled() ) {
 				return; // Don't need to display notice if any of our plugin already have the permission.
 			}
@@ -278,7 +282,7 @@ if ( ! class_exists( 'BSF_Analytics' ) ) {
 
 				$language_dir = is_rtl() ? 'rtl' : 'ltr';
 
-				Astra_Notices::add_notice(
+				BSF_Admin_Notices::add_notice(
 					array(
 						'id'                         => $key . '-optin-notice',
 						'type'                       => '',
