@@ -5,6 +5,7 @@ import { STORE_KEY } from '../store';
 import Modal from './modal';
 import Button from './button';
 import LoadingSpinner from './loading-spinner';
+import { isValidAuthMessage, resolveAuthOrigin } from '../utils/auth-message';
 const { imageDir } = aiBuilderVars;
 import { CheckIcon } from '@heroicons/react/24/outline';
 
@@ -24,6 +25,10 @@ const SignupLoginModal = () => {
 	const [ isAuthLoading, setIsAuthLoading ] = useState( false );
 	const authChildWindow = useRef( null );
 	const onAuthSuccessRef = useRef( onAuthSuccess );
+
+	// Resolve the expected ZipWP auth origin once. Used to reject cross-origin
+	// postMessage events that would otherwise be able to spoof auth success.
+	const expectedAuthOrigin = resolveAuthOrigin( screen_url );
 
 	// Keep callback ref in sync so the message handler always has the latest.
 	useEffect( () => {
@@ -59,20 +64,25 @@ const SignupLoginModal = () => {
 	// Listen for ZIPWP_AUTH_SUCCESS postMessage from the popup window.
 	useEffect( () => {
 		const handleMessage = async ( event ) => {
-			if ( ! event.data || event.data.type !== 'ZIPWP_AUTH_SUCCESS' ) {
+			// Reject messages from any origin other than the ZipWP auth origin
+			// and from any source other than the popup this component opened.
+			// Prevents CSRF via forged postMessage from attacker-controlled pages.
+			if (
+				! isValidAuthMessage(
+					event,
+					expectedAuthOrigin,
+					authChildWindow.current
+				)
+			) {
 				return;
 			}
 
-			const { token, credit_token, email } = event.data;
-
-			if ( ! token || ! credit_token || ! email ) {
-				return;
-			}
+			const { token, credit_token: creditToken, email } = event.data;
 
 			// Save tokens to the WordPress database.
 			const result = await saveAuthToken( {
 				token,
-				creditToken: credit_token,
+				creditToken,
 				email,
 			} );
 
@@ -94,7 +104,7 @@ const SignupLoginModal = () => {
 
 		window.addEventListener( 'message', handleMessage );
 		return () => window.removeEventListener( 'message', handleMessage );
-	}, [ saveAuthToken, setSignupLoginModal ] );
+	}, [ saveAuthToken, setSignupLoginModal, expectedAuthOrigin ] );
 
 	const handleClickNext = ( ask = 'register' ) => {
 		const currentUrl = window.location.href;
@@ -126,8 +136,8 @@ const SignupLoginModal = () => {
 		url += '&mode=popup';
 
 		// Open auth in a child browser window, centered on screen.
-		const width = 600;
-		const height = 700;
+		const width = 1280;
+		const height = 828;
 		const left = window.screenX + ( window.outerWidth - width ) / 2;
 		const top = window.screenY + ( window.outerHeight - height ) / 2;
 		const features = `width=${ width },height=${ height },left=${ left },top=${ top },scrollbars=yes,resizable=yes`;

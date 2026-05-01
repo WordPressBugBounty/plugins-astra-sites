@@ -8,7 +8,7 @@
 
 namespace One_Onboarding\Ajax;
 
-if ( ! class_exists( 'Ajax' ) ) {
+if ( ! class_exists( '\One_Onboarding\Ajax\Ajax' ) ) {
 
 	/**
 	 * Ajax Class

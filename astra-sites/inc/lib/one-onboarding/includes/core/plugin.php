@@ -12,7 +12,7 @@ use One_Onboarding\Admin\Admin;
 use One_Onboarding\Ajax\Ajax;
 use One_Onboarding\Api\Api;
 
-if ( ! class_exists( 'Plugin' ) ) {
+if ( ! class_exists( '\One_Onboarding\Core\Plugin' ) ) {
 
 	/**
 	 * Main Plugin Class

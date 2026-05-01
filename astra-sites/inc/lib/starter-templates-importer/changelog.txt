@@ -1,3 +1,13 @@
+v1.1.33 - 30-April-2026
+- Fix: Record batch processing start timestamp for stale import flag detection.
+- Fix: Strip residual `websitedemos.net` URLs from customizer settings during classic-template imports so menu and button links resolve to the newly imported site.
+- Fix: Removed residual `websitedemos.net` links from Spectra container block attributes (`link`, `editLink`, `authorLink`) after template import.
+
+v1.1.32 - 20-April-2026
+- Fix: Content duplication on retry import using deterministic GUID for duplicate detection.
+- Fix: Reverted safe unserialize hardening that stripping Beaver Builder layout data and other serialized objects during template import.
+- Fix: Resolved fatal error during content import on hosts where `set_time_limit` is disabled.
+
 v1.1.31 - 16-April-2026
 - Fix: Skip orphaned attachments during WXR import that don't belong to the imported template.
 

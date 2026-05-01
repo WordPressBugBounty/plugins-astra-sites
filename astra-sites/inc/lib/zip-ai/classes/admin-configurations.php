@@ -386,11 +386,11 @@ class Admin_Configurations {
 			}
 		}
 
-		// Enqueue the admin Google Fonts and WP Components.
+		// Enqueue the admin font (Inter, self-hosted) and WP Components.
 		$admin_slug = 'zip-ai-admin';
 		wp_enqueue_style(
 			$admin_slug . '-font',
-			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap',
+			ZIP_AI_URL . 'assets/fonts/fonts.css',
 			array(),
 			ZIP_AI_VERSION
 		);
@@ -479,10 +479,10 @@ class Admin_Configurations {
 			ZIP_AI_VERSION
 		);
 
-		// Register the admin Google Fonts.
+		// Register the admin font (Inter, self-hosted).
 		wp_register_style(
-			'zip-ai-admin-google-fonts',
-			'https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap',
+			'zip-ai-admin-font',
+			ZIP_AI_URL . 'assets/fonts/fonts.css',
 			array(),
 			ZIP_AI_VERSION
 		);
@@ -491,8 +491,8 @@ class Admin_Configurations {
 		wp_enqueue_script( $handle );
 		// Set the script translations.
 		wp_set_script_translations( $handle, apply_filters( 'zip_ai_library_textdomain', 'zip-ai' ) );
-		// Enqueue the Google Fonts.
-		wp_enqueue_style( 'zip-ai-admin-google-fonts' );
+		// Enqueue the bundled font.
+		wp_enqueue_style( 'zip-ai-admin-font' );
 		// Enqueue the admin styles.
 		wp_enqueue_style( $handle );
 		// Set the RTL styles.

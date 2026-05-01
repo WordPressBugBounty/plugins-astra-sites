@@ -592,6 +592,8 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 			if ( $this->options['aggressive_url_search'] ) {
 				$this->replace_attachment_urls_in_content();
 			}
+
+			$this->replace_demo_site_urls_in_content();
 			// phpcs:disable
 			// $this->remap_featured_images();
 			// phpcs:enable
@@ -2406,6 +2408,123 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 		}
 
 		/**
+		 * Replace residual demo-site URLs in specific block attribute fields.
+		 *
+		 * Block editors such as Spectra (`uagb/container`) store the full WP media
+		 * attachment object in block attributes, which includes `link`, `editLink`
+		 * and `authorLink` fields pointing at the source demo site. The attachment
+		 * URL remap only substitutes file URLs, so those permalink/admin fields
+		 * survive the import. This method targets only those specific JSON keys —
+		 * a blanket domain replace would also strip image file URLs before the
+		 * batch image importer can download them.
+		 *
+		 * @since 1.1.33
+		 *
+		 * @return void
+		 */
+		protected function replace_demo_site_urls_in_content() {
+			$post_ids = array_values( array_filter( array_map( 'intval', (array) ( $this->mapping['post'] ?? array() ) ) ) );
+			if ( empty( $post_ids ) ) {
+				return;
+			}
+
+			$demo_bases = $this->collect_demo_site_bases();
+			if ( empty( $demo_bases ) ) {
+				return;
+			}
+
+			$site_url = trailingslashit( get_site_url() );
+
+			// Only target editor-only metadata fields — never raw URLs that may
+			// resolve to image files the batch importer still needs to fetch.
+			$json_fields = array( 'link', 'editLink', 'authorLink' );
+
+			global $wpdb;
+			$placeholders = implode( ',', array_fill( 0, count( $post_ids ), '%d' ) );
+
+			foreach ( $demo_bases as $demo_base ) {
+				if ( $demo_base === $site_url ) {
+					continue;
+				}
+
+				$demo_base_json = str_replace( '/', '\\/', $demo_base );
+				$site_url_json  = str_replace( '/', '\\/', $site_url );
+
+				foreach ( $json_fields as $field ) {
+					// Plain JSON — `"link":"https://websitedemos.net/slug/..."`.
+					$old_plain = '"' . $field . '":"' . $demo_base;
+					$new_plain = '"' . $field . '":"' . $site_url;
+
+					// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- ID placeholders built dynamically from a safe post-ID list; replacement count matches.
+					$query = $wpdb->prepare(
+						"UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID IN ({$placeholders})",
+						array_merge( array( $old_plain, $new_plain ), $post_ids )
+					);
+					// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+					$wpdb->query( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk maintenance UPDATE for imported posts.
+
+					// JSON-escaped slashes — `\"link\":\"https:\/\/...\/slug\/...\"`.
+					$old_escaped = '\\"' . $field . '\\":\\"' . $demo_base_json;
+					$new_escaped = '\\"' . $field . '\\":\\"' . $site_url_json;
+
+					// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- ID placeholders built dynamically from a safe post-ID list; replacement count matches.
+					$query = $wpdb->prepare(
+						"UPDATE {$wpdb->posts} SET post_content = REPLACE(post_content, %s, %s) WHERE ID IN ({$placeholders})",
+						array_merge( array( $old_escaped, $new_escaped ), $post_ids )
+					);
+					// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+					$wpdb->query( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk maintenance UPDATE for imported posts.
+				}
+			}
+		}
+
+		/**
+		 * Collect demo-site base URLs from both the WXR XML and the import metadata.
+		 *
+		 * Templates can ship with a mismatch between the WXR `<wp:base_site_url>`
+		 * (the slug the content references, e.g. `brandstore-08`) and the
+		 * `astra-site-url` in the template metadata (e.g. `branding-store-08`),
+		 * because the WXR export was generated from a different source site than
+		 * the template listing. Replacing against only one of them leaves residual
+		 * links. This method returns every candidate base, each with a trailing
+		 * slash, so the caller can run REPLACE for all of them.
+		 *
+		 * @since 1.1.33
+		 *
+		 * @return array<int, string> List of demo-site base URLs (with trailing slash).
+		 */
+		protected function collect_demo_site_bases() {
+			$bases = array();
+
+			if ( ! empty( $this->base_url ) ) {
+				$bases[] = trailingslashit( (string) $this->base_url );
+			}
+
+			if ( class_exists( 'STImporter\Importer\ST_Importer_File_System' ) ) {
+				$demo_data = ST_Importer_File_System::get_instance()->get_demo_content();
+				if ( is_array( $demo_data ) && ! empty( $demo_data['astra-site-url'] ) ) {
+					$raw = (string) $demo_data['astra-site-url'];
+
+					// `astra-site-url` has historically shipped as either
+					// protocol-relative (`//websitedemos.net/slug/`), fully
+					// qualified, or bare (`websitedemos.net/slug/`). Normalize
+					// all three to a fully qualified URL before use.
+					if ( 0 === stripos( $raw, 'http://' ) || 0 === stripos( $raw, 'https://' ) ) {
+						$base = $raw;
+					} elseif ( 0 === strpos( $raw, '//' ) ) {
+						$base = 'https:' . $raw;
+					} else {
+						$base = 'https://' . ltrim( $raw, '/' );
+					}
+
+					$bases[] = trailingslashit( $base );
+				}
+			}
+
+			return array_values( array_unique( array_filter( $bases ) ) );
+		}
+
+		/**
 		 * Update _thumbnail_id meta to new, imported attachment IDs
 		 */
 		public function remap_featured_images() {
@@ -2521,8 +2640,9 @@ if ( ! class_exists( 'WXR_Importer' ) && class_exists( 'WP_Importer' ) ) :
 		 * @return int|bool Existing post ID if it exists, false otherwise.
 		 */
 		protected function post_exists( $data ) {
-			// Constant-time lookup if we prefilled.
-			$exists_key = $data['guid'];
+			// Use deterministic hash matching pre_post_data() for reliable duplicate detection on retry imports.
+			$hash       = md5( $data['post_title'] . '::' . $data['post_type'] . '::' . $data['post_name'] );
+			$exists_key = site_url( '/?st-import=' . $hash );
 
 			if ( $this->options['prefill_existing_posts'] ) {
 				return isset( $this->exists['post'][ $exists_key ] ) ? $this->exists['post'][ $exists_key ] : false;

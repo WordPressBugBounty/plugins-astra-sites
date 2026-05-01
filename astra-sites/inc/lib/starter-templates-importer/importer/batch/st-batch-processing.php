@@ -206,6 +206,7 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 			}
 
 			update_option( 'astra_sites_batch_process_started', 'yes' );
+			update_option( 'astra_sites_batch_process_started_time', time() );
 
 			// Log batch processing start.
 			ST_Importer_Log::add( 'Batch processing started' );

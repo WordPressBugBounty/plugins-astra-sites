@@ -135,95 +135,7 @@ class Zipwp_Images_Script {
 
 		// Enqueue CSS.
 		wp_enqueue_style( 'zipwp-images-style', ZIPWP_IMAGES_URL . 'dist/style-main.css', array(), ZIPWP_IMAGES_VER );
-		wp_enqueue_style( 'zipwp-images-google-fonts', $this->google_fonts_url(), array(), 'all' );
-	}
-
-	/**
-	 * Generate and return the Google fonts url.
-	 *
-	 * @since 1.0.0
-	 * @return string
-	 */
-	public function google_fonts_url() {
-
-		$fonts_url     = '';
-		$font_families = array(
-			'Figtree:400,500,600,700',
-		);
-
-		$query_args = array(
-			'family' => rawurlencode( implode( '|', $font_families ) ),
-			'subset' => rawurlencode( 'latin,latin-ext' ),
-		);
-
-		return add_query_arg( $query_args, '//fonts.googleapis.com/css' );
-	}
-
-	/**
-	 * Get the server's country code using its public IP.
-	 *
-	 * @param string $provider Optional. GeoIP provider: 'ipwhois', 'ipapi', or 'ipinfo'. Default 'ipwhois'.
-	 * @param string $token    Optional. API token (only needed for ipapi/ipinfo).
-	 *
-	 * @since 1.0.20
-	 * @return string Two-letter ISO country code (e.g., 'RU', 'US'), or 'unknown' on failure.
-	 */
-	public static function get_server_country_code( $provider = 'ipwhois', $token = '' ) {
-		// Step 1: Get server's public IP.
-		$response = wp_safe_remote_get( 'https://api.ipify.org' );
-		if ( is_wp_error( $response ) ) {
-			return 'unknown';
-		}
-
-		$ip = wp_remote_retrieve_body( $response );
-		if ( empty( $ip ) ) {
-			return 'unknown';
-		}
-
-		// Step 2: Select provider endpoint.
-		switch ( strtolower( $provider ) ) {
-			case 'ipapi':
-				// Requires token for higher limits.
-				$url = "https://ipapi.co/{$ip}/country/";
-				if ( ! empty( $token ) ) {
-					$url = "https://ipapi.co/{$ip}/country/?key={$token}";
-				}
-				break;
-
-			case 'ipinfo':
-				$url = "https://ipinfo.io/{$ip}/country";
-				if ( ! empty( $token ) ) {
-					$url .= "?token={$token}";
-				}
-				break;
-
-			case 'ipwhois':
-			default:
-				// Default: ipwho.is (no token needed).
-				$url = "https://ipwho.is/{$ip}";
-				break;
-		}
-
-		// Step 3: Make request.
-		$response = wp_safe_remote_get( $url );
-		if ( is_wp_error( $response ) ) {
-			return 'unknown';
-		}
-
-		$body = wp_remote_retrieve_body( $response );
-
-		// Step 4: Parse response based on provider.
-		if ( 'ipwhois' === $provider ) {
-			$data = json_decode( $body, true );
-			if ( is_array( $data ) && isset( $data['country_code'] ) && is_string( $data['country_code'] ) ) {
-				return $data['country_code'];
-			}
-			return 'unknown';
-		}
-
-		// ipapi and ipinfo return plain text country code.
-		$country = trim( $body );
-		return ! empty( $country ) ? $country : 'unknown';
+		wp_enqueue_style( 'zipwp-images-fonts', ZIPWP_IMAGES_URL . 'assets/fonts/figtree.css', array(), ZIPWP_IMAGES_VER );
 	}
 
 	/**
@@ -233,19 +145,6 @@ class Zipwp_Images_Script {
 	 * @return array<string> Image Engine.s
 	 */
 	public static function get_images_engines() {
-		$country_code = get_transient( 'zipwp_images_server_country_code' );
-
-		if ( false === $country_code ) {
-			$country_code = self::get_server_country_code();
-			set_transient( 'zipwp_images_server_country_code', $country_code, WEEK_IN_SECONDS );
-		}
-
-		// Use Unsplash for Russia as Pexels is blocked there.
-		if ( 'RU' === $country_code ) {
-			return [ 'unsplash' ];
-		}
-
-		// Default to Pexels.
 		return [ 'pexels', 'pixabay' ];
 	}
 }

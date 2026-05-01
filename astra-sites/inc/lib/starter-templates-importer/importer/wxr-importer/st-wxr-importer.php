@@ -112,12 +112,12 @@ class ST_WXR_Importer {
 			)
 		);
 
-		if ( in_array( $data['post_type'], [ 'post', 'page' ], true ) && 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
+		if ( in_array( $data['post_type'], array( 'post', 'page' ), true ) && 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
 			$imports                         = get_option(
 				'astra_sites_ai_imports',
 				array(
-					'post' => [],
-					'page' => [],
+					'post' => array(),
+					'page' => array(),
 				)
 			);
 			$imports[ $data['post_type'] ][] = $post_id;
@@ -354,7 +354,9 @@ class ST_WXR_Importer {
 		}
 
 		// Time to run the import!
-		set_time_limit( 0 ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Required for long-running import process.
+		if ( function_exists( 'set_time_limit' ) ) {
+			\set_time_limit( 0 ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Required for long-running import process.
+		}
 
 		// Ensure we're not buffered.
 		wp_ob_end_flush_all();
@@ -630,8 +632,9 @@ class ST_WXR_Importer {
 	 */
 	public function pre_post_data( $postdata, $data ) {
 
-		// Skip GUID field which point to the https://websitedemos.net.
-		$postdata['guid'] = '';
+		// Replace source GUID with a deterministic URL-based hash for duplicate detection on retry imports.
+		$hash             = md5( $data['post_title'] . '::' . $data['post_type'] . '::' . $data['post_name'] );
+		$postdata['guid'] = site_url( '/?st-import=' . $hash );
 
 		return $postdata;
 	}

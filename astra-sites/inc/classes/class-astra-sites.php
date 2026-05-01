@@ -127,8 +127,13 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				return;
 			}
 
-			// 🎯 FIX: Global hook to prevent Elementor placeholder image imports
-			add_filter( 'pre_http_request', array( $this, 'block_elementor_placeholder_requests' ), 10, 3 );
+			// Only register the placeholder blocking filter when a batch import is actively running.
+			// This avoids unnecessary get_option() DB calls on every HTTP request.
+			if ( 'yes' === get_option( 'astra_sites_batch_process_started', 'no' )
+				&& 'yes' !== get_option( 'astra_sites_batch_process_complete', 'no' )
+			) {
+				add_filter( 'pre_http_request', array( $this, 'block_elementor_placeholder_requests' ), 10, 3 );
+			}
 
 			$this->set_api_url();
 			$this->includes();
@@ -3010,10 +3015,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		 * @return bool True if import is active.
 		 */
 		private function is_import_process_active() {
-			
+
 			// Check if visible import is complete but batch processing is not yet complete.
-			$import_complete = get_option( 'astra_sites_import_complete', 'no' );
-			$batch_process_started = get_option( 'astra_sites_batch_process_started', 'no' );
+			$import_complete        = get_option( 'astra_sites_import_complete', 'no' );
+			$batch_process_started  = get_option( 'astra_sites_batch_process_started', 'no' );
 			$batch_process_complete = get_option( 'astra_sites_batch_process_complete', 'no' );
 
 			// Hook should be active when:
@@ -3021,6 +3026,15 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			// 2. Batch process has started
 			// 3. Batch process is not yet complete.
 			if ( 'yes' === $import_complete && 'yes' === $batch_process_started && 'yes' !== $batch_process_complete ) {
+				// Safety: treat as inactive if batch flags are stale.
+				// No timestamp = flag predates the timestamp feature, guaranteed stale.
+				// Timestamp older than 6 hours = failed/interrupted import.
+				$started_time = (int) get_option( 'astra_sites_batch_process_started_time', 0 );
+				if ( 0 === $started_time || ( time() - $started_time ) > 6 * HOUR_IN_SECONDS ) {
+					delete_option( 'astra_sites_batch_process_started' );
+					delete_option( 'astra_sites_batch_process_started_time' );
+					return false;
+				}
 				return true;
 			}
 

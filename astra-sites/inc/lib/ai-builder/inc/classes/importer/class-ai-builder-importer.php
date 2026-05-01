@@ -106,6 +106,8 @@ class Ai_Builder_Importer {
 	 */
 	public function delete_related_transient() {
 		delete_option( 'astra_sites_batch_process_started' );
+		delete_option( 'astra_sites_batch_process_started_time' );
+		delete_option( 'astra_sites_batch_process_complete' );
 
 		if ( class_exists( 'STImporter\Importer\ST_Importer_File_System' ) ) {
 			ST_Importer_File_System::get_instance()->delete_demo_content();

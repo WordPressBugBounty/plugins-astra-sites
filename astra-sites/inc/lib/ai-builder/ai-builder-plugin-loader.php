@@ -441,7 +441,7 @@ class Ai_Builder_Plugin_Loader {
 			'reportError'              => $this->should_report_error(),
 			'zip_token_exists'         => Helper::get_token() !== '' ? true : false,
 			'themeStatus'              => $theme_status,
-			'firstImportStatus'        => get_option( 'astra_sites_import_complete', false ),
+			'firstImportStatus'        => $this->get_first_import_status(),
 			'analytics'                => get_site_option( 'astra_sites_usage_optin', false ),
 			'siteUrl'                  => site_url(),
 			'installed'                => __( 'Installed! Activating..', 'astra-sites' ),
@@ -527,6 +527,37 @@ class Ai_Builder_Plugin_Loader {
 		}
 
 		return $active_failed_sites;
+	}
+
+	/**
+	 * Determine if a previous import exists that requires site reset.
+	 *
+	 * Returns 'yes' if a previous import completed successfully, started but
+	 * never completed (failed mid-import), or leftover imported posts exist.
+	 *
+	 * @since 1.2.75
+	 * @return string|false 'yes' if reset needed, false otherwise.
+	 */
+	private function get_first_import_status() {
+		// Previous import completed successfully.
+		if ( 'yes' === get_option( 'astra_sites_import_complete', false ) ) {
+			return 'yes';
+		}
+
+		// Previous import started but never completed (failed mid-import).
+		if ( 'yes' === get_option( 'astra_sites_import_started', false ) ) {
+			return 'yes';
+		}
+
+		// Fallback: imported posts exist but import not marked complete.
+		if ( function_exists( 'astra_sites_get_reset_post_data' ) ) {
+			$imported_posts = astra_sites_get_reset_post_data();
+			if ( ! empty( $imported_posts ) ) {
+				return 'yes';
+			}
+		}
+
+		return false;
 	}
 
 	/**

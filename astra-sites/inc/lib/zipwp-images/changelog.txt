@@ -1,3 +1,9 @@
+v1.0.28 - 27-April-2026
+- Fix: Self-host the Figtree font used by the image-picker UI instead of fetching from fonts.googleapis.com on every editor load. Required for WordPress.org compliance.
+
+v1.0.27 - 23-April-2026
+- Fix: Removed server-IP geolocation lookups (ipify + ipwho.is) used to switch image sources by region. Required for WordPress.org compliance — the block-editor image picker now shows Pexels and Pixabay consistently for all users, including Russian-hosted sites that previously saw an Unsplash-only fallback.
+
 v1.0.26 - 25-March-2026
 - Security: Replaced wp_remote_get() with wp_safe_remote_get() for external HTTP requests (ipify, geolocation API).
 

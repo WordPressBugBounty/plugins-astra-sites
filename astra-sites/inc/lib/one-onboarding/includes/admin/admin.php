@@ -8,7 +8,7 @@
 
 namespace One_Onboarding\Admin;
 
-if ( ! class_exists( 'Admin' ) ) {
+if ( ! class_exists( '\One_Onboarding\Admin\Admin' ) ) {
 
 	/**
 	 * Admin Class
@@ -254,6 +254,7 @@ if ( ! class_exists( 'Admin' ) ) {
 			);
 
 			wp_localize_script( 'one-onboarding-script', 'oneOnboardingData', $localized_data );
+
 			wp_set_script_translations(
 				'one-onboarding-script',
 				apply_filters( 'one_onboarding_textdomain', 'one-onboarding' ),

@@ -161,12 +161,36 @@
 	align-items: center;
 }
 
+.cta-strip-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 6px;
+}
+
 .cta-strip-right {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	align-content: center;
 	grid-gap: 40px;
+}
+
+.step-site-list .step-actions .cta-strip-subline {
+	font-size: 12px;
+	font-weight: 400;
+	color: #6b7280;
+	margin: 0;
+	text-align: right;
+
+	a {
+		color: inherit;
+		text-decoration: underline;
+
+		&:hover {
+			color: #374151;
+		}
+	}
 }
 
 .stc-extra-text.stc-logo {

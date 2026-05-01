@@ -470,7 +470,7 @@ const SiteList = () => {
 																{ sprintf(
 																	/* translators: %1$s: search term. */
 																	__(
-																		'Starter Templates for %1$s:',
+																		'Starter Templates for: %1$s',
 																		'astra-sites'
 																	),
 																	decodeEntities(
@@ -535,23 +535,49 @@ const SiteList = () => {
 					</PreviousStepLink>
 
 					{ ! isPro() && ! whiteLabelEnabled() && (
-						<div className="cta-strip-right">
-							<h5>
-								{ __(
-									'Get unlimited access to all Premium Starter Templates and more, at a single low cost!',
-									'astra-sites'
-								) }
-							</h5>
-							<Button
-								className="st-access-btn"
-								onClick={ () =>
-									window.open(
-										astraSitesVars?.cta_links[ builder ]
-									)
-								}
-							>
-								{ __( 'Get Premium Templates', 'astra-sites' ) }
-							</Button>
+						<div className="cta-strip-wrapper">
+							<div className="cta-strip-right">
+								<h5>
+									{ __(
+										'Get unlimited access to all Premium Starter Templates and more, at a single low cost!',
+										'astra-sites'
+									) }
+								</h5>
+								<Button
+									className="st-access-btn"
+									onClick={ () =>
+										window.open(
+											astraSitesVars?.cta_links[ builder ]
+										)
+									}
+								>
+									{ __(
+										'Get Premium Templates',
+										'astra-sites'
+									) }
+								</Button>
+							</div>
+							<p className="cta-strip-subline">
+								{ __( 'Already purchased it?', 'astra-sites' ) }{ ' ' }
+								<a
+									href="https://store.brainstormforce.com/account/?utm_source=gutenberg-templates&utm_medium=dashboard&utm_campaign=Starter-Template-Backend"
+									target="_blank"
+									rel="noreferrer"
+								>
+									{ __(
+										'Install and activate Premium Starter Templates',
+										'astra-sites'
+									) }
+								</a>
+								{ '\u00A0\u00A0\u00A0' }
+								<a
+									href="https://startertemplates.com/docs/install-premium-starter-templates/?utm_source=gutenberg-templates&utm_medium=dashboard&utm_campaign=Starter-Template-Backend"
+									target="_blank"
+									rel="noreferrer"
+								>
+									{ __( '[Need Help?]', 'astra-sites' ) }
+								</a>
+							</p>
 						</div>
 					) }
 				</div>

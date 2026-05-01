@@ -3,7 +3,7 @@
  * Plugin Name: Starter Templates
  * Plugin URI: https://wpastra.com/
  * Description: Starter Templates is all in one solution for complete starter sites, single page templates, blocks & images. This plugin offers the premium library of ready templates & provides quick access to beautiful Pixabay images that can be imported in your website easily.
- * Version: 4.5.3
+ * Version: 4.5.4
  * Author: Brainstorm Force
  * Author URI: https://www.brainstormforce.com
  * Text Domain: astra-sites
@@ -39,7 +39,7 @@ if ( ! defined( 'ASTRA_SITES_NAME' ) ) {
 }
 
 if ( ! defined( 'ASTRA_SITES_VER' ) ) {
-	define( 'ASTRA_SITES_VER', '4.5.3' );
+	define( 'ASTRA_SITES_VER', '4.5.4' );
 }
 
 if ( ! defined( 'ASTRA_SITES_FILE' ) ) {
@@ -196,5 +196,29 @@ if ( ! function_exists( 'astra_pro_sites_activate' ) ) :
 		update_option( 'st_start_onboarding', true );
 	}
 	register_activation_hook( __FILE__, 'astra_pro_sites_activate' );
+
+endif;
+
+if ( ! function_exists( 'astra_sites_deactivate' ) ) :
+
+	/**
+	 * Clean up import state options on plugin deactivation.
+	 *
+	 * Prevents stale import flags from persisting in wp_options and
+	 * causing database conflicts during WP-Cron after deactivation.
+	 *
+	 * @since 4.5.4
+	 * @return void
+	 */
+	function astra_sites_deactivate() {
+		delete_option( 'astra_sites_batch_process_started' );
+		delete_option( 'astra_sites_batch_process_started_time' );
+		delete_option( 'astra_sites_batch_process_complete' );
+		delete_option( 'astra_sites_ai_import_started' );
+		delete_option( 'ast_ai_import_current_url' );
+		delete_option( 'astra_sites_import_started' );
+		delete_option( 'astra_sites_current_import_template_type' );
+	}
+	register_deactivation_hook( __FILE__, 'astra_sites_deactivate' );
 
 endif;

@@ -8,7 +8,7 @@
 
 namespace One_Onboarding\Core;
 
-if ( ! class_exists( 'Register' ) ) {
+if ( ! class_exists( '\One_Onboarding\Core\Register' ) ) {
 
 	/**
 	 * Register Class

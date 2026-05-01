@@ -63,6 +63,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 			add_action( 'wp_ajax_astra-sites-import-latepoint', array( $this, 'import_latepoint' ) );
 			add_action( 'wp_ajax_astra-sites-verify-required-plugins', array( $this, 'verify_required_plugins' ) );
 			add_action( 'astra_sites_import_complete', array( $this, 'clear_related_cache' ) );
+			add_action( 'astra_sites_batch_process_complete', array( $this, 'delete_related_transient' ) );
 
 			require_once ASTRA_SITES_DIR . 'inc/importers/batch-processing/class-astra-sites-batch-processing.php';
 
@@ -196,6 +197,8 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 		 */
 		public function delete_related_transient() {
 			delete_option( 'astra_sites_batch_process_started' );
+			delete_option( 'astra_sites_batch_process_started_time' );
+			delete_option( 'astra_sites_batch_process_complete' );
 			Astra_Sites_File_System::get_instance()->delete_demo_content();
 			delete_option( 'ast_ai_import_current_url' );
 			delete_option( 'astra_sites_ai_import_started' );

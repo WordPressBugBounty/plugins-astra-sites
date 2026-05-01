@@ -125,6 +125,7 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 		 */
 		public function start_process() {
 			set_transient( 'astra_sites_batch_process_started', 'yes', HOUR_IN_SECONDS );
+			update_option( 'astra_sites_batch_process_started_time', time() );
 
 			/** WordPress Plugin Administration API */
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -767,12 +768,19 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 			astra_sites_error_log( 'Getting Total Pages' );
 			update_site_option( 'astra-sites-batch-status-string', 'Getting Total Pages' );
 
-			$api_args = array(
-				'timeout'            => 60,
+			$api_args   = array(
+				'timeout' => 60,
+			);
+			$query_args = array(
+				'per_page'           => 15,
 				'spectra-blocks-ver' => Astra_Sites::get_rest_spectra_blocks_version(),
 			);
+			$api_url    = add_query_arg(
+				$query_args,
+				trailingslashit( Astra_Sites::get_instance()->get_api_domain() ) . 'wp-json/astra-sites/v1/get-total-pages/'
+			);
 
-			$response = wp_safe_remote_get( trailingslashit( Astra_Sites::get_instance()->get_api_domain() ) . 'wp-json/astra-sites/v1/get-total-pages/?per_page=15', $api_args );
+			$response = wp_safe_remote_get( $api_url, $api_args );
 			if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
 				$total_requests = json_decode( wp_remote_retrieve_body( $response ), true );
 

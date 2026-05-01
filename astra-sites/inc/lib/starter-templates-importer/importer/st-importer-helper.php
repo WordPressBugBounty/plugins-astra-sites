@@ -313,4 +313,76 @@ class ST_Importer_Helper {
 		);
 		return is_string( $result ) ? $result : $content;
 	}
+
+	/**
+	 * Replace demo-site URLs with the current site URL.
+	 *
+	 * Rewrites `https?://websitedemos.net/<slug>/...` occurrences inside
+	 * string leaves of the supplied value to `<site_url>/...`, dropping the
+	 * demo host and the template slug so the tail path lines up with the
+	 * newly imported site. Image file URLs are preserved so the batch image
+	 * downloader can still fetch and localize them.
+	 *
+	 * Intended for classic-template imports only — AI imports don't ship
+	 * with `websitedemos.net` URLs, so callers gate accordingly.
+	 *
+	 * @since 1.1.33
+	 *
+	 * @param mixed $value Array or string value to scrub. Other types are
+	 *                     returned unchanged.
+	 * @return mixed Cleaned value with the same shape as the input.
+	 */
+	public static function replace_source_site_url( $value ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $inner ) {
+				$value[ $key ] = self::replace_source_site_url( $inner );
+			}
+			return $value;
+		}
+
+		if ( ! is_string( $value ) || false === stripos( $value, 'websitedemos.net' ) ) {
+			return $value;
+		}
+
+		$site_url = trailingslashit( get_site_url() );
+
+		$result = preg_replace_callback(
+			// Tail class excludes common prose terminators so a URL embedded in
+			// a sentence (e.g. `Visit …/page/, thanks`) doesn't swallow the `,`.
+			'#https?://websitedemos\.net/[^/"\'\s]+/[^"\'\s<>,;!?)\]]*#i',
+			function ( $matches ) use ( $site_url ) {
+				$url = $matches[0];
+
+				// Preserve image file URLs — batch image downloader will
+				// fetch and localize them on a later pass.
+				if ( (bool) preg_match( '~\.(?:jpe?g|png|gif|svg|webp|avif)(?:[?#][^\s]*)?$~i', $url ) ) {
+					return $url;
+				}
+
+				// Skip past `https?://` to the host.
+				$scheme_end = stripos( $url, '://' );
+				if ( false === $scheme_end ) {
+					return $site_url;
+				}
+				$host_start = $scheme_end + 3;
+
+				// First `/` after host closes the host segment.
+				$host_end = strpos( $url, '/', $host_start );
+				if ( false === $host_end ) {
+					return $site_url;
+				}
+
+				// Next `/` after that closes the slug segment.
+				$slug_end = strpos( $url, '/', $host_end + 1 );
+				if ( false === $slug_end ) {
+					return $site_url;
+				}
+
+				return $site_url . substr( $url, $slug_end + 1 );
+			},
+			$value
+		);
+
+		return is_string( $result ) ? $result : $value;
+	}
 }

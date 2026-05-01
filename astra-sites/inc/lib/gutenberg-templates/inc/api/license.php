@@ -73,6 +73,9 @@ class License extends Api_Base {
 	 * @return array<string, mixed> $products Products.
 	 */
 	public static function bsf_maybe_update_products_option( $products ) {
+		if ( ! is_array( $products ) ) {
+			$products = array();
+		}
 		// Make sure 'astra-pro-sites' plugin is initialized in the products array.
 		if ( ! isset( $products['plugins'] ) ) {
 			$products['plugins'] = array(

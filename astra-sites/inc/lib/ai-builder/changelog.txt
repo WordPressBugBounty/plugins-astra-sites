@@ -1,3 +1,11 @@
+v1.2.76 - 30th April 2026
+- Security: Hardened ZipWP auth postMessage handling by validating origin and source window to prevent CSRF-based credential overwrite (CWE-352).
+- Fix: Clean up stale batch import options (batch_process_started_time, batch_process_complete) in delete_related_transient.
+
+v1.2.75 - 20th April 2026
+- Fix: Reverted safe unserialize that was stripping serialized objects during template import.
+- Fix: Content duplication on retry after failed site import.
+
 v1.2.74 - 3rd April 2026
 - Improvement: Upgraded preview browser frame to a realistic Chrome-style design.
 - Improvement: Tightened safe unserialize by class whitelisting.

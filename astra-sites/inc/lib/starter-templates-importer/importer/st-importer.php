@@ -376,6 +376,32 @@ class ST_Importer {
 
 			// Update Astra Theme customizer settings.
 			if ( isset( $customizer_data['astra-settings'] ) ) {
+
+				// Strip residual `websitedemos.net` URLs from classic-template
+				// customizer data so menu/button links resolve to the newly
+				// imported site. AI imports ship with clean URLs, so this is
+				// a no-op there by default.
+				$is_classic = 'ai' !== get_option( 'astra_sites_current_import_template_type' );
+
+				/**
+				 * Filters whether to scrub `websitedemos.net` URLs from the
+				 * customizer settings being saved during import.
+				 *
+				 * Returning `false` preserves the raw customizer payload.
+				 * Defaults to `true` for classic-template imports and
+				 * `false` for AI imports (which don't ship demo URLs).
+				 *
+				 * @since 1.1.33
+				 *
+				 * @param bool  $scrub           Whether to run the scrub. Default based on template type.
+				 * @param array $customizer_data The full customizer data array being imported.
+				 */
+				$should_scrub = (bool) apply_filters( 'astra_sites_scrub_customizer_demo_urls', $is_classic, $customizer_data );
+
+				if ( $should_scrub ) {
+					$customizer_data['astra-settings'] = ST_Importer_Helper::replace_source_site_url( $customizer_data['astra-settings'] );
+				}
+
 				update_option( 'astra-settings', $customizer_data['astra-settings'] );
 				ST_Importer_Log::add( 'Astra theme settings updated', 'success', array( 'option_key' => 'astra-settings' ) );
 			} else {

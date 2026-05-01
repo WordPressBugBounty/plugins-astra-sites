@@ -509,7 +509,7 @@ class Sidebar_Configurations {
 
 		wp_enqueue_style(
 			'zip-ai-sidebar-fonts',
-			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Courier+Prime:wght@400&display=swap',
+			ZIP_AI_URL . 'assets/fonts/fonts.css',
 			array(),
 			ZIP_AI_VERSION
 		);

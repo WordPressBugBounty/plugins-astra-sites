@@ -10,7 +10,7 @@ namespace One_Onboarding\Api;
 
 use One_Onboarding\Core;
 
-if ( ! class_exists( 'Api' ) ) {
+if ( ! class_exists( '\One_Onboarding\Api\Api' ) ) {
 
 	/**
 	 * API Class

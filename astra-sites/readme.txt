@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 4.5.3
+Stable tag: 4.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,18 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.5.4 - 01-May-2026
+- Fix:
+    - Clean up stale import flags from failed/interrupted imports plus deactivation/uninstall cleanup of import state options.
+    - Fixed some templates not appearing on the onboarding templates listing screen due to an incorrect total template count.
+    - Fixed search results label displaying colon after the search term instead of before it.
+    - AI Builder: Content duplication on retry after failed site import.
+    - Importer: Record batch processing start timestamp for stale import flag detection.
+    - Importer: Strip residual websitedemos.net URLs from customizer settings and Spectra container block attributes during classic-template imports.
+    - Importer: Resolved fatal errors during content import on hosts where set_time_limit is disabled, and when another plugin defines a global Api, Admin, Ajax, Plugin, or Register class.
+- Security:
+    - AI Builder: Hardened ZipWP auth postMessage handling by validating origin and source window to prevent CSRF-based credential overwrite (CWE-352) - (Props - Nhan Tran Van).
+
 v4.5.3 - 17-April-2026
 - Fix:
     - Resolved a fatal error caused by a missing Astra_Notices class.

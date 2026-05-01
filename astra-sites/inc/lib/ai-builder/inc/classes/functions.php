@@ -226,4 +226,3 @@ function astra_sites_is_valid_url( $url = '' ) {
 
 	return false;
 }
-
