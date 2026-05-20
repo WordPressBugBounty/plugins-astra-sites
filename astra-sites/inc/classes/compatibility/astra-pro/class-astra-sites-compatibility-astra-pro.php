@@ -49,6 +49,7 @@ if ( ! class_exists( 'Astra_Sites_Compatibility_Astra_Pro' ) ) :
 		public function __construct() {
 			add_action( 'astra_sites_after_plugin_activation', array( $this, 'astra_pro' ), 10, 2 );
 			add_action( 'astra_sites_import_start', array( $this, 'import_enabled_extension' ), 10, 2 );
+			add_action( 'astra_sites_import_complete', array( $this, 'import_enabled_extension' ), 10, 1 );
 			add_action( 'astra_sites_import_complete', array( $this, 'clear_cache' ) );
 		}
 
@@ -120,11 +121,17 @@ if ( ! class_exists( 'Astra_Sites_Compatibility_Astra_Pro' ) ) :
 		 * @param  array $demo_api_uri Demo URL.
 		 */
 		public function import_enabled_extension( $demo_data = array(), $demo_api_uri = '' ) {
+			// Check if the demo data has enabled extensions data, if not then try to get it from the site data (in case of import complete action).
+			if ( ! empty( $demo_data ) && isset( $demo_data['astra-enabled-extensions'] ) ) {
+				$enabled_extensions = $demo_data['astra-enabled-extensions'];
+			} elseif ( function_exists( 'astra_get_site_data' ) ) {
+				$enabled_extensions = astra_get_site_data( 'astra-enabled-extensions' );
+			} else {
+				return;
+			}
 
-			if ( isset( $demo_data['astra-enabled-extensions'] ) ) {
-				if ( is_callable( 'Astra_Admin_Helper::update_admin_settings_option' ) ) {
-					Astra_Admin_Helper::update_admin_settings_option( '_astra_ext_enabled_extensions', $demo_data['astra-enabled-extensions'] );
-				}
+			if ( ! empty( $enabled_extensions ) && is_callable( 'Astra_Admin_Helper::update_admin_settings_option' ) ) {
+				Astra_Admin_Helper::update_admin_settings_option( '_astra_ext_enabled_extensions', $enabled_extensions );
 			}
 		}
 

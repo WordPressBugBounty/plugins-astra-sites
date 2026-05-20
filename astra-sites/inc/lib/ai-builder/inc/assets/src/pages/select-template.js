@@ -63,7 +63,6 @@ const SelectTemplate = () => {
 		setWebsiteTemplateSearchResultsAIStep,
 		setSelectedTemplateIsPremium,
 		setSelectedPageBuilder,
-		setWebsiteColorPalette,
 		setWebsiteTypography,
 		setWebsiteLogo,
 		setSiteTitleVisible,
@@ -622,7 +621,6 @@ const SelectTemplate = () => {
 				setSelectedTemplateIsPremium( selectedTemplateItem.is_premium );
 				setWebsiteLogo( siteLogoDefault );
 				setWebsiteTypography( null );
-				setWebsiteColorPalette( null );
 				setSiteTitleVisible( true );
 			}
 		}

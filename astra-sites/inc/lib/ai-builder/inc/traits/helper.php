@@ -309,6 +309,9 @@ class Helper {
 				// Merge only the new feature plugins that aren't already in the required plugins.
 				foreach ( $feature_plugins as $feature_plugin ) {
 					if ( isset( $feature_plugin['slug'] ) && ! in_array( $feature_plugin['slug'], $existing_slugs, true ) ) {
+						// Mark the feature plugin as optional.
+						$feature_plugin['optional'] = true;
+
 						$required_plugins[] = $feature_plugin;
 						$existing_slugs[]   = $feature_plugin['slug']; // Keep the slug list updated.
 					}
@@ -1045,8 +1048,12 @@ class Helper {
 	 * @return string Two-letter ISO country code (e.g., 'RU', 'US'), or 'unknown' on failure.
 	 */
 	public static function get_server_country_code( $provider = 'ipwhois', $token = '' ) {
+		// Cap each external call so a slow GeoIP provider can't stall the
+		// localize-script path for the default 5s wp_remote_get timeout.
+		$request_args = array( 'timeout' => 2 );
+
 		// Step 1: Get server's public IP.
-		$response = wp_remote_get( 'https://api.ipify.org' );
+		$response = wp_remote_get( 'https://api.ipify.org', $request_args );
 		if ( is_wp_error( $response ) ) {
 			return 'unknown';
 		}
@@ -1081,7 +1088,7 @@ class Helper {
 		}
 
 		// Step 3: Make request.
-		$response = wp_remote_get( $url );
+		$response = wp_remote_get( $url, $request_args );
 		if ( is_wp_error( $response ) ) {
 			return 'unknown';
 		}
@@ -1105,10 +1112,15 @@ class Helper {
 	/**
 	 * Get Images Engine
 	 *
+	 * Pexels is the default image engine. For servers in Russia, Unsplash is
+	 * used instead because Pexels is geo-blocked there. The Russian engine can
+	 * be overridden via the `ai_builder_images_engine_for_russia` filter —
+	 * e.g., partner distributions with a Freepik key may return 'freepik'.
+	 *
 	 * @since 1.2.59
 	 * @return string Image Engine.
 	 */
-	public static function get_images_engine() {
+	public static function get_images_engine(): string {
 		$country_code = get_transient( 'zipwp_images_server_country_code' );
 
 		if ( false === $country_code ) {
@@ -1118,7 +1130,16 @@ class Helper {
 
 		// Use Unsplash for Russia as Pexels is blocked there.
 		if ( 'RU' === $country_code ) {
-			return 'unsplash';
+			/**
+			 * Filter the images engine for Russia.
+			 *
+			 * @param string $engine The default engine for Russia, which is 'unsplash'.
+			 * @return string The images engine to use for Russia.
+			 * @since 1.2.77
+			 */
+			$allowed_engines = [ 'unsplash', 'pexels', 'freepik' ];
+			$engine          = apply_filters( 'ai_builder_images_engine_for_russia', 'unsplash' );
+			return in_array( $engine, $allowed_engines, true ) ? $engine : 'unsplash';
 		}
 
 		// Default to Pexels.

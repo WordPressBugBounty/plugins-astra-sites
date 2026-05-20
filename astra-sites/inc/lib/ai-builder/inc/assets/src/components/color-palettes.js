@@ -44,7 +44,7 @@ const ColorPalettes = () => {
 	};
 
 	const handleChange = ( palette ) => () => {
-		if ( selectedPalette.slug === palette.slug ) {
+		if ( selectedPalette?.slug === palette.slug ) {
 			return;
 		}
 		sendPostMessage( {
@@ -86,10 +86,21 @@ const ColorPalettes = () => {
 				colors: [],
 			},
 		] );
-		if ( ! selectedPalette ) {
+		const isStaleDefault =
+			selectedPalette?.slug === 'default' &&
+			defaultPaletteValues.length > 0 &&
+			selectedPalette?.colors?.[ 0 ] !==
+				defaultPaletteValues[ 0 ]?.colors?.[ 0 ];
+
+		if ( ! selectedPalette || isStaleDefault ) {
 			setDefaultColorPalette( defaultPaletteValues[ 0 ] );
 		}
-	}, [ selectedTemplate, selectedPalette ] ); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [
+		selectedTemplate,
+		selectedPalette,
+		selectedTemplateItem,
+		templateList,
+	] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Sync selected palette to the preview iframe when it changes.
 	useEffect( () => {

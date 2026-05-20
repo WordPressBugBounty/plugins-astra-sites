@@ -9,7 +9,10 @@ import DotsLoader from './dots-loader';
 import { siteLogoDefault } from '../store/reducer';
 import { GemIcon } from '../ui/icons';
 import { useState } from 'react';
-import { getRandomColorPaletteForTemplate } from '../utils/color-palette-utils';
+import {
+	getDefaultColorPaletteForTemplate,
+	getRandomColorPaletteForTemplate,
+} from '../utils/color-palette-utils';
 
 export const ColumnItem = ( {
 	template,
@@ -40,7 +43,7 @@ export const ColumnItem = ( {
 	const [ isLoaded, setIsLoaded ] = useState( false );
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ previewPalette, setPreviewPalette ] = useState( () =>
-		getRandomColorPaletteForTemplate( template )
+		getDefaultColorPaletteForTemplate( template )
 	);
 
 	const handleScaling = () => {

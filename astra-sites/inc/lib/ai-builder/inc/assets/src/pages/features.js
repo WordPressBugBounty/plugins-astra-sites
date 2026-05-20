@@ -358,9 +358,6 @@ const Features = ( {
 				ask: 'register',
 				shouldResume: true,
 				isPremiumTemplate: selectedTemplateIsPremium,
-				onAuthSuccess: () => {
-					handleClickNext( { skipFeature } );
-				},
 			} );
 			return;
 		}

@@ -20,6 +20,7 @@ const SurveyForm = ( { formDetails, updateFormDetails } ) => {
 					name="first_name"
 					placeholder={ __( 'Your First Name', 'astra-sites' ) }
 					value={ formDetails.first_name }
+					maxLength={ 50 }
 					onChange={ ( e ) =>
 						updateFormDetails( 'first_name', e.target.value )
 					}

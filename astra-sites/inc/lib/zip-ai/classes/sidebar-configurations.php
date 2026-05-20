@@ -67,10 +67,10 @@ class Sidebar_Configurations {
 		add_action( 'rest_api_init', array( $this, 'register_route' ) );
 		add_action( 'admin_bar_menu', array( $this, 'add_admin_trigger' ), $admin_trigger_priority );
 		// Setup the Sidebar Auth Ajax.
-		add_action( 'wp_ajax_verify_zip_ai_authenticity', array( $this, 'verify_authenticity' ) );
+		add_action( 'wp_ajax_zip_ai_verify_authenticity', array( $this, 'verify_authenticity' ) );
 		// Setup the Sidebar Credit Details Ajax.
-		add_action( 'wp_ajax_get_latest_credit_details', array( $this, 'get_latest_credit_details' ) );
-		add_action( 'wp_ajax_get_fresh_credit_details', array( $this, 'get_fresh_credit_details' ) );
+		add_action( 'wp_ajax_zip_ai_get_latest_credit_details', array( $this, 'get_latest_credit_details' ) );
+		add_action( 'wp_ajax_zip_ai_get_fresh_credit_details', array( $this, 'get_fresh_credit_details' ) );
 
 		// Render the Sidebar React App in the Footer in the Gutenberg Editor, Admin, and the Front-end.
 		add_action( 'admin_footer', array( $this, 'render_sidebar_markup' ) );
@@ -103,6 +103,10 @@ class Sidebar_Configurations {
 						'use_system_message' => array(
 							'sanitize_callback' => array( $this, 'sanitize_boolean_field' ),
 						),
+						'message_array'      => array(
+							'type'              => 'array',
+							'sanitize_callback' => array( $this, 'sanitize_message_array' ),
+						),
 					),
 				),
 			)
@@ -117,7 +121,29 @@ class Sidebar_Configurations {
 	 * @return boolean
 	 */
 	public function sanitize_boolean_field( $value ) {
-		return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
+		return wp_validate_boolean( sanitize_text_field( wp_unslash( (string) $value ) ) );
+	}
+
+	/**
+	 * Sanitize a message array by sanitizing each message's role and content.
+	 *
+	 * @since x.x.x
+	 * @param mixed $value The value to sanitize.
+	 * @return array
+	 */
+	public function sanitize_message_array( $value ) {
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+		return array_map(
+			function ( $message ) {
+				return array(
+					'role'    => isset( $message['role'] ) ? sanitize_text_field( wp_unslash( $message['role'] ) ) : '',
+					'content' => isset( $message['content'] ) ? wp_kses_post( wp_unslash( $message['content'] ) ) : '',
+				);
+			},
+			$value
+		);
 	}
 
 	/**
@@ -173,7 +199,7 @@ class Sidebar_Configurations {
 	 *
 	 * @param \WP_REST_Request $request request object.
 	 * @since 1.0.0
-	 * @return void
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function generate_ai_content( $request ) {
 
@@ -185,7 +211,7 @@ class Sidebar_Configurations {
 
 		// If the nessage array doesn't exist, abandon ship.
 		if ( empty( $params['message_array'] ) || ! is_array( $params['message_array'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'The message array was not supplied', 'astra-sites' ) ) );
+			return new \WP_Error( 'missing_message_array', __( 'The message array was not supplied', 'astra-sites' ), array( 'status' => 400 ) );
 		}
 
 		// Set the character count to 0, and create messages array.
@@ -241,23 +267,23 @@ class Sidebar_Configurations {
 		if ( ! empty( $response['error'] ) ) {
 			// If the response has an error, handle it and report it back.
 			$message = '';
-			if ( ! empty( $response['error']['message'] ) ) { // If any error message received from OpenAI.
-				$message = $response['error']['message'];
-			} elseif ( is_string( $response['error'] ) ) {  // If any error message received from server.
-				if ( ! empty( $response['code'] && is_string( $response['code'] ) ) ) {
-					$message = $this->custom_message( $response['code'] );
-				}
-				$message = ! empty( $message ) ? $message : $response['error'];
+			if ( ! empty( $response['code'] ) && is_string( $response['code'] ) ) {
+				$message = $this->custom_message( $response['code'] );
 			}
-			wp_send_json_error(
+			if ( empty( $message ) ) {
+				$message = __( 'An error occurred while processing your request.', 'astra-sites' );
+			}
+			return new \WP_Error(
+				'ai_content_error',
+				$message,
 				array(
-					'message' => $message,
-					'code'    => $response['code'],
+					'status' => 500,
+					'code'   => $response['code'],
 				)
 			);
 		} elseif ( is_array( $response['choices'] ) && ! empty( $response['choices'][0]['message']['content'] ) ) {
 			// If the message was sent successfully, send it successfully.
-			wp_send_json_success(
+			return rest_ensure_response(
 				array(
 					'message' => $response['choices'][0]['message']['content'],
 					'code'    => $response['code'],
@@ -265,10 +291,12 @@ class Sidebar_Configurations {
 			);
 		} else {
 			// If you've reached here, then something has definitely gone amuck. Abandon ship.
-			wp_send_json_error(
+			return new \WP_Error(
+				'unexpected_error',
+				__( 'Something went wrong', 'astra-sites' ),
 				array(
-					'message' => __( 'Something went wrong', 'astra-sites' ),
-					'code'    => $response['code'],
+					'status' => 500,
+					'code'   => $response['code'],
 				)
 			);
 		}//end if
@@ -308,6 +336,11 @@ class Sidebar_Configurations {
 
 		// Check the nonce.
 		check_ajax_referer( 'zip_ai_ajax_nonce', 'nonce' );
+
+		// Verify user capability.
+		if ( ! current_user_can( 'manage_zip_ai_assistant' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'astra-sites' ) ), 403 );
+		}
 
 		// Set an array of data to be sent.
 		$required_details = [
@@ -801,6 +834,11 @@ class Sidebar_Configurations {
 		// Check the nonce.
 		check_ajax_referer( 'zip_ai_ajax_nonce', 'nonce' );
 
+		// Verify user capability.
+		if ( ! current_user_can( 'manage_zip_ai_assistant' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'astra-sites' ) ), 403 );
+		}
+
 		// Set an array of data to be sent.
 		$latest_credit_details = Helper::get_credit_details();
 
@@ -822,6 +860,11 @@ class Sidebar_Configurations {
 	public function get_fresh_credit_details() {
 		// Check the nonce.
 		check_ajax_referer( 'zip_ai_ajax_nonce', 'nonce' );
+
+		// Verify user capability.
+		if ( ! current_user_can( 'manage_zip_ai_assistant' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'astra-sites' ) ), 403 );
+		}
 
 		// Set an array of data to be sent.
 		$latest_credit_details = Helper::get_fresh_credit_details();

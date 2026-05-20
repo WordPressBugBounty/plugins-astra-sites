@@ -7,6 +7,14 @@ import toast from 'react-hot-toast';
 import { toastBody } from '../helpers';
 import { setCookie } from '../utils/helpers';
 
+export const canBypassWithOverage = () => {
+	const overage = aiBuilderVars?.zip_plans?.plan_data?.overage;
+	if ( ! overage ) {
+		return false;
+	}
+	return overage.eligible === true && overage.auto_charge_enabled === true;
+};
+
 const useBuildSiteController = () => {
 	const { nextStep } = useNavigateSteps();
 	const {
@@ -120,6 +128,9 @@ const useBuildSiteController = () => {
 			typeof aiSitesRemainingCount === 'number' &&
 			aiSitesRemainingCount <= 0
 		) {
+			if ( canBypassWithOverage() ) {
+				return false;
+			}
 			return true;
 		}
 
@@ -218,14 +229,19 @@ const useBuildSiteController = () => {
 						message,
 						error,
 					} );
-				} else if (
-					'site_creation_limit_exceeded' === code ||
-					message.includes( 'limit' )
-				) {
-					// Handle site limit exceed error.
-					setLimitExceedModal( {
-						open: true,
-					} );
+				} else if ( 'site_creation_limit_exceeded' === code ) {
+					// If overage is available, surface the server message instead of the limit modal.
+					if ( canBypassWithOverage() ) {
+						setApiErrorModal( {
+							open: true,
+							message,
+							error,
+						} );
+					} else {
+						setLimitExceedModal( {
+							open: true,
+						} );
+					}
 				} else {
 					setApiErrorModal( {
 						open: true,

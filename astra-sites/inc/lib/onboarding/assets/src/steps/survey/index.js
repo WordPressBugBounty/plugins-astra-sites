@@ -11,7 +11,7 @@ import AdvancedSettings from './advanced-settings';
 import './style.scss';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
-const { phpVersion, analytics, firstImportStatus } = starterTemplates;
+const { phpVersion, firstImportStatus } = starterTemplates;
 
 const Survey = () => {
 	const storedState = useStateValue();
@@ -22,7 +22,6 @@ const Survey = () => {
 			requiredPlugins,
 			notInstalledList,
 			notActivatedList,
-			analyticsFlag,
 			shownRequirementOnce,
 			pluginInstallationAttempts,
 			fileSystemPermissions,
@@ -220,29 +219,6 @@ const Survey = () => {
 					currentIndex: currentIndex + 1,
 				} );
 			}, 500 );
-
-			// Always send analytics opt-in/opt-out preference so the user can change their choice.
-			const answer = analyticsFlag ? 'yes' : 'no';
-			if ( answer !== analytics ) {
-				const optinAnswer = new FormData();
-				optinAnswer.append( 'action', 'astra-sites-update-analytics' );
-				optinAnswer.append(
-					'_ajax_nonce',
-					astraSitesVars?._ajax_nonce
-				);
-				optinAnswer.append( 'data', answer );
-
-				fetch( ajaxurl, {
-					method: 'post',
-					body: optinAnswer,
-				} )
-					.then( ( response ) => response.json() )
-					.then( ( response ) => {
-						if ( response.success ) {
-							starterTemplates.analytics = answer;
-						}
-					} );
-			}
 
 			// Skip subscription if chose to skip and start building.
 			if ( skipSubscription ) {

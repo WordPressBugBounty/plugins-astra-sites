@@ -1,3 +1,12 @@
+v1.0.30 - 20-May-2026
+- Fix: Use integer type and absint sanitize_callback for the per_page REST arg.
+- Fix: Replace raw remote error message with a generic string to prevent info disclosure.
+
+v1.0.29 - 19-May-2026
+- Fix: Converted the images REST callback to return WP_REST_Response/WP_Error instead of wp_send_json_success/error. Required for WordPress.org compliance.
+- Security: Added sanitize_callback definitions to REST route args for server-side sanitization.
+- Fix: Replaced sanitize_url() with esc_url_raw( wp_unslash() ) for correct URL sanitization.
+
 v1.0.28 - 27-April-2026
 - Fix: Self-host the Figtree font used by the image-picker UI instead of fetching from fonts.googleapis.com on every editor load. Required for WordPress.org compliance.
 

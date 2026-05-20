@@ -1,3 +1,6 @@
+v1.1.34 - 13-May-2026
+- Fix: Prevented PHP fatal in filesystem helper when running on FTP-based hosts without WordPress credentials.
+
 v1.1.33 - 30-April-2026
 - Fix: Record batch processing start timestamp for stale import flag detection.
 - Fix: Strip residual `websitedemos.net` URLs from customizer settings during classic-template imports so menu and button links resolve to the newly imported site.

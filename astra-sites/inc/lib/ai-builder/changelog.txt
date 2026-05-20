@@ -1,3 +1,17 @@
+v1.2.79 - 19th May 2026
+- Fix: Template cards now load with their default color palette instead of a random one; shuffle only applies on button click.
+- Fix: Temporarily reverted popup-based ZipWP authentication to same-tab redirect to resolve environment-specific issues.
+
+v1.2.78 - 13th May 2026
+- Fix: Logo and other customizer images are now correctly replaced with media library URLs after template import.
+
+v1.2.77 - 7th May 2026
+- Improvement: Allow AI site creation to proceed past plan limit when the account is eligible for auto-charge overage.
+- Improvement: Added Freepik image support for Russian users with ZipWP connection prompt for image access.
+- Fix: Resolved blank organization and plan name in the Limit Reached modal when connecting ZipWP account mid-flow.
+- Fix: Resolved a crash on the contact details step caused by invalid saved social media data.
+- Fix: Custom color palette selection no longer crashes the design step when the default palette has not yet been hydrated.
+
 v1.2.76 - 30th April 2026
 - Security: Hardened ZipWP auth postMessage handling by validating origin and source window to prevent CSRF-based credential overwrite (CWE-352).
 - Fix: Clean up stale batch import options (batch_process_started_time, batch_process_complete) in delete_related_transient.

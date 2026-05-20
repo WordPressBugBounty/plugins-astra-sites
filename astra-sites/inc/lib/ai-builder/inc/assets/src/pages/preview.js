@@ -172,7 +172,7 @@ const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 			}, 100 );
 		}
 
-		if ( ! aiActivePallette?.slug?.includes( 'default' ) ) {
+		if ( aiActivePallette ) {
 			sendPostMessage( {
 				param: 'colorPalette',
 				data: aiActivePallette,

@@ -72,7 +72,8 @@ class ST_Resetter {
 		);
 
 		// If file system fails? Then take a backup in site option.
-		if ( method_exists( $file_system, 'put_contents' ) && false === $file_system->put_contents( $log_file, wp_json_encode( $old_settings ), FS_CHMOD_FILE ) ) {
+		$write_failed = ! $file_system || ! method_exists( $file_system, 'put_contents' ) || false === $file_system->put_contents( $log_file, (string) wp_json_encode( $old_settings ), FS_CHMOD_FILE );
+		if ( $write_failed ) {
 			update_option( 'astra_sites_' . $file_name, $old_settings, false );
 			ST_Importer_Log::add(
 				'Backup Settings - Backup file could not be written to filesystem. Using site option as fallback.',
@@ -118,12 +119,13 @@ class ST_Resetter {
 			// Create the directory.
 			wp_mkdir_p( $dir_info['path'] );
 
-			if ( method_exists( self::get_filesystem(), 'put_contents' ) ) {
+			$filesystem = self::get_filesystem();
+			if ( $filesystem && method_exists( $filesystem, 'put_contents' ) ) {
 				// Add an index file for security.
-				self::get_filesystem()->put_contents( $dir_info['path'] . 'index.html', '' );
+				$filesystem->put_contents( $dir_info['path'] . 'index.html', '' );
 
 				// Add an .htaccess for security.
-				self::get_filesystem()->put_contents( $dir_info['path'] . '.htaccess', 'deny from all' );
+				$filesystem->put_contents( $dir_info['path'] . '.htaccess', 'deny from all' );
 			}
 		}
 
@@ -131,17 +133,23 @@ class ST_Resetter {
 	}
 
 	/**
-	 * Get an instance of WP_Filesystem_Direct.
+	 * Get an instance of WP_Filesystem.
+	 *
+	 * Returns null when WP_Filesystem() fails to initialise (e.g. FTP method
+	 * selected without valid credentials), preventing fatal errors when callers
+	 * invoke filesystem methods on a partially initialised global.
 	 *
 	 * @since 1.0.0
-	 * @return object A WP_Filesystem_Direct instance.
+	 * @return \WP_Filesystem_Base|null Filesystem instance, or null on failure.
 	 */
 	public static function get_filesystem() {
 		global $wp_filesystem;
 
 		require_once ABSPATH . '/wp-admin/includes/file.php';
 
-		WP_Filesystem();
+		if ( ! WP_Filesystem() ) {
+			return null;
+		}
 
 		return $wp_filesystem;
 	}

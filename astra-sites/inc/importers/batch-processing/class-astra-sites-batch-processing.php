@@ -163,8 +163,19 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 			// Add "elementor" in import [queue].
 			// @todo Remove required `allow_url_fopen` support.
 			if ( ini_get( 'allow_url_fopen' ) && is_plugin_active( 'elementor/elementor.php' ) ) {
-				$import    = new \Elementor\TemplateLibrary\Astra_Sites_Batch_Processing_Elementor();
-				$classes[] = $import;
+				// The Elementor batch file early-returns if \Elementor\Plugin
+				// isn't loaded when includes() runs, and require_once won't
+				// re-run it. Re-require now that Elementor is available.
+				if ( ! class_exists( '\Elementor\TemplateLibrary\Astra_Sites_Batch_Processing_Elementor' )
+					&& class_exists( '\Elementor\Plugin' ) ) {
+					require ASTRA_SITES_DIR . 'inc/importers/batch-processing/class-astra-sites-batch-processing-elementor.php';
+				}
+				if ( class_exists( '\Elementor\TemplateLibrary\Astra_Sites_Batch_Processing_Elementor' ) ) {
+					$import    = new \Elementor\TemplateLibrary\Astra_Sites_Batch_Processing_Elementor();
+					$classes[] = $import;
+				} else {
+					Astra_Sites_Importer_Log::add( 'Elementor batch processor unavailable — Elementor classes not loaded. Skipping Elementor import step.' );
+				}
 			}
 
 			// Add "astra-addon" in import [queue].

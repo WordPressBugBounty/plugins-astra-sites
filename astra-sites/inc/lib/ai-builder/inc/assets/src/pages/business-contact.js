@@ -19,9 +19,10 @@ const EMAIL_VALIDATION_REGEX =
 
 const mapSocialUrl = ( list ) => {
 	return list.map( ( item ) => {
+		const identifier = item.id ?? item.type;
 		return {
-			type: item.id,
-			id: item.id,
+			type: identifier,
+			id: identifier,
 			url: item.url,
 		};
 	} );

@@ -70,6 +70,9 @@ if ( ! class_exists( 'Astra_Sites_Compatibility' ) ) :
 
 			// Plugin - Modern Cart.
 			require_once ASTRA_SITES_DIR . 'inc/classes/compatibility/modern-cart/class-astra-sites-compatibility-modern-cart.php';
+
+			// Plugin - Power Coupons.
+			require_once ASTRA_SITES_DIR . 'inc/classes/compatibility/power-coupons/class-astra-sites-compatibility-power-coupons.php';
 		}
 
 	}

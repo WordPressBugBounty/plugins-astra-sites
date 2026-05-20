@@ -22,6 +22,7 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Masonry from 'react-layout-masonry';
 
+import ConnectZipWPBanner from '../components/connect-zipwp-banner';
 import Dropdown from '../components/dropdown';
 import Heading from '../components/heading';
 import ImagePreview from '../components/image-preview';
@@ -280,6 +281,10 @@ const Images = () => {
 	const [ openSuggestedKeywords, setOpenSuggestedKeywords ] =
 		useState( false );
 	const [ openSkipModal, setOpenSkipModal ] = useState( false );
+	const [ needsZipWPAuth, setNeedsZipWPAuth ] = useState(
+		aiBuilderVars?.imagesEngine === 'freepik' &&
+			! aiBuilderVars?.zip_token_exists
+	);
 	const [ referenceRef, popperRef ] = usePopper( {
 		placement: 'bottom',
 		modifiers: [ { name: 'offset', options: { offset: [ 0, 0 ] } } ],
@@ -440,6 +445,33 @@ const Images = () => {
 		}
 	};
 
+	// Client-side country check — catches the case where the WordPress server
+	// IP is outside Russia but the user is (e.g. VPS in Germany hosting a
+	// Russian site). Skipped when the banner is already showing or the user
+	// has a token. Runs once on mount.
+	useEffect( () => {
+		if ( needsZipWPAuth || aiBuilderVars?.zip_token_exists ) {
+			return;
+		}
+		getClientCountryCode().then( ( code ) => {
+			if ( code === 'RU' ) {
+				setNeedsZipWPAuth( true );
+			}
+		} );
+	}, [] );
+
+	// Fired by the Connect ZipWP banner once the user successfully completes
+	// auth. Clears the auth requirement and resets image state so the fetch
+	// effect re-runs.
+	const handleAuthSuccess = () => {
+		setNeedsZipWPAuth( false );
+		blackListedEngines.current.clear();
+		imageRequestCompleted.current = false;
+		setImages( [] );
+		setHasMore( true );
+		setPage( 1 );
+	};
+
 	// Define a function to fetch all images
 	const fetchAllImages = async ( engine ) => {
 		// eslint-disable-line
@@ -456,8 +488,12 @@ const Images = () => {
 		// Get client country code (checks cookie first, fetches from API if not cached).
 		const clientCountryCode = await getClientCountryCode();
 
-		// Use Unsplash for Russian clients, otherwise use the provided engine or default from server.
-		const selectedEngine = clientCountryCode === 'RU' ? 'unsplash' : engine;
+		// Russian clients: Freepik for white-label builds, Unsplash otherwise. Non-Russian clients use the passed-in engine.
+		const russianEngine = aiBuilderVars?.isWhiteLabelAIBuilder
+			? 'freepik'
+			: 'unsplash';
+		const selectedEngine =
+			clientCountryCode === 'RU' ? russianEngine : engine;
 
 		const payload = {
 			keywords: searchKeywords,
@@ -539,6 +575,10 @@ const Images = () => {
 	};
 
 	useEffect( () => {
+		if ( needsZipWPAuth ) {
+			return;
+		}
+
 		imageRequestCompleted.current = false;
 		const fetchAllImagesFromAllEngines = async () => {
 			if ( isLoading || ! hasMore ) {
@@ -574,7 +614,7 @@ const Images = () => {
 		};
 
 		fetchAllImagesFromAllEngines();
-	}, [ debouncedImageKeywords, debouncedOrientation, page ] );
+	}, [ debouncedImageKeywords, debouncedOrientation, page, needsZipWPAuth ] );
 
 	useEffect( () => {
 		imageRequestCompleted.current = false;
@@ -642,6 +682,9 @@ const Images = () => {
 	const getRenderItems = () => {
 		switch ( activeTab ) {
 			case TABS[ 0 ].value:
+				if ( needsZipWPAuth ) {
+					return [];
+				}
 				return isLoading || ! imageRequestCompleted.current
 					? [ ...images, ...getImageSkeleton() ]
 					: images;
@@ -742,7 +785,7 @@ const Images = () => {
 		}
 
 		const imagesToSelect = images.slice( 0, 10 );
-		imagesToSelect.slice( 0, 10 ).forEach( ( image ) => {
+		imagesToSelect.forEach( ( image ) => {
 			handleImageSelection( image );
 		} );
 
@@ -950,7 +993,7 @@ const Images = () => {
 								) ) }
 							</div>
 						</div>
-						{ activeTab === TABS[ 0 ].value && (
+						{ activeTab === TABS[ 0 ].value && ! needsZipWPAuth && (
 							<Dropdown
 								placement="right"
 								trigger={
@@ -1032,13 +1075,15 @@ const Images = () => {
 						) }
 					</div>
 				</div>
-				<p className="text-start text-zip-body-text text-sm px-1 pb-2 items-center flex !mt-0">
-					<InformationCircleIcon className="w-4 h-4 inline-block mr-1 mb-0.5 shrink-0" />
-					{ __(
-						'Select 15 to 18 images for best results.',
-						'ai-builder'
-					) }
-				</p>
+				{ ! ( activeTab === TABS[ 0 ].value && needsZipWPAuth ) && (
+					<p className="text-start text-zip-body-text text-sm px-1 pb-2 items-center flex !mt-0">
+						<InformationCircleIcon className="w-4 h-4 inline-block mr-1 mb-0.5 shrink-0" />
+						{ __(
+							'Select 15 to 18 images for best results.',
+							'ai-builder'
+						) }
+					</p>
+				) }
 			</div>
 			<div
 				className="rounded-b-lg py-4 flex flex-col flex-auto relative px-5 md:px-10 lg:px-14 xl:px-15"
@@ -1132,7 +1177,18 @@ const Images = () => {
 					</div>
 				) }
 
+				{ activeTab === TABS[ 0 ].value && needsZipWPAuth && (
+					<div className="flex flex-col items-center justify-center h-full">
+						<ConnectZipWPBanner
+							onAuthSuccess={ handleAuthSuccess }
+							onUploadOwn={ () =>
+								setActiveTab( TABS[ 1 ].value )
+							}
+						/>
+					</div>
+				) }
 				{ activeTab === TABS[ 0 ].value &&
+					! needsZipWPAuth &&
 					! isLoading &&
 					! images.length &&
 					imageRequestCompleted.current && (

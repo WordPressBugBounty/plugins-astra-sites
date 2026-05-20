@@ -85,7 +85,9 @@ const SocialMediaItem = ( { socialMedia, onRemove, onEdit } ) => {
 					<XMarkIcon className="w-4 h-4 text-white" />
 				</div>
 			) }
-			<socialMedia.icon className="shrink-0 text-zip-body-text inline-block" />
+			{ socialMedia.icon && (
+				<socialMedia.icon className="shrink-0 text-zip-body-text inline-block" />
+			) }
 			{ isEditing ? (
 				<Input
 					ref={ ( node ) => {
@@ -219,17 +221,19 @@ const SocialMediaAdd = ( { list, onChange } ) => {
 	};
 
 	const updatedList = useMemo( () => {
-		return list.map( ( sm ) => {
-			const url = sm.url;
-			const valid = validateSocialMediaURL( url, sm.id );
-			return {
-				...sm,
-				url,
-				valid,
-				icon: socialMediaList.find( ( item ) => item.id === sm.id )
-					?.icon,
-			};
-		} );
+		return list
+			.map( ( sm ) => {
+				const url = sm.url;
+				const valid = validateSocialMediaURL( url, sm.id );
+				return {
+					...sm,
+					url,
+					valid,
+					icon: socialMediaList.find( ( item ) => item.id === sm.id )
+						?.icon,
+				};
+			} )
+			.filter( ( sm ) => sm.icon );
 	}, [ list ] );
 
 	const socialMediaRender = () => {

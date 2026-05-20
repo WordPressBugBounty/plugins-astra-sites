@@ -1,3 +1,14 @@
+2.0.12 - 20th May 2026
+- Fix: Add 403 HTTP status code to AJAX permission error responses.
+- Security: Sanitize message_array REST parameter — role via sanitize_text_field, content via wp_kses_post.
+- Fix: Replace raw upstream error messages with custom mapped messages or a generic fallback.
+
+2.0.11 - 19th May 2026
+- Fix: Renamed sidebar AJAX action names to use the zip_ai_ prefix for WordPress.org compliance.
+- Fix: Converted the AI content REST callback to return WP_REST_Response/WP_Error instead of wp_send_json_success/error. Required for WordPress.org compliance.
+- Security: Added current_user_can() capability checks to all AJAX handlers.
+- Fix: Added wp_unslash() before sanitize_text_field() on $_POST superglobal access.
+
 2.0.10 - 27th April 2026
 - Fix: Self-host the Inter and Courier Prime fonts used by the admin dashboard and editor sidebar instead of fetching from fonts.googleapis.com on every page load. Required for WordPress.org compliance.
 

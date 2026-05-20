@@ -111,8 +111,9 @@ class ST_Importer_Log {
 		$upload_dir = self::log_dir();
 
 		$file_created = false;
-		if ( method_exists( self::get_filesystem(), 'put_contents' ) ) {
-			$file_created = self::get_filesystem()->put_contents( $upload_dir['path'] . 'index.html', '' );
+		$filesystem   = self::get_filesystem();
+		if ( $filesystem && method_exists( $filesystem, 'put_contents' ) ) {
+			$file_created = $filesystem->put_contents( $upload_dir['path'] . 'index.html', '' );
 		}
 
 		if ( ! $file_created ) {
@@ -186,12 +187,13 @@ class ST_Importer_Log {
 			// Create the directory.
 			wp_mkdir_p( $dir_info['path'] );
 
-			if ( method_exists( self::get_filesystem(), 'put_contents' ) ) {
+			$filesystem = self::get_filesystem();
+			if ( $filesystem && method_exists( $filesystem, 'put_contents' ) ) {
 				// Add an index file for security.
-				self::get_filesystem()->put_contents( $dir_info['path'] . 'index.html', '' );
+				$filesystem->put_contents( $dir_info['path'] . 'index.html', '' );
 
 				// Add an .htaccess for security.
-				self::get_filesystem()->put_contents( $dir_info['path'] . '.htaccess', 'deny from all' );
+				$filesystem->put_contents( $dir_info['path'] . '.htaccess', 'deny from all' );
 			}
 		}
 
@@ -199,17 +201,23 @@ class ST_Importer_Log {
 	}
 
 	/**
-	 * Get an instance of WP_Filesystem_Direct.
+	 * Get an instance of WP_Filesystem.
+	 *
+	 * Returns null when WP_Filesystem() fails to initialise (e.g. FTP method
+	 * selected without valid credentials), preventing fatal errors when callers
+	 * invoke filesystem methods on a partially initialised global.
 	 *
 	 * @since 1.1.25
-	 * @return object A WP_Filesystem_Direct instance.
+	 * @return \WP_Filesystem_Base|null Filesystem instance, or null on failure.
 	 */
 	public static function get_filesystem() {
 		global $wp_filesystem;
 
 		require_once ABSPATH . '/wp-admin/includes/file.php';
 
-		WP_Filesystem();
+		if ( ! WP_Filesystem() ) {
+			return null;
+		}
 
 		return $wp_filesystem;
 	}
@@ -315,9 +323,10 @@ class ST_Importer_Log {
 			error_log( $formatted_content ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- This is for the debug logs while importing. This is conditional and will not be logged in the debug.log file for normal users.
 		}
 
+		$filesystem    = self::get_filesystem();
 		$existing_data = '';
-		if ( file_exists( (string) $log_file ) && method_exists( self::get_filesystem(), 'get_contents' ) ) {
-			$existing_data = self::get_filesystem()->get_contents( $log_file );
+		if ( $filesystem && method_exists( $filesystem, 'get_contents' ) && file_exists( (string) $log_file ) ) {
+			$existing_data = $filesystem->get_contents( $log_file );
 		}
 
 		// Bail early to avoid potential Fatal errors during CLI imports.
@@ -328,8 +337,8 @@ class ST_Importer_Log {
 		// Style separator.
 		$separator = PHP_EOL;
 
-		if ( method_exists( self::get_filesystem(), 'put_contents' ) ) {
-			self::get_filesystem()->put_contents( $log_file, $existing_data . $separator . $formatted_content, FS_CHMOD_FILE );
+		if ( $filesystem && method_exists( $filesystem, 'put_contents' ) ) {
+			$filesystem->put_contents( $log_file, $existing_data . $separator . $formatted_content, FS_CHMOD_FILE );
 		}
 
 		/**

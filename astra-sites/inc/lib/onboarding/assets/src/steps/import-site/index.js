@@ -5,7 +5,10 @@ import PreviousStepLink from '../../components/util/previous-step-link/index';
 import DefaultStep from '../../components/default-step/index';
 import ImportLoader from '../../components/import-steps/import-loader';
 import ErrorScreen from '../../components/error/index';
-import { trackOnboardingStep } from '../../utils/functions';
+import PluginInstallList, {
+	MAX_RETRIES,
+} from '../../components/plugin-install-list/index';
+import { trackOnboardingStep, getStepIndex } from '../../utils/functions';
 import { useStateValue } from '../../store/store';
 import lottieJson from '../../../images/website-building.json';
 import ICONS from '../../../icons';
@@ -19,6 +22,7 @@ import {
 	checkRequiredPlugins,
 	generateAnalyticsLead,
 	getDemo,
+	extractPluginError,
 } from './import-utils';
 const { reportError } = starterTemplates;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
@@ -52,9 +56,10 @@ const ImportSite = () => {
 			templateId,
 			selectedTemplateType,
 			builder,
-			pluginInstallationAttempts,
 			awaitingPluginCheck,
 			skippedPlugins,
+			analyticsFlag,
+			pluginStatuses,
 		},
 		dispatch,
 	] = storedState;
@@ -177,18 +182,11 @@ const ImportSite = () => {
 			return { verified: true, missing: [], notActivated: [] };
 		}
 
-		// Show verification status with plugin names
-		const pluginNames = requiredPluginsList
-			.map( ( p ) => p.name )
-			.join( ', ' );
-		dispatch( {
-			type: 'set',
-			importStatus: sprintf(
-				// translators: %s: Plugin names being verified.
-				__( 'Verifying plugins: %s', 'astra-sites' ),
-				pluginNames
-			),
-		} );
+		// No status dispatch here — the user is already on the ImportLoader
+		// screen by this point (requiredPluginsDone flipped before importPart1
+		// ran), so plugin-step copy like "Verifying plugins: …" doesn't belong
+		// here. The "Preparing import…" status set during the transition stays
+		// visible until the first content-import phase updates it.
 
 		const formData = new FormData();
 		formData.append( 'action', 'astra-sites-verify-required-plugins' );
@@ -206,7 +204,10 @@ const ImportSite = () => {
 			const result = await response.json();
 
 			if ( ! result.success ) {
-				// Plugins missing or not activated - handle recovery
+				// Plugins missing or not activated - handle recovery.
+				// Repopulating the notInstalled/notActivated lists triggers
+				// the install/activate useEffects to re-run; the all-active
+				// effect then re-fires this verification with a fresh timer.
 				const { missing, not_activated } = result.data || {};
 				const missingPlugins = missing || [];
 				const notActivatedPlugins = not_activated || [];
@@ -219,7 +220,6 @@ const ImportSite = () => {
 					type: 'set',
 					notInstalledList: missingPlugins,
 					notActivatedList: notActivatedPlugins,
-					requiredPluginsDone: false,
 				} );
 
 				return {
@@ -250,64 +250,10 @@ const ImportSite = () => {
 	 * Start Import Part 1.
 	 */
 	const importPart1 = async () => {
-		// STEP 1: Verify all required plugins are installed on server
-		const verificationResult = await verifyPluginsBeforeImport();
-
-		if ( ! verificationResult.verified ) {
-			// Build a detailed message about which plugins need attention
-			const { missing, notActivated } = verificationResult;
-			const problemPlugins = [];
-
-			if ( missing.length > 0 ) {
-				const missingNames = missing
-					.map( ( p ) => p.name )
-					.join( ', ' );
-				problemPlugins.push(
-					sprintf(
-						// translators: %s: Plugin names that are not installed.
-						__( 'Not installed: %s', 'astra-sites' ),
-						missingNames
-					)
-				);
-			}
-
-			if ( notActivated.length > 0 ) {
-				const inactiveNames = notActivated
-					.map( ( p ) => p.name )
-					.join( ', ' );
-				problemPlugins.push(
-					sprintf(
-						// translators: %s: Plugin names that are not activated.
-						__( 'Not activated: %s', 'astra-sites' ),
-						inactiveNames
-					)
-				);
-			}
-
-			const statusMessage =
-				problemPlugins.length > 0
-					? sprintf(
-							// translators: %s: Details about plugins needing attention.
-							__(
-								'Plugins need attention. %s. Retrying…',
-								'astra-sites'
-							),
-							problemPlugins.join( '. ' )
-					  )
-					: __(
-							'Plugin verification failed. Retrying…',
-							'astra-sites'
-					  );
-
-			dispatch( {
-				type: 'set',
-				importStatus: statusMessage,
-			} );
-
-			return; // Exit - the useEffects will handle re-installation
-		}
-
-		// STEP 2: Proceed with existing import logic
+		// Plugin verification has already passed on the plugin step (see the
+		// all-plugins-active effect's setTimeout); requiredPluginsDone only
+		// flips after a successful verifyPluginsBeforeImport(). No need to
+		// re-check here.
 		let resetStatus = false;
 		let cfStatus = false;
 		let wooCARStatus = false;
@@ -407,10 +353,55 @@ const ImportSite = () => {
 	};
 
 	/**
+	 * Push a single plugin onto the wp.updates install queue.
+	 * Caller must invoke wp.updates.queueChecker() once after pushing all items.
+	 *
+	 * @param {Object} plugin
+	 */
+	const queueInstall = ( plugin ) => {
+		wp.updates.queue.push( {
+			action: 'install-plugin',
+			data: {
+				slug: plugin.slug,
+				init: plugin.init,
+				name: plugin.name,
+				is_ast_request: true,
+				clear_destination: true,
+				ajax_nonce: astraSitesVars?._ajax_nonce,
+				success() {
+					dispatch( {
+						type: 'plugin_installed',
+						plugin,
+						importStatus: sprintf(
+							// translators: Plugin Name.
+							__(
+								'%1$s plugin installed successfully.',
+								'astra-sites'
+							),
+							plugin.name
+						),
+					} );
+				},
+				error( err ) {
+					// pluginInstallationAttempts is incremented inside the
+					// plugin_install_failed reducer — single dispatch, single render.
+					dispatch( {
+						type: 'plugin_install_failed',
+						plugin,
+						error: extractPluginError(
+							err,
+							__( 'Installation failed.', 'astra-sites' )
+						),
+					} );
+				},
+			},
+		} );
+	};
+
+	/**
 	 * Install Required plugins.
 	 */
 	const installRequiredPlugins = () => {
-		// Install Bulk.
 		if ( notInstalledList.length <= 0 ) {
 			return;
 		}
@@ -422,76 +413,15 @@ const ImportSite = () => {
 			importPercent: percentage,
 		} );
 
-		notInstalledList.forEach( ( plugin ) => {
-			wp.updates.queue.push( {
-				action: 'install-plugin', // Required action.
-				data: {
-					slug: plugin.slug,
-					init: plugin.init,
-					name: plugin.name,
-					is_ast_request: true,
-					clear_destination: true,
-					ajax_nonce: astraSitesVars?._ajax_nonce,
-					success() {
-						// Use reducer action to avoid closure issues
-						// The reducer uses current state, not stale closure values
-						dispatch( {
-							type: 'plugin_installed',
-							plugin,
-							importStatus: sprintf(
-								// translators: Plugin Name.
-								__(
-									'%1$s plugin installed successfully.',
-									'astra-sites'
-								),
-								plugin.name
-							),
-						} );
-					},
-					error( err ) {
-						dispatch( {
-							type: 'set',
-							pluginInstallationAttempts:
-								pluginInstallationAttempts + 1,
-						} );
-						let errText = err;
-						if ( err && undefined !== err.errorMessage ) {
-							errText = err.errorMessage;
-							if ( undefined !== err.errorCode ) {
-								errText = err.errorCode + ': ' + errText;
-							}
-						}
-						// Showing the memory error message instead of json response
-						if ( err && undefined !== err.responseJSON ) {
-							const json = err.responseJSON;
-							if (
-								undefined !== json.data &&
-								undefined !== json.data.message
-							) {
-								errText = json.data.message;
-							}
-						}
-						report(
-							sprintf(
-								// translators: Plugin Name.
-								__(
-									'Could not install the plugin - %s',
-									'astra-sites'
-								),
-								plugin.name
-							),
-							'',
-							errText,
-							'',
-							'',
-							err
-						);
-					},
-				},
-			} );
+		// Mark only the first plugin as 'installing' — wp.updates queue is
+		// sequential, so the rest stay 'pending' and the reducer flips the
+		// next one to 'installing' as each completes.
+		dispatch( {
+			type: 'plugin_install_started',
+			plugin: notInstalledList[ 0 ],
 		} );
 
-		// Required to set queue.
+		notInstalledList.forEach( queueInstall );
 		wp.updates.queueChecker();
 	};
 
@@ -503,7 +433,8 @@ const ImportSite = () => {
 	const activatePlugin = ( plugin ) => {
 		percentage += 2;
 		dispatch( {
-			type: 'set',
+			type: 'plugin_activate_started',
+			plugin,
 			importStatus: sprintf(
 				// translators: Plugin Name.
 				__( 'Activating %1$s plugin.', 'astra-sites' ),
@@ -568,16 +499,20 @@ const ImportSite = () => {
 						// Use reducer actions to avoid closure issues
 						// The reducer uses current state, not stale closure values
 						if ( deprioritizeStatus ) {
+							const dependencyName =
+								response.data?.dependency ||
+								__( 'a required plugin', 'astra-sites' );
 							dispatch( {
 								type: 'plugin_deferred',
 								plugin,
 								importStatus: sprintf(
-									// translators: Plugin Name.
+									/* translators: %1$s: plugin name, %2$s: dependency plugin name */
 									__(
-										'%1$s deferred (requires WooCommerce).',
+										'%1$s deferred (requires %2$s).',
 										'astra-sites'
 									),
-									plugin.name
+									plugin.name,
+									dependencyName
 								),
 								importPercent: percentage,
 							} );
@@ -596,29 +531,18 @@ const ImportSite = () => {
 						}
 					}
 				} catch ( error ) {
-					report(
-						sprintf(
-							// translators: Plugin name.
+					// Per-plugin failure — surface inline, don't wipe the whole screen.
+					dispatch( {
+						type: 'plugin_activate_failed',
+						plugin,
+						error: extractPluginError(
+							error,
 							__(
-								`JSON_Error: Could not activate the required plugin - %1$s.`,
+								'Activation failed (invalid response).',
 								'astra-sites'
-							),
-							plugin.name
+							)
 						),
-						'',
-						error,
-						'',
-						sprintf(
-							// translators: Support article URL.
-							__(
-								'<a href="%1$s">Read article</a> to resolve the issue and continue importing template.',
-								'astra-sites'
-							),
-							'https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging'
-						),
-						text
-					);
-
+					} );
 					errorReported = true;
 				}
 
@@ -627,32 +551,17 @@ const ImportSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				// Per-plugin failure — remove from queue, surface inline.
+				// pluginInstallationAttempts is incremented inside the
+				// plugin_activate_failed reducer.
 				dispatch( {
-					type: 'set',
-					pluginInstallationAttempts: pluginInstallationAttempts + 1,
+					type: 'plugin_activate_failed',
+					plugin,
+					error: extractPluginError(
+						error,
+						__( 'Activation failed.', 'astra-sites' )
+					),
 				} );
-				report(
-					sprintf(
-						// translators: Plugin name.
-						__(
-							`Could not activate the required plugin - %1$s.`,
-							'astra-sites'
-						),
-						plugin.name
-					),
-					'',
-					error?.data?.message,
-					'',
-					sprintf(
-						// translators: Support article URL.
-						__(
-							'<a href="%1$s">Read article</a> to resolve the issue and continue importing template.',
-							'astra-sites'
-						),
-						'https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging'
-					),
-					error
-				);
 			} );
 	};
 
@@ -2172,6 +2081,11 @@ const ImportSite = () => {
 					}, successMessageDelay );
 					return true;
 				} catch ( error ) {
+					// report() flips importError so the ErrorScreen renders.
+					// Don't bump importPercent to 100 here — that would visually
+					// claim success while the user sees the failure body, and
+					// it triggers the "Congratulations" header path. importEnd
+					// still flips so the runner halts.
 					report(
 						__(
 							'Final finishings failed due to parse JSON error.',
@@ -2206,6 +2120,84 @@ const ImportSite = () => {
 		return status;
 	};
 
+	// Re-queue a single failed plugin for retry.
+	// For activate-failures the activatePlugin useEffect fires automatically
+	// when the plugin is added back to notActivatedList. For install-failures
+	// we need to push the plugin onto wp.updates.queue ourselves and mark it
+	// 'installing' (the reducer's auto-advance only kicks in on completion).
+	const handleRetryPlugin = ( pluginStatus ) => {
+		// Capture failedAt before dispatching plugin_retry, which clears it in
+		// the reducer — the branch below must read the pre-dispatch value.
+		const { failedAt } = pluginStatus;
+		dispatch( { type: 'plugin_retry', plugin: pluginStatus } );
+
+		if ( failedAt === 'install' ) {
+			dispatch( {
+				type: 'plugin_install_started',
+				plugin: pluginStatus,
+			} );
+			queueInstall( pluginStatus );
+			wp.updates.queueChecker();
+		}
+	};
+
+	// Retry all currently failed plugins that are still under the retry cap.
+	// Plugins at MAX_RETRIES are excluded — they show a manual-install fallback
+	// and must not be silently re-queued by this bulk action.
+	const handleRetryAll = () => {
+		Object.values( pluginStatuses )
+			.filter(
+				( s ) =>
+					s.state === 'failed' && ( s.attempts || 0 ) < MAX_RETRIES
+			)
+			.forEach( handleRetryPlugin );
+	};
+
+	// Skip all failed optional plugins and proceed to import.
+	const handleProceedWithoutOptional = () => {
+		dispatch( { type: 'skip_optional_failures' } );
+		// All required are already success at this point — safe to advance.
+		// Clear the stale per-plugin status (e.g. "X activated.") so it doesn't
+		// leak into the next-phase ImportLoader screen. Only set the transition
+		// status if we haven't already advanced — otherwise we'd overwrite a
+		// later phase's importStatus.
+		dispatch( {
+			type: 'set',
+			requiredPluginsDone: true,
+			...( requiredPluginsDone
+				? {}
+				: {
+						importStatus: __( 'Preparing import…', 'astra-sites' ),
+				  } ),
+		} );
+	};
+
+	// Re-run the server-side plugin check. Single-flight: ignore overlapping
+	// invocations whether they come from the manual Refresh CTA or the
+	// background tab-focus listener.
+	const runPluginCheck = () => {
+		if ( awaitingPluginCheck ) {
+			return;
+		}
+		dispatch( {
+			type: 'set',
+			awaitingPluginCheck: true,
+		} );
+		checkRequiredPlugins( storedState );
+	};
+
+	// Escape hatch: when required plugins are stuck failing, let the user
+	// abandon this template and pick a different one. Cancel any pending
+	// verify timer first — if ImportSite doesn't unmount on step change, the
+	// timer could fire and flip requiredPluginsDone for the abandoned template.
+	const handleGoBackToTemplates = () => {
+		if ( pluginVerifyTimeoutRef.current ) {
+			clearTimeout( pluginVerifyTimeoutRef.current );
+			pluginVerifyTimeoutRef.current = null;
+		}
+		dispatch( { type: 'set', currentIndex: getStepIndex( 'site-list' ) } );
+	};
+
 	const preventRefresh = ( event ) => {
 		if ( importPercent < 100 ) {
 			event.returnValue = __(
@@ -2217,22 +2209,46 @@ const ImportSite = () => {
 	};
 
 	useEffect( () => {
-		// Track template preview step when component mounts
-		trackOnboardingStep( 'import' );
+		// Track import step first, then update the analytics opt-in preference.
+		// The analytics option update triggers a WordPress init hook that may flush
+		// steps_visited to the server — doing it here ensures import is already in
+		// the DB before that snapshot is taken.
+		const { analytics } = starterTemplates;
+		trackOnboardingStep( 'import' ).finally( () => {
+			const answer = analyticsFlag ? 'yes' : 'no';
+			if ( answer !== analytics ) {
+				const optinAnswer = new FormData();
+				optinAnswer.append( 'action', 'astra-sites-update-analytics' );
+				optinAnswer.append(
+					'_ajax_nonce',
+					astraSitesVars?._ajax_nonce
+				);
+				optinAnswer.append( 'data', answer );
+
+				fetch( ajaxurl, {
+					method: 'post',
+					body: optinAnswer,
+				} )
+					.then( ( response ) => response.json() )
+					.then( ( response ) => {
+						if ( response.success ) {
+							starterTemplates.analytics = answer;
+						}
+					} );
+			}
+		} );
 	}, [] );
 
 	useEffect( () => {
+		// Skip attaching the guard once the import is done — no point warning
+		// the user about a flow that has already completed.
+		if ( importPercent === 100 ) {
+			return undefined;
+		}
 		window.addEventListener( 'beforeunload', preventRefresh ); // eslint-disable-line
 		return () => {
 			window.removeEventListener( 'beforeunload', preventRefresh ); // eslint-disable-line
 		};
-	}, [ importPercent ] ); // Add importPercent as a dependency.
-
-	// Add a useEffect to remove the event listener when importPercent is 100%.
-	useEffect( () => {
-		if ( importPercent === 100 ) {
-			window.removeEventListener( 'beforeunload', preventRefresh );
-		}
 	}, [ importPercent ] );
 
 	/**
@@ -2287,20 +2303,13 @@ const ImportSite = () => {
 	 * 		2. Astra Theme is installed
 	 */
 	useEffect( () => {
-		if ( requiredPluginsDone && themeStatus ) {
-			// Add a 2-second delay to ensure plugins are fully loaded and initialized
-			dispatch( {
-				type: 'set',
-				importStatus: __(
-					'Waiting for plugins to initialize…',
-					'astra-sites'
-				),
-			} );
-
-			setTimeout( () => {
-				importPart1();
-			}, 2000 ); // 2 second delay to allow plugin classes to load
+		if ( ! ( requiredPluginsDone && themeStatus ) ) {
+			return;
 		}
+		// The post-activation initialization delay (STAR-1711) now happens on
+		// the plugin-step screen before requiredPluginsDone flips, so by the
+		// time we get here it's safe to start importPart1 without further wait.
+		importPart1();
 	}, [ requiredPluginsDone, themeStatus ] );
 
 	/**
@@ -2312,19 +2321,31 @@ const ImportSite = () => {
 		}
 	}, [ xmlImportDone ] );
 
-	// State for deferred plugins (WooCommerce dependency handling)
+	// State for deferred plugins (dependency-on-another-plugin handling, e.g. WooCommerce, LearnDash).
 	const [ deferredPlugins, setDeferredPlugins ] = React.useState( [] );
-	const [ retryingDeferred, setRetryingDeferred ] = React.useState( false );
+	// Single-flight guard around retryDeferredPlugins. Set true → false within
+	// the same function call, so it never crosses a render — using a ref
+	// avoids an unnecessary re-render pair.
+	const retryingDeferredRef = React.useRef( false );
+	// Tracks whether the post-activation initialization delay has been started
+	// for this run. Plain ref (not state) so toggling it doesn't trigger renders
+	// and a stale closure can't restart the timer if the effect re-fires.
+	const pluginInitTimerStarted = React.useRef( false );
+	// Holds the setTimeout id for the 2s "Verifying plugins…" buffer so we can
+	// cancel it if the user navigates away (Back to Templates, step change)
+	// before it fires — otherwise a late dispatch would overwrite importStatus
+	// or flip requiredPluginsDone after the step is no longer current.
+	const pluginVerifyTimeoutRef = React.useRef( null );
 
 	/**
-	 * Retry deferred plugins after WooCommerce is activated
+	 * Retry deferred plugins once their dependency has been activated.
 	 */
 	const retryDeferredPlugins = () => {
-		if ( deferredPlugins.length === 0 || retryingDeferred ) {
+		if ( deferredPlugins.length === 0 || retryingDeferredRef.current ) {
 			return;
 		}
 
-		setRetryingDeferred( true );
+		retryingDeferredRef.current = true;
 
 		// Move deferred plugins back to activation queue
 		const pluginsToRetry = [ ...deferredPlugins ];
@@ -2337,7 +2358,7 @@ const ImportSite = () => {
 			plugins: pluginsToRetry,
 		} );
 
-		setRetryingDeferred( false );
+		retryingDeferredRef.current = false;
 	};
 
 	// This checks if all the required plugins are installed and activated.
@@ -2348,40 +2369,160 @@ const ImportSite = () => {
 			return;
 		}
 
+		// Already advanced — late plugin XHRs can re-trigger this effect via
+		// pluginStatuses changes; don't redispatch (would overwrite the current
+		// phase's importStatus with "Preparing import…").
+		if ( requiredPluginsDone ) {
+			return;
+		}
+
 		if ( notActivatedList.length <= 0 && notInstalledList.length <= 0 ) {
 			// Check if we have deferred plugins to retry
-			if ( deferredPlugins.length > 0 && ! retryingDeferred ) {
+			if ( deferredPlugins.length > 0 && ! retryingDeferredRef.current ) {
 				retryDeferredPlugins();
 				return;
 			}
 
-			// All plugins are truly done
+			// Block progression if any required plugin is still in a failed state.
+			const hasFailedRequired = Object.values( pluginStatuses ).some(
+				( s ) => s.type === 'required' && s.state === 'failed'
+			);
+			if ( hasFailedRequired ) {
+				return;
+			}
+
+			// Pause auto-advance when an optional plugin failed so the user can
+			// see the Retry optional / Proceed without optional plugins CTAs.
+			// Clicking either CTA transitions the optional plugin out of 'failed'
+			// (to 'pending' on retry, or 'skipped' on proceed), unblocking this
+			// effect on the next render.
+			const hasFailedOptional = Object.values( pluginStatuses ).some(
+				( s ) => s.type === 'optional' && s.state === 'failed'
+			);
+			if ( hasFailedOptional ) {
+				return;
+			}
+
+			// All required plugins are active. Hold the plugin-step screen for
+			// 2s while just-activated plugins (WooCommerce, Elementor, etc.)
+			// finish wiring up their hooks server-side — without this delay,
+			// importPart1 can race ahead and hit AJAX endpoints before those
+			// classes register their data hooks (see STAR-1711).
+			//
+			// Keeping the delay here (before requiredPluginsDone flips) means
+			// the "Verifying plugins…" copy shows on the PluginInstallList
+			// screen rather than bleeding onto ImportLoader.
+			if ( pluginInitTimerStarted.current ) {
+				return;
+			}
+			pluginInitTimerStarted.current = true;
 			dispatch( {
 				type: 'set',
-				requiredPluginsDone: true,
+				importStatus: __( 'Verifying plugins…', 'astra-sites' ),
 			} );
+			pluginVerifyTimeoutRef.current = setTimeout( async () => {
+				pluginVerifyTimeoutRef.current = null;
+				// Server-side ground truth: ask WordPress whether the plugins
+				// it reported as "active" are actually registered. This catches
+				// cases where activation succeeded over AJAX but the plugin
+				// classes weren't picked up.
+				const result = await verifyPluginsBeforeImport();
+				if ( result.verified ) {
+					dispatch( {
+						type: 'set',
+						requiredPluginsDone: true,
+						importStatus: __( 'Preparing import…', 'astra-sites' ),
+					} );
+				}
+				// On failure, verifyPluginsBeforeImport repopulated
+				// notInstalledList/notActivatedList; the install/activate
+				// effects will re-fire and on success this effect runs again
+				// with a fresh timer (reset on lists going non-empty, see
+				// effect below).
+			}, 2000 );
 		}
 	}, [
 		notActivatedList.length,
 		notInstalledList.length,
 		deferredPlugins.length,
 		awaitingPluginCheck,
+		pluginStatuses,
+		requiredPluginsDone,
 	] );
 
-	// Activate plugins one by one using the prioritized list
+	// Cancel the pending "Verifying plugins…" timer if this step unmounts (e.g.
+	// user clicks "Back to Templates" mid-buffer). Prevents a late dispatch
+	// from flipping requiredPluginsDone or overwriting importStatus after the
+	// step is no longer current.
 	useEffect( () => {
-		// Installed all required plugins.
+		return () => {
+			if ( pluginVerifyTimeoutRef.current ) {
+				clearTimeout( pluginVerifyTimeoutRef.current );
+				pluginVerifyTimeoutRef.current = null;
+			}
+		};
+	}, [] );
+
+	// If verification (or any other recovery path) repopulates the install/
+	// activate queues, the all-plugins-active effect must be free to re-fire
+	// the init delay + verify cycle on next completion. Resetting the ref here
+	// keeps it idempotent without storing the flag in reducer state.
+	useEffect( () => {
+		if ( notInstalledList.length > 0 || notActivatedList.length > 0 ) {
+			pluginInitTimerStarted.current = false;
+		}
+	}, [ notInstalledList.length, notActivatedList.length ] );
+
+	// Activate plugins one by one using the prioritized list.
+	// Track the head's slug (not just length) so a swap that keeps length equal
+	// — e.g. one plugin fails (drops from list) while another is re-queued —
+	// still re-fires this effect for the new head.
+	useEffect( () => {
 		if ( notActivatedList.length > 0 ) {
 			activatePlugin( notActivatedList[ 0 ] );
 		}
-	}, [ notActivatedList.length ] );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ notActivatedList[ 0 ]?.slug ] );
+
+	// After "Check Again" completes (awaitingPluginCheck flips back to false),
+	// if the server still reports notInstalled plugins, kick off the install
+	// queue again — otherwise the UI shows them as 'pending' forever.
+	useEffect( () => {
+		if ( awaitingPluginCheck ) {
+			return;
+		}
+		if ( notInstalledList.length > 0 && wp?.updates?.queue ) {
+			installRequiredPlugins();
+		}
+	}, [ awaitingPluginCheck ] );
+
+	// Background auto-detect: when at least one plugin row has hit MAX_RETRIES
+	// (the user is being shown the manual-install fallback), re-run the server
+	// check on tab focus so users who installed the plugin in another tab don't
+	// have to manually click Refresh on return. The single-flight guard inside
+	// runPluginCheck prevents overlapping checks.
+	useEffect( () => {
+		if ( requiredPluginsDone ) {
+			return undefined;
+		}
+		const hasMaxAttemptsReached = Object.values( pluginStatuses ).some(
+			( s ) => s.state === 'failed' && ( s.attempts || 0 ) >= MAX_RETRIES
+		);
+		if ( ! hasMaxAttemptsReached ) {
+			return undefined;
+		}
+		window.addEventListener( 'focus', runPluginCheck );
+		return () => {
+			window.removeEventListener( 'focus', runPluginCheck );
+		};
+	}, [ pluginStatuses, awaitingPluginCheck, requiredPluginsDone ] );
 
 	return (
 		<DefaultStep
 			content={
 				<div className="middle-content middle-content-import">
 					<>
-						{ importPercent === 100 ? (
+						{ importPercent === 100 && ! importError ? (
 							<h1 className="import-done-congrats">
 								{ __( 'Congratulations', 'astra-sites' ) }
 								<span>{ ICONS.tada }</span>
@@ -2399,7 +2540,20 @@ const ImportSite = () => {
 								<ErrorScreen />
 							</div>
 						) }
-						{ ! importError && (
+						{ ! importError && ! requiredPluginsDone && (
+							<div className="ist-import-process-step-wrap">
+								<PluginInstallList
+									onRetryPlugin={ handleRetryPlugin }
+									onRetryAll={ handleRetryAll }
+									onProceedWithoutOptional={
+										handleProceedWithoutOptional
+									}
+									onCheckAgain={ runPluginCheck }
+									onGoBack={ handleGoBackToTemplates }
+								/>
+							</div>
+						) }
+						{ ! importError && requiredPluginsDone && (
 							<>
 								<div className="ist-import-process-step-wrap">
 									<ImportLoader />

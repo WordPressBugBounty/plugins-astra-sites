@@ -2832,17 +2832,23 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		}
 
 		/**
-		 * Get an instance of WP_Filesystem_Direct.
+		 * Get an instance of WP_Filesystem.
+		 *
+		 * Returns null when WP_Filesystem() fails to initialise (e.g. FTP method
+		 * selected without valid credentials), preventing fatal errors when callers
+		 * invoke filesystem methods on a partially initialised global.
 		 *
 		 * @since 2.0.0
-		 * @return mixed A WP_Filesystem_Direct instance.
+		 * @return \WP_Filesystem_Base|null Filesystem instance, or null on failure.
 		 */
 		public static function get_filesystem() {
 			global $wp_filesystem;
 
 			require_once ABSPATH . '/wp-admin/includes/file.php';
 
-			WP_Filesystem();
+			if ( ! WP_Filesystem() ) {
+				return null;
+			}
 
 			return $wp_filesystem;
 		}

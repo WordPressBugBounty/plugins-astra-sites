@@ -60,7 +60,7 @@ if ( ! function_exists( 'astra_sites_is_valid_image' ) ) {
 	 * @return int|false
 	 */
 	function astra_sites_is_valid_image( $link = '' ) {
-		return preg_match( '/^((https?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?\/[\w\-\@]+\.(jpg|png|gif|jpeg|svg)\/?$/i', $link );
+		return preg_match( '/^((https?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(\/[\w\-\@]+)+\.(jpg|png|gif|jpeg|svg|webp)\/?$/i', $link );
 	}
 }
 

@@ -273,7 +273,7 @@ class Admin_Configurations {
 	public function disabler_ajax() {
 		// If the current user does not have the required capability, then abandon ship.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error();
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'astra-sites' ) ), 403 );
 		}
 
 		// Verify the nonce.
@@ -283,7 +283,7 @@ class Admin_Configurations {
 		$is_module_disabled = false;
 
 		// Check if the Zip AI Assistant was requested to be disabled.
-		if ( ! empty( $_POST['disable_zip_ai_assistant'] ) ) {
+		if ( ! empty( sanitize_text_field( wp_unslash( $_POST['disable_zip_ai_assistant'] ?? '' ) ) ) ) {
 			$is_module_disabled = Module::disable( 'ai_assistant' );
 		}
 
@@ -304,7 +304,7 @@ class Admin_Configurations {
 	public function toggle_assistant_status_ajax() {
 		// If the current user does not have the required capability, then abandon ship.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error();
+			wp_send_json_error( array( 'message' => __( 'Insufficient permissions', 'astra-sites' ) ), 403 );
 		}
 
 		// Verify the nonce.
@@ -357,7 +357,7 @@ class Admin_Configurations {
 	public function settings_admin_scripts() {
 
 		// If the current page is not the Zip AI Settings page, then abandon ship.
-		if ( empty( $_GET['page'] ) || ( $this->menu_slug !== $_GET['page'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( empty( $_GET['page'] ) || ( $this->menu_slug !== $_GET['page'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Page routing check only; no data is written or processed based on this value.
 			return;
 		}
 

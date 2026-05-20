@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Starter Templates plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Starter Templates 4.5.4\n"
+"Project-Id-Version: Starter Templates 4.6.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/astra-sites\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-30T13:15:46+00:00\n"
+"POT-Creation-Date: 2026-05-20T11:13:28+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: astra-sites\n"
@@ -19,7 +19,7 @@ msgstr ""
 #: astra-sites.php:133
 #: inc/classes/class-astra-sites-nps-notice.php:115
 #: inc/classes/class-astra-sites-utils.php:87
-#: inc/classes/class-astra-sites.php:2897
+#: inc/classes/class-astra-sites.php:2903
 #: inc/lib/onboarding/class-onboarding-loader.php:105
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
@@ -388,7 +388,7 @@ msgstr ""
 #: inc/classes/class-astra-sites-error-handler.php:109
 #: inc/classes/class-astra-sites-error-handler.php:153
 #: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-error-handler.php:110
-#: inc/lib/starter-templates-importer/resetter/st-resetter.php:523
+#: inc/lib/starter-templates-importer/resetter/st-resetter.php:531
 msgid "There was an error on your website."
 msgstr ""
 
@@ -660,14 +660,14 @@ msgstr ""
 #: inc/classes/class-astra-sites.php:1388
 #: inc/classes/class-astra-sites.php:1423
 #: inc/classes/class-astra-sites.php:1623
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1016
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1036
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1054
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1027
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1047
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1065
 #: inc/lib/ai-builder/inc/ajax/plugin.php:119
 #: inc/lib/ai-builder/inc/ajax/plugin.php:335
 #: inc/lib/ai-builder/inc/ajax/plugin.php:372
 #: inc/lib/ai-builder/inc/ajax/plugin.php:377
-#: inc/lib/ai-builder/inc/traits/helper.php:938
+#: inc/lib/ai-builder/inc/traits/helper.php:941
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:248
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:315
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:359
@@ -687,7 +687,7 @@ msgstr ""
 #: inc/lib/gutenberg-templates/inc/traits/upgrade.php:39
 #: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:69
 #: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:203
-#: inc/lib/zipwp-images/classes/zipwp-images-api.php:269
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:264
 msgid "You are not allowed to perform this action"
 msgstr ""
 
@@ -744,7 +744,7 @@ msgstr ""
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Elementor"
 msgstr ""
 
@@ -752,12 +752,12 @@ msgstr ""
 #: inc/classes/class-astra-sites-utils.php:121
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Beaver Builder"
 msgstr ""
 
 #: inc/classes/class-astra-sites-page.php:483
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Brizy"
 msgstr ""
 
@@ -844,7 +844,7 @@ msgid "Starter Templates: Choose Page Builder"
 msgstr ""
 
 #: inc/classes/class-astra-sites-utils.php:94
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Page Builder"
 msgstr ""
 
@@ -1232,7 +1232,7 @@ msgid "Pixabay API key is not configured. Set it via the astra_sites_pixabay_api
 msgstr ""
 
 #: inc/classes/class-astra-sites.php:1431
-#: inc/lib/zipwp-images/classes/zipwp-images-api.php:287
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:282
 msgid "Need to send URL of the image to be downloaded"
 msgstr ""
 
@@ -1245,7 +1245,7 @@ msgid "Get Started"
 msgstr ""
 
 #: inc/classes/class-astra-sites.php:1721
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
 msgid "Get Premium Templates"
 msgstr ""
 
@@ -1446,7 +1446,7 @@ msgid "Required Plugins Missing"
 msgstr ""
 
 #: inc/classes/class-astra-sites.php:2312
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "This starter template requires premium plugins. As these are third party premium plugins, you'll need to purchase, install and activate them first."
 msgstr ""
 
@@ -1526,7 +1526,7 @@ msgstr ""
 
 #: inc/classes/class-astra-sites.php:2526
 #: inc/includes/templates.php:78
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Dismiss"
 msgstr ""
 
@@ -1546,29 +1546,29 @@ msgstr ""
 msgid "Template library refreshed!"
 msgstr ""
 
-#: inc/classes/class-astra-sites.php:2899
+#: inc/classes/class-astra-sites.php:2905
 msgid "Build Your Dream Site in Minutes With AI"
 msgstr ""
 
-#: inc/classes/class-astra-sites.php:2900
+#: inc/classes/class-astra-sites.php:2906
 msgid "Say goodbye to the days of spending weeks designing and building your website.<br/> You can now create professional-grade websites in minutes."
 msgstr ""
 
-#: inc/classes/class-astra-sites.php:2902
+#: inc/classes/class-astra-sites.php:2908
 #: inc/lib/one-onboarding/build/main.js:16
 msgid "Let’s Get Started"
 msgstr ""
 
-#: inc/classes/class-astra-sites.php:2903
+#: inc/classes/class-astra-sites.php:2909
 msgid "I want to build this website from scratch"
 msgstr ""
 
-#: inc/classes/class-astra-sites.php:2938
+#: inc/classes/class-astra-sites.php:2944
 msgid "Required WP_Filesystem Permissions to import the templates from Starter Templates are missing."
 msgstr ""
 
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1043
-#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1061
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1054
+#: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1072
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:1049
 msgid "You are not allowed to perform this action."
 msgstr ""
@@ -1676,7 +1676,7 @@ msgstr ""
 #: inc/includes/templates.php:144
 #: inc/includes/templates.php:145
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Close"
 msgstr ""
 
@@ -1710,6 +1710,7 @@ msgstr ""
 #: inc/includes/templates.php:440
 #: inc/includes/templates.php:501
 #: inc/lib/gutenberg-templates/dist/main.js:2
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:142
 msgid "Back to Templates"
 msgstr ""
 
@@ -1757,42 +1758,41 @@ msgstr ""
 msgid "AI Builder"
 msgstr ""
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:447
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:445
 msgid "Installed! Activating.."
 msgstr ""
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:448
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:446
 msgid "Activating..."
 msgstr ""
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:449
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:447
 msgid "Activated!"
 msgstr ""
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:450
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:448
 msgid "Installing..."
 msgstr ""
 
 #. translators: %1$s: team name, %2$s: plan name
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:471
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:469
 #, php-format
 msgid "Your current active organization is %1$s, which is on the %2$s plan. You have reached the maximum number of sites allowed to be created on %2$s plan."
 msgstr ""
 
-#. translators: %1$s: team name
 #. translators: %s: team name
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:480
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:475
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 #, php-format,js-format
 msgid "Please upgrade the plan for %s in order to create more sites."
 msgstr ""
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:486
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:479
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Unlock Full Power"
 msgstr ""
 
-#: inc/lib/ai-builder/ai-builder-plugin-loader.php:489
+#: inc/lib/ai-builder/ai-builder-plugin-loader.php:482
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
 msgid "Contact Support"
 msgstr ""
@@ -1911,7 +1911,7 @@ msgid "Failed to set the site language."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/classes/importer/class-ai-builder-error-handler.php:164
-#: inc/lib/starter-templates-importer/resetter/st-resetter.php:492
+#: inc/lib/starter-templates-importer/resetter/st-resetter.php:500
 msgid "There was an error your website."
 msgstr ""
 
@@ -1984,11 +1984,11 @@ msgstr ""
 #: inc/lib/gutenberg-templates/inc/api/sites.php:93
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-zipwp-api.php:142
 #: inc/lib/gutenberg-templates/inc/classes/ast-block-templates-zipwp-api.php:201
-#: inc/lib/nps-survey/classes/nps-survey-script.php:367
-#: inc/lib/nps-survey/classes/nps-survey-script.php:485
+#: inc/lib/nps-survey/classes/nps-survey-script.php:366
+#: inc/lib/nps-survey/classes/nps-survey-script.php:486
 #: inc/lib/onboarding/classes/class-astra-sites-zipwp-api.php:163
 #: inc/lib/onboarding/classes/class-astra-sites-zipwp-api.php:236
-#: inc/lib/zipwp-images/classes/zipwp-images-api.php:171
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:174
 msgid "Nonce verification failed."
 msgstr ""
 
@@ -2008,13 +2008,13 @@ msgid "There was an error downloading the XML file."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1014
-#: inc/lib/ai-builder/inc/traits/helper.php:666
-#: inc/lib/ai-builder/inc/traits/helper.php:698
-#: inc/lib/ai-builder/inc/traits/helper.php:734
-#: inc/lib/ai-builder/inc/traits/helper.php:815
-#: inc/lib/ai-builder/inc/traits/helper.php:839
-#: inc/lib/ai-builder/inc/traits/helper.php:864
-#: inc/lib/ai-builder/inc/traits/helper.php:899
+#: inc/lib/ai-builder/inc/traits/helper.php:669
+#: inc/lib/ai-builder/inc/traits/helper.php:701
+#: inc/lib/ai-builder/inc/traits/helper.php:737
+#: inc/lib/ai-builder/inc/traits/helper.php:818
+#: inc/lib/ai-builder/inc/traits/helper.php:842
+#: inc/lib/ai-builder/inc/traits/helper.php:867
+#: inc/lib/ai-builder/inc/traits/helper.php:902
 msgid "Required class not found."
 msgstr ""
 
@@ -2045,7 +2045,7 @@ msgid "Start Accepting Payments"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/traits/helper.php:250
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Please contact the hosting service provider to help you update the permissions so that you can successfully import a complete template."
 msgstr ""
 
@@ -2053,99 +2053,99 @@ msgstr ""
 msgid "Permission Denied!"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:495
+#: inc/lib/ai-builder/inc/traits/helper.php:498
 msgid "Insufficient Permission. Please contact your Super Admin to allow the install required plugin permissions."
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:565
+#: inc/lib/ai-builder/inc/traits/helper.php:568
 msgid "Error: You don't have the required permissions to activate plugins."
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:572
+#: inc/lib/ai-builder/inc/traits/helper.php:575
 msgid "Error: Missing or invalid plugin initialization parameter."
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:586
+#: inc/lib/ai-builder/inc/traits/helper.php:589
 msgid "This plugin requires WooCommerce to be installed and activated first."
 msgstr ""
 
 #. translators: 1: Error message.
-#: inc/lib/ai-builder/inc/traits/helper.php:628
+#: inc/lib/ai-builder/inc/traits/helper.php:631
 #, php-format
 msgid "Plugin Activation Error: %s"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:647
+#: inc/lib/ai-builder/inc/traits/helper.php:650
 msgid "Plugin Activated"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:663
+#: inc/lib/ai-builder/inc/traits/helper.php:666
 msgid "User does not have permission!"
 msgstr ""
 
 #. translators: %s: Log file path.
-#: inc/lib/ai-builder/inc/traits/helper.php:675
+#: inc/lib/ai-builder/inc/traits/helper.php:678
 #, php-format
 msgid "File generated at %s"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:709
+#: inc/lib/ai-builder/inc/traits/helper.php:712
 msgid "Site options Imported!"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:745
+#: inc/lib/ai-builder/inc/traits/helper.php:748
 msgid "Widget Imported!"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:758
+#: inc/lib/ai-builder/inc/traits/helper.php:761
 msgid "Permission denied: You don't have sufficient permissions to import. Please contact your site administrator."
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:761
+#: inc/lib/ai-builder/inc/traits/helper.php:764
 msgid "Import failed: ST_Importer_File_System class not found. Please ensure the importer is properly loaded."
 msgstr ""
 
 #. translators: %s: Error message.
 #. translators: %s is the exception message.
-#: inc/lib/ai-builder/inc/traits/helper.php:774
+#: inc/lib/ai-builder/inc/traits/helper.php:777
 #: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:178
 #, php-format
 msgid "Import failed: Unexpected error - %s"
 msgstr ""
 
 #. translators: %s: Error message.
-#: inc/lib/ai-builder/inc/traits/helper.php:778
+#: inc/lib/ai-builder/inc/traits/helper.php:781
 #: inc/lib/onboarding/classes/class-astra-sites-onboarding-setup.php:181
 #, php-format
 msgid "Import failed: Fatal error - %s"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:797
+#: inc/lib/ai-builder/inc/traits/helper.php:800
 msgid "Import completed successfully!"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:821
+#: inc/lib/ai-builder/inc/traits/helper.php:824
 msgid "Deleted Customizer Settings!"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:845
+#: inc/lib/ai-builder/inc/traits/helper.php:848
 msgid "Deleted Site Options!"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:870
+#: inc/lib/ai-builder/inc/traits/helper.php:873
 msgid "Deleted Widgets!"
 msgstr ""
 
-#: inc/lib/ai-builder/inc/traits/helper.php:894
+#: inc/lib/ai-builder/inc/traits/helper.php:897
 msgid "Customizer data is empty!"
 msgstr ""
 
-#: inc/lib/astra-notices/class-bsf-admin-notices.php:144
+#: inc/lib/astra-notices/class-bsf-admin-notices.php:159
 msgid "Permission denied."
 msgstr ""
 
-#: inc/lib/astra-notices/class-bsf-admin-notices.php:161
-#: inc/lib/astra-notices/class-bsf-admin-notices.php:168
+#: inc/lib/astra-notices/class-bsf-admin-notices.php:176
+#: inc/lib/astra-notices/class-bsf-admin-notices.php:183
 msgid "Invalid notice ID."
 msgstr ""
 
@@ -2155,44 +2155,44 @@ msgstr ""
 
 #: inc/lib/getting-started/classes/class-gs-admin.php:110
 #: inc/lib/ai-builder/inc/assets/build/main.js:239
-#: inc/lib/getting-started/build/main.js:4
+#: inc/lib/getting-started/build/main.js:1
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:141
 msgid "Finish Setup"
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:243
+#: inc/lib/getting-started/classes/class-gs-admin.php:230
 msgid "Complete these steps to take full control of your website."
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:247
+#: inc/lib/getting-started/classes/class-gs-admin.php:234
 msgid "Awesome, You did it! 😍"
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:283
+#: inc/lib/getting-started/classes/class-gs-admin.php:270
 msgid "Hi there 👋"
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:293
+#: inc/lib/getting-started/classes/class-gs-admin.php:280
 msgid "🎉 Congratulations on completing the tasks and instructional videos to take full control of your website.\\n 🚀 Now, you're well-equipped to make your website thrive. Best of luck with your website journey, and may it bring you great achievements and opportunities in the digital world!"
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:331
+#: inc/lib/getting-started/classes/class-gs-admin.php:318
 msgid "Security verification failed."
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:340
+#: inc/lib/getting-started/classes/class-gs-admin.php:327
 msgid "Insufficient permissions."
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:403
+#: inc/lib/getting-started/classes/class-gs-admin.php:390
 msgid "Your Website is Almost Ready!"
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:407
+#: inc/lib/getting-started/classes/class-gs-admin.php:394
 msgid "This quick, checklist-style course walks you through the final steps of site settings, essential setups, and more so your website is polished, professional, and ready for the world!"
 msgstr ""
 
-#: inc/lib/getting-started/classes/class-gs-admin.php:413
+#: inc/lib/getting-started/classes/class-gs-admin.php:400
 msgid "Continue to finish setup"
 msgstr ""
 
@@ -2339,12 +2339,12 @@ msgstr ""
 #: inc/lib/getting-started/classes/class-gs-helper.php:283
 #: inc/lib/getting-started/build/main.js:1
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:126
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Learn More"
 msgstr ""
 
 #: inc/lib/getting-started/classes/class-gs-helper.php:294
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Contact Form"
 msgstr ""
 
@@ -2374,7 +2374,7 @@ msgstr ""
 
 #: inc/lib/getting-started/classes/class-gs-helper.php:340
 #: inc/lib/getting-started/classes/class-gs-helper.php:465
-#: inc/lib/getting-started/build/main.js:4
+#: inc/lib/getting-started/build/main.js:1
 msgid "Set Up"
 msgstr ""
 
@@ -2538,8 +2538,9 @@ msgstr ""
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:280
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:291
 #: inc/lib/gutenberg-templates/inc/importer/plugin.php:467
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:270
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:296
 #: inc/lib/ai-builder/inc/assets/build/main.js:184
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "Something went wrong"
 msgstr ""
 
@@ -2588,6 +2589,15 @@ msgstr ""
 
 #: inc/lib/gutenberg-templates/inc/traits/helper.php:273
 msgid "The Zip AI Middleware encountered an error."
+msgstr ""
+
+#: inc/lib/nps-survey/classes/nps-survey-script.php:431
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:222
+msgid "Remote request failed."
+msgstr ""
+
+#: inc/lib/nps-survey/classes/nps-survey-script.php:466
+msgid "Request failed."
 msgstr ""
 
 #: inc/lib/onboarding/class-onboarding-loader.php:346
@@ -2995,58 +3005,58 @@ msgid "Every %d Minutes"
 msgstr ""
 
 #. translators: %1$s refers to the plugin name
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:148
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:149
 #, php-format
 msgid "Required File Permissions to import the templates from %s are missing."
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:155
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:156
 msgid "This is usually due to inconsistent file permissions."
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:158
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:159
 msgid "You can easily update permissions by adding the following code into the wp-config.php file."
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:440
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:449
 msgid "Enabled"
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:443
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:452
 msgid "Disabled"
 msgstr ""
 
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:460
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:469
 #, php-format
 msgctxt "Recommended Memory Limit"
 msgid "Current memory limit %1$s. We recommend setting memory to at least %2$s."
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:527
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:584
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:536
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:593
 msgid "Yes"
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:530
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:587
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:539
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:596
 msgid "No"
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:541
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:550
 msgctxt "PHP Version"
 msgid "We recommend to use php 5.4 or higher"
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:602
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:611
 msgid "You currently have no scheduled cron events."
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:661
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:670
 msgid "Log Files"
 msgstr ""
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:675
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:684
 msgid "Backup Files"
 msgstr ""
 
@@ -3440,6 +3450,14 @@ msgstr ""
 msgid "Import complete!"
 msgstr ""
 
+#: inc/lib/zip-ai/classes/admin-configurations.php:276
+#: inc/lib/zip-ai/classes/admin-configurations.php:307
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:342
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:839
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:866
+msgid "Insufficient permissions"
+msgstr ""
+
 #. translators: %1$s: HTML link start tag, %2$s: HTML link end tag.
 #: inc/lib/zip-ai/classes/admin-configurations.php:513
 #, php-format
@@ -3474,85 +3492,89 @@ msgstr ""
 msgid "The ZipWP API server encountered an error."
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:188
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:214
 msgid "The message array was not supplied"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:287
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:274
+msgid "An error occurred while processing your request."
+msgstr ""
+
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:315
 msgid "Authentication failed. Invalid or missing bearer token."
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:289
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:317
 msgid "You've run out of credits."
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:291
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:319
 msgid "To continue using the assistant and access its full features, please purchase more credits."
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:293
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:321
 msgid "Buy more credits"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:762
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:795
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Formal"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:763
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:796
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Casual"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:764
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:797
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Friendly"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:765
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:798
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Informative"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:766
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:799
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Professional"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:767
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:800
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Playful"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:768
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:801
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Serious"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:769
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:802
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Humorous"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:770
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:803
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Polite"
 msgstr ""
 
-#: inc/lib/zip-ai/classes/sidebar-configurations.php:771
+#: inc/lib/zip-ai/classes/sidebar-configurations.php:804
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Emotional"
 msgstr ""
 
-#: inc/lib/zipwp-images/classes/zipwp-images-api.php:283
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:278
 msgid "Need to send photo ID"
 msgstr ""
 
-#: inc/lib/zipwp-images/classes/zipwp-images-api.php:297
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:292
 msgid "Could not download the image."
 msgstr ""
 
@@ -3673,6 +3695,7 @@ msgid "Original %1$s"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
+#: inc/lib/ai-builder/inc/assets/build/main.js:195
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:132
 msgid "Original"
 msgstr ""
@@ -3778,10 +3801,10 @@ msgstr ""
 #: inc/lib/nps-survey/dist/main.js:1
 #: inc/lib/nps-survey/dist/main.js:4
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:132
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 #: inc/lib/one-onboarding/build/main.js:25
 #: inc/lib/one-onboarding/build/main.js:37
 msgid "Back"
@@ -3853,17 +3876,17 @@ msgid "Multisite Requirements Not Met"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:180
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "In a multisite environment, you need to have all required plugins and themes already installed and activated by your network administrator to import this template."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:180
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Missing Theme:"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:180
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Missing Plugins:"
 msgstr ""
 
@@ -3919,7 +3942,7 @@ msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:180
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Build with AI"
 msgstr ""
 
@@ -3933,7 +3956,8 @@ msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:180
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:132
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 #: inc/lib/one-onboarding/build/main.js:25
 #: inc/lib/one-onboarding/build/main.js:40
 msgid "Continue"
@@ -3947,27 +3971,35 @@ msgstr ""
 msgid "Responsive Preview"
 msgstr ""
 
+#: inc/lib/ai-builder/inc/assets/build/main.js:180
+msgid "your team"
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:180
+msgid "your current plan"
+msgstr ""
+
 #. translators: %s: daily limit
 #: inc/lib/ai-builder/inc/assets/build/main.js:181
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:145
 #, js-format
 msgid "%s AI sites"
 msgstr ""
 
 #. translators: %s: daily limit
 #: inc/lib/ai-builder/inc/assets/build/main.js:182
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:144
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
 #, js-format
 msgid "This plan allows you to generate %s per day, and you have reached this limit."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:182
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:144
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
 msgid "To create more AI websites, you will need to either upgrade your plan or wait until the limit resets."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:182
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Limit reached"
 msgstr ""
 
@@ -4088,8 +4120,8 @@ msgstr ""
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Exit to Dashboard"
 msgstr ""
 
@@ -4194,7 +4226,15 @@ msgid "You've successfully generated %1$s AI sites with your %2$s account. Do mu
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
+msgid "Connect ZipWP to access images"
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:191
 msgid "Great Job! Your Site is Ready! 🎉"
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:191
+msgid "Sign up for a free ZipWP account to load curated images for your region and finish building your website."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
@@ -4218,6 +4258,7 @@ msgid "Create ZipWP Account"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
+#: inc/lib/ai-builder/inc/assets/build/main.js:192
 msgid "Already have an account?"
 msgstr ""
 
@@ -4256,13 +4297,13 @@ msgstr ""
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Block Editor"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "AI Website Builder"
 msgstr ""
 
@@ -4526,6 +4567,30 @@ msgid "This might not be a valid URL."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:192
+msgid "Connect ZipWP to load images for your region"
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:192
+msgid "Image search uses an API key from your ZipWP account. Connect a free account to load images available in your region."
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:192
+msgid "Connect ZipWP"
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:192
+msgid "Log in"
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:192
+msgid "OR"
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:192
+msgid "Upload your own"
+msgstr ""
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:192
 msgid "Skip Images?"
 msgstr ""
 
@@ -4673,22 +4738,22 @@ msgid "Failed to check File Permissions"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "The following plugins will be installed and activated for the selected features:"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Required plugins for the website"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Select features"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Select the features you want on this website"
 msgstr ""
 
@@ -4697,12 +4762,12 @@ msgid "Something went wrong. Please try again later."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Skip & Start Building"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Importing Content…"
 msgstr ""
 
@@ -5122,88 +5187,88 @@ msgid "Select features as you need"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting posts."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting posts failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Taking settings backup."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Taking settings backup failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting customizer."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting customizer failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting site options."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting site options Failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting widgets."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting widgets JSON parse failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting widgets failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting terms and forms."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting terms and forms failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Gathering posts for deletions."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Resetting posts done."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing Site Content Failed. - Import Process Interrupted"
 msgstr ""
 
 #. translators: Response importMessage
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 #, js-format
 msgid "Importing - %1$s"
 msgstr ""
@@ -5226,8 +5291,8 @@ msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:132
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Are you sure you want to cancel the site import process?"
 msgstr ""
 
@@ -5256,7 +5321,7 @@ msgid "The website is created successfully!"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Starting Import."
 msgstr ""
 
@@ -5265,7 +5330,7 @@ msgid "Resetting site."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:211
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Reset for old website is done."
 msgstr ""
 
@@ -5280,96 +5345,96 @@ msgid "Downloading images failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing forms."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Customizer failed due to parse JSON error."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Customizer Failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Spectra Settings."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Spectra Settings failed due to parse JSON error."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Spectra Settings Failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Surecart Settings failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Surecart Settings Failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Site Content."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:214
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:159
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:155
 msgid "Installing Required Plugins."
 msgstr ""
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:217
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:162
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:155
 #, js-format
 msgid "%1$s plugin installed successfully."
 msgstr ""
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
 #, js-format
 msgid "Could not install the plugin - %s"
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Site Options."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Site Options failed due to parse JSON error."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Site Options Failed."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Widgets."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Widgets failed due to parse JSON error."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Importing Widgets Failed."
 msgstr ""
 
@@ -5403,21 +5468,20 @@ msgstr ""
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:223
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:180
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:167
 #, js-format
 msgid "Activating %1$s plugin."
 msgstr ""
 
 #. translators: Plugin Name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:226
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:186
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 #, js-format
 msgid "%1$s activated."
 msgstr ""
 
 #. translators: Plugin name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:229
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:189
 #, js-format
 msgid "JSON_Error: Could not activate the required plugin - %1$s."
 msgstr ""
@@ -5432,13 +5496,12 @@ msgstr ""
 
 #. translators: Plugin name.
 #: inc/lib/ai-builder/inc/assets/build/main.js:235
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:195
 #, js-format
 msgid "Could not activate the required plugin - %1$s."
 msgstr ""
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:238
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "We are building your website…"
 msgstr ""
 
@@ -5483,20 +5546,47 @@ msgid "The URL may have been typed incorrectly. Or it might be a broken or outda
 msgstr ""
 
 #: inc/lib/getting-started/build/main.js:1
-msgid "Finish Setting Up Your Website"
+msgid "Finish Setup Icon"
 msgstr ""
 
 #: inc/lib/getting-started/build/main.js:1
-msgid "Let’s get your new website fully ready. Follow this quick checklist to customize, configure, and launch with confidence."
+msgid "Setup dismissal failed!"
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Failed to dismiss setup."
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Dismiss Setup"
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Mark as incomplete"
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Mark as complete"
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "An error occurred while updating the step status."
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Failed to update step status:"
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Error updating step status:"
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Learn how"
 msgstr ""
 
 #: inc/lib/getting-started/build/main.js:1
 msgid "Play Video"
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:1
-#: inc/lib/getting-started/build/main.js:4
-msgid "Learn how"
 msgstr ""
 
 #. translators: %1$d is the number of completed steps, %2$d is the total number of steps.
@@ -5505,46 +5595,18 @@ msgstr ""
 msgid "%1$d of %2$d steps completed"
 msgstr ""
 
-#: inc/lib/getting-started/build/main.js:4
-msgid "Finish Setup Icon"
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Setup dismissal failed!"
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Failed to dismiss setup."
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Dismiss Setup"
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Mark as incomplete"
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Mark as complete"
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "An error occurred while updating the step status."
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Failed to update step status:"
-msgstr ""
-
-#: inc/lib/getting-started/build/main.js:4
-msgid "Error updating step status:"
-msgstr ""
-
 #. translators: %s is the step number.
 #: inc/lib/getting-started/build/main.js:7
 #, js-format
 msgid "Step %d:"
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:7
+msgid "Finish Setting Up Your Website"
+msgstr ""
+
+#: inc/lib/getting-started/build/main.js:7
+msgid "Let’s get your new website fully ready. Follow this quick checklist to customize, configure, and launch with confidence."
 msgstr ""
 
 #: inc/lib/gutenberg-templates/dist/138.js:1
@@ -6173,7 +6235,7 @@ msgid "Contribute to %s"
 msgstr ""
 
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:126
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Collect non-sensitive information from your website, such as the PHP version and features used, to help us fix bugs faster, make smarter decisions, and build features that actually matter to you."
 msgstr ""
 
@@ -6274,6 +6336,7 @@ msgid "Add your own logo, change color and font."
 msgstr ""
 
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:132
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:142
 msgid "1. Installing required theme, plugins, forms, etc"
 msgstr ""
 
@@ -6344,453 +6407,514 @@ msgid "&nbsp;so we can fix it."
 msgstr ""
 
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/one-onboarding/build/main.js:2
+#: inc/lib/one-onboarding/build/main.js:34
+msgid "Installing…"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/one-onboarding/build/main.js:2
+#: inc/lib/one-onboarding/build/main.js:25
+msgid "Activating…"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/one-onboarding/build/main.js:2
+msgid "Active"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+msgid "Failed"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+msgid "Skipped"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+msgid "Pending"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+msgid "Required plugin"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+msgid "Retry"
+msgstr ""
+
+#. translators: %1$s: plugin name
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:142
+#, js-format
+msgid "Could not install %1$s automatically. <a>Click here to install it manually</a>, then come back to this tab."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:142
+msgid "Some required plugins could not be installed. Please retry below."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:142
+msgid "Optional plugins failed. You can continue without them or retry."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:142
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
+msgid "Re-check plugin status. Use this after manually installing or activating a plugin in another tab."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:142
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
+msgid "Refresh"
+msgstr ""
+
+#. translators: %d: failed count
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
+#, js-format
+msgid "Retry Failed (%d)"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
+msgid "Retry optional"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
+msgid "Mark failed optional plugins as skipped and continue with the import. Your site will work without them. You can install them later from Plugins → Add New."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Tell us a little bit about yourself"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Your First Name"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Your Work Email"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Advanced Options"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Install & Activate Astra Theme"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "To import the site in the original format, you would need the Astra theme activated. You can import it with any other theme, but the site might lose some of the design settings and look a bit different."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Help Us Improve Your Experience"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "It looks like you already have a website created with Starter Templates. Check this box to keep your existing content and images."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Keep existing data!"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "Your current site will be updated with the selected layout, design, content, and pages."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:143
 msgid "I understand, let's go!"
 msgstr ""
 
 #. translators: %1$s: team name, %2$s: plan name
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:142
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:144
 #, js-format
 msgid "Your current active organization is %1$s, which is on the %2$s plan."
 msgstr ""
 
 #. translators: %s: plan name
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:145
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
 #, js-format
 msgid "You have reached the maximum number of sites allowed to be created on %s plan."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Skip this step"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Custom Templates"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Experience the future of website building. We offer AI features powered by ZipWP to help you build your website 10x faster."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Go to Templates"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 #: inc/lib/one-onboarding/build/main.js:2
 msgid "Classic Starter Templates"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Begin the website-building process with our extensive library of professionally designed templates tailored to meet your requirements."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 #: inc/lib/one-onboarding/build/main.js:2
 msgid "Build with Templates"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "How would you like to build your website?"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Select Page Builder"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "Please choose your preferred page builder from the list below."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:146
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:148
 msgid "What type of website are you building?"
 msgstr ""
 
 #. translators: %1$s: search term.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
 #, js-format
 msgid "Starter Templates for: %1$s"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
 msgid "Get unlimited access to all Premium Starter Templates and more, at a single low cost!"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
 msgid "Already purchased it?"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
 msgid "Install and activate Premium Starter Templates"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
 msgid "[Need Help?]"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
 msgid "Install & Activate"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:147
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:149
 msgid "Activate"
 msgstr ""
 
 #. translators: %1$s is a terms link, %2$s is a privacy policy link
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 #, js-format
 msgid "By continuing, you agree to our %1$s and %2$s."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Submit & Build My Website"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Required plugins missing"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Some required plugins could not be able to be installed/activated due to some limitations coming from this website’s hosting service provider."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "We request you to please install/update the following plugins to proceed."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Required plugins -"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Start Importing"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "We're Almost There!"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "The Starter Template you are trying to import requires a few plugins to be installed and activated. Your current PHP version does not match the minimum requirement for these plugins."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Missing Required Plugins or Theme"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Please contact your network administrator to install and activate these plugins."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Continue Anyway"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "You're close to importing the template. To complete the process, please clear the following conditions."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Skip & Continue"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Skip & Start Importing"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "The import process was interrupted due to the lack of file-system permissions from your host. It is required to import images, XML files, and more required for the template to work."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Current file-system permissions:"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Read Permissions:"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Write Permissions:"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "WP_Filesystem Permissions:"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:150
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:152
 msgid "Okay, just one last step…"
 msgstr ""
 
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:155
+msgid "Installation failed."
+msgstr ""
+
 #. translators: %1$s: Import name, %2$d: current attempt, %3$d: max attempts.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:153
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:158
 #, js-format
 msgid "%1$s (retry attempt %2$d/%3$d)…"
 msgstr ""
 
 #. translators: Import name, seconds to wait.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 #, js-format
 msgid "%1$s encountered an error. Retrying in %2$d seconds…"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Reseting site."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing CartFlows flows."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing CartFlows flows failed due to parse JSON error."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing CartFlows flows Failed."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing Cart Abandonment Recovery data."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing Cart Abandonment Recovery data failed due to parse JSON error."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing Cart Abandonment Recovery data Failed."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing LatePoint data."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing LatePoint data failed due to parse JSON error."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing LatePoint data Failed."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing forms failed due to parse JSON error."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:161
 msgid "Importing forms Failed."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "The XML URL for the site content is empty."
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Reseting site."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Importing Site Content Failed"
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "The server returned an invalid response. This may be due to server configuration issues or plugin conflicts."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Importing Site Content failed due to parse JSON error."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Unable to connect to the server. This could be due to internet connectivity issues."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Please check your internet connection and try again."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Connection failed: Failed to connect to the import server. This could be due to network issues or server problems."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Request timeout: The import request took too long to complete. This could be due to server load or network issues."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Please try again. If the problem persists, try a different template."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Importing Site Content Failed."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Unknown error occurred."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Parse error occurred."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:156
-msgid "Network error occurred."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:165
-msgid "Waiting for plugins to initialize…"
-msgstr ""
-
-#. translators: %s: Plugin names being verified.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:168
-#, js-format
-msgid "Verifying plugins: %s"
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:168
-msgid "Plugin verification failed."
-msgstr ""
-
-#. translators: %s: Plugin names that are not installed.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
-#, js-format
-msgid "Not installed: %s"
-msgstr ""
-
-#. translators: %s: Plugin names that are not activated.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:174
-#, js-format
-msgid "Not activated: %s"
-msgstr ""
-
-#. translators: %s: Details about plugins needing attention.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
-#, js-format
-msgid "Plugins need attention. %s. Retrying…"
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
-msgid "Plugin verification failed. Retrying…"
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "CartFlows Import"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Cart Abandonment Recovery Import"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "LatePoint Import"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "WPForms Import"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Unknown error occurred."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Parse error occurred."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Network error occurred."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "The XML URL for the site content is empty."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Importing Site Content Failed"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "The server returned an invalid response. This may be due to server configuration issues or plugin conflicts."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Importing Site Content failed due to parse JSON error."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Unable to connect to the server. This could be due to internet connectivity issues."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Please check your internet connection and try again."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Connection failed: Failed to connect to the import server. This could be due to network issues or server problems."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Request timeout: The import request took too long to complete. This could be due to server load or network issues."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Please try again. If the problem persists, try a different template."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Importing Site Content Failed."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Final finishings."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Final finishings failed due to parse JSON error."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:177
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
 msgid "Final finishings Failed."
 msgstr ""
 
-#. translators: Plugin Name.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:183
-#, js-format
-msgid "%1$s deferred (requires WooCommerce)."
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Verifying plugins…"
 msgstr ""
 
-#. translators: Support article URL.
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:192
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
-#, js-format
-msgid "<a href=\"%1$s\">Read article</a> to resolve the issue and continue importing template."
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Plugin verification failed."
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "Preparing import…"
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:167
+msgid "a required plugin"
+msgstr ""
+
+#. translators: %1$s: plugin name, %2$s: dependency plugin name
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:168
+#, js-format
+msgid "%1$s deferred (requires %2$s)."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "Activation failed (invalid response)."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "Activation failed."
+msgstr ""
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Congratulations"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Design pages with visual website builder"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Allow your visitors to get in touch with you"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "eCommerce"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Sell your products online"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "SEO & Search Visibility"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Optimize your website for search engines"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Website Emails & SMTP"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Get emails from your website (forms, etc)"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Free Live Chat"
 msgstr ""
 
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:198
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Connect with your website visitors for free"
 msgstr ""
 
@@ -6857,21 +6981,7 @@ msgid "Pick from 300+ hand-crafted designs for different niches and styles."
 msgstr ""
 
 #: inc/lib/one-onboarding/build/main.js:2
-msgid "Active"
-msgstr ""
-
-#: inc/lib/one-onboarding/build/main.js:2
-#: inc/lib/one-onboarding/build/main.js:25
-msgid "Activating…"
-msgstr ""
-
-#: inc/lib/one-onboarding/build/main.js:2
 msgid "Inactive"
-msgstr ""
-
-#: inc/lib/one-onboarding/build/main.js:2
-#: inc/lib/one-onboarding/build/main.js:34
-msgid "Installing…"
 msgstr ""
 
 #. translators: %s is the addon title
@@ -7115,7 +7225,7 @@ msgid "Say goodbye to generic designs and say hello to Zip's personalized page t
 msgstr ""
 
 #: inc/lib/zip-ai/admin/dashboard-app/build/dashboard-app.js:1
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Generate Custom Code"
 msgstr ""
 
@@ -7389,7 +7499,7 @@ msgid "Change tone to %s."
 msgstr ""
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Rephrase"
 msgstr ""
 
@@ -7466,17 +7576,17 @@ msgid "and chat from there"
 msgstr ""
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Fix Grammar"
 msgstr ""
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Make Longer"
 msgstr ""
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:2
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Make Shorter"
 msgstr ""
 
@@ -7526,153 +7636,153 @@ msgid "It looks like I've encountered an error…"
 msgstr ""
 
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:3
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "Click Here"
 msgstr ""
 
 #. translators: %1$d is the current page, %2$d is the total number of pages.
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 #, js-format
 msgid "%1$d/%2$d"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "Something went wrong while I was generating a response."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "Generating…"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "How can I help you?"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "Ask AI"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:5
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "Clear Chat"
 msgstr ""
 
 #. Translators: %1$s is the opening link tag, %2$s is the closing link tag.
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
 #, js-format
 msgid "AI Assistant can make mistakes. Want to %1$sdisable it?%2$s"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
 msgid "AI Assistant can make mistakes."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
 msgid "Reconnect and Continue Using AI Features"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
 msgid "Get Started with 1000 Free Monthly Credits"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
 msgid "Reconnecting…"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:7
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
 msgid "Getting Started…"
 msgstr ""
 
 #. Translators: %1$s is the opening link tag, %2$s is the closing link tag.
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
 #, js-format
 msgid "Get started from %1$shere%2$s."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:9
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "The possibilities are endless!"
 msgstr ""
 
 #. translators: %s: Plugin Name
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:10
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
 #, js-format
 msgid "Build 10x Faster with %s AI"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:10
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:13
 msgid "Build 10x Faster with ZipWP"
 msgstr ""
 
 #. translators: %s: Plugin Name
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 #, js-format
 msgid "%s offers AI features powered by ZipWP to help you build your website 10 times faster."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "ZipWP offers AI features to help you build your website 10 times faster."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Translate Your Pages"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Write Content for Pages"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Customize Templates"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Craft Product Descriptions"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Engage with Comments"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Get Ready!"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Something went wrong, please try again."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Learn more"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Hi there! I'm here to assist you."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Choose a prompt bellow or write on your own."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Ask me about what you need."
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
 msgid "AI Assistant"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:11
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Get More Credits"
 msgstr ""
 
 #. translators: %s: lastUsedTone label
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
 #, js-format
 msgid "Change Tone to %s"
 msgstr ""
 
-#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:12
+#: inc/lib/zip-ai/sidebar/build/sidebar-app.js:15
 msgid "Something Else"
 msgstr ""
 

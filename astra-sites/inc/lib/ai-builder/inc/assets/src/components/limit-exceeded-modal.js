@@ -6,6 +6,7 @@ import Modal from './modal';
 import ModalTitle from './modal-title';
 import Button from './button';
 import { __, sprintf } from '@wordpress/i18n';
+import { escapeHTML } from '@wordpress/escape-html';
 
 const LimitExceedModal = ( { onOpenChange, openTarget = '_blank' } ) => {
 	const { setLimitExceedModal } = useDispatch( STORE_KEY );
@@ -18,10 +19,26 @@ const LimitExceedModal = ( { onOpenChange, openTarget = '_blank' } ) => {
 		};
 	} );
 
+	const rawTeamName = aiBuilderVars?.zip_plans?.team?.name || '';
+	const rawPlanName = aiBuilderVars?.zip_plans?.active_plan?.slug || '';
+	const teamName =
+		escapeHTML( rawTeamName ) || __( 'your team', 'ai-builder' );
+	const planName =
+		escapeHTML( rawPlanName ) || __( 'your current plan', 'ai-builder' );
+
+	const mainContentTemplate =
+		aiBuilderVars?.filtered_data?.main_content || '';
+	const secondaryContentTemplate =
+		aiBuilderVars?.filtered_data?.secondary_content || '';
+
 	const teamPlanInfo = (
 		<span
 			dangerouslySetInnerHTML={ {
-				__html: aiBuilderVars?.filtered_data?.main_content,
+				__html: sprintf(
+					mainContentTemplate,
+					`<strong>${ teamName }</strong>`,
+					`<strong>${ planName }</strong>`
+				),
 			} }
 		/>
 	);
@@ -64,7 +81,7 @@ const LimitExceedModal = ( { onOpenChange, openTarget = '_blank' } ) => {
 						: `
 				<br />
 				<br />
-				 ${ aiBuilderVars?.filtered_data?.secondary_content }
+				 ${ sprintf( secondaryContentTemplate, `<strong>${ teamName }</strong>` ) }
           		<br />
 				`,
 			} }

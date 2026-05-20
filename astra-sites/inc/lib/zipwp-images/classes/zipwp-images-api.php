@@ -117,16 +117,19 @@ class Zipwp_Images_Api {
 					'permission_callback' => array( $this, 'get_item_permissions_check' ),
 					'args'                => array(
 						'keywords'    => array(
-							'type'     => 'string',
-							'required' => true,
+							'type'              => 'string',
+							'required'          => true,
+							'sanitize_callback' => 'sanitize_text_field',
 						),
 						'per_page'    => array(
-							'type'     => 'string',
-							'required' => false,
+							'type'              => 'integer',
+							'required'          => false,
+							'sanitize_callback' => 'absint',
 						),
 						'page'        => array(
-							'type'     => 'string',
-							'required' => false,
+							'type'              => 'string',
+							'required'          => false,
+							'sanitize_callback' => 'absint',
 						),
 						'orientation' => array(
 							'type'              => 'string',
@@ -166,12 +169,10 @@ class Zipwp_Images_Api {
 
 		// Verify the nonce.
 		if ( ! wp_verify_nonce( sanitize_text_field( (string) $nonce ), 'wp_rest' ) ) {
-			wp_send_json_error(
-				array(
-					'data'   => __( 'Nonce verification failed.', 'astra-sites' ),
-					'status' => false,
-
-				)
+			return new \WP_Error(
+				'nonce_verification_failed',
+				__( 'Nonce verification failed.', 'astra-sites' ),
+				array( 'status' => 403 )
 			);
 		}
 
@@ -216,13 +217,10 @@ class Zipwp_Images_Api {
 		$response     = wp_safe_remote_post( $api_endpoint, $request_args ); // @phpstan-ignore-line
 
 		if ( is_wp_error( $response ) ) {
-			// There was an error in the request.
-			wp_send_json_error(
-				array(
-					'data'   => 'Failed ' . $response->get_error_message(),
-					'status' => false,
-
-				)
+			return new \WP_Error(
+				'remote_request_failed',
+				__( 'Remote request failed.', 'astra-sites' ),
+				array( 'status' => 500 )
 			);
 		}
 		$response_code = wp_remote_retrieve_response_code( $response );
@@ -236,7 +234,7 @@ class Zipwp_Images_Api {
 				$images[ $key ]['sizes'] = $this->get_image_size( $image );
 			}
 
-			wp_send_json_success(
+			return rest_ensure_response(
 				array(
 					'data'   => $images,
 					'status' => true,
@@ -244,13 +242,10 @@ class Zipwp_Images_Api {
 			);
 
 		} else {
-
-			wp_send_json_error(
-				array(
-					'data'   => 'Failed',
-					'status' => false,
-
-				)
+			return new \WP_Error(
+				'api_error',
+				'Failed',
+				array( 'status' => 500 )
 			);
 		}
 	}
@@ -269,7 +264,7 @@ class Zipwp_Images_Api {
 			wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 		}
 
-		$url      = isset( $_POST['url'] ) ? sanitize_url( $_POST['url'] ) : ''; // phpcs:ignore -- We need to remove this ignore once the WPCS has released this issue fix - https://github.com/WordPress/WordPress-Coding-Standards/issues/2189.
+		$url      = isset( $_POST['url'] ) ? esc_url_raw( wp_unslash( $_POST['url'] ) ) : '';
 		$name     = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : false;
 		$desc     = isset( $_POST['description'] ) ? sanitize_text_field( wp_unslash( $_POST['description'] ) ) : '';
 		$photo_id = isset( $_POST['id'] ) ? sanitize_key( wp_unslash( $_POST['id'] ) ) : 0;

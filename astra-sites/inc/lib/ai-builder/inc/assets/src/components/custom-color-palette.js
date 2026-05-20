@@ -157,12 +157,14 @@ const CustomColorPalette = () => {
 	}, [] );
 	const { setWebsiteColorPalette } = useDispatch( STORE_KEY );
 
-	const defaultColors = generateColorPalette(
-		defaultColorPalette.colors[ 0 ],
-		colorSchemes[ 0 ],
-		backgroundSaturations[ 0 ],
-		brightnessLevels[ 0 ]
-	);
+	const defaultColors = defaultColorPalette?.colors?.[ 0 ]
+		? generateColorPalette(
+				defaultColorPalette.colors[ 0 ],
+				colorSchemes[ 0 ],
+				backgroundSaturations[ 0 ],
+				brightnessLevels[ 0 ]
+		  )
+		: [];
 	const activePaletteColors = aiActivePallette?.colors ?? [];
 
 	const [ customColorState, setCustomColorState ] = useReducer(
@@ -170,8 +172,8 @@ const CustomColorPalette = () => {
 			{
 				color: {
 					hex:
-						aiActivePallette?.colors[ 0 ] ??
-						defaultColorPalette?.colors[ 0 ] ??
+						aiActivePallette?.colors?.[ 0 ] ??
+						defaultColorPalette?.colors?.[ 0 ] ??
 						'#74A84A',
 				},
 				colors: activePaletteColors ?? defaultColors ?? [],
