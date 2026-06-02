@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.6.0
+Stable tag: 4.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,12 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.6.1 - 02-June-2026
+- New:
+    - Added SureContact (CRM & Contacts) to the features selection step in the onboarding flow.
+- Improvement:
+    - Template imports are now more reliable on slower or shared hosting — key import steps will automatically retry if the server takes too long to respond, instead of failing immediately.
+
 v4.6.0 - 20-May-2026
 - Improvement:
     - Compatibility with WordPress 7.0.

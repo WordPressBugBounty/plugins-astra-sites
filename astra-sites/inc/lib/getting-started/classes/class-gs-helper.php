@@ -564,6 +564,30 @@ class GS_Helper {
 			];
 		}
 
+		if ( is_plugin_active( 'surecontact/surecontact.php' ) ) {
+			$action_items[] = [
+				'id'          => 'surecontact',
+				'title'       => __( 'Manage Your Contacts', 'astra-sites' ),
+				'description' => __( 'Keep all your customer relationships in one place so you can follow up faster, automate smarter, and never lose track of a lead', 'astra-sites' ),
+				'category'    => 'level-up',
+				'cta'         => [
+					'type' => 'video',
+					'url'  => 'https://www.youtube-nocookie.com/embed/c-LbIA_5OC0?modestbranding=1',
+				],
+				'steps'       => [
+					[
+						'id'        => 'connect-surecontact-account',
+						'completed' => self::is_surecontact_connected(),
+						'title'     => __( 'Connect SureContact account', 'astra-sites' ),
+						'cta'       => [
+							'label' => __( 'Set Up', 'astra-sites' ),
+							'url'   => esc_url( $admin_url ) . 'admin.php?page=surecontact-dashboard',
+						],
+					],
+				],
+			];
+		}
+
 		if ( is_plugin_active( 'suretriggers/suretriggers.php' ) ) {
 			// OttoKit dynamic checks.
 			$is_ottokit_connected = class_exists( '\SureTriggers\Models\SaasApiToken' ) && \SureTriggers\Models\SaasApiToken::get();
@@ -652,6 +676,21 @@ class GS_Helper {
 		 * @return array<string, array<string, string>>
 		 */
 		return apply_filters( 'getting_started_action_items_categories', $categories );
+	}
+
+	/**
+	 * Checks if SureContact has an active connection (bearer token present).
+	 *
+	 * @since 1.0.7
+	 *
+	 * @return bool
+	 */
+	public static function is_surecontact_connected() {
+		if ( ! is_plugin_active( 'surecontact/surecontact.php' ) ) {
+			return false;
+		}
+
+		return ! empty( get_option( 'surecontact_bearer_token' ) );
 	}
 
 	/**

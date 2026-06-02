@@ -3,6 +3,30 @@ const { themeStatus } = starterTemplates;
 import apiFetch from '@wordpress/api-fetch';
 
 /**
+ * Parse a fetch Response as JSON, but throw a clear human-readable error when
+ * the server returns an HTML page (e.g. a 504 timeout or PHP fatal) instead of
+ * JSON. Without this guard, response.json() throws a cryptic SyntaxError.
+ *
+ * @param {Response} response Fetch API Response object.
+ * @return {Promise<*>} Parsed JSON value.
+ */
+export const safeParseJson = ( response ) => {
+	const contentType = response.headers.get( 'content-type' ) || '';
+	const nonJsonError = new Error(
+		__(
+			"Server returned a non-JSON response. This usually means the server timed out or encountered a fatal error. Check your server's max_execution_time and PHP error log, then try again.",
+			'astra-sites'
+		)
+	);
+	if ( ! contentType.includes( 'application/json' ) ) {
+		throw nonJsonError;
+	}
+	return response.json().catch( () => {
+		throw nonJsonError;
+	} );
+};
+
+/**
  * Pull a human-readable message out of the various error shapes the
  * plugin install/activate endpoints can return.
  *
@@ -47,7 +71,7 @@ export const getDemo = async ( id, storedState ) => {
 		method: 'post',
 		body: generateData,
 	} )
-		.then( ( response ) => response.json() )
+		.then( safeParseJson )
 		.then( ( response ) => {
 			if ( response.success ) {
 				const isEcommerce = response?.data[ 'required-plugins' ]?.some(
@@ -158,7 +182,7 @@ export const getDemo = async ( id, storedState ) => {
 					secondaryText:
 						astraSitesVars?.ajax_request_failed_secondary,
 					errorCode: '',
-					errorText: error,
+					errorText: error?.message || error,
 					solutionText: '',
 					tryAgain: false,
 				},
@@ -239,7 +263,7 @@ export const checkRequiredPlugins = async ( storedState ) => {
 		method: 'post',
 		body: reqPlugins,
 	} )
-		.then( ( response ) => response.json() )
+		.then( safeParseJson )
 		.then( ( response ) => {
 			const rPlugins = response.data?.required_plugins;
 			const notInstalledPlugin = rPlugins.notinstalled || [];
@@ -427,6 +451,13 @@ export function getFeaturePluginList(
 					init: 'wp-live-chat-support/wp-live-chat-support.php',
 				} );
 				break;
+			case 'crm-contacts':
+				requiredPlugins.push( {
+					name: 'SureContact',
+					slug: 'surecontact',
+					init: 'surecontact/surecontact.php',
+				} );
+				break;
 			default:
 				break;
 		}
@@ -446,7 +477,7 @@ export const activateAstra = ( storedState ) => {
 		method: 'post',
 		body: data,
 	} )
-		.then( ( response ) => response.json() )
+		.then( safeParseJson )
 		.then( ( response ) => {
 			if ( response.success ) {
 				dispatch( {
@@ -668,7 +699,7 @@ export const checkFileSystemPermissions = async ( [ , dispatch ] ) => {
 			method: 'POST',
 			body: formData,
 		} );
-		const data = await response.json();
+		const data = await safeParseJson( response );
 
 		dispatch( {
 			type: 'set',

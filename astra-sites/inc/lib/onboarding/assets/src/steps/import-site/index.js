@@ -23,6 +23,7 @@ import {
 	generateAnalyticsLead,
 	getDemo,
 	extractPluginError,
+	safeParseJson,
 } from './import-utils';
 const { reportError } = starterTemplates;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
@@ -201,7 +202,7 @@ const ImportSite = () => {
 				method: 'post',
 				body: formData,
 			} );
-			const result = await response.json();
+			const result = await safeParseJson( response );
 
 			if ( ! result.success ) {
 				// Plugins missing or not activated - handle recovery.
@@ -303,11 +304,17 @@ const ImportSite = () => {
 		}
 
 		if ( formsStatus ) {
-			customizerStatus = await importCustomizerJson();
+			customizerStatus = await importWithRetry( {
+				importFn: importCustomizerJson,
+				importName: __( 'Customizer Import', 'astra-sites' ),
+			} );
 		}
 
 		if ( customizerStatus ) {
-			spectraStatus = await importSpectraSettings();
+			spectraStatus = await importWithRetry( {
+				importFn: importSpectraSettings,
+				importName: __( 'Spectra Settings Import', 'astra-sites' ),
+			} );
 		}
 
 		if ( spectraStatus ) {
@@ -328,11 +335,17 @@ const ImportSite = () => {
 		sureCartStatus = await importSureCartSettings();
 
 		if ( sureCartStatus ) {
-			optionsStatus = await importSiteOptions();
+			optionsStatus = await importWithRetry( {
+				importFn: importSiteOptions,
+				importName: __( 'Site Options Import', 'astra-sites' ),
+			} );
 		}
 
 		if ( optionsStatus ) {
-			widgetStatus = await importWidgets();
+			widgetStatus = await importWithRetry( {
+				importFn: importWidgets,
+				importName: __( 'Widgets Import', 'astra-sites' ),
+			} );
 		}
 
 		if ( widgetStatus ) {
@@ -340,7 +353,10 @@ const ImportSite = () => {
 		}
 
 		if ( customizationsStatus ) {
-			finalStepStatus = await importDone();
+			finalStepStatus = await importWithRetry( {
+				importFn: importDone,
+				importName: __( 'Final Finishings', 'astra-sites' ),
+			} );
 		}
 
 		if ( finalStepStatus ) {
@@ -431,6 +447,12 @@ const ImportSite = () => {
 	 * @param {Object} plugin
 	 */
 	const activatePlugin = ( plugin ) => {
+		// Already active — skip re-activation; just drain it from the queue.
+		if ( pluginStatuses[ plugin.slug ]?.state === 'success' ) {
+			dispatch( { type: 'plugin_activated', plugin } );
+			return;
+		}
+
 		percentage += 2;
 		dispatch( {
 			type: 'plugin_activate_started',
@@ -1105,7 +1127,7 @@ const ImportSite = () => {
 			method: 'post',
 			body: data,
 		} )
-			.then( ( response ) => response.json() )
+			.then( safeParseJson )
 			.then( async ( response ) => {
 				if ( response.success ) {
 					const chunkArray = divideIntoChunks( 10, response.data );
@@ -1489,8 +1511,10 @@ const ImportSite = () => {
 
 	/**
 	 * 4. Import Customizer JSON.
+	 *
+	 * @param {boolean} suppressErrorReporting - If true, suppress error reporting (used by retry logic).
 	 */
-	const importCustomizerJson = async () => {
+	const importCustomizerJson = async ( suppressErrorReporting = false ) => {
 		if ( ! customizerImportFlag ) {
 			percentage += 5;
 			dispatch( {
@@ -1523,6 +1547,9 @@ const ImportSite = () => {
 					} );
 					return true;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					report(
 						__(
 							'Importing Customizer failed due to parse JSON error.',
@@ -1538,6 +1565,9 @@ const ImportSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Importing Customizer Failed.', 'astra-sites' ),
 					'',
@@ -1695,8 +1725,10 @@ const ImportSite = () => {
 
 	/**
 	 * 6. Import Spectra Settings.
+	 *
+	 * @param {boolean} suppressErrorReporting - If true, suppress error reporting (used by retry logic).
 	 */
-	const importSpectraSettings = async () => {
+	const importSpectraSettings = async ( suppressErrorReporting = false ) => {
 		// Skip if Spectra is not in the required plugins list.
 		if ( ! inRequiredPlugins( 'ultimate-addons-for-gutenberg' ) ) {
 			return true;
@@ -1742,6 +1774,9 @@ const ImportSite = () => {
 						__( 'Unknown error occurred.', 'astra-sites' );
 					throw errorMsg;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					const errorText =
 						error?.message ||
 						error ||
@@ -1761,6 +1796,9 @@ const ImportSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				const errorText =
 					error?.message ||
 					error ||
@@ -1921,8 +1959,10 @@ const ImportSite = () => {
 
 	/**
 	 * 6. Import Site Option table values.
+	 *
+	 * @param {boolean} suppressErrorReporting - If true, suppress error reporting (used by retry logic).
 	 */
-	const importSiteOptions = async () => {
+	const importSiteOptions = async ( suppressErrorReporting = false ) => {
 		dispatch( {
 			type: 'set',
 			importStatus: __( 'Importing Site Options.', 'astra-sites' ),
@@ -1947,6 +1987,9 @@ const ImportSite = () => {
 					} );
 					return true;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					report(
 						__(
 							'Importing Site Options failed due to parse JSON error.',
@@ -1962,6 +2005,9 @@ const ImportSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Importing Site Options Failed.', 'astra-sites' ),
 					'',
@@ -1975,8 +2021,10 @@ const ImportSite = () => {
 
 	/**
 	 * 7. Import Site Widgets.
+	 *
+	 * @param {boolean} suppressErrorReporting - If true, suppress error reporting (used by retry logic).
 	 */
-	const importWidgets = async () => {
+	const importWidgets = async ( suppressErrorReporting = false ) => {
 		if ( ! widgetImportFlag ) {
 			dispatch( {
 				type: 'set',
@@ -2011,6 +2059,9 @@ const ImportSite = () => {
 					} );
 					return true;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					report(
 						__(
 							'Importing Widgets failed due to parse JSON error.',
@@ -2026,6 +2077,9 @@ const ImportSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Importing Widgets Failed.', 'astra-sites' ),
 					'',
@@ -2052,8 +2106,10 @@ const ImportSite = () => {
 
 	/**
 	 * 9. Final setup - Invoking Batch process.
+	 *
+	 * @param {boolean} suppressErrorReporting - If true, suppress error reporting (used by retry logic).
 	 */
-	const importDone = async () => {
+	const importDone = async ( suppressErrorReporting = false ) => {
 		dispatch( {
 			type: 'set',
 			importStatus: __( 'Final finishings.', 'astra-sites' ),
@@ -2081,6 +2137,9 @@ const ImportSite = () => {
 					}, successMessageDelay );
 					return true;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					// report() flips importError so the ErrorScreen renders.
 					// Don't bump importPercent to 100 here — that would visually
 					// claim success while the user sees the failure body, and
@@ -2109,6 +2168,9 @@ const ImportSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Final finishings Failed.', 'astra-sites' ),
 					'',
@@ -2229,7 +2291,7 @@ const ImportSite = () => {
 					method: 'post',
 					body: optinAnswer,
 				} )
-					.then( ( response ) => response.json() )
+					.then( safeParseJson )
 					.then( ( response ) => {
 						if ( response.success ) {
 							starterTemplates.analytics = answer;

@@ -693,6 +693,8 @@ class Helper {
 
 		self::verify_ajax_request( 'customize' );
 
+		self::extend_time_limit();
+
 		if ( empty( $options_data ) ) {
 			$options_data = astra_get_site_data( 'astra-site-options-data' );
 		}
@@ -727,6 +729,8 @@ class Helper {
 
 		self::verify_ajax_request( 'customize' );
 
+		self::extend_time_limit();
+
 		$data = astra_get_site_data( 'astra-site-widgets-data' );
 
 		if ( defined( 'WP_CLI' ) ) {
@@ -759,6 +763,8 @@ class Helper {
 		Ai_Builder_Importer_Log::add( 'Finalizing import process', 'info' );
 
 		self::verify_ajax_request( 'customize', __( "Permission denied: You don't have sufficient permissions to import. Please contact your site administrator.", 'astra-sites' ) );
+
+		self::extend_time_limit();
 
 		if ( ! class_exists( 'STImporter\Importer\ST_Importer_File_System' ) ) {
 			self::error_response( __( 'Import failed: ST_Importer_File_System class not found. Please ensure the importer is properly loaded.', 'astra-sites' ) );
@@ -888,6 +894,8 @@ class Helper {
 
 		self::verify_ajax_request( 'customize' );
 
+		self::extend_time_limit();
+
 		if ( empty( $customizer_data ) ) {
 			$customizer_data = astra_get_site_data( 'astra-site-customizer-data' );
 			Ai_Builder_Importer_Log::add( 'Fetched customizer data from site data', 'info', array( 'settings_count' => is_array( $customizer_data ) ? count( $customizer_data ) : 0 ) );
@@ -913,6 +921,22 @@ class Helper {
 		Ai_Builder_Importer_Log::add( 'Customizer settings imported successfully', 'success' );
 
 		self::success_response();
+	}
+
+	/**
+	 * Extend PHP max execution time for long-running import operations.
+	 *
+	 * Shared helper so every AJAX import handler can raise the limit
+	 * without duplicating the function_exists() guard.
+	 *
+	 * @param int $limit Seconds to allow. Default 300. Pass 0 for unlimited.
+	 * @since 1.2.80
+	 * @return void
+	 */
+	public static function extend_time_limit( $limit = 300 ) {
+		if ( function_exists( 'set_time_limit' ) ) {
+			set_time_limit( $limit ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Required for long-running import process.
+		}
 	}
 
 	/**

@@ -117,6 +117,18 @@ export const initialState = {
 			plugins: [ 'suremail' ],
 		},
 		{
+			title: __( 'CRM & Contacts', 'astra-sites' ),
+			id: 'crm-contacts',
+			description: __(
+				'Keep all your customer relationships in one place',
+				'astra-sites'
+			),
+			enabled: false,
+			compulsory: false,
+			icon: 'users',
+			plugins: [ 'surecontact' ],
+		},
+		{
 			title: __( 'Free Live Chat', 'astra-sites' ),
 			id: 'live-chat',
 			description: __(

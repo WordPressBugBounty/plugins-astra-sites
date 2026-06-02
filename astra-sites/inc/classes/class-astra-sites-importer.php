@@ -508,6 +508,8 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 				}
 			}
 
+			Astra_Sites_Helper::extend_time_limit();
+
 			try {
 				$screen = ( isset( $_REQUEST['screen'] ) ) ? sanitize_text_field( $_REQUEST['screen'] ) : '';
 				$id = ( isset( $_REQUEST['id'] ) ) ? absint( $_REQUEST['id'] ) : '';
@@ -689,6 +691,8 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 					wp_send_json_error( __( "Permission Denied: You don't have permission to import CartFlows flows. Please contact your site administrator.", 'astra-sites' ) );
 				}
 			}
+
+			Astra_Sites_Helper::extend_time_limit();
 
 			// Disable CartFlows import logging.
 			add_filter( 'cartflows_enable_log', '__return_false' );
@@ -972,6 +976,12 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 
 			$missing       = array();
 			$not_activated = array();
+
+			// Flush the options cache so is_plugin_active() reads the DB rather than
+			// a potentially stale object-cache entry left over from the activation
+			// requests that just completed in separate PHP processes.
+			wp_cache_delete( 'active_plugins', 'options' );
+			wp_cache_delete( 'alloptions', 'options' );
 
 			foreach ( $required_plugins as $plugin ) {
 				if ( ! is_array( $plugin ) || empty( $plugin['init'] ) ) {

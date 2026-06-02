@@ -1,16 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { __ } from '@wordpress/i18n';
 import { decodeEntities } from '@wordpress/html-entities';
 import { useStateValue } from '../../store/store';
 import Button from '../../components/button/button';
 import './style.scss';
 import { getSupportLink } from '../../utils/functions';
+import { safeParseJson } from '../../steps/import-site/import-utils';
 
 const ErrorScreen = () => {
 	const [
 		{ importErrorMessages, currentIndex, tryAgainCount, templateId },
 		dispatch,
 	] = useStateValue();
+
+	const [ importLogUrl, setImportLogUrl ] = useState( '' );
+
+	useEffect( () => {
+		if ( ! astraSitesVars?._ajax_nonce ) {
+			return;
+		}
+		const controller = new AbortController();
+		const formData = new FormData();
+		formData.append( 'action', 'astra-sites-get-import-log-url' );
+		formData.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+		fetch( astraSitesVars?.ajaxurl, {
+			method: 'POST',
+			body: formData,
+			signal: controller.signal,
+		} )
+			.then( safeParseJson )
+			.then( ( r ) => {
+				const url = r?.data?.import_log_url;
+				if (
+					r.success &&
+					url &&
+					url.startsWith( window.location.origin )
+				) {
+					setImportLogUrl( url );
+				}
+			} )
+			// eslint-disable-next-line no-console -- Intentionally silent in production; logged for debugging.
+			.catch( ( err ) => {
+				if ( err.name !== 'AbortError' ) {
+					console.warn(
+						'[Astra Sites] Could not fetch import log URL:',
+						err
+					);
+				}
+			} );
+		return () => controller.abort();
+	}, [] );
 
 	const supportLink = getSupportLink(
 		templateId,
@@ -108,6 +147,18 @@ const ErrorScreen = () => {
 						) }
 				</div>
 			</div>
+			{ importLogUrl && (
+				<div className="ist-import-error-log-wrap">
+					<a
+						href={ importLogUrl }
+						target="_blank"
+						rel="noreferrer"
+						className="ist-import-error-log-link"
+					>
+						{ __( 'View import log', 'astra-sites' ) }
+					</a>
+				</div>
+			) }
 			{ importErrorMessages.tryAgain && tryAgainCount < 3 && (
 				<Button
 					className="ist-button"

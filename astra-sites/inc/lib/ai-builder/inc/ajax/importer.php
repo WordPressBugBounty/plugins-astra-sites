@@ -339,6 +339,8 @@ class Importer extends AjaxBase {
 
 			Helper::verify_ajax_request( 'edit_posts', __( "Permission denied: You don't have sufficient permissions to import Spectra settings. Please contact your site administrator.", 'astra-sites' ) );
 
+			Helper::extend_time_limit();
+
 			// Check if ST_Importer class exists.
 			if ( ! class_exists( 'STImporter\Importer\ST_Importer' ) ) {
 				Helper::error_response(

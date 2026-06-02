@@ -127,7 +127,7 @@ class Sidebar_Configurations {
 	/**
 	 * Sanitize a message array by sanitizing each message's role and content.
 	 *
-	 * @since x.x.x
+	 * @since 4.6.1
 	 * @param mixed $value The value to sanitize.
 	 * @return array
 	 */

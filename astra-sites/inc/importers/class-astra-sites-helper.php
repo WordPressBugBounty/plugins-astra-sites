@@ -379,6 +379,22 @@ if ( ! class_exists( 'Astra_Sites_Helper' ) ) :
 			}
 		}
 
+		/**
+		 * Extend PHP max execution time for long-running import operations.
+		 *
+		 * Shared helper so every AJAX import handler can raise the limit
+		 * without duplicating the function_exists() guard.
+		 *
+		 * @param int $limit Seconds to allow. Default 300. Pass 0 for unlimited.
+		 * @since 4.6.1
+		 * @return void
+		 */
+		public static function extend_time_limit( $limit = 300 ) {
+			if ( function_exists( 'set_time_limit' ) ) {
+				set_time_limit( $limit ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Required for long-running import process.
+			}
+		}
+
 	}
 
 	/**

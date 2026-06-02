@@ -120,17 +120,18 @@ if ( ! class_exists( 'Astra_Sites_Compatibility_WooCommerce' ) ) :
 
 		/**
 		 * Returns true/false that need screen check required to retieve the swatch types
-		 * 
+		 *
 		 * @since 4.4.19
+		 * @param bool $value Default screen check value passed by the filter.
 		 * @return bool
 		 */
-		public function screen_required_check() {
+		public function screen_required_check( $value ) {
 			if ( ! is_plugin_active( 'variation-swatches-woo/variation-swatches-woo.php' ) ) {
-				return false;
+				return $value;
 			}
 
 			if ( ! function_exists( 'astra_sites_has_import_started' ) || ! astra_sites_has_import_started() ) {
-				return false;
+				return $value;
 			}
 			return true;
 		}

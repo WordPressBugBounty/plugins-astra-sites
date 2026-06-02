@@ -26,6 +26,7 @@ const PLUGIN_ICON_MAP = {
 	'wpforms-lite': 'wpforms.png',
 	'wp-live-chat-support': '3cx.png',
 	'power-coupons': 'power-coupons.svg',
+	surecontact: 'surecontact.png',
 };
 
 const RequiredPlugins = ( { pluginsList } ) => {
@@ -73,7 +74,7 @@ const RequiredPlugins = ( { pluginsList } ) => {
 							key={ slug }
 							className="px-1.5 py-1 flex items-center gap-0.5 border-[0.5px] border-solid border-button-disabled rounded cursor-pointer"
 						>
-							{ PLUGIN_ICON_MAP?.[ slug ] && (
+							{ PLUGIN_ICON_MAP?.[ slug ] ? (
 								<div className="relative w-4 h-4">
 									{ /* Skeleton/Loading state */ }
 									{ ! loadedImages?.[ slug ] && (
@@ -91,6 +92,10 @@ const RequiredPlugins = ( { pluginsList } ) => {
 										alt={ name }
 										onLoad={ () => handleImageLoad( slug ) }
 									/>
+								</div>
+							) : (
+								<div className="w-4 h-4 flex items-center justify-center bg-[#6c7280] rounded text-[13px] font-semibold text-white uppercase">
+									{ slug?.charAt( 0 ) }
 								</div>
 							) }
 

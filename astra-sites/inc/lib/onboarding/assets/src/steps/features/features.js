@@ -19,6 +19,7 @@ import {
 	EnvelopeIcon,
 	CalendarIcon,
 	ArrowTrendingUpIcon,
+	UsersIcon,
 } from '@heroicons/react/24/outline';
 import { classNames, trackOnboardingStep } from '../../utils/functions';
 import {
@@ -43,6 +44,7 @@ const ICON_SET = {
 	envelope: EnvelopeIcon,
 	calendar: CalendarIcon,
 	'arrow-trending-up': ArrowTrendingUpIcon,
+	users: UsersIcon,
 };
 
 const getPluginProps = ( id ) => {

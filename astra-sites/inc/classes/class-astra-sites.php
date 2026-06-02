@@ -171,6 +171,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				'astra-sites-update-subscription' => 'update_subscription',
 				'astra-sites-update-analytics' => 'update_analytics',
 				'astra-sites-generate-analytics-lead' => 'push_to_import_analytics',
+				'astra-sites-get-import-log-url'      => 'get_import_log_url',
 			);
 
 			foreach ( $this->ajax as $ajax_hook => $ajax_callback ) {
@@ -817,6 +818,29 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 
 			wp_send_json_error( $result['data'] );
+		}
+
+		/**
+		 * Return the URL of the most recent import log file.
+		 *
+		 * Used by the JS failure screen so the user can open the log directly.
+		 *
+		 * @since 4.6.1
+		 * @return void
+		 */
+		public function get_import_log_url() {
+			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
+
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ), 403 );
+				return;
+			}
+
+			wp_send_json_success(
+				array(
+					'import_log_url' => Astra_Sites_Importer_Log::get_log_file_url(),
+				)
+			);
 		}
 
 		/**
@@ -2335,6 +2359,14 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					/* translators: %s doc link. */
 					'tooltip' => '<p>' . esc_html__( 'The memory limit of your site is below the recommended 256MB. While you can proceed, increasing the memory limit is advised for a seamless import experience.', 'astra-sites' ) . '</p>',
 				),
+				'max-execution-time'      => array(
+					'title'   => esc_html__( 'Low Max Execution Time', 'astra-sites' ),
+					'tooltip' => '<p>' . esc_html__( "Your server's max_execution_time is below the recommended 300 seconds. This may cause import timeouts. Please contact your hosting provider to increase it.", 'astra-sites' ) . '</p>',
+				),
+				'mysql-version'           => array(
+					'title'   => esc_html__( 'MySQL Version Too Old', 'astra-sites' ),
+					'tooltip' => '<p>' . esc_html__( 'Your MySQL version is below 5.7. Some templates require MySQL 5.7 or higher for full utf8mb4 collation support. Please upgrade your database server.', 'astra-sites' ) . '</p>',
+				),
 			);
 		}
 
@@ -2382,6 +2414,22 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 
 			if ( $memory_limit_in_bytes < $required_memory_limit ) {
 				$compatibilities['warnings']['wp-memory-limit'] = $data['wp-memory-limit'];
+			}
+
+			$max_execution_time = (int) ini_get( 'max_execution_time' );
+			// 0 means unlimited — no warning needed.
+			if ( $max_execution_time > 0 && $max_execution_time < 300 ) {
+				$compatibilities['warnings']['max-execution-time'] = $data['max-execution-time'];
+			}
+
+			$mysql_version = get_transient( 'astra_sites_mysql_version' );
+			if ( false === $mysql_version ) {
+				global $wpdb;
+				$mysql_version = $wpdb->db_version();
+				set_transient( 'astra_sites_mysql_version', $mysql_version, WEEK_IN_SECONDS );
+			}
+			if ( version_compare( $mysql_version, '5.7', '<' ) ) {
+				$compatibilities['warnings']['mysql-version'] = $data['mysql-version'];
 			}
 
 			if ( ! current_user_can( 'install_plugins' ) ) {
