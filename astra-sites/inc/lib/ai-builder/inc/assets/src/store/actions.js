@@ -65,6 +65,13 @@ const actions = {
 		};
 	},
 
+	setReconnectModal( reconnectModal ) {
+		return {
+			type: actionsTypes.SET_RECONNECT_MODAL,
+			payload: reconnectModal,
+		};
+	},
+
 	setWebsiteTypeAIStep( websiteType ) {
 		return {
 			type: actionsTypes.SET_WEBSITE_TYPE_AI_STEP,

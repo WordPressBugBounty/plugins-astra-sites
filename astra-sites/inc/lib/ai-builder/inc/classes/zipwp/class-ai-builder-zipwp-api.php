@@ -806,6 +806,15 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 
+		// Handle Team Not Found response.
+		if ( 404 === $response_code ) {
+			return array(
+				'error_code' => 'team_not_found',
+				'data'       => __( 'Your ZipWP team was not found. Please reconnect your account to continue.', 'astra-sites' ),
+				'status'     => false,
+			);
+		}
+
 		// Handle Unauthenticated response.
 		if ( 401 === $response_code ) {
 			/**

@@ -124,6 +124,12 @@ if ( ! class_exists( 'Astra_Sites_Batch_Processing' ) ) :
 		 * @return void
 		 */
 		public function start_process() {
+			// AI Builder handles its own batch processing via dedicated AJAX steps.
+			// Skip legacy batch to prevent _elementor_data from being overwritten.
+			if ( 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
+				return;
+			}
+
 			set_transient( 'astra_sites_batch_process_started', 'yes', HOUR_IN_SECONDS );
 			update_option( 'astra_sites_batch_process_started_time', time() );
 

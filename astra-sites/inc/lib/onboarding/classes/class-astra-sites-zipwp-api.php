@@ -46,7 +46,7 @@ class Astra_Sites_ZipWP_Api {
      * Get api namespace
      *
      * @since 4.0.0
-     * @return string
+     * @return non-falsy-string
      */
     public function get_api_namespace() {
         return 'zipwp/v1';

@@ -34,6 +34,7 @@ import ApiErrorModel from '../api-error-model';
 import PlanInformationModal from '../plan-information-modal';
 import PlanUpgradePromoModal from '../plan-upgrade-promo';
 import SignupLoginModal from '../signup-login-modal';
+import ReconnectModal from '../reconnect-modal';
 import SaleInfobar from '../sale-infobar';
 
 const { logoUrlLight } = aiBuilderVars;
@@ -374,22 +375,26 @@ const OnboardingAI = () => {
 							getStepIndex( '/building-website' ) !==
 								currentStep && (
 								<div className="[grid-area:1/3] !mr-5 flex items-center justify-center mx-auto">
-									{ show_zip_plan && authenticated && (
-										<>
-											<button
-												onClick={ () =>
-													setPlanInformationModal( {
-														planInformationModal,
-														open: true,
-													} )
-												}
-												className="border px-1.5 py-0.5 font-semibold border-blue-crayola text-xs rounded text-blue-crayola"
-											>
-												{ active_plan?.name }
-											</button>
-											<span className="mx-3 h-4 w-[1px] bg-border-tertiary"></span>
-										</>
-									) }
+									{ show_zip_plan &&
+										authenticated &&
+										active_plan?.name && (
+											<>
+												<button
+													onClick={ () =>
+														setPlanInformationModal(
+															{
+																planInformationModal,
+																open: true,
+															}
+														)
+													}
+													className="border px-1.5 py-0.5 font-semibold border-blue-crayola text-xs rounded text-blue-crayola"
+												>
+													{ active_plan?.name }
+												</button>
+												<span className="mx-3 h-4 w-[1px] bg-border-tertiary"></span>
+											</>
+										) }
 									<AiBuilderExitButton exitButtonClassName="text-icon-tertiary hover:text-icon-secondary" />
 								</div>
 							) }
@@ -420,6 +425,7 @@ const OnboardingAI = () => {
 				<ContinueProgressModal />
 				<ConfirmationStartOverModal />
 				<SignupLoginModal />
+				<ReconnectModal />
 				<ApiErrorModel />
 				<PlanInformationModal />
 				<PlanUpgradePromoModal />

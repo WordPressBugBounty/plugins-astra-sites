@@ -7,6 +7,7 @@ import { useStateValue } from '../../../store/store';
 import './style.scss';
 import { setURLParmsValue } from '../../../utils/url-params';
 import { useFilteredSites } from '..';
+import { applyPriorityPinning } from '../../../utils/priority-templates';
 
 const SiteSearch = ( { setSiteData } ) => {
 	const [
@@ -153,8 +154,13 @@ const SiteSearch = ( { setSiteData } ) => {
 
 						collectTerms( Object.keys( results ).length );
 
+						const pinnedResults = applyPriorityPinning(
+							results,
+							siteSearchTerm
+						);
+
 						setSiteData( {
-							sites: results,
+							sites: pinnedResults,
 							gridSkeleton: false,
 						} );
 					} }

@@ -1,3 +1,8 @@
+v1.2.80 - 16th June 2026
+- Improvement: Template imports are now more reliable on slower or shared hosting — key import steps will automatically retry if the server takes too long to respond, instead of failing immediately.
+- Fix: Show a dedicated reconnect prompt when the connected ZipWP organization is no longer found.
+- Fix: Prevent Spectra onboarding redirect after activation during import process.
+
 v1.2.79 - 19th May 2026
 - Fix: Template cards now load with their default color palette instead of a random one; shuffle only applies on button click.
 - Fix: Temporarily reverted popup-based ZipWP authentication to same-tab redirect to resolve environment-specific issues.

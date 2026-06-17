@@ -42,6 +42,9 @@ const selectors = {
 	getSignupLoginModalInfo( { signupLoginModal } ) {
 		return signupLoginModal;
 	},
+	getReconnectModalInfo( { reconnectModal } ) {
+		return reconnectModal;
+	},
 	getPlanInfoModalInfo( { planInformationModal } ) {
 		return planInformationModal;
 	},

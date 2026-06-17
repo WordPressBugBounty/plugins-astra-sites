@@ -134,6 +134,9 @@ export const useZipWPAuthPopup = ( {
 						aiBuilderVars.zip_plans = result.data.zip_plans;
 					}
 
+					aiBuilderVars.zip_plans_error_code =
+						result.data?.error_code ?? '';
+
 					if ( typeof onAuthSuccessRef.current === 'function' ) {
 						onAuthSuccessRef.current();
 					}

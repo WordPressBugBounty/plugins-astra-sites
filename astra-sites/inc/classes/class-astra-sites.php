@@ -2060,6 +2060,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 						)
 					),
 					'isWPFreshSite'        => $this->is_wp_fresh_site(),
+					'priorityTemplates'    => $this->get_priority_templates_config(),
 				)
 			);
 
@@ -2628,6 +2629,88 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			 * @since 4.4.43
 			 */
 			return apply_filters( 'astra_sites_get_all_sites', $sites_and_pages );
+		}
+
+		/**
+		 * Get priority templates configuration for category-based pinning.
+		 *
+		 * Scans all sites for templates that use SureCart (detected via required-plugins)
+		 * and belong to the ecommerce category. These template IDs are shipped to the
+		 * frontend so they can be pinned to the top of search results when the user
+		 * searches for ecommerce-related keywords.
+		 *
+		 * Gated by the {@see 'astra_sites_priority_templates_enabled'} filter (default true).
+		 *
+		 * @since 4.6.2
+		 * @return array {
+		 *     @type array $priorityTemplatesByCategory Category slug => array of template IDs.
+		 *     @type array $priorityCategoryKeywords    Category slug => array of trigger keywords.
+		 * }
+		 */
+		private function get_priority_templates_config() {
+			/**
+			 * Master switch for priority template pinning.
+			 *
+			 * @since 4.6.2
+			 * @param bool $enabled Whether priority pinning is enabled. Default true.
+			 */
+			$enabled = apply_filters( 'astra_sites_priority_templates_enabled', true );
+
+			if ( ! $enabled ) {
+				return array(
+					'priorityTemplatesByCategory' => array(),
+					'priorityCategoryKeywords'    => array(),
+				);
+			}
+
+			$all_sites    = $this->get_all_sites();
+			$priority_ids = array();
+
+			foreach ( $all_sites as $site_id => $site ) {
+				$required_plugins = isset( $site['required-plugins'] ) ? $site['required-plugins'] : array();
+				$plugin_slugs     = wp_list_pluck( $required_plugins, 'slug' );
+
+				if ( ! in_array( 'surecart', $plugin_slugs, true ) ) {
+					continue;
+				}
+
+				$categories = isset( $site['categories'] ) ? $site['categories'] : array();
+
+				if ( ! in_array( 'ecommerce', array_values( $categories ), true ) ) {
+					continue;
+				}
+
+				$priority_ids[] = str_replace( 'id-', '', $site_id );
+			}
+
+			$priority_by_category = array(
+				'ecommerce' => array_map( 'intval', $priority_ids ),
+			);
+
+			/**
+			 * Filter the priority templates map (category slug => template IDs).
+			 *
+			 * @since 4.6.2
+			 * @param array $priority_by_category Associative array of category slug to template ID arrays.
+			 */
+			$priority_by_category = apply_filters( 'astra_sites_priority_templates_by_category', $priority_by_category );
+
+			$keywords = array(
+				'ecommerce' => array( 'ecommerce', 'e-commerce', 'shop', 'store', 'online shopping', 'woocommerce', 'shopping' ),
+			);
+
+			/**
+			 * Filter the keywords that trigger priority pinning for each category.
+			 *
+			 * @since 4.6.2
+			 * @param array $keywords Associative array of category slug to keyword arrays.
+			 */
+			$keywords = apply_filters( 'astra_sites_priority_category_keywords', $keywords );
+
+			return array(
+				'priorityTemplatesByCategory' => $priority_by_category,
+				'priorityCategoryKeywords'    => $keywords,
+			);
 		}
 
 		/**

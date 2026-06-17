@@ -99,13 +99,15 @@ class Auth extends AjaxBase {
 		update_option( 'zip_ai_settings', $spec_ai_settings );
 
 		// Fetch fresh plan data so the frontend can update immediately.
-		$plans     = Ai_Builder_ZipWP_Api::Instance()->get_zip_plans();
-		$plan_data = $plans && isset( $plans['data'] ) ? $plans['data'] : array();
+		$plans      = Ai_Builder_ZipWP_Api::Instance()->get_zip_plans();
+		$plan_data  = $plans && isset( $plans['data'] ) && ! empty( $plans['status'] ) ? $plans['data'] : array();
+		$error_code = isset( $plans['error_code'] ) ? $plans['error_code'] : '';
 
 		wp_send_json_success(
 			array(
-				'status'    => true,
-				'zip_plans' => $plan_data,
+				'status'     => true,
+				'zip_plans'  => $plan_data,
+				'error_code' => $error_code,
 			)
 		);
 	}

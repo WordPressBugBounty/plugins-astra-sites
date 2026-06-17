@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from '@wordpress/element';
+import { useEffect, useRef, useState, useMemo } from '@wordpress/element';
 import {
 	FunnelIcon,
 	HeartIcon,
@@ -166,7 +166,14 @@ const Features = ( {
 	const { previousStep } = useNavigateSteps();
 	const disabledFeatures = aiBuilderVars?.hide_site_features;
 	const { setSiteFeatures, storeSiteFeatures } = useDispatch( STORE_KEY );
-	const { setSignupLoginModal } = useDispatch( STORE_KEY );
+	const { setSignupLoginModal, setReconnectModal } = useDispatch( STORE_KEY );
+
+	// Capture should_resume at mount time before onboarding-ai's useLayoutEffect
+	// removes it from the URL. Used to auto-proceed after reconnect/signup redirect.
+	const shouldResumeOnMount = useRef(
+		new URLSearchParams( window.location.search ).get( 'should_resume' ) ===
+			'1'
+	).current;
 
 	const isAuthenticated = () => !! aiBuilderVars?.zip_token_exists;
 
@@ -300,6 +307,17 @@ const Features = ( {
 		}
 	}, [] );
 
+	// Auto-proceed after a reconnect or signup redirect returns with should_resume=1.
+	useEffect( () => {
+		if (
+			shouldResumeOnMount &&
+			isAuthenticated() &&
+			aiBuilderVars?.zip_plans_error_code !== 'team_not_found'
+		) {
+			handleClickNext( { skipFeature: false } );
+		}
+	}, [ shouldResumeOnMount ] );
+
 	const listOfFeatures = useMemo( () => {
 		const isEcommerceEnabled = siteFeatures.some(
 			( feat ) => feat.id === 'ecommerce' && feat.enabled
@@ -351,6 +369,11 @@ const Features = ( {
 	};
 
 	const handleClickNext = async ( { skipFeature = false } ) => {
+		if ( aiBuilderVars?.zip_plans_error_code === 'team_not_found' ) {
+			setReconnectModal( { open: true } );
+			return;
+		}
+
 		if ( ! isAuthenticated() ) {
 			setSignupLoginModal( {
 				open: true,

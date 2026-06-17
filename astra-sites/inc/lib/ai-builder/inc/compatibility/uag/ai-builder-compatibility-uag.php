@@ -51,6 +51,7 @@ class Ai_Builder_Compatibility_UAG {
 	public function uag_activation( $plugin_init ) {
 		if ( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' === $plugin_init ) {
 			update_option( '__uagb_do_redirect', false );
+			update_option( 'spectra_onboarding', array( 'status' => 'completed' ) );
 		}
 	}
 }

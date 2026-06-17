@@ -244,6 +244,73 @@ const ImportAiSite = () => {
 	}, [] );
 
 	/**
+	 * Retry wrapper for import steps that can transiently return non-JSON
+	 * (e.g. server timeout returning HTML). importFn must accept a
+	 * suppressErrorReporting boolean as its first argument.
+	 *
+	 * @param  root0
+	 * @param  root0.importFn
+	 * @param  root0.importName
+	 * @param  root0.maxRetries
+	 * @param  root0.initialDelay
+	 */
+	const importWithRetry = async ( {
+		importFn,
+		importName = 'Import',
+		maxRetries = 2,
+		initialDelay = 2000,
+	} ) => {
+		for ( let attempt = 1; attempt <= maxRetries; attempt++ ) {
+			const isLastAttempt = attempt === maxRetries;
+
+			if ( attempt > 1 ) {
+				dispatch( {
+					importStatus: sprintf(
+						// translators: %1$s: Import name, %2$d: current attempt, %3$d: max attempts.
+						__( '%1$s (retry attempt %2$d/%3$d)…', 'ai-builder' ),
+						importName,
+						attempt - 1,
+						maxRetries - 1
+					),
+				} );
+			}
+
+			// On last attempt, allow error reporting; suppress on earlier attempts
+			const result = await importFn( ! isLastAttempt );
+
+			// If result is false and not the last attempt, retry
+			if ( result === false && ! isLastAttempt ) {
+				// Calculate exponential backoff delay
+				const delay = initialDelay * Math.pow( 2, attempt - 1 );
+
+				dispatch( {
+					importStatus: sprintf(
+						// translators: Import name, seconds to wait.
+						__(
+							'%1$s encountered an error. Retrying in %2$d seconds…',
+							'ai-builder'
+						),
+						importName,
+						Math.floor( delay / 1000 )
+					),
+				} );
+
+				// Wait before retry
+				await new Promise( ( resolve ) =>
+					setTimeout( resolve, delay )
+				);
+
+				continue;
+			}
+
+			// Either success or last attempt - return the result
+			return result;
+		}
+
+		return false;
+	};
+
+	/**
 	 * Start Import Part 1.
 	 */
 	const importPart1 = async () => {
@@ -260,11 +327,17 @@ const ImportAiSite = () => {
 		}
 
 		if ( imageDownloadStatus ) {
-			customizerStatus = await importCustomizerJson();
+			customizerStatus = await importWithRetry( {
+				importFn: importCustomizerJson,
+				importName: __( 'Customizer Import', 'ai-builder' ),
+			} );
 		}
 
 		if ( customizerStatus ) {
-			spectraStatus = await importSpectraSettings();
+			spectraStatus = await importWithRetry( {
+				importFn: importSpectraSettings,
+				importName: __( 'Spectra Settings Import', 'ai-builder' ),
+			} );
 		}
 
 		if ( spectraStatus ) {
@@ -287,10 +360,16 @@ const ImportAiSite = () => {
 		let imagesReplaceBatch = false;
 		let setSiteOptions = false;
 
-		optionsStatus = await importSiteOptions();
+		optionsStatus = await importWithRetry( {
+			importFn: importSiteOptions,
+			importName: __( 'Site Options Import', 'ai-builder' ),
+		} );
 
 		if ( optionsStatus ) {
-			widgetStatus = await importWidgets();
+			widgetStatus = await importWithRetry( {
+				importFn: importWidgets,
+				importName: __( 'Widgets Import', 'ai-builder' ),
+			} );
 		}
 
 		if ( widgetStatus ) {
@@ -302,7 +381,10 @@ const ImportAiSite = () => {
 		}
 
 		if ( imagesReplaceBatch ) {
-			finalStepStatus = await importDone();
+			finalStepStatus = await importWithRetry( {
+				importFn: importDone,
+				importName: __( 'Final Finishings', 'ai-builder' ),
+			} );
 		}
 
 		if ( finalStepStatus ) {
@@ -1037,7 +1119,7 @@ const ImportAiSite = () => {
 		return status;
 	};
 
-	const importCustomizerJson = async () => {
+	const importCustomizerJson = async ( suppressErrorReporting = false ) => {
 		if ( ! customizerImportFlag ) {
 			percentage.current += 5;
 			dispatch( {
@@ -1074,6 +1156,9 @@ const ImportAiSite = () => {
 					}
 					throw data.data;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					report(
 						__(
 							'Importing Customizer failed due to parse JSON error.',
@@ -1089,6 +1174,9 @@ const ImportAiSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Importing Customizer Failed.', 'ai-builder' ),
 					'',
@@ -1181,8 +1269,10 @@ const ImportAiSite = () => {
 
 	/**
 	 * 6. Import Spectra Settings.
+	 *
+	 * @param  suppressErrorReporting
 	 */
-	const importSpectraSettings = async () => {
+	const importSpectraSettings = async ( suppressErrorReporting = false ) => {
 		const spectraSettings =
 			templateResponse[ 'astra-site-spectra-options' ] || '';
 
@@ -1225,6 +1315,9 @@ const ImportAiSite = () => {
 					}
 					throw data.data;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					report(
 						__(
 							'Importing Spectra Settings failed due to parse JSON error.',
@@ -1240,6 +1333,9 @@ const ImportAiSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Importing Spectra Settings Failed.', 'ai-builder' ),
 					'',
@@ -1401,8 +1497,10 @@ const ImportAiSite = () => {
 
 	/**
 	 * 6. Import Site Option table values.
+	 *
+	 * @param  suppressErrorReporting
 	 */
-	const importSiteOptions = async () => {
+	const importSiteOptions = async ( suppressErrorReporting = false ) => {
 		dispatch( {
 			importStatus: __( 'Importing Site Options.', 'ai-builder' ),
 		} );
@@ -1428,6 +1526,9 @@ const ImportAiSite = () => {
 					}
 					throw data.data;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					report(
 						__(
 							'Importing Site Options failed due to parse JSON error.',
@@ -1443,6 +1544,9 @@ const ImportAiSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Importing Site Options Failed.', 'ai-builder' ),
 					'',
@@ -1456,8 +1560,10 @@ const ImportAiSite = () => {
 
 	/**
 	 * 7. Import Site Widgets.
+	 *
+	 * @param  suppressErrorReporting
 	 */
-	const importWidgets = async () => {
+	const importWidgets = async ( suppressErrorReporting = false ) => {
 		if ( ! widgetImportFlag ) {
 			percentage.current += 3;
 			dispatch( {
@@ -1497,6 +1603,9 @@ const ImportAiSite = () => {
 					}
 					throw data.data;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					report(
 						__(
 							'Importing Widgets failed due to parse JSON error.',
@@ -1512,6 +1621,9 @@ const ImportAiSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Importing Widgets Failed.', 'ai-builder' ),
 					'',
@@ -1660,8 +1772,10 @@ const ImportAiSite = () => {
 
 	/**
 	 * 9. Final setup - Invoking Batch process.
+	 *
+	 * @param  suppressErrorReporting
 	 */
-	const importDone = async () => {
+	const importDone = async ( suppressErrorReporting = false ) => {
 		dispatch( {
 			importStatus: __( 'Final finishing.', 'ai-builder' ),
 		} );
@@ -1697,6 +1811,9 @@ const ImportAiSite = () => {
 					}
 					throw data.data;
 				} catch ( error ) {
+					if ( suppressErrorReporting ) {
+						return false;
+					}
 					report(
 						__(
 							'Final finishing failed due to parse JSON error.',
@@ -1723,6 +1840,9 @@ const ImportAiSite = () => {
 				}
 			} )
 			.catch( ( error ) => {
+				if ( suppressErrorReporting ) {
+					return false;
+				}
 				report(
 					__( 'Final finishing Failed.', 'ai-builder' ),
 					'',

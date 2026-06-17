@@ -7,18 +7,23 @@ import {
 } from '../../import-site/import-utils';
 import { useStateValue } from '../../../store/store';
 import { getGridItem } from '../../../utils/functions';
+import { applyPriorityPinning } from '../../../utils/priority-templates';
 
 const SiteGrid = ( { sites } ) => {
 	const sitesData = sites ? sites : {};
 	const storedState = useStateValue();
-	const [ { favoriteSiteIDs, currentIndex }, dispatch ] = storedState;
+	const [ { favoriteSiteIDs, currentIndex, siteSearchTerm }, dispatch ] =
+		storedState;
 	const [ columns, setColumns ] = useState( 4 );
+
+	// Apply priority pinning based on the active search term.
+	const pinnedSitesData = applyPriorityPinning( sitesData, siteSearchTerm );
 
 	const allSites = [];
 
-	if ( Object.keys( sitesData ).length ) {
-		for ( const siteId in sitesData ) {
-			const site = sitesData[ siteId ];
+	if ( Object.keys( pinnedSitesData ).length ) {
+		for ( const siteId in pinnedSitesData ) {
+			const site = pinnedSitesData[ siteId ];
 			if (
 				site.related_ecommerce_template !== undefined &&
 				site.related_ecommerce_template !== '' &&

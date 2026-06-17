@@ -69,6 +69,9 @@ export const defaultOnboardingAIState = {
 	signupLoginModal: {
 		open: false,
 	},
+	reconnectModal: {
+		open: false,
+	},
 	planInformationModal: {
 		open: false,
 	},
@@ -228,6 +231,11 @@ const reducer = ( state = initialState, action ) => {
 			return {
 				...state,
 				signupLoginModal: action.payload,
+			};
+		case actionTypes.SET_RECONNECT_MODAL:
+			return {
+				...state,
+				reconnectModal: action.payload,
 			};
 		case actionTypes.SET_WEBSITE_TYPE_AI_STEP:
 			return {
