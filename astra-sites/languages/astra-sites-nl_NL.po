@@ -7502,7 +7502,7 @@ msgstr "Help %s te verbeteren door niet-gevoelige gebruiksgegevens te delen — 
 
 #: admin/bsf-analytics/class-bsf-analytics.php:550
 msgid " This will be applicable for all sites from the network."
-msgstr " Dit zal van toepassing zijn op alle sites van het netwerk."
+msgstr "Dit zal van toepassing zijn op alle sites van het netwerk."
 
 #: admin/bsf-analytics/class-bsf-analytics.php:555
 msgid "Learn More."
@@ -7876,6 +7876,91 @@ msgstr "Activering mislukt."
 msgid "An error occurred while processing your request."
 msgstr "Er is een fout opgetreden bij het verwerken van je aanvraag."
 
+#: inc/classes/class-astra-sites.php:2364
+msgid "Low Max Execution Time"
+msgstr "Lage Max Uitvoertijd"
+
+#: inc/classes/class-astra-sites.php:2365
+msgid "Your server's max_execution_time is below the recommended 300 seconds. This may cause import timeouts. Please contact your hosting provider to increase it."
+msgstr "De max_execution_time van uw server is lager dan de aanbevolen 300 seconden. Dit kan import time-outs veroorzaken. Neem contact op met uw hostingprovider om deze te verhogen."
+
+#: inc/classes/class-astra-sites.php:2368
+msgid "MySQL Version Too Old"
+msgstr "MySQL-versie te oud"
+
+#: inc/classes/class-astra-sites.php:2369
+msgid "Your MySQL version is below 5.7. Some templates require MySQL 5.7 or higher for full utf8mb4 collation support. Please upgrade your database server."
+msgstr "Uw MySQL-versie is lager dan 5.7. Sommige sjablonen vereisen MySQL 5.7 of hoger voor volledige utf8mb4-collatieondersteuning. Upgrade uw databaseserver."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:570
+msgid "Manage Your Contacts"
+msgstr "Beheer uw contacten"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:571
+msgid "Keep all your customer relationships in one place so you can follow up faster, automate smarter, and never lose track of a lead"
+msgstr "Houd al uw klantrelaties op één plek zodat u sneller kunt opvolgen, slimmer kunt automatiseren en nooit een lead uit het oog verliest"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:581
+msgid "Connect SureContact account"
+msgstr "Verbind SureContact-account"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
+msgid "Server returned a non-JSON response. This usually means the server timed out or encountered a fatal error. Check your server's max_execution_time and PHP error log, then try again."
+msgstr "De server gaf een niet-JSON-reactie terug. Dit betekent meestal dat de server een time-out had of een fatale fout tegenkwam. Controleer de max_execution_time van uw server en de PHP-foutlog, en probeer het opnieuw."
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
+msgid "View import log"
+msgstr "Bekijk importlogboek"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:220
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Customizer Import"
+msgstr "Customizer Import"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:220
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Spectra Settings Import"
+msgstr "Spectra-instellingen importeren"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:226
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Site Options Import"
+msgstr "Site-opties importeren"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:226
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Widgets Import"
+msgstr "Widgets importeren"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:226
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
+msgid "Final Finishings"
+msgstr "Laatste afwerkingen"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "CRM & Contacts"
+msgstr "CRM & Contacten"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "Keep all your customer relationships in one place"
+msgstr "Houd al uw klantrelaties op één plek"
+
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:813
+msgid "Your ZipWP team was not found. Please reconnect your account to continue."
+msgstr "Uw ZipWP-team is niet gevonden. Verbind uw account opnieuw om door te gaan."
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:191
+msgid "Reconnect Your ZipWP Account"
+msgstr "Verbind uw ZipWP-account opnieuw"
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:191
+msgid "Your account isn't linked to an active ZipWP team. Log in to create or join a team and continue building your website."
+msgstr "Uw account is niet gekoppeld aan een actief ZipWP-team. Log in om een team te maken of deel te nemen en verder te gaan met het bouwen van uw website."
+
+#: inc/lib/ai-builder/inc/assets/build/main.js:191
+msgid "Reconnect to ZipWP"
+msgstr "Verbind opnieuw met ZipWP"
+
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
 #: inc/lib/starter-templates-importer/importer/st-importer-log.php:469
 #, php-format
@@ -7892,88 +7977,3 @@ msgstr "We raden aan om php 5.4 of hoger te gebruiken"
 msgctxt "block title"
 msgid "Spectra AI"
 msgstr "Spectra AI"
-
-#: inc/classes/class-astra-sites.php:2364
-msgid "Low Max Execution Time"
-msgstr ""
-
-#: inc/classes/class-astra-sites.php:2365
-msgid "Your server's max_execution_time is below the recommended 300 seconds. This may cause import timeouts. Please contact your hosting provider to increase it."
-msgstr ""
-
-#: inc/classes/class-astra-sites.php:2368
-msgid "MySQL Version Too Old"
-msgstr ""
-
-#: inc/classes/class-astra-sites.php:2369
-msgid "Your MySQL version is below 5.7. Some templates require MySQL 5.7 or higher for full utf8mb4 collation support. Please upgrade your database server."
-msgstr ""
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:570
-msgid "Manage Your Contacts"
-msgstr ""
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:571
-msgid "Keep all your customer relationships in one place so you can follow up faster, automate smarter, and never lose track of a lead"
-msgstr ""
-
-#: inc/lib/getting-started/classes/class-gs-helper.php:581
-msgid "Connect SureContact account"
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:123
-msgid "Server returned a non-JSON response. This usually means the server timed out or encountered a fatal error. Check your server's max_execution_time and PHP error log, then try again."
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:141
-msgid "View import log"
-msgstr ""
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
-msgid "Customizer Import"
-msgstr ""
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:220
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
-msgid "Spectra Settings Import"
-msgstr ""
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:226
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
-msgid "Site Options Import"
-msgstr ""
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:226
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
-msgid "Widgets Import"
-msgstr ""
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:226
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:164
-msgid "Final Finishings"
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
-msgid "CRM & Contacts"
-msgstr ""
-
-#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
-msgid "Keep all your customer relationships in one place"
-msgstr ""
-
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:813
-msgid "Your ZipWP team was not found. Please reconnect your account to continue."
-msgstr ""
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Reconnect Your ZipWP Account"
-msgstr ""
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Your account isn't linked to an active ZipWP team. Log in to create or join a team and continue building your website."
-msgstr ""
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Reconnect to ZipWP"
-msgstr ""

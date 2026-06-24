@@ -10,6 +10,7 @@ const PLUGIN_ICON_MAP = {
 	'header-footer-elementor': 'uae.svg',
 	latepoint: 'latepoint.svg',
 	'presto-player': 'presto-player.svg',
+	'spectra-blocks': 'spectra.svg',
 	'spectra-pro': 'spectra.svg',
 	surecart: 'surecart.svg',
 	sureforms: 'sureforms.svg',

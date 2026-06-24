@@ -3,8 +3,8 @@ import { useStateValue } from '../../../store/store';
 import Tooltip from '../../../components/tooltip/tooltip';
 
 const blockVersions = {
-	v2: __( 'v2', 'astra-sites' ),
-	v3: __( 'v3', 'astra-sites' ),
+	v2: __( 'Legacy', 'astra-sites' ),
+	v3: __( 'Blocks', 'astra-sites' ),
 };
 
 /**

@@ -240,7 +240,11 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 		}
 
 		/**
-		 * Maybe download Spectra v3 beta version during Astra Sites import.
+		 * Maybe download Spectra Blocks plugin during Astra Sites import.
+		 *
+		 * The required-plugins list is normalised at the API response level (api_request()),
+		 * so the frontend already sends `spectra-blocks` as the slug to install. This filter
+		 * provides the custom download URL since the plugin is not on WordPress.org.
 		 *
 		 * @param false|object|array $result The result object or array. Default false.
 		 * @param string             $action The type of information being requested from the Plugin Installation API.
@@ -253,8 +257,8 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 				return $result;
 			}
 
-			// Only modify for ultimate-addons-for-gutenberg.
-			if ( ! isset( $args->slug ) || 'ultimate-addons-for-gutenberg' !== $args->slug ) {
+			// Only intercept the spectra-blocks slug.
+			if ( ! isset( $args->slug ) || 'spectra-blocks' !== $args->slug ) {
 				return $result;
 			}
 
@@ -264,21 +268,13 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 				return $result;
 			}
 
-			$spectra_blocks_version = astra_get_site_data( 'spectra-blocks-ver' );
-			$class_list             = astra_get_site_data( 'class_list' );
-
-			// Only proceed if it's v3 template.
-			if ( empty( $spectra_blocks_version ) || ! in_array( 'spectra-blocks-ver-v3', $class_list, true ) ) {
-				return $result;
-			}
-
-			// Prepare custom response for Spectra v3 beta.
+			// Provide the download URL for the standalone Spectra Blocks plugin.
 			if ( ! is_object( $result ) ) {
 				$result = new stdClass();
 			}
 
-			$result->version       = '3.0.0-beta.2';
-			$result->download_link = 'https://downloads.wordpress.org/plugin/ultimate-addons-for-gutenberg.3.0.0-beta.2.zip';
+			$result->version       = '0.0.8';
+			$result->download_link = 'https://wpspectra.com/wp-content/uploads/2026/06/spectra-blocks.0.0.8.zip';
 
 			return $result;
 		}

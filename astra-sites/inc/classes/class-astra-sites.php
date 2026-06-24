@@ -1032,17 +1032,39 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			$demo_data = json_decode( wp_remote_retrieve_body( $request ), true );
 
 			if ( 200 === $code ) {
-				Astra_Sites_File_System::get_instance()->update_json_file( 'astra_sites_import_data.json', $demo_data );
-				update_option( 'astra_sites_current_import_template_type', 'classic' );
-
 				$class_list = isset( $demo_data['class_list'] ) ? $demo_data['class_list'] : array();
 				if ( in_array( 'astra-site-page-builder-gutenberg', $class_list, true ) ) {
 					$spectra_blocks_version = isset( $demo_data['spectra-blocks-ver'] ) ? $demo_data['spectra-blocks-ver'] : array();
 					$spectra_blocks_ver     = empty( $spectra_blocks_version ) || ! in_array( 'spectra-blocks-ver-v3', $class_list, true ) ? 'v2' : 'v3';
 					update_option( 'astra_sites_current_spectra_blocks_ver', $spectra_blocks_ver );
+
+					// For v3 templates, replace the `ultimate-addons-for-gutenberg` entry in
+					// required-plugins with `spectra-blocks` before the data is saved and sent.
+					// This ensures every downstream step — plugin status check, install, activate,
+					// and verify — works with the correct plugin without additional overrides.
+					if (
+						'v3' === $spectra_blocks_ver &&
+						isset( $demo_data['required-plugins'] ) &&
+						is_array( $demo_data['required-plugins'] )
+					) {
+						$demo_data['required-plugins'] = array_map(
+							function ( $plugin ) {
+								if ( isset( $plugin['init'] ) && 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' === $plugin['init'] ) {
+									$plugin['init'] = 'spectra-blocks/spectra-blocks.php';
+									$plugin['slug'] = 'spectra-blocks';
+									$plugin['name'] = 'Spectra Blocks';
+								}
+								return $plugin;
+							},
+							$demo_data['required-plugins']
+						);
+					}
 				} else {
 					delete_option( 'astra_sites_current_spectra_blocks_ver' );
 				}
+
+				Astra_Sites_File_System::get_instance()->update_json_file( 'astra_sites_import_data.json', $demo_data );
+				update_option( 'astra_sites_current_import_template_type', 'classic' );
 
 				wp_send_json_success( $demo_data );
 			}
@@ -3397,19 +3419,44 @@ JS;
 		}
 
 		/**
+		 * Check if Spectra Legacy (UAG) plugin is installed.
+		 *
+		 * @since 4.6.3
+		 *
+		 * @return bool
+		 */
+		public static function is_spectra_legacy_installed() {
+			$plugin_file = 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php';
+
+			if ( is_plugin_active( $plugin_file ) ) {
+				return true;
+			}
+
+			if ( ! function_exists( 'get_plugins' ) ) {
+				if ( ! defined( 'ABSPATH' ) ) {
+					return false;
+				}
+				require_once ABSPATH . '/wp-admin/includes/plugin.php';
+			}
+
+			$all_plugins = get_plugins();
+			return isset( $all_plugins[ $plugin_file ] );
+		}
+
+		/**
 		 * Should display Spectra Blocks version selector
+		 *
+		 * Display the selector when Spectra Legacy (UAG) is installed, regardless of
+		 * whether Spectra Blocks is also installed. Hide the selector when only
+		 * Spectra Blocks is installed or when neither plugin is installed.
 		 *
 		 * @since 4.4.41
 		 *
 		 * @return bool
 		 */
 		public static function should_display_spectra_blocks_version_selector() {
-			$spectra_blocks_version = self::get_spectra_blocks_version();
-			$legacy_library_enabled = get_option( 'uag_enable_legacy_design_library', 'disabled' ) === 'enabled';
-			$v2_blocks_enabled      = get_option( 'register-v2-blocks', 'no' ) === 'yes';
-
-			// Display selector only if Spectra v3 is enabled and either legacy library or v2 blocks are enabled.
-			$flag = 'v3' === $spectra_blocks_version && ( $legacy_library_enabled || $v2_blocks_enabled );
+			// Show selector only when spectra legacy is installed.
+			$flag = self::is_spectra_legacy_installed();
 
 			/**
 			 * Filter to modify the display of Spectra Blocks version selector.
@@ -3424,52 +3471,22 @@ JS;
 		/**
 		 * Get Spectra Blocks Version
 		 *
-		 * Determines the version of the Spectra Blocks plugin (v2 or v3) based on its activation status and defined constants.
+		 * Always returns 'v3'. The version selector (shown when Spectra Legacy is
+		 * installed) lets the user switch to v2 at runtime via the store.
 		 *
 		 * @since 4.4.41
 		 *
-		 * @return string Returns 'v2' for Spectra Blocks version 2, 'v3' for version 3, or an empty string if not installed.
+		 * @return string 'v3'.
 		 */
 		public static function get_spectra_blocks_version() {
-			$spectra_init = 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php';
-
-			// If spectra is active, check for Spectra 3 constant to determine version.
-			if ( is_plugin_active( $spectra_init ) ) {
-				return defined( 'SPECTRA_3_FILE' ) ? 'v3' : 'v2';
-			}
-
-			// Load plugin.php functions if not already available.
-			if ( ! function_exists( 'get_plugins' ) ) {
-				if ( ! defined( 'ABSPATH' ) ) {
-					return '';
-				}
-				require_once ABSPATH . '/wp-admin/includes/plugin.php';
-			}
-
-			$all_plugins = get_plugins();
-
-			// If spectra is installed, check its version.
-			if ( isset( $all_plugins[ $spectra_init ] ) ) {
-				$spectra_plugin  = $all_plugins[ $spectra_init ];
-				$spectra_version = isset( $spectra_plugin['Version'] ) ? $spectra_plugin['Version'] : '';
-
-				// Remove any suffix from the version (e.g., '-beta', '-rc1').
-				$spectra_version = preg_replace_callback(
-					'/-.+$/',
-					function() {
-						return '';
-					},
-					$spectra_version
-				);
-
-				// If spectra version is found, check version to determine v2 or v3.
-				if ( $spectra_version ) {
-					return version_compare( $spectra_version, '3.0.0', '<' ) ? 'v2' : 'v3';
-				}
-			}
-
-			// Default to v3 for fresh installs.
-			return 'v3';
+			/**
+			 * Filter the Spectra Blocks version.
+			 *
+			 * @param string $version The Spectra Blocks version. Default 'v3'.
+			 *
+			 * @since 4.6.3
+			 */
+			return apply_filters( 'astra_sites_spectra_blocks_version', 'v3' );
 		}
 
 		/**

@@ -431,17 +431,39 @@ const Features = ( {
 				?.filter( ( feature ) => feature.enabled )
 				.map( ( feature ) => feature.id ) ?? [];
 
+		const hasSpectraBlocks = selectedTemplateData?.plugins?.some(
+			( plugin ) => plugin.name === 'spectra-blocks'
+		);
+
+		const getSpectraName = () => {
+			if ( hasSpectraBlocks ) {
+				return 'Spectra Blocks';
+			}
+			return 'Spectra';
+		};
+
+		const getSpectraSlug = () => {
+			if ( hasSpectraBlocks ) {
+				return 'spectra-blocks';
+			}
+			return 'ultimate-addons-for-gutenberg';
+		};
+
+		const getSpectraInit = () => {
+			if ( hasSpectraBlocks ) {
+				return 'spectra-blocks/spectra-blocks.php';
+			}
+			return 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php';
+		};
+
 		const builderPlugin = {
-			name: pageBuilder === 'elementor' ? 'Elementor' : 'Spectra',
-			slug:
-				pageBuilder === 'elementor'
-					? 'elementor'
-					: 'ultimate-addons-for-gutenberg',
+			name: pageBuilder === 'elementor' ? 'Elementor' : getSpectraName(),
+			slug: pageBuilder === 'elementor' ? 'elementor' : getSpectraSlug(),
 			compulsory: true,
 			init:
 				pageBuilder === 'elementor'
 					? 'elementor/elementor.php'
-					: 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
+					: getSpectraInit(),
 		};
 
 		const formPlugin = {

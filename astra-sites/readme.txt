@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.6.2
+Stable tag: 4.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,12 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.6.3 - 24-June-2026
+- New:
+    - Added Spectra Blocks plugin compatibility for AI Builder template imports.
+- Improvement:
+    - Added a version selector for sites with Spectra Legacy installed, allowing users to switch between Spectra Legacy and Spectra Blocks template designs.
+
 v4.6.2 - 17-June-2026
 - Improvement:
     - SureCart ecommerce templates now appear first when searching for ecommerce-related keywords.
