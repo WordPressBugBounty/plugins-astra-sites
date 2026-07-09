@@ -82,6 +82,83 @@ class ST_WXR_Importer {
 		// To handle the multiple WXR import requests.
 		add_action( 'import_start', array( $this, 'wxr_import_transient_start' ) );
 		add_action( 'import_end', array( $this, 'wxr_import_transient_cleanup' ) );
+
+		// SureDonation auto-creates a default form when a campaign is published.
+		// The imported WXR already carries the campaign's real form, so suppress
+		// the auto-creation during import and remap the campaign/form
+		// cross-reference metas once all posts are in.
+		add_action( 'import_start', array( $this, 'suppress_suredonation_auto_form' ) );
+		add_action( 'import_end', array( $this, 'restore_suredonation_auto_form' ) );
+		add_action( 'import_end', array( $this, 'remap_suredonation_relations' ) );
+	}
+
+	/**
+	 * Detach SureDonation's default-form auto-creation during WXR import.
+	 *
+	 * Publishing a `suredonation_cmpgn` post normally triggers
+	 * `Campaign_Cpt::maybe_create_default_form()`, which would generate a second
+	 * donation form alongside the one carried by the WXR file (the campaign's
+	 * `_suredonation_default_form_id` meta is not yet inserted when `save_post`
+	 * fires mid-import, so its own guard cannot help).
+	 *
+	 * @since 1.1.35
+	 * @return void
+	 */
+	public function suppress_suredonation_auto_form() {
+		if ( ! class_exists( 'SureDonation\Inc\Campaigns\Campaign_Cpt' ) ) {
+			return;
+		}
+
+		remove_action( 'save_post_suredonation_cmpgn', array( \SureDonation\Inc\Campaigns\Campaign_Cpt::get_instance(), 'maybe_create_default_form' ), 20 );
+	}
+
+	/**
+	 * Re-attach SureDonation's default-form auto-creation after WXR import.
+	 *
+	 * @since 1.1.35
+	 * @return void
+	 */
+	public function restore_suredonation_auto_form() {
+		if ( ! class_exists( 'SureDonation\Inc\Campaigns\Campaign_Cpt' ) ) {
+			return;
+		}
+
+		add_action( 'save_post_suredonation_cmpgn', array( \SureDonation\Inc\Campaigns\Campaign_Cpt::get_instance(), 'maybe_create_default_form' ), 20, 2 );
+	}
+
+	/**
+	 * Remap SureDonation campaign/form cross-reference metas to imported IDs.
+	 *
+	 * The campaign stores its default form in `_suredonation_default_form_id`
+	 * and the form stores its campaign in `_suredonation_campaign_id` — both as
+	 * source-site post IDs. Runs on `import_end`, when the campaign and form ID
+	 * maps captured during the WXR import are complete.
+	 *
+	 * @since 1.1.35
+	 * @return void
+	 */
+	public function remap_suredonation_relations() {
+		$campaign_id_map = get_option( 'astra_sites_suredonation_campaign_id_map', array() );
+		$form_id_map     = get_option( 'astra_sites_suredonation_form_id_map', array() );
+
+		$campaign_id_map = is_array( $campaign_id_map ) ? $campaign_id_map : array();
+		$form_id_map     = is_array( $form_id_map ) ? $form_id_map : array();
+
+		// Campaign meta -> new form ID.
+		foreach ( $campaign_id_map as $new_campaign_id ) {
+			$old_form_id = (int) get_post_meta( $new_campaign_id, '_suredonation_default_form_id', true );
+			if ( $old_form_id && isset( $form_id_map[ $old_form_id ] ) ) {
+				update_post_meta( $new_campaign_id, '_suredonation_default_form_id', (int) $form_id_map[ $old_form_id ] );
+			}
+		}
+
+		// Form meta -> new campaign ID.
+		foreach ( $form_id_map as $new_form_id ) {
+			$old_campaign_id = (int) get_post_meta( $new_form_id, '_suredonation_campaign_id', true );
+			if ( $old_campaign_id && isset( $campaign_id_map[ $old_campaign_id ] ) ) {
+				update_post_meta( $new_form_id, '_suredonation_campaign_id', (int) $campaign_id_map[ $old_campaign_id ] );
+			}
+		}
 	}
 
 	/**
@@ -134,6 +211,18 @@ class ST_WXR_Importer {
 			$sureforms_id_map                 = get_option( 'astra_sites_surecart_forms_id_map', array() );
 			$sureforms_id_map[ $original_id ] = $post_id;
 			update_option( 'astra_sites_surecart_forms_id_map', $sureforms_id_map );
+		}
+
+		if ( 'suredonation_cmpgn' === get_post_type( $post_id ) ) {
+			$suredonation_campaign_id_map                 = get_option( 'astra_sites_suredonation_campaign_id_map', array() );
+			$suredonation_campaign_id_map[ $original_id ] = $post_id;
+			update_option( 'astra_sites_suredonation_campaign_id_map', $suredonation_campaign_id_map );
+		}
+
+		if ( 'suredonation_form' === get_post_type( $post_id ) ) {
+			$suredonation_form_id_map                 = get_option( 'astra_sites_suredonation_form_id_map', array() );
+			$suredonation_form_id_map[ $original_id ] = $post_id;
+			update_option( 'astra_sites_suredonation_form_id_map', $suredonation_form_id_map );
 		}
 	}
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom';
+import { createRoot } from '@wordpress/element';
 import reducer, { initialState } from './store/reducer';
 import { StateProvider } from './store/store';
 import App from './app';

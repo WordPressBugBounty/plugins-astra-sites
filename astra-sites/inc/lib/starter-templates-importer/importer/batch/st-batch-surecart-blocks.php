@@ -187,6 +187,15 @@ class ST_Batch_SureCart_Blocks {
 				}
 			}
 
+			// Process surecart/product-page blocks — remap the WP post ID stored in product_post_id.
+			if ( 'surecart/product-page' === $block['blockName'] && ! empty( $mappers['post_ids'] ) && isset( $block['attrs']['product_post_id'] ) ) {
+				$old_id = $block['attrs']['product_post_id'];
+				if ( isset( $mappers['post_ids'][ $old_id ] ) ) {
+					$block['attrs']['product_post_id'] = $mappers['post_ids'][ $old_id ];
+					$content_updated                   = true;
+				}
+			}
+
 			// Process surecart/buy-button blocks.
 			if ( 'surecart/buy-button' === $block['blockName'] && ! empty( $mappers['price_ids'] ) ) {
 				if ( isset( $block['attrs']['line_items'] ) && is_array( $block['attrs']['line_items'] ) ) {

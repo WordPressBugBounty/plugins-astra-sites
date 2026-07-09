@@ -206,6 +206,10 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 					$this->replace_surecart_forms_ids( $widget );
 				}
 
+				if ( isset( $widget['widgetType'] ) && 'shortcode' === $widget['widgetType'] && has_shortcode( $widget['settings']['shortcode'], 'suredonation_form' ) ) {
+					$this->replace_suredonation_ids( $widget );
+				}
+
 				if ( isset( $widget['elements'] ) && is_array( $widget['elements'] ) ) {
 					$this->process_elementor_widgets( $widget['elements'] );
 				}
@@ -291,6 +295,26 @@ if ( ! class_exists( 'ST_Batch_Processing_Elementor' ) ) :
 
 			foreach ( $sureform_id_map as $old_id => $new_id ) {
 				$widget['settings']['shortcode'] = str_replace( '[sureforms id="' . $old_id . '"]', '[sureforms id="' . $new_id . '"]', $widget['settings']['shortcode'] );
+			}
+		}
+
+		/**
+		 * Replace SureDonation form IDs in shortcode widget.
+		 *
+		 * @since 1.1.35
+		 *
+		 * @param array<string, mixed> $widget Widget data.
+		 * @return void
+		 */
+		public function replace_suredonation_ids( &$widget ) {
+			$form_id_map = get_option( 'astra_sites_suredonation_form_id_map', array() );
+
+			if ( empty( $form_id_map ) ) {
+				return;
+			}
+
+			foreach ( $form_id_map as $old_id => $new_id ) {
+				$widget['settings']['shortcode'] = str_replace( '[suredonation_form id="' . $old_id . '"]', '[suredonation_form id="' . $new_id . '"]', $widget['settings']['shortcode'] );
 			}
 		}
 

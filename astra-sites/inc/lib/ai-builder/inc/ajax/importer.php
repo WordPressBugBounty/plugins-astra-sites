@@ -21,6 +21,7 @@ use AiBuilder\Inc\Traits\Instance;
 use STImporter\Importer\Batch\ST_Batch_Processing_Elementor;
 use STImporter\Importer\Batch\ST_Batch_Processing_Gutenberg;
 use STImporter\Importer\Batch\ST_Batch_Processing_Misc;
+use STImporter\Importer\Batch\ST_Replace_Images;
 use STImporter\Importer\ST_Importer;
 use STImporter\Importer\ST_Importer_Helper;
 use STImporter\Resetter\ST_Resetter;
@@ -129,6 +130,7 @@ class Importer extends AjaxBase {
 	public function backup_settings() {
 		Ai_Builder_Importer_Log::add( '---' . PHP_EOL );
 		Ai_Builder_Importer_Log::add( 'Starting backup of existing settings', 'info' );
+		delete_option( 'ai_builder_image_replacement_index' );
 		Helper::backup_settings();
 	}
 
@@ -531,7 +533,13 @@ class Importer extends AjaxBase {
 	}
 
 	/**
-	 * Processing GT batch.
+	 * Processing image replacement batch.
+	 *
+	 * Accepts an optional 'step' POST parameter to split work across multiple
+	 * requests, preventing PHP timeouts on resource-constrained hosting.
+	 *
+	 * Steps: pages, posts, customizer, cleanup.
+	 * When no step is provided, falls back to processing everything in one call.
 	 *
 	 * @since 1.0.14
 	 * @return void
@@ -539,13 +547,92 @@ class Importer extends AjaxBase {
 	public function image_replacement_batch() {
 		Helper::verify_ajax_request( 'customize' );
 
-		Ai_Builder_Importer_Log::add( '---' . PHP_EOL );
-		Ai_Builder_Importer_Log::add( 'Starting image replacement batch processing', 'info' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in verify_ajax_request().
+		$step = isset( $_POST['step'] ) ? sanitize_text_field( $_POST['step'] ) : '';
 
-		$status = class_exists( 'STImporter\Importer\Batch\ST_Batch_Processing_Misc' ) ? ST_Batch_Processing_Misc::get_instance()->import() : array(
-			'status' => false,
-			'msg'    => __( 'Required function not found', 'astra-sites' ),
+		Ai_Builder_Importer_Log::add( '---' . PHP_EOL );
+		Ai_Builder_Importer_Log::add( 'Starting image replacement batch processing' . ( $step ? ' - step: ' . $step : '' ), 'info' );
+
+		if ( empty( $step ) ) {
+			$status = class_exists( 'STImporter\Importer\Batch\ST_Batch_Processing_Misc' ) ? ST_Batch_Processing_Misc::get_instance()->import() : array(
+				'success' => false,
+				'msg'     => __( 'Required function not found', 'astra-sites' ),
+			);
+
+			if ( $status['success'] ) {
+				Helper::success_response( $status['msg'] );
+				return;
+			}
+
+			Helper::error_response( $status['msg'] );
+			return;
+		}
+
+		if ( ! class_exists( 'STImporter\Importer\Batch\ST_Replace_Images' ) ) {
+			Helper::error_response( __( 'Required class not found.', 'astra-sites' ) );
+			return;
+		}
+
+		if ( 'ai' !== get_option( 'astra_sites_current_import_template_type' ) ) {
+			Helper::success_response( __( 'Template type is not AI.', 'astra-sites' ) );
+			return;
+		}
+
+		if ( false === get_option( 'astra_sites_ai_import_started', false ) ) {
+			Helper::error_response( __( 'Required flags are not set.', 'astra-sites' ) );
+			return;
+		}
+
+		$instance = ST_Replace_Images::get_instance();
+
+		// Restore image index from previous step to maintain correct image distribution.
+		$image_index                    = get_option( 'ai_builder_image_replacement_index', 0 );
+		ST_Replace_Images::$image_index = is_numeric( $image_index ) ? absint( $image_index ) : 0;
+
+		$status = array(
+			'success' => true,
+			'msg'     => '',
 		);
+
+		switch ( $step ) {
+			case 'pages':
+				$status = $instance->replace_in_pages();
+				break;
+
+			case 'posts':
+				$status = $instance->replace_in_post();
+				break;
+
+			case 'customizer':
+				if ( function_exists( 'astra_update_option' ) && function_exists( 'astra_get_option' ) ) {
+					$instance->replace_in_customizer();
+				}
+				$status = array(
+					'success' => true,
+					'msg'     => __( 'Customizer images replaced.', 'astra-sites' ),
+				);
+				break;
+
+			case 'cleanup':
+				$instance->cleanup();
+				delete_option( 'ai_builder_image_replacement_index' );
+				$status = array(
+					'success' => true,
+					'msg'     => __( 'Image replacement cleanup complete.', 'astra-sites' ),
+				);
+				break;
+
+			default:
+				Helper::error_response( __( 'Invalid step.', 'astra-sites' ) );
+				return;
+		}
+
+		// Persist image index for next step so images distribute correctly across steps.
+		if ( 'cleanup' !== $step ) {
+			update_option( 'ai_builder_image_replacement_index', ST_Replace_Images::$image_index, false );
+		}
+
+		Ai_Builder_Importer_Log::add( 'Image replacement step complete: ' . $step, 'info' );
 
 		if ( $status['success'] ) {
 			Helper::success_response( $status['msg'] );

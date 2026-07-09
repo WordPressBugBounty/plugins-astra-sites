@@ -1,5 +1,5 @@
 import { useSelect, useDispatch } from '@wordpress/data';
-import { renderToString } from 'react-dom/server';
+import { renderToString } from '@wordpress/element';
 import { ExclamationTriangleColorfulIcon } from '../ui/icons';
 import { STORE_KEY } from '../store';
 import Modal from './modal';

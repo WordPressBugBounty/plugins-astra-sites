@@ -250,6 +250,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 			// Replace SureForm ID's.
 			$content = $this->replace_sureforms_ids( $content );
 			$content = $this->replace_surecart_forms_ids( $content );
+			$content = $this->replace_suredonation_ids( $content );
 
 			ST_Importer_Log::add(
 				'Updating post content (first pass)',
@@ -354,6 +355,95 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 			}
 
 			return $content;
+		}
+
+		/**
+		 * Replace SureDonation campaign and form IDs in content.
+		 *
+		 * SureDonation campaign blocks store the source campaign post ID in the
+		 * `campaignId` attribute and form blocks store the source form post ID in
+		 * the `formId` attribute (both serialized as unquoted numbers). The
+		 * [suredonation_form] shortcode references the form ID as a quoted
+		 * attribute. All are remapped to the newly imported post IDs.
+		 *
+		 * The `campaignId` / `formId` remap is scoped to `wp:suredonation/*`
+		 * block markup so identically named attributes belonging to other plugins'
+		 * blocks are never touched.
+		 *
+		 * @since 1.1.35
+		 *
+		 * @param string $content Post content.
+		 * @return string
+		 */
+		public function replace_suredonation_ids( $content ) {
+
+			$campaign_id_map = get_option( 'astra_sites_suredonation_campaign_id_map', array() );
+			$form_id_map     = get_option( 'astra_sites_suredonation_form_id_map', array() );
+
+			$campaign_id_map = is_array( $campaign_id_map ) ? $campaign_id_map : array();
+			$form_id_map     = is_array( $form_id_map ) ? $form_id_map : array();
+
+			// Remap campaignId/formId only inside SureDonation block comments so
+			// other plugins' blocks that happen to use the same attribute names
+			// are left untouched.
+			if ( ! empty( $campaign_id_map ) || ! empty( $form_id_map ) ) {
+				$replaced = preg_replace_callback(
+					'/<!-- wp:suredonation\/.*?-->/s',
+					function ( $matches ) use ( $campaign_id_map, $form_id_map ) {
+						$block = $matches[0];
+
+						foreach ( $campaign_id_map as $old_id => $new_id ) {
+							$block = $this->replace_block_numeric_attribute( $block, 'campaignId', (int) $old_id, (int) $new_id );
+						}
+
+						foreach ( $form_id_map as $old_id => $new_id ) {
+							$block = $this->replace_block_numeric_attribute( $block, 'formId', (int) $old_id, (int) $new_id );
+						}
+
+						return $block;
+					},
+					$content
+				);
+
+				$content = null !== $replaced ? $replaced : $content;
+			}
+
+			// The [suredonation_form] shortcode is uniquely named, so replace it
+			// across the whole content.
+			foreach ( $form_id_map as $old_id => $new_id ) {
+				$content = str_replace( '[suredonation_form id="' . $old_id . '"]', '[suredonation_form id="' . $new_id . '"]', $content );
+			}
+
+			return $content;
+		}
+
+		/**
+		 * Replace a numeric block attribute value within block markup.
+		 *
+		 * Gutenberg serializes number attributes unquoted, so the value is always
+		 * terminated by a comma (another attribute follows) or a closing brace
+		 * (last attribute). Matching both terminators keeps "attr":12 from being
+		 * corrupted when a longer id such as "attr":123 is also present.
+		 *
+		 * @since 1.1.35
+		 *
+		 * @param string $block     Block markup to operate on.
+		 * @param string $attribute Attribute name, e.g. campaignId.
+		 * @param int    $old_id    Source post ID.
+		 * @param int    $new_id    Imported post ID.
+		 * @return string
+		 */
+		public function replace_block_numeric_attribute( $block, $attribute, $old_id, $new_id ) {
+			$search  = array(
+				'"' . $attribute . '":' . $old_id . ',',
+				'"' . $attribute . '":' . $old_id . '}',
+			);
+			$replace = array(
+				'"' . $attribute . '":' . $new_id . ',',
+				'"' . $attribute . '":' . $new_id . '}',
+			);
+
+			return str_replace( $search, $replace, $block );
 		}
 
 		/**

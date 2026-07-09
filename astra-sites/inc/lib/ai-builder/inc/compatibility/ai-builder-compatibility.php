@@ -65,6 +65,12 @@ if ( ! class_exists( 'Ai_Builder_Compatibility' ) ) {
 
 			// Plugin - SureRank.
 			require_once AI_BUILDER_DIR . 'inc/compatibility/surerank/ai-builder-compatibility-surerank.php';
+
+			// Plugin - SureMembers Core.
+			require_once AI_BUILDER_DIR . 'inc/compatibility/suremembers/ai-builder-compatibility-suremembers.php';
+
+			// Plugin - SureDonation.
+			require_once AI_BUILDER_DIR . 'inc/compatibility/suredonation/ai-builder-compatibility-suredonation.php';
 		}
 
 		/**

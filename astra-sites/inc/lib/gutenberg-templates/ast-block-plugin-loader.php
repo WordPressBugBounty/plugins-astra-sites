@@ -15,7 +15,6 @@ use Gutenberg_Templates\Inc\Importer\Plugin;
 use Gutenberg_Templates\Inc\Importer\Image_Importer;
 use Gutenberg_Templates\Inc\Importer\Updater;
 use Gutenberg_Templates\Inc\Content\Ai_Content;
-use Gutenberg_Templates\Inc\Traits\Upgrade;
 use Gutenberg_Templates\Inc\Importer\Template_Kit_Importer;
 use Gutenberg_Templates\Inc\Block\Spectra_AI_Block;
 use Gutenberg_Templates\Inc\Classes\Ast_Block_Templates_Zipwp_Api;
@@ -120,7 +119,6 @@ class Ast_Block_Plugin_Loader {
 		Sync_Library::instance();
 		Sync_Library_WP_CLI::instance();
 		Ai_Content::instance();
-		Upgrade::instance();
 		Updater::instance();
 		//phpcs:disable Squiz
 		// Spectra_AI_Block::get_instance();

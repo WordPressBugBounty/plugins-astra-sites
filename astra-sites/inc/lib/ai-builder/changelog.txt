@@ -1,5 +1,16 @@
+v1.2.83 - 8th July 2026
+- New: Added SureDonation compatibility to prevent onboarding redirect during template import.
+- Improvement: The AI builder loading screen now handles failures gracefully with a credit-restore message, retry that rebuilds the site, and a stall timeout.
+- Fix: Prevented a PHP warning when a stored failed-site record was missing the expiry flag.
+
+v1.2.82 - 30th June 2026
+- New: Added feature card carousel to the AI builder loading screen with auto-advancing dot navigation, gradient progress ring, and support CTA.
+- New: Added SureMembers Core plugin compatibility to prevent onboarding redirect during template import.
+- Fix: Listbox Language selection crash and Tooltip rendering issue while using the Google Auto-Translate wizard.
+
 v1.2.81 - 23th June 2026
 - New: Added Spectra Blocks plugin compatibility for AI Builder template imports.
+- Fix: Split image replacement batch into chunked steps to prevent PHP timeouts on shared hosting during site import.
 
 v1.2.80 - 16th June 2026
 - Improvement: Template imports are now more reliable on slower or shared hosting — key import steps will automatically retry if the server takes too long to respond, instead of failing immediately.

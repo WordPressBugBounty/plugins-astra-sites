@@ -354,6 +354,18 @@ class Ai_Builder_ZipWP_Api {
 
 		register_rest_route(
 			$namespace,
+			'/restore-credit/',
+			array(
+				array(
+					'methods'             => \WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'restore_credit' ),
+					'permission_callback' => array( $this, 'get_item_permissions_check' ),
+				),
+			)
+		);
+
+		register_rest_route(
+			$namespace,
 			'/migration-status/',
 			array(
 				array(
@@ -2051,6 +2063,78 @@ class Ai_Builder_ZipWP_Api {
 			wp_send_json_error(
 				array(
 					'data'   => $response_code,
+					'status' => false,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Restore the AI credit consumed by a failed site generation.
+	 *
+	 * Proxies to the ZipWP manual restore endpoint. The response mirrors the
+	 * backend contract: a `status` of `not_eligible`, `already_restored` or
+	 * `restored_now` plus a user-facing `message`. Idempotent on the backend.
+	 *
+	 * @since 1.2.83
+	 * @param \WP_REST_Request $request Full details about the request.
+	 * @return mixed
+	 */
+	public function restore_credit( $request ) {
+		$nonce = (string) $request->get_header( 'X-WP-Nonce' );
+		// Verify the nonce.
+		if ( ! wp_verify_nonce( sanitize_text_field( $nonce ), 'wp_rest' ) ) {
+			wp_send_json_error(
+				array(
+					'data'   => __( 'Nonce verification failed.', 'astra-sites' ),
+					'status' => false,
+				)
+			);
+		}
+
+		$site = get_option( 'zipwp_import_site_details', array() );
+		$uuid = is_array( $site ) && ! empty( $site['uuid'] ) ? $site['uuid'] : '';
+
+		if ( empty( $uuid ) ) {
+			wp_send_json_error(
+				array(
+					'data'   => __( 'Site not found.', 'astra-sites' ),
+					'status' => false,
+				)
+			);
+		}
+
+		$api_endpoint = $this->get_api_domain( false ) . '/sites/' . $uuid . '/restore-credit/';
+		$request_args = array(
+			'headers' => $this->get_api_headers(),
+			'timeout' => 100,
+		);
+		$response     = wp_safe_remote_post( $api_endpoint, $request_args );
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error(
+				array(
+					'data'   => 'Failed ' . $response->get_error_message(),
+					'status' => false,
+				)
+			);
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		$response_body = wp_remote_retrieve_body( $response );
+		$response_data = json_decode( $response_body, true );
+
+		if ( 200 === $response_code && $response_data ) {
+			wp_send_json_success(
+				array(
+					'data'   => $response_data,
+					'status' => true,
+				)
+			);
+		} else {
+			wp_send_json_error(
+				array(
+					'data'   => $response_data,
 					'status' => false,
 				)
 			);

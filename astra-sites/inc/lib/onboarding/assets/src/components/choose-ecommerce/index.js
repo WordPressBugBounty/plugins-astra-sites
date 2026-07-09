@@ -44,6 +44,9 @@ const ChooseEcommerce = () => {
 	const selectedTemplate = getSelectedTemplate();
 	const relatedTemplateID =
 		selectedTemplate?.related_ecommerce_template || '';
+	const hasSureCart = selectedTemplate?.[ 'required-plugins' ]?.some(
+		( plugin ) => plugin?.slug === 'surecart'
+	);
 
 	const changeEcommerceTemplate = async ( event ) => {
 		const templateValue = parseInt( event?.value );
@@ -66,13 +69,13 @@ const ChooseEcommerce = () => {
 	}, [ selectedTemplateID, relatedTemplateID ] );
 
 	useEffect( () => {
-		if ( ! relatedTemplateID ) {
+		if ( ! relatedTemplateID || ! hasSureCart ) {
 			dispatch( {
 				type: 'set',
 				currentCustomizeIndex: currentCustomizeIndex + 1, // Skip 1 step.
 			} );
 		}
-	}, [ relatedTemplateID, currentCustomizeIndex, dispatch ] );
+	}, [ relatedTemplateID, hasSureCart, currentCustomizeIndex, dispatch ] );
 
 	const platforms = [
 		{

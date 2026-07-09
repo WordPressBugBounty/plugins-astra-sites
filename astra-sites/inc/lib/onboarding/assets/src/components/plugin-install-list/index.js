@@ -44,6 +44,7 @@ const PLUGIN_ICON_MAP = {
 	'spectra-blocks': 'spectra.svg',
 	'spectra-pro': 'spectra.svg',
 	surecart: 'surecart.svg',
+	suredonation: 'suredonation.png',
 	sureforms: 'sureforms.svg',
 	suremails: 'suremails.svg',
 	surerank: 'surerank.svg',

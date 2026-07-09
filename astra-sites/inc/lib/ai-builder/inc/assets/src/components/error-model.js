@@ -2,12 +2,16 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { __ } from '@wordpress/i18n';
 import { getSupportLink } from '../utils/functions';
 import Button from '../components/button';
+import CreditRestoreNotice from './credit-restore-notice';
 
 const ErrorModel = ( {
 	error,
 	websiteInfo,
 	tryAgainCallback,
 	renderHeader,
+	showCreditRestore = false,
+	creditAutoRestore = true,
+	hideTryAgain = false,
 } ) => {
 	return (
 		<div className="relative grid grid-cols-1 grid-rows-1 place-items-center py-5 md:py-0 px-5 md:px-10 bg-app-light-background ">
@@ -49,20 +53,28 @@ const ErrorModel = ( {
 						</div>
 					</div>
 				) }
+				{ showCreditRestore && (
+					<CreditRestoreNotice autoRestore={ creditAutoRestore } />
+				) }
 				<div className="items-center gap-3 justify-center mt-4">
-					<Button
-						onClick={ () => {
-							tryAgainCallback();
-						} }
-						variant="primary"
-						size="l"
-						className="w-full min-h-[48px] mt-3"
-					>
-						<div className="flex items-center justify-center gap-2">
-							{ __( 'Click here to try again', 'ai-builder' ) }
-							<ArrowRightIcon className="w-5 h-5" />
-						</div>
-					</Button>
+					{ ! hideTryAgain && (
+						<Button
+							onClick={ () => {
+								tryAgainCallback();
+							} }
+							variant="primary"
+							size="l"
+							className="w-full min-h-[48px] mt-3"
+						>
+							<div className="flex items-center justify-center gap-2">
+								{ __(
+									'Click here to try again',
+									'ai-builder'
+								) }
+								<ArrowRightIcon className="w-5 h-5" />
+							</div>
+						</Button>
+					) }
 					<Button
 						onClick={ () => {
 							const content = new FormData();

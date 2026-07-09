@@ -12,7 +12,7 @@ const Tooltip = ( {
 	return content ? (
 		<Tippy
 			arrow={ arrow }
-			content={ content }
+			content={ <span>{ content }</span> }
 			className={ classNames(
 				'zw-tooltip zw-xs-normal bg-app-tooltip px-0.5 py-1.5 flex items-center justify-left text-justify',
 				className

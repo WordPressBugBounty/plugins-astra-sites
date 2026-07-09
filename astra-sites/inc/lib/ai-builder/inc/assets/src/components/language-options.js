@@ -91,7 +91,11 @@ const LanguageOptions = ( {
 	}, [ value ] );
 
 	return (
-		<Listbox value={ selected } onChange={ handleSelectOption }>
+		<Listbox
+			key={ selected?.code }
+			value={ selected }
+			onChange={ handleSelectOption }
+		>
 			{ ( { open } ) => (
 				<>
 					{ showLabel && (

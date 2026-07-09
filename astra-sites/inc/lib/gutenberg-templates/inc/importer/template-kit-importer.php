@@ -120,8 +120,14 @@ class Template_Kit_Importer {
 
 		$ids_mapping = get_option( 'ast_block_templates_wpforms_ids_mapping', array() );
 
-		// Post content.
-		$content = isset( $_REQUEST['content'] ) ? wp_unslash( $_REQUEST['content'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Block content contains HTML comments with JSON attributes that wp_kses_post() would mangle.
+		// Gutenberg serialized block markup cannot be pre-sanitized with wp_kses_post() because that would
+		// strip the <!-- wp:block {...} --> comment delimiters that parse_blocks() requires. Do NOT use
+		// sanitize_post_field( 'post_content', ..., 'raw' ) here — the 'raw' context is a no-op in WP core
+		// (returns the value unchanged), so it provides no actual sanitization. This handler never writes
+		// to the DB — it returns processed content to the browser via wp_send_json_success(). The content
+		// is sanitized by WordPress core (wp_kses_post()) when the user saves the post.
+		$raw_content = isset( $_REQUEST['content'] ) ? wp_unslash( $_REQUEST['content'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$content     = force_balance_tags( (string) ( is_array( $raw_content ) ? implode( '', $raw_content ) : $raw_content ) );
 
 		// Empty mapping? Then return.
 		if ( ! empty( $ids_mapping ) ) {

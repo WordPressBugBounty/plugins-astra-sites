@@ -51,10 +51,14 @@ class Helper {
 	}
 
 	/**
-	 * Get an instance of WP_Filesystem_Direct.
+	 * Get an instance of WP_Filesystem.
+	 *
+	 * Returns null when WP_Filesystem() fails to initialise (e.g. FTP method
+	 * selected without valid credentials), preventing fatal errors when callers
+	 * invoke filesystem methods on a partially initialised global.
 	 *
 	 * @since 1.0.0
-	 * @return object A WP_Filesystem_Direct instance.
+	 * @return \WP_Filesystem_Base|null Filesystem instance, or null on failure.
 	 */
 	public function ast_block_templates_get_filesystem() {
 		global $wp_filesystem;
@@ -63,7 +67,9 @@ class Helper {
 			require_once ABSPATH . '/wp-admin/includes/file.php';
 		}
 
-		WP_Filesystem();
+		if ( ! WP_Filesystem() ) {
+			return null;
+		}
 
 		return $wp_filesystem;
 	}
@@ -354,8 +360,7 @@ class Helper {
 			if ( ! function_exists( 'WP_Filesystem' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/file.php';
 			}
-			WP_Filesystem();
-			if ( $wp_filesystem && $wp_filesystem->put_contents( trailingslashit( $file['file_base'] ) . $file['file_name'], $file['file_content'], FS_CHMOD_FILE ) ) {
+			if ( WP_Filesystem() && $wp_filesystem && $wp_filesystem->put_contents( trailingslashit( $file['file_base'] ) . $file['file_name'], $file['file_content'], FS_CHMOD_FILE ) ) {
 				self::ast_block_templates_log( 'File: ' . $file['file_name'] . ' Created Successfully!' );
 			}
 		}
@@ -387,8 +392,8 @@ class Helper {
 		if ( ! function_exists( 'WP_Filesystem' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 		}
-		WP_Filesystem();
-		if ( file_exists( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name ) && $wp_filesystem && $wp_filesystem->put_contents( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name, wp_json_encode( $file_content ), FS_CHMOD_FILE ) ) {
+		$filesystem_ready = WP_Filesystem() && $wp_filesystem;
+		if ( $filesystem_ready && file_exists( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name ) && $wp_filesystem->put_contents( AST_BLOCK_TEMPLATES_JSON_DIR . $file_name, wp_json_encode( $file_content ), FS_CHMOD_FILE ) ) {
 			self::ast_block_templates_log( 'File: ' . $file_name . ' Updated Successfully!' );
 		} else {
 			self::ast_block_templates_log( 'File: ' . $file_name . ' Not Updated!' );
@@ -495,92 +500,12 @@ class Helper {
 	}
 
 	/**
-	 * Get the server's country code using its public IP.
-	 *
-	 * @param string $provider Optional. GeoIP provider: 'ipwhois', 'ipapi', or 'ipinfo'. Default 'ipwhois'.
-	 * @param string $token    Optional. API token (only needed for ipapi/ipinfo).
-	 *
-	 * @since 2.4.11
-	 * @return string Two-letter ISO country code (e.g., 'RU', 'US'), or 'unknown' on failure.
-	 */
-	public static function get_server_country_code( $provider = 'ipwhois', $token = '' ) {
-		// Step 1: Get server's public IP.
-		$response = wp_safe_remote_get( 'https://api.ipify.org' );
-		if ( is_wp_error( $response ) ) {
-			return 'unknown';
-		}
-
-		$ip = wp_remote_retrieve_body( $response );
-		if ( empty( $ip ) ) {
-			return 'unknown';
-		}
-
-		// Step 2: Select provider endpoint.
-		switch ( strtolower( $provider ) ) {
-			case 'ipapi':
-				// Requires token for higher limits.
-				$url = "https://ipapi.co/{$ip}/country/";
-				if ( ! empty( $token ) ) {
-					$url = "https://ipapi.co/{$ip}/country/?key={$token}";
-				}
-				break;
-
-			case 'ipinfo':
-				$url = "https://ipinfo.io/{$ip}/country";
-				if ( ! empty( $token ) ) {
-					$url .= "?token={$token}";
-				}
-				break;
-
-			case 'ipwhois':
-			default:
-				// Default: ipwho.is (no token needed).
-				$url = "https://ipwho.is/{$ip}";
-				break;
-		}
-
-		// Step 3: Make request.
-		$response = wp_safe_remote_get( $url );
-		if ( is_wp_error( $response ) ) {
-			return 'unknown';
-		}
-
-		$body = wp_remote_retrieve_body( $response );
-
-		// Step 4: Parse response based on provider.
-		if ( 'ipwhois' === $provider ) {
-			$data = json_decode( $body, true );
-			if ( is_array( $data ) && isset( $data['country_code'] ) && is_string( $data['country_code'] ) ) {
-				return $data['country_code'];
-			}
-			return 'unknown';
-		}
-
-		// ipapi and ipinfo return plain text country code.
-		$country = trim( $body );
-		return ! empty( $country ) ? $country : 'unknown';
-	}
-
-	/**
 	 * Get Images Engines
 	 *
 	 * @since 2.4.11
 	 * @return array<string> Image Engines.
 	 */
 	public static function get_images_engines() {
-		$country_code = get_transient( 'zipwp_images_server_country_code' );
-
-		if ( false === $country_code ) {
-			$country_code = self::get_server_country_code();
-			set_transient( 'zipwp_images_server_country_code', $country_code, MONTH_IN_SECONDS );
-		}
-
-		// Use Unsplash for Russia as Pexels is blocked there.
-		if ( 'RU' === $country_code ) {
-			return array( 'unsplash' );
-		}
-
-		// Default to Pexels.
 		return array( 'pexels', 'unsplash' );
 	}
 }

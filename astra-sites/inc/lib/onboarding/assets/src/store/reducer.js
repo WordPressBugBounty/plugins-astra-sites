@@ -70,6 +70,18 @@ export const initialState = {
 			plugins: [ 'woocommerce', 'surecart' ],
 		},
 		{
+			title: __( 'Donations', 'astra-sites' ),
+			id: 'donations',
+			description: __(
+				'Collect donations on your website',
+				'astra-sites'
+			),
+			enabled: false,
+			compulsory: false,
+			icon: 'heart',
+			plugins: [ 'suredonation' ],
+		},
+		{
 			title: __( 'SEO & Search Visibility', 'astra-sites' ),
 			id: 'seo',
 			description: __(

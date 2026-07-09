@@ -262,6 +262,8 @@ class ST_Replace_Images {
 		delete_option( 'astra_sites_ai_imports' );
 		delete_option( 'astra_sites_sureforms_id_map' );
 		delete_option( 'astra_sites_surecart_forms_id_map' );
+		delete_option( 'astra_sites_suredonation_campaign_id_map' );
+		delete_option( 'astra_sites_suredonation_form_id_map' );
 
 		ST_Importer_Log::add( 'Cleanup options removed' );
 	}

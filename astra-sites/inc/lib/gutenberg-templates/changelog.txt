@@ -1,3 +1,41 @@
+v.2.4.31 - 8-July-2026
+- New: Added a consent popup that installs and activates the required Spectra and form plugins before a pattern is inserted, with a tooltip on the Insert button listing the required plugin.
+- Improvement: Show Spectra Blocks (v3) patterns by default in all cases, and only show the version toggle when Spectra Legacy is active, with Spectra Blocks selected by default.
+- Improvement: Pattern import no longer shows the upfront ZipWP connection prompt.
+- Fix: Prevented a crash on the AI Personalization language step when the site-languages API returned a non-array response.
+- Fix: Avoided an unnecessary page reload after block import on sites running the standalone Spectra Blocks plugin.
+- Fix: Auto-open Design Library no longer closes third-party plugin modals.
+- Fix: Prevented PHP fatal in filesystem helpers when running on FTP-based hosts without WordPress credentials.
+
+v.2.4.30 - 19-June-2026
+- New: Added compatibility for the Spectra Blocks plugin.
+
+v.2.4.29 - 19-May-2026
+- Fix: Reverted no-op sanitize_post_field( 'raw' ) in block/template-kit importers; block content is sanitized by wp_insert_post() before DB write.
+
+v.2.4.28 - 19-May-2026
+- Fix: Improved sanitization of imported block content in the block and template-kit importers. Use raw context in sanitize_post_field to preserve Gutenberg block comment delimiters.
+- Fix: Converted REST API callbacks to return WP_REST_Response/WP_Error instead of wp_send_json_success/error. Required for WordPress.org compliance.
+- Fix: Updated JS response handling to match REST-compliant response format (removed success wrapper checks).
+- Fix: Replaced filter_var() with wp_validate_boolean() for WPCS compliance.
+- Fix: Removed stale ipinfo.io and ipify entries from External Services readme; added missing Privacy Policy and Terms of Use links for websitedemos.net.
+
+v.2.4.27 - 27-April-2026
+- Fix: Self-host the Inter and Figtree fonts used by the Design Library / template importer UI instead of fetching from fonts.googleapis.com. Required for WordPress.org compliance.
+
+v.2.4.26 - 23-April-2026
+- Fix: Removed server-IP geolocation lookups (ipify + ipwho.is) used to pick the Design Library / AI wizard image sources by region. Required for WordPress.org compliance — the template library now surfaces Pexels and Unsplash to all users regardless of server location.
+
+v.2.4.25 - 31-March-2026
+Fix: Resolved click behavior issue on AI dropdown toggle options.
+
+v.2.4.24 - 25-March-2026
+- Security: Removed host plugin activation — Spectra/UAG is always active. Dependency plugins (forms) still activate on user-initiated import.
+- Security: Added force_balance_tags() sanitization for block content imports.
+- Security: Replaced file_get_contents() with WP_Filesystem API for core stylesheet reading.
+- Fix: Added wp_normalize_path() to core CSS file path.
+- Fix: Removed "Activate Spectra & Insert" CTA — replaced with direct "Insert" button.
+
 v.2.4.23 - 24-March-2026
 - Improvement: Updated build process to add ABSPATH guards to generated .asset.php files.
 - Improvement: Added README.md documenting external service usage (support.brainstormforce.com, ipinfo.io, and others).

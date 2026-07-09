@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.6.3
+Stable tag: 4.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,24 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.0 - 8-July-2026
+- New:
+    - Added compatibility for SureDonation plugin.
+    - Added SureMembers Core plugin compatibility to prevent onboarding redirect during template import.
+    - AI Builder: Added feature card carousel to the AI builder loading screen with auto-advancing dot navigation, gradient progress ring, and support CTA.
+    - Design Kit: Added a consent popup that installs and activates the required Spectra and form plugins before a pattern is inserted, with a tooltip on the Insert button listing the required plugin.
+    - Design Kit: Added compatibility for the Spectra Blocks plugin.
+- Improvement:
+    - AI Builder: The loading screen now handles failures gracefully with a credit-restore message, retry that rebuilds the site, and a stall timeout.
+    - Importer: Added compatibility for SureCart Product Form block to correctly remap product IDs after template import.
+    - Design Kit: Pattern import no longer shows the upfront ZipWP connection prompt.
+- Fix:
+    - Fixed ecommerce platform selection step showing incorrectly for templates without a SureCart variant.
+    - AI Builder: Listbox Language selection crash and Tooltip rendering issue while using the Google Auto-Translate wizard.
+    - Design Kit: Auto-open Design Library no longer closes third-party plugin modals.
+    - Design Kit: Improved sanitization of imported block content in the block and template-kit importers. Use raw context in sanitize_post_field to preserve Gutenberg block comment delimiters.
+    - Design Kit: Self-host the Inter and Figtree fonts used by the Design Library / template importer UI instead of fetching from fonts.googleapis.com.
+
 v4.6.3 - 24-June-2026
 - New:
     - Added Spectra Blocks plugin compatibility for AI Builder template imports.

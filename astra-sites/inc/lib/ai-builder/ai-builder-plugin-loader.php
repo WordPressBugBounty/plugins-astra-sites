@@ -521,7 +521,10 @@ class Ai_Builder_Plugin_Loader {
 		$active_failed_sites = array();
 		if ( is_array( $failed_sites ) ) {
 			foreach ( $failed_sites as $site ) {
-				if ( ! $site['is_expired'] ) {
+				// Guard the key: older/partial records may not set `is_expired`,
+				// which raised an "Undefined array key" warning here. Treat a
+				// missing value as not-expired so the record still surfaces.
+				if ( empty( $site['is_expired'] ) ) {
 					$active_failed_sites[] = $site;
 				}
 			}

@@ -90,14 +90,17 @@ const FontSelector = () => {
 			let otherFontsString = '';
 			if ( !! fonts ) {
 				for ( const font of fonts ) {
-					const fontHeading = getFontName(
-						font[ 'headings-font-family' ]
-					).replaceAll( ' ', '+' );
+					const fontHeading =
+						getFontName(
+							font[ 'headings-font-family' ]
+						)?.replaceAll( ' ', '+' ) ?? '';
 					const fontHeadingWeight = font[ 'headings-font-weight' ];
 
-					const fontBody = getFontName(
-						font[ 'body-font-family' ]
-					).replaceAll( ' ', '+' );
+					const fontBody =
+						getFontName( font[ 'body-font-family' ] )?.replaceAll(
+							' ',
+							'+'
+						) ?? '';
 					const fontBodyWeight = font[ 'body-font-weight' ];
 
 					otherFontsString += `&family=${ fontHeading }:wght@${ fontHeadingWeight }&family=${ fontBody }:wght@${ fontBodyWeight }`;

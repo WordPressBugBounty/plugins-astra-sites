@@ -63,6 +63,7 @@ class Intelligent_Starter_Templates_Loader {
 
 		// Admin Menu.
 		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		add_action( 'admin_menu', array( $this, 'add_astra_submenu' ), 20 );
 		add_filter( 'admin_body_class', array( $this, 'admin_body_class' ) );
 
 		// Assets loading.
@@ -95,16 +96,74 @@ class Intelligent_Starter_Templates_Loader {
 	}
 
 	/**
+	 * Get the menu page title, respecting white-label overrides.
+	 *
+	 * @since 4.7.0
+	 * @return string
+	 */
+	public static function get_menu_page_title() {
+		/**
+		 * Filter the Starter Templates admin menu page title.
+		 *
+		 * @since 4.7.0
+		 * @param string $title Default menu page title.
+		 */
+		return apply_filters( 'astra_sites_menu_page_title', esc_html__( 'Starter Templates', 'astra-sites' ) );
+	}
+
+	/**
 	 * Add main menu
 	 *
 	 * @since 3.0.0-beta.1
-	 * 
+	 *
 	 * @return void
 	 */
 	public function admin_menu() {
-		$page_title = apply_filters( 'astra_sites_menu_page_title', esc_html__( 'Starter Templates', 'astra-sites' ) );
+		$page_title = self::get_menu_page_title();
 
 		add_theme_page( $page_title, $page_title, 'manage_options', 'starter-templates', array( $this, 'menu_callback' ) );
+	}
+
+	/**
+	 * Add Starter Templates submenu under the Astra theme menu.
+	 *
+	 * Runs at priority 20 so Astra's top-level menu is already registered.
+	 *
+	 * @since 4.7.0
+	 * @return void
+	 */
+	public function add_astra_submenu() {
+		// No need to register the Astra submenu when already on the Starter Templates page.
+		if ( isset( $_GET['page'] ) && 'starter-templates' === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+
+		if ( ! ( 'astra' === get_template() && class_exists( 'Astra_Menu' ) ) ) {
+			return;
+		}
+
+		$page_title  = self::get_menu_page_title();
+		$parent_slug = Astra_Menu::get_theme_page_slug();
+
+		add_submenu_page( // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_submenu_page
+			$parent_slug,
+			$page_title,
+			$page_title,
+			'manage_options',
+			'themes.php?page=starter-templates'
+		);
+
+		// Move to 2nd last position; our entry is always last since add_submenu_page appends.
+		global $submenu; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		if ( empty( $submenu[ $parent_slug ] ) ) {
+			return;
+		}
+
+		$items   = array_values( $submenu[ $parent_slug ] );
+		$st_item = array_pop( $items );
+		array_splice( $items, -1, 0, array( $st_item ) );
+
+		$submenu[ $parent_slug ] = $items; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	}
 
 	/**

@@ -1,4 +1,4 @@
-import { renderToString } from 'react-dom/server';
+import { renderToString } from '@wordpress/element';
 import { ExclamationTriangleColorfulIcon } from '../../steps/ui/icons';
 import Modal from '../../components/modal';
 import Button from '../button/button';

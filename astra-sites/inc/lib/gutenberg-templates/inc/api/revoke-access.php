@@ -82,20 +82,18 @@ class RevokeAccess extends Api_Base {
 	 * Revoke access.
 	 *
 	 * @param \WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response
+	 * @return WP_REST_Response|WP_Error
 	 */
-	public function set( $request ): WP_REST_Response {
+	public function set( $request ) {
 
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		$nonce = isset( $nonce ) ? sanitize_text_field( $nonce ) : '';
 		// Verify the nonce.
 		if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			wp_send_json_error(
-				array(
-					'data' => __( 'Nonce verification failed.', 'astra-sites' ),
-					'status'  => false,
-
-				)
+			return new WP_Error(
+				'nonce_verification_failed',
+				__( 'Nonce verification failed.', 'astra-sites' ),
+				array( 'status' => 403 )
 			);
 		}
 		

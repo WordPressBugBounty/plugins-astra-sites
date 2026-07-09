@@ -61,6 +61,7 @@ class Plugin {
 		}
 		add_action( 'wp_ajax_ast_block_templates_importer', array( $this, 'template_importer' ) );
 		add_action( 'wp_ajax_ast_block_templates_activate_plugin', array( $this, 'activate_plugin' ) );
+		add_filter( 'plugins_api', array( $this, 'maybe_set_spectra_blocks_download_source' ), 10, 3 );
 		add_action( 'wp_ajax_ast_block_templates_import_wpforms', array( $this, 'import_wpforms' ) );
 		add_action( 'wp_ajax_ast_block_templates_import_sureforms', array( $this, 'import_sureforms' ) );
 		add_action( 'wp_ajax_ast_block_templates_import_block', array( $this, 'import_block' ) );
@@ -68,7 +69,6 @@ class Plugin {
 		add_action( 'wp_ajax_ast_block_templates_hide_notices', array( $this, 'hide_notices' ) );
 		add_filter( 'upload_mimes', array( $this, 'custom_upload_mimes' ) );
 		add_action( 'wp_ajax_ast_block_templates_data_option', array( $this, 'api_request' ) );
-		add_action( 'wp_ajax_ast_block_templates_check_auth_status', array( $this, 'check_auth_status' ) );
 		add_action( 'wp_ajax_ast_block_templates_save_auto_open_setting', array( $this, 'save_auto_open_setting' ) );
 		$this->get_default_color_palette();
 	}
@@ -412,15 +412,15 @@ class Plugin {
 					$ext = strtolower( pathinfo( $file_path['data']['file'], PATHINFO_EXTENSION ) );
 
 					if ( 'json' === $ext ) {
-						/** 
-						 * 
+						/**
+						 *
 						 * Retrieves the contents of a file using the specified file system.
 						 *
-						 * @var \WP_Filesystem_Base $filesystem 
+						 * @var \WP_Filesystem_Base|null $filesystem
 						 * */
-						$filesystem = Helper::instance()->ast_block_templates_get_filesystem();
-						$file_content = $filesystem->get_contents( $file_path['data']['file'] );
-						$forms = json_decode( $file_content ? $file_content : '', true );
+						$filesystem   = Helper::instance()->ast_block_templates_get_filesystem();
+						$file_content = $filesystem ? $filesystem->get_contents( $file_path['data']['file'] ) : '';
+						$forms        = json_decode( $file_content ? $file_content : '', true );
 
 						if ( ! empty( $forms ) ) {
 
@@ -518,14 +518,14 @@ class Plugin {
 		if ( isset( $file_path['data']['file'] ) ) {
 			$ext = strtolower( pathinfo( $file_path['data']['file'], PATHINFO_EXTENSION ) );
 			if ( 'json' === $ext ) {
-				/** 
-				 * 
+				/**
+				 *
 				 * Retrieves the contents of a file using the specified file system.
 				 *
-				 * @var \WP_Filesystem_Base $filesystem 
+				 * @var \WP_Filesystem_Base|null $filesystem
 				 * */
 				$filesystem   = Helper::instance()->ast_block_templates_get_filesystem();
-				$file_content = $filesystem->get_contents( $file_path['data']['file'] );
+				$file_content = $filesystem ? $filesystem->get_contents( $file_path['data']['file'] ) : '';
 
 				// Apply the form color for sureforms.
 				$adaptive_mode = $this->get_adaptive_mode();
@@ -584,9 +584,14 @@ class Plugin {
 
 		$ids_mapping = get_option( 'ast_block_templates_wpforms_ids_mapping', array() );
 
-		// Post content.
-		$content = isset( $_REQUEST['content'] ) ? wp_unslash( $_REQUEST['content'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Block content contains HTML comments with JSON attributes that wp_kses_post() would mangle.
-		$content = (string) ( is_array( $content ) ? implode( '', $content ) : $content );
+		// Gutenberg serialized block markup cannot be pre-sanitized with wp_kses_post() because that would
+		// strip the <!-- wp:block {...} --> comment delimiters that parse_blocks() requires. Do NOT use
+		// sanitize_post_field( 'post_content', ..., 'raw' ) here — the 'raw' context is a no-op in WP core
+		// (returns the value unchanged), so it provides no actual sanitization. This handler never writes
+		// to the DB — it returns processed content to the browser via wp_send_json_success(). The content
+		// is sanitized by WordPress core (wp_kses_post()) when the user saves the post.
+		$raw_content = isset( $_REQUEST['content'] ) ? wp_unslash( $_REQUEST['content'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$content     = force_balance_tags( (string) ( is_array( $raw_content ) ? implode( '', $raw_content ) : $raw_content ) );
 		$category = isset( $_REQUEST['category'] ) ? intval( $_REQUEST['category'] ) : '';
 
 		// Fix invalid escaped single quotes.
@@ -677,7 +682,7 @@ class Plugin {
 			$content = str_replace( 'ast-global-color-temp-', 'ast-global-color-', $content );
 		}
 
-		$disable_ai = isset( $_REQUEST['disableAI'] ) ? 'true' === $_REQUEST['disableAI'] : false;
+		$disable_ai = isset( $_REQUEST['disableAI'] ) ? 'true' === sanitize_text_field( wp_unslash( $_REQUEST['disableAI'] ) ) : false;
 
 		if ( ! $disable_ai && ! empty( Importer_Helper::get_business_details( 'business_description' ) ) ) {
 			$category_content = get_option( 'ast-templates-ai-content', array() );
@@ -833,33 +838,6 @@ class Plugin {
 		}
 
 		return $content;
-	}
-
-	/**
-	 * Check authentication status for ZipWP
-	 *
-	 * @since 2.4.20
-	 * @return void
-	 */
-	public function check_auth_status() {
-		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
-			wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
-		}
-		
-		// Verify Nonce.
-		check_ajax_referer( 'ast-block-templates-ajax-nonce', '_ajax_nonce' );
-
-		// Check if user is authenticated by checking if tokens exist.
-		$zip_ai_settings = get_option( 'zip_ai_settings', array() );
-		$is_authenticated = ! empty( $zip_ai_settings['auth_token'] ) || ! empty( $zip_ai_settings['zip_token'] );
-		$auth_token = isset( $zip_ai_settings['auth_token'] ) ? $zip_ai_settings['auth_token'] : '';
-
-		wp_send_json_success(
-			array(
-				'is_authenticated' => $is_authenticated,
-				'auth_token'       => $auth_token,
-			)
-		);
 	}
 
 	/**
@@ -1038,9 +1016,16 @@ class Plugin {
 		return $allowedposttags;
 	}
 
+
 	/**
-	 * Activate Plugin
+	 * Activate a plugin required by the imported pattern.
 	 *
+	 * Restricted to an allow-list of plugins the library can require (Spectra,
+	 * Spectra Blocks and the supported form plugins). Called only on a
+	 * user-initiated "Insert" action with capability and nonce checks, so the
+	 * install/activation happens with the user's explicit consent.
+	 *
+	 * @since 2.4.31
 	 * @return void
 	 */
 	public function activate_plugin() {
@@ -1048,12 +1033,49 @@ class Plugin {
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			wp_send_json_error( __( 'You are not allowed to perform this action.', 'astra-sites' ) );
 		}
-		// Verify Nonce.
+
 		check_ajax_referer( 'ast-block-templates-ajax-nonce', 'security' );
 
-		wp_clean_plugins_cache();
-
 		$plugin_init = ( isset( $_POST['init'] ) ) ? sanitize_text_field( wp_unslash( $_POST['init'] ) ) : '';
+
+		if ( empty( $plugin_init ) ) {
+			wp_send_json_error( __( 'Plugin slug is missing.', 'astra-sites' ) );
+		}
+
+		/**
+		 * Plugins the library is allowed to activate on the user's behalf.
+		 *
+		 * @since 2.4.31
+		 * @param array $plugins List of plugin basenames.
+		 */
+		$allowed_plugins = apply_filters(
+			'ast_block_templates_installable_plugins',
+			array(
+				'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
+				'spectra-blocks/spectra-blocks.php',
+				'wpforms-lite/wpforms.php',
+				'sureforms/sureforms.php',
+			)
+		);
+
+		if ( ! in_array( $plugin_init, $allowed_plugins, true ) ) {
+			wp_send_json_error( __( 'This plugin is not allowed to be activated.', 'astra-sites' ) );
+		}
+
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		// Nothing to do when the plugin is already active.
+		if ( is_plugin_active( $plugin_init ) ) {
+			wp_send_json_success(
+				array(
+					'message' => 'Plugin already active.',
+				)
+			);
+		}
+
+		wp_clean_plugins_cache();
 
 		$activate = activate_plugin( $plugin_init, '', false, true );
 
@@ -1066,6 +1088,68 @@ class Plugin {
 				'message' => 'Plugin activated successfully.',
 			)
 		);
+	}
+
+	/**
+	 * Provide a trusted ZIP download source for plugins not yet on WordPress.org.
+	 *
+	 * The consent popup installs plugins through WordPress core's standard
+	 * `install-plugin` flow, which resolves the package via
+	 * `plugins_api( 'plugin_information' )`. Spectra Blocks is not published on
+	 * WordPress.org yet, so we intercept that lookup for its slug and return the
+	 * custom download URL — core then downloads and installs it as usual, and the
+	 * existing (allow-listed) activation handler activates it.
+	 *
+	 * Temporary bridge: once Spectra Blocks is live on WordPress.org, empty the
+	 * `ast_block_templates_plugin_zip_sources` map (or remove this method) and the
+	 * standard WordPress.org install path takes over.
+	 *
+	 * @since 2.4.31
+	 *
+	 * @param false|object|array<string, mixed> $result The result object or array. Default false.
+	 * @param string                            $action The type of information being requested.
+	 * @param object                            $args   Plugin API arguments.
+	 * @return false|object|array<string, mixed> Modified result.
+	 */
+	public function maybe_set_spectra_blocks_download_source( $result, $action, $args ) {
+		// Only the plugin details lookup carries a download link; search uses a different action.
+		if ( 'plugin_information' !== $action ) {
+			return $result;
+		}
+
+		if ( ! isset( $args->slug ) || 'spectra-blocks' !== $args->slug ) {
+			return $result;
+		}
+
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return $result;
+		}
+
+		/**
+		 * Trusted ZIP sources keyed by plugin slug, for plugins not yet on
+		 * WordPress.org. Empty the entry to fall back to the WordPress.org package.
+		 *
+		 * @since 2.4.31
+		 * @param array<string, string> $sources Map of plugin slug => ZIP URL.
+		 */
+		$sources = apply_filters(
+			'ast_block_templates_plugin_zip_sources',
+			array(
+				'spectra-blocks' => 'https://wpspectra.com/wp-content/uploads/2026/06/spectra-blocks.0.0.8.zip',
+			)
+		);
+
+		if ( empty( $sources['spectra-blocks'] ) ) {
+			return $result;
+		}
+
+		$information                = new \stdClass();
+		$information->name          = 'Spectra Blocks';
+		$information->slug          = 'spectra-blocks';
+		$information->version       = '0.0.8';
+		$information->download_link = esc_url_raw( $sources['spectra-blocks'] );
+
+		return $information;
 	}
 
 	/**
@@ -1162,6 +1246,22 @@ class Plugin {
 			return;
 		}
 
+		/**
+		 * Allows plugins to disable only the Design Library editor button and its
+		 * assets without disabling the full library (sync, import, REST API, etc.).
+		 *
+		 * Unlike `ast_block_templates_disable` which stops the entire plugin, this
+		 * filter targets only the `enqueue_block_editor_assets` callback so that
+		 * background sync and other non-UI functionality continue to work.
+		 *
+		 * @since 2.4.29
+		 *
+		 * @param bool $disable Whether to disable the editor button. Default false.
+		 */
+		if ( apply_filters( 'ast_block_templates_disable_editor_button', false ) ) {
+			return;
+		}
+
 		$this->sync_disable_ai_settings();
 
 		wp_enqueue_script( 'ast-block-templates', AST_BLOCK_TEMPLATES_URI . 'dist/main.js', array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor', 'masonry', 'imagesloaded', 'updates', 'media-upload', 'wp-util' ), AST_BLOCK_TEMPLATES_VER, true );
@@ -1178,8 +1278,8 @@ class Plugin {
 			true
 		);
 
-		// Google fonts.
-		wp_enqueue_style( 'ast-block-templates-google-fonts', $this->google_fonts_url(), array( 'ast-block-templates' ), 'all' );
+		// Self-hosted fonts (Inter + Figtree).
+		wp_enqueue_style( 'ast-block-templates-fonts', AST_BLOCK_TEMPLATES_URI . 'assets/fonts/fonts.css', array( 'ast-block-templates' ), AST_BLOCK_TEMPLATES_VER );
 
 		$license_status = false;
 		// Check for BSF Core License Manager from any pro plugin.
@@ -1257,11 +1357,17 @@ class Plugin {
 		}
 		$pro_url = apply_filters( 'ast_block_templates_pro_url', 'https://wpastra.com/starter-templates-plans/?utm_source=gutenberg-templates&utm_medium=dashboard&utm_campaign=Starter-Template-Backend' );
 
-		$wp_stylesheet_path = ABSPATH . WPINC . '/css/dist/block-library/style.min.css';
+		$wp_stylesheet_path = wp_normalize_path( ABSPATH . WPINC . '/css/dist/block-library/style.min.css' );
 
 		$wp_stylesheet = '';
 		if ( file_exists( $wp_stylesheet_path ) ) {
-			$wp_stylesheet = file_get_contents( $wp_stylesheet_path ); //phpcs:ignore
+			global $wp_filesystem;
+			if ( ! function_exists( 'WP_Filesystem' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+			if ( WP_Filesystem() && $wp_filesystem ) {
+				$wp_stylesheet = (string) $wp_filesystem->get_contents( $wp_stylesheet_path );
+			}
 			$wp_stylesheet = preg_replace_callback(
 				'/html/i',
 				function( $matches ) {
@@ -1290,9 +1396,12 @@ class Plugin {
 					'wpforms_status'          => $this->get_plugin_status( 'wpforms-lite/wpforms.php' ),
 					'sureforms_status'        => $this->get_plugin_status( 'sureforms/sureforms.php' ),
 					'spectra_status'          => $this->get_plugin_status( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ),
+					'spectra_blocks_status'   => $this->get_plugin_status( 'spectra-blocks/spectra-blocks.php' ),
+					'spectra_blocks_pro_status' => $this->get_plugin_status( apply_filters( 'ast_block_templates_spectra_blocks_pro_basename', 'spectra-blocks-pro/spectra-blocks-pro.php' ) ),
 					'spectra_pro_status'      => $this->get_plugin_status( 'spectra-pro/spectra-pro.php' ),
 					'spectra_version'         => $this->get_spectra_version(),
 					'show_version_toggle'     => $this->should_show_version_toggle(),
+					'version_toggle_labels'   => $this->get_version_toggle_labels(),
 					'user_migration_status'   => $this->get_uagb_user_migration_status(),
 					'astra_sites_pro_status'  => $this->get_plugin_status( 'astra-pro-sites/astra-pro-sites.php' ),
 					'astra_sites_status'          => $this->get_plugin_status( 'astra-sites/astra-sites.php' ),
@@ -1332,8 +1441,6 @@ class Plugin {
 					'rest_api_nonce' => wp_create_nonce( 'wp_rest' ),
 					'default_ai_categories' => Helper::instance()->get_default_ai_categories(),
 					'user_email' => get_option( 'admin_email' ),
-					'skip_zip_ai_onboarding_nonce'             => wp_create_nonce( 'skip-spectra-pro-onboarding-nonce' ),
-					'skip_zip_ai_onboarding' => get_option( 'ast_skip_zip_ai_onboarding', false ),
 					'show_onboarding' => ( 'no' !== get_option( 'ast-block-templates-show-onboarding', true ) ),
 					'dynamic_content' => get_option( 'ast-templates-ai-content', array() ),
 					'favorites' => get_option(
@@ -1389,7 +1496,6 @@ class Plugin {
 					'ai_assistant' => isset( $ai_features['ai_assistant']['status'] ) ? $ai_features['ai_assistant']['status'] : 'disabled',
 					'hide_notice' => $this->is_show_personalize_ai_notice(),
 					'is_sync_business_details' => get_option( 'ast-templates-business-details-synced', false ),
-					'bypassAuth' => apply_filters( 'ast_block_templates_bypass_auth', false ),
 					'zipwp_ai_auth_nonce' => wp_create_nonce( 'zip_ai_auth_nonce' ),
 					'gutenberg_plugin_status' => is_plugin_active( 'gutenberg/gutenberg.php' ),
 					'is_personalized' => get_option( 'ast-templates-ai-content', false ),
@@ -1399,30 +1505,6 @@ class Plugin {
 				)
 			)
 		);
-	}
-
-		/**
-		 * Generate and return the Google fonts url.
-		 *
-		 * @since 1.0.1
-		 * @return string
-		 */
-	public function google_fonts_url() {
-
-		$fonts_url     = '';
-		$font_families = array(
-			'Inter:400,500,600',
-			'Figtree:400,500,600,700',
-		);
-
-		$query_args = array(
-			'family' => rawurlencode( implode( '|', $font_families ) ),
-			'subset' => rawurlencode( 'latin,latin-ext' ),
-		);
-
-		$fonts_url = add_query_arg( $query_args, '//fonts.googleapis.com/css' );
-
-		return $fonts_url;
 	}
 
 	/**
@@ -1735,7 +1817,7 @@ class Plugin {
 			if ( ! function_exists( 'get_plugin_data' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			}
-			$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/spectra-pro/spectra-pro.php' );
+			$plugin_data = get_plugin_data( wp_normalize_path( WP_PLUGIN_DIR . '/spectra-pro/spectra-pro.php' ) );
 			if ( ! empty( $plugin_data['Version'] ) ) {
 				$pro_version = $plugin_data['Version'];
 			}
@@ -1746,7 +1828,7 @@ class Plugin {
 			if ( ! function_exists( 'get_plugin_data' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/plugin.php';
 			}
-			$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' );
+			$plugin_data = get_plugin_data( wp_normalize_path( WP_PLUGIN_DIR . '/ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ) );
 			if ( ! empty( $plugin_data['Version'] ) ) {
 				$free_version = $plugin_data['Version'];
 			}
@@ -1760,8 +1842,39 @@ class Plugin {
 			return 'v3';
 		}
 
-		// If Starter Templates is active without Spectra, or both plugins are < 3.0.0-beta.1.
-		return 'v2';
+		// Spectra Blocks (standalone v3-only plugin) is always v3.
+		if ( is_plugin_active( 'spectra-blocks/spectra-blocks.php' ) ) {
+			return 'v3';
+		}
+
+		// Legacy Spectra installed (UAGB or Spectra Pro < 3.0.0-beta.1) — only the
+		// v2 (uagb/) blocks are available, so the site's capability is v2.
+		if (
+			is_plugin_active( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ) ||
+			is_plugin_active( 'spectra-pro/spectra-pro.php' )
+		) {
+			return 'v2';
+		}
+
+		// No Spectra plugin installed — default the library to v3 (Spectra Blocks).
+		return 'v3';
+	}
+
+	/**
+	 * Get the installed UAGB (ultimate-addons-for-gutenberg) version string, or null if not active.
+	 *
+	 * @since 2.4.29
+	 * @return string|null
+	 */
+	public function get_uagb_version() {
+		if ( ! is_plugin_active( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ) ) {
+			return null;
+		}
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$plugin_data = get_plugin_data( wp_normalize_path( WP_PLUGIN_DIR . '/ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ) );
+		return ! empty( $plugin_data['Version'] ) ? $plugin_data['Version'] : null;
 	}
 
 	/**
@@ -1772,17 +1885,20 @@ class Plugin {
 	 * @return bool
 	 */
 	public function should_show_version_toggle() {
-		// Show toggle only when BOTH conditions are met:
-		// 1. Spectra version >= 3.0.0-beta.1 (v3)
-		// 2. Legacy design library is explicitly enabled OR register-v2-blocks is enabled.
+		// High priority: explicit opt-in flags for the legacy v2 block library take
+		// precedence. When either is set the v2 blocks are available, so show the
+		// toggle regardless of the plugin activation state below.
+		$register_v2_blocks    = get_option( 'register-v2-blocks', 'no' );
 		$enable_legacy_library = get_option( 'uag_enable_legacy_design_library', 'disabled' );
-		$register_v2_blocks = get_option( 'register-v2-blocks', 'no' );
-		$spectra_version = $this->get_spectra_version();
 
-		// Show toggle if legacy library is enabled OR register-v2 blocks is enabled.
-		$should_show_toggle = ( 'enabled' === $enable_legacy_library || 'yes' === $register_v2_blocks );
+		if ( 'yes' === $register_v2_blocks || 'enabled' === $enable_legacy_library ) {
+			return apply_filters( 'ast_block_templates_show_version_toggle', true );
+		}
 
-		$flag = ( $should_show_toggle && 'v3' === $spectra_version );
+		// The library defaults to v3 (Spectra Blocks) everywhere. Otherwise the toggle
+		// is only needed when Spectra Legacy (UAGB) is active, so the user can switch
+		// back to the legacy v2 pattern library. Spectra Blocks presence is irrelevant.
+		$flag = is_plugin_active( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' );
 
 		/**
 		 * Filter to modify the visibility of version toggle.
@@ -1792,6 +1908,24 @@ class Plugin {
 		 * @since 2.4.15
 		 */
 		return apply_filters( 'ast_block_templates_show_version_toggle', $flag );
+	}
+
+	/**
+	 * Get the labels to use for the version toggle.
+	 *
+	 * The toggle is only shown when Spectra Legacy (UAGB) is active, letting the
+	 * user switch between the legacy v2 pattern library and the default Spectra
+	 * Blocks (v3) patterns, so the labels are named accordingly.
+	 *
+	 * @since 2.4.18
+	 *
+	 * @return array{v2: string, v3: string}
+	 */
+	public function get_version_toggle_labels() {
+		return array(
+			'v2' => __( 'Spectra Legacy', 'astra-sites' ),
+			'v3' => __( 'Spectra Blocks', 'astra-sites' ),
+		);
 	}
 
 	/**
@@ -1822,6 +1956,19 @@ class Plugin {
 
 		// Premium filter is available for all 3.0.0-beta.1+ users.
 		$status['show_premium_filter'] = true;
+
+		// Spectra Blocks (standalone) has no legacy v2 library — always a fresh v3 user.
+		if ( is_plugin_active( 'spectra-blocks/spectra-blocks.php' ) && ! is_plugin_active( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ) ) {
+			$status['is_fresh_user'] = true;
+			return $status;
+		}
+
+		// Spectra Blocks + UAGB both active — uagb/ blocks are present so the user
+		// has access to legacy v2 templates via the Spectra Legacy toggle.
+		if ( is_plugin_active( 'spectra-blocks/spectra-blocks.php' ) && is_plugin_active( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' ) ) {
+			$status['is_upgraded_user'] = true;
+			return $status;
+		}
 
 		// Use UAGB's Enable Legacy Design Library setting.
 		// Users with legacy library enabled are considered upgraded users.
@@ -2147,21 +2294,21 @@ class Plugin {
 	public function save_auto_open_setting() {
 		// Verify nonce.
 		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'ast-block-templates-ajax-nonce' ) ) {
-			wp_die( 'Security check failed' );
+			wp_send_json_error( array( 'message' => 'Security check failed' ) );
 		}
 
 		// Check user capabilities.
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			wp_die( 'Insufficient permissions' );
+			wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
 		}
 
 		// Get and validate the value from POST.
-		$raw       = isset( $_POST['auto_open'] ) ? sanitize_text_field( wp_unslash( $_POST['auto_open'] ) ) : null;
-		$auto_open = filter_var(
-			$raw,
-			FILTER_VALIDATE_BOOLEAN,
-			FILTER_NULL_ON_FAILURE
-		);
+		$raw = isset( $_POST['auto_open'] ) ? sanitize_text_field( wp_unslash( $_POST['auto_open'] ) ) : null;
+		if ( null === $raw ) {
+			$auto_open = null;
+		} else {
+			$auto_open = wp_validate_boolean( $raw );
+		}
 
 		if ( null === $auto_open ) {
 			wp_send_json_error( array( 'message' => 'Invalid value send!' ) );

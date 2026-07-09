@@ -42,13 +42,16 @@ class Sync_Library {
 	public function __construct() {
 		add_action( 'wp_ajax_ast-block-templates-check-sync-library-status', array( $this, 'sync_via_ajax' ) );
 		add_action( 'wp_ajax_ast-block-templates-import-blocks', array( $this, 'ajax_import_blocks' ) );
-		add_action( 'sync_blocks', array( $this, 'sync_blocks' ) );
+		add_action( 'ast_block_templates_sync_blocks', array( $this, 'sync_blocks' ) );
 		add_action( 'wp_ajax_ast-block-templates-get-sites-request-count', array( $this, 'ajax_sites_requests_count' ) );
 		add_action( 'wp_ajax_ast-block-templates-import-sites', array( $this, 'ajax_import_sites' ) );
 
 		// To force sync library after Spectra plugin installation, update or deletion for switching between v2 and v3.
 		add_action( 'upgrader_process_complete', array( $this, 'handle_spectra_install_update' ), 10, 2 );
 		add_action( 'deleted_plugin', array( $this, 'handle_spectra_deletion' ), 10, 1 );
+		// Force re-sync on activation — upgrader_process_complete fires before the plugin is active
+		// so the version-negotiation isn't accurate at install time.
+		add_action( 'activated_plugin', array( $this, 'handle_spectra_activation' ), 10, 1 );
 
 		// To force sync library after Spectra v3 update and legacy design library option change.
 		add_action( 'uagb_update_after', array( __CLASS__, 'enable_force_sync' ) );
@@ -522,7 +525,7 @@ class Sync_Library {
 				'data'    => array(),
 			);
 
-			if ( isset( $_POST['total'] ) && $_POST['total'] === $_POST['page_no'] ) {
+			if ( isset( $_POST['total'] ) && absint( $_POST['total'] ) === $page_no ) {
 				$data['data']['allBlocks'] = Plugin::instance()->get_all_blocks();
 				$data['data']['categories'] = Helper::instance()->get_block_template_category();
 			}
@@ -895,7 +898,7 @@ class Sync_Library {
 				'data'    => array(),
 			);
 
-			if ( isset( $_POST['total'] ) && $_POST['total'] === $_POST['page_no'] ) {
+			if ( isset( $_POST['total'] ) && absint( $_POST['total'] ) === $page_no ) {
 				$data['data']['allBlocks'] = Plugin::instance()->get_all_blocks();
 				$data['data']['categories'] = Helper::instance()->get_block_template_category();
 				$data['data']['allSites'] = Plugin::instance()->get_all_sites();
@@ -946,7 +949,34 @@ class Sync_Library {
 	 * @return void
 	 */
 	public function handle_spectra_deletion( $plugin ) {
-		if ( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' === $plugin ) {
+		$watched = array(
+			'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
+			'spectra-blocks/spectra-blocks.php',
+		);
+		if ( in_array( $plugin, $watched, true ) ) {
+			self::enable_force_sync();
+		}
+	}
+
+	/**
+	 * Handle Spectra plugin activation.
+	 *
+	 * Forces a library re-sync when spectra-blocks or UAGB is activated so that
+	 * the spectra-blocks-ver parameter reflects the now-active plugin combination.
+	 * upgrader_process_complete fires before the plugin is active so its sync
+	 * uses stale version negotiation; this hook corrects that.
+	 *
+	 * @since 2.4.29
+	 *
+	 * @param string $plugin Path to the plugin file relative to the plugins directory.
+	 * @return void
+	 */
+	public function handle_spectra_activation( $plugin ) {
+		$watched = array(
+			'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
+			'spectra-blocks/spectra-blocks.php',
+		);
+		if ( in_array( $plugin, $watched, true ) ) {
 			self::enable_force_sync();
 		}
 	}
@@ -1010,20 +1040,29 @@ class Sync_Library {
 			return;
 		}
 
+		$watched_plugins = array(
+			'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
+			'spectra-blocks/spectra-blocks.php',
+		);
+		$watched_destinations = array(
+			'ultimate-addons-for-gutenberg',
+			'spectra-blocks',
+		);
+
 		// Handle bulk plugin install/update.
 		if ( isset( $options['plugins'] ) && is_array( $options['plugins'] ) ) {
 			foreach ( $options['plugins'] as $plugin ) {
-				if ( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' === $plugin ) {
+				if ( in_array( $plugin, $watched_plugins, true ) ) {
 					self::enable_force_sync();
 					break;
 				}
 			}
 		} elseif ( isset( $options['plugin'] ) ) {
 			// Handle single plugin update.
-			if ( 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php' === $options['plugin'] ) {
+			if ( in_array( $options['plugin'], $watched_plugins, true ) ) {
 				self::enable_force_sync();
 			}
-		} elseif ( is_array( $upgrader_object->result ) && 'ultimate-addons-for-gutenberg' === $upgrader_object->result['destination_name'] ) {
+		} elseif ( is_array( $upgrader_object->result ) && in_array( $upgrader_object->result['destination_name'], $watched_destinations, true ) ) {
 			self::enable_force_sync();
 		}
 	}

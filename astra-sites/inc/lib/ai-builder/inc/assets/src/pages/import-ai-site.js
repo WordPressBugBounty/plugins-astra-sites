@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
-import { CircularProgressBar } from '@tomickigrzegorz/react-circular-progress-bar';
 import { __, sprintf } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
@@ -19,12 +18,14 @@ import {
 	showErrorToast,
 	generateAnalyticsLead,
 } from '../utils/import-site/import-utils';
-const { migrateSvg, reportError } = aiBuilderVars;
+const { reportError, supportLink } = aiBuilderVars;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
 import { STORE_KEY } from '../store';
 import ErrorModel from '../components/error-model';
 import { stepNextButtonClick, TOTAL_STEPS, useNavigateSteps } from '../router';
 import { SITE_CREATION_STATUS_CODES, getLocalStorageItem } from '../helpers';
+import FeatureCarousel from '../components/feature-carousel';
+import ExitConfirmationPopover from '../components/exit-confirmation-popover';
 
 const RANDOM_FINAL_FINISHING_MESSAGES = [
 	__( 'Double-checking for grammar and spelling errors…', 'ai-builder' ),
@@ -45,10 +46,61 @@ function* getMessage() {
 	}
 }
 
+const GradientProgressRing = ( { percent } ) => {
+	const radius = 30;
+	const circumference = 2 * Math.PI * radius;
+	const offset = circumference * ( 1 - percent / 100 );
+
+	return (
+		<div className="relative grid place-items-center">
+			<svg width="68" height="68" viewBox="0 0 68 68">
+				<defs>
+					<linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
+						<stop offset="0%" stopColor="#B809A7" />
+						<stop offset="46.88%" stopColor="#E90B76" />
+						<stop offset="100%" stopColor="#FC8536" />
+					</linearGradient>
+				</defs>
+				<circle
+					cx="34"
+					cy="34"
+					r={ radius }
+					fill="none"
+					stroke="#e0e4ec"
+					strokeWidth="6"
+				/>
+				<circle
+					cx="34"
+					cy="34"
+					r={ radius }
+					fill="none"
+					stroke="url(#ring-grad)"
+					strokeWidth="6"
+					strokeLinecap="round"
+					strokeDasharray={ circumference }
+					strokeDashoffset={ offset }
+					transform="rotate(-90 34 34)"
+					className="transition-[stroke-dashoffset] duration-[600ms]"
+					style={ {
+						transitionTimingFunction: 'cubic-bezier(.16,1,.3,1)',
+					} }
+				/>
+			</svg>
+			<span className="absolute text-sm font-bold text-[#16182a]">
+				{ Math.round( percent ) }%
+			</span>
+		</div>
+	);
+};
+
+// Client-side safety net: if no new progress step arrives within this window we
+// treat the build as stalled, stop polling and surface a recoverable failure.
+const STALL_TIMEOUT_MS = 10 * 60 * 1000;
+
 const ImportAiSite = () => {
 	const { nextStep } = useNavigateSteps();
 
-	const [ showProgressBar, setShowProgressBar ] = useState( true );
+	const [ , setShowProgressBar ] = useState( true );
 	const [ isReadyForImport, setIsReadyForImport ] = useState( false );
 	const [ isFetchingStatus, setIsFetchingStatus ] = useState( false );
 
@@ -60,6 +112,11 @@ const ImportAiSite = () => {
 			selectedImages,
 			siteLanguageList,
 			siteLanguage,
+			businessContact,
+			businessDetails,
+			businessType,
+			keywords,
+			templateList,
 		},
 		aiSiteLogo,
 		aiSiteTitleVisible,
@@ -91,7 +148,6 @@ const ImportAiSite = () => {
 	}, [] );
 
 	const {
-		importEnd,
 		importPercent,
 		templateResponse,
 		reset,
@@ -109,6 +165,8 @@ const ImportAiSite = () => {
 		xmlImportDone,
 		pluginInstallationAttempts,
 		importErrorMessages,
+		isCreationFailure,
+		creditAutoRestore,
 		templateId,
 	} = useSelect( ( select ) => {
 		const { getImportSiteProgressData } = select( STORE_KEY );
@@ -116,9 +174,12 @@ const ImportAiSite = () => {
 			...getImportSiteProgressData(),
 		};
 	}, [] );
-	const { updateImportAiSiteData: dispatch } = useDispatch( STORE_KEY );
+	const { updateImportAiSiteData: dispatch, setWebsiteInfoAIStep } =
+		useDispatch( STORE_KEY );
 
 	const percentage = useRef( importPercent );
+	// Timestamp of the last forward progress; drives the stall guard in fetchImportStatus.
+	const lastProgressAtRef = useRef( Date.now() );
 	const randomMessage = useMemo( getMessage, [] );
 
 	let currentStep = 0;
@@ -1703,71 +1764,93 @@ const ImportAiSite = () => {
 	};
 
 	const replaceImagebatch = async () => {
-		dispatch( {
-			importStatus: __( 'Processing images.', 'ai-builder' ),
-		} );
+		const steps = [
+			{
+				step: 'pages',
+				status: __( 'Replacing images in pages.', 'ai-builder' ),
+				errorMsg: __(
+					'Image replacement in pages failed.',
+					'ai-builder'
+				),
+			},
+			{
+				step: 'posts',
+				status: __( 'Replacing images in posts.', 'ai-builder' ),
+				errorMsg: __(
+					'Image replacement in posts failed.',
+					'ai-builder'
+				),
+			},
+			{
+				step: 'customizer',
+				status: __( 'Updating customizer images.', 'ai-builder' ),
+				errorMsg: __(
+					'Customizer image replacement failed.',
+					'ai-builder'
+				),
+			},
+			{
+				step: 'cleanup',
+				status: __( 'Cleaning up temporary data.', 'ai-builder' ),
+				errorMsg: __( 'Image cleanup failed.', 'ai-builder' ),
+			},
+		];
 
-		const finalSteps = new FormData();
-		finalSteps.append( 'action', 'astra-sites-image_replacement_batch' );
-		finalSteps.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
-
-		const status = await fetch( ajaxurl, {
-			method: 'post',
-			body: finalSteps,
-		} )
-			.then( ( response ) => response.text() )
-			.then( ( text ) => {
-				try {
-					const data = JSON.parse( text );
-					if ( data.success ) {
-						setTimeout( function () {
-							percentage.current =
-								percentage.current < 90
-									? 90
-									: percentage.current;
-							dispatch( {
-								importPercent:
-									percentage.current >= 90
-										? 90
-										: percentage.current,
-							} );
-						}, successMessageDelay );
-
-						return true;
-					}
-					throw data.data;
-				} catch ( error ) {
-					report(
-						__( 'Image processing failed.', 'ai-builder' ),
-						'',
-						error,
-						'',
-						'',
-						text
-					);
-					setTimeout( function () {
-						percentage.current =
-							percentage.current > 90
-								? 90
-								: percentage.current + 1;
-						dispatch( {
-							importPercent: percentage.current,
-						} );
-					}, successMessageDelay );
-
-					return false;
-				}
-			} )
-			.catch( ( error ) => {
-				report(
-					__( 'Image processing failed.', 'ai-builder' ),
-					'',
-					error
-				);
-				return false;
+		for ( const { step, status, errorMsg } of steps ) {
+			dispatch( {
+				importStatus: status,
 			} );
 
-		return status;
+			const formData = new FormData();
+			formData.append( 'action', 'astra-sites-image_replacement_batch' );
+			formData.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+			formData.append( 'step', step );
+
+			const result = await fetch( ajaxurl, {
+				method: 'post',
+				body: formData,
+			} )
+				.then( ( response ) => response.text() )
+				.then( ( text ) => {
+					try {
+						const data = JSON.parse( text );
+						if ( data.success ) {
+							return true;
+						}
+						throw data.data;
+					} catch ( error ) {
+						report( errorMsg, '', error, '', '', text );
+						return false;
+					}
+				} )
+				.catch( ( error ) => {
+					report( errorMsg, '', error );
+					return false;
+				} );
+
+			if ( ! result ) {
+				setTimeout( function () {
+					percentage.current =
+						percentage.current > 90 ? 90 : percentage.current + 1;
+					dispatch( {
+						importPercent: percentage.current,
+					} );
+				}, successMessageDelay );
+
+				return false;
+			}
+		}
+
+		setTimeout( function () {
+			percentage.current =
+				percentage.current < 90 ? 90 : percentage.current;
+			dispatch( {
+				importPercent:
+					percentage.current >= 90 ? 90 : percentage.current,
+			} );
+		}, successMessageDelay );
+
+		return true;
 	};
 
 	/**
@@ -2009,25 +2092,120 @@ const ImportAiSite = () => {
 		}
 	};
 
+	// Base reset applied on every retry — clears errors and import-phase flags.
+	const buildRetryResetState = () => ( {
+		// Reset errors.
+		importErrorMessages: {},
+		importErrorResponse: [],
+		importError: false,
+		isCreationFailure: false,
+		creditAutoRestore: true,
+		// Try again count.
+		tryAgainCount: tryAgainCount + 1,
+		// Reset import flags.
+		xmlImportDone: false,
+		resetData: [],
+		importStart: false,
+		importEnd: false,
+		importPercent: 0,
+		requiredPluginsDone: false,
+		themeStatus: false,
+		notInstalledList: [],
+		notActivatedList: [],
+	} );
+
+	/**
+	 * Rebuild the create-site request body from the current wizard selections in
+	 * the store. The failed site is soft-deleted server-side, so a creation-stage
+	 * retry has to re-dispatch site creation rather than re-poll the old uuid.
+	 */
+	const buildCreateSitePayload = () => {
+		const selectedTemplateData = templateList?.find(
+			( item ) => item?.uuid === selectedTemplate
+		);
+
+		const enabledFeatures = ( siteFeatures || [] )
+			.filter( ( feature ) => feature.enabled )
+			.map( ( feature ) => feature.id );
+
+		if ( selectedTemplateData?.features?.ecommerce === 'yes' ) {
+			enabledFeatures.push( 'ecommerce' );
+		}
+		if ( selectedTemplateData?.features?.donations === 'yes' ) {
+			enabledFeatures.push( 'donations' );
+		}
+
+		return {
+			template: selectedTemplate,
+			business_email: businessContact?.email,
+			business_description: businessDetails,
+			business_name: businessName,
+			business_phone: businessContact?.phone,
+			business_address: businessContact?.address,
+			business_category: businessType,
+			image_keyword: keywords,
+			social_profiles: businessContact?.socialMedia,
+			language: siteLanguage,
+			images: selectedImages,
+			site_features: enabledFeatures,
+			site_features_data: enabledFeatures.includes( 'ecommerce' )
+				? siteFeaturesData
+				: {},
+		};
+	};
+
+	// Creation-stage retry: create a fresh site, then reset + resume polling.
+	const recreateSite = async ( resetState ) => {
+		try {
+			const response = await apiFetch( {
+				path: 'zipwp/v1/site',
+				method: 'POST',
+				data: buildCreateSitePayload(),
+			} );
+
+			if ( ! response?.success ) {
+				report(
+					response?.data?.data?.message ||
+						__( 'Failed to create website', 'ai-builder' )
+				);
+				return;
+			}
+
+			const newSite = response?.data?.data?.site;
+			setWebsiteInfoAIStep( newSite );
+
+			currentStep = 0;
+			percentage.current = 0;
+			lastProgressAtRef.current = Date.now();
+
+			dispatch( {
+				...resetState,
+				importStatus: __(
+					'We are building your website…',
+					'ai-builder'
+				),
+				createSiteStatus: false,
+			} );
+
+			fetchImportStatus();
+		} catch ( error ) {
+			report( error );
+		}
+	};
+
 	const tryAainCallback = () => {
-		dispatch( {
-			// Reset errors.
-			importErrorMessages: {},
-			importErrorResponse: [],
-			importError: false,
-			// Try again count.
-			tryAgainCount: tryAgainCount + 1,
-			// Reset import flags.
-			xmlImportDone: false,
-			resetData: [],
-			importStart: false,
-			importEnd: false,
-			importPercent: 0,
-			requiredPluginsDone: false,
-			themeStatus: false,
-			notInstalledList: [],
-			notActivatedList: [],
-		} );
+		// Reset the stall guard so a fresh attempt is not immediately flagged.
+		lastProgressAtRef.current = Date.now();
+
+		const resetState = buildRetryResetState();
+
+		// A creation-stage failure has no site left to import — build a new one.
+		if ( isCreationFailure ) {
+			recreateSite( resetState );
+			return;
+		}
+
+		dispatch( resetState );
 	};
 
 	const updateProgressBar = ( step, totalSteps ) => {
@@ -2053,8 +2231,35 @@ const ImportAiSite = () => {
 		}
 	};
 
+	/**
+	 * Ask the backend to return the AI credit consumed by a failed build.
+	 *
+	 * The backend auto-restores on failure, so the common response is
+	 * `already_restored`; we treat that and `restored_now` identically. The call
+	 * is eligibility-gated server-side, so it is a no-op when there was no real
+	 * credit-consuming failure. Returns a user-facing message, or '' if not
+	 * restored.
+	 */
+	/**
+	 * Final failure during site creation: show the error screen and flag it as a
+	 * creation-stage failure so the UI offers credit-restore reassurance and a
+	 * re-create retry (the backend soft-deletes the failed site + auto-restores
+	 * the credit).
+	 *
+	 * @param {string}  msg         Failure message to display.
+	 * @param {boolean} autoRestore Whether the backend confirmed the failure (so
+	 *                              it auto-restores the credit). False for a
+	 *                              client-side stall where the backend may still
+	 *                              be running and nothing has been restored yet.
+	 */
+	const handleCreationFailure = ( msg, autoRestore = true ) => {
+		report( msg || __( 'Failed to create website', 'ai-builder' ) );
+		dispatch( { isCreationFailure: true, creditAutoRestore: autoRestore } );
+	};
+
 	const handleStatusResponse = async ( response ) => {
 		const responseCode = response?.data?.data?.code;
+		const responseCodeType = responseCode?.slice( 0, 1 );
 
 		if ( ! ( responseCode in SITE_CREATION_STATUS_CODES ) ) {
 			dispatch( {
@@ -2066,66 +2271,83 @@ const ImportAiSite = () => {
 
 		const msg = SITE_CREATION_STATUS_CODES[ responseCode ]?.trim();
 
-		if ( response?.success ) {
-			const step = +responseCode?.slice( 1 );
+		// Final failure (F-prefixed) — restore credit and show the error screen.
+		if ( responseCodeType === 'F' ) {
+			await handleCreationFailure( msg );
+			return;
+		}
 
-			// Avoid progress bar going back
-			if ( step > currentStep ) {
-				currentStep = step;
-				updateProgressBar( currentStep, TOTAL_STEPS );
-			}
-
-			// Make sure msg is not empty
-			if ( msg && msg !== 'Done' ) {
+		// Auto-retry in progress (R-prefixed) — recoverable, keep polling and show
+		// a non-error message. Counts as activity so the stall guard does not fire.
+		if ( responseCodeType === 'R' ) {
+			lastProgressAtRef.current = Date.now();
+			if ( msg ) {
 				dispatch( {
 					importStatus: msg,
 				} );
+			}
+			await new Promise( ( resolve ) => setTimeout( resolve, 7000 ) );
+			return await fetchImportStatus();
+		}
 
-				// Refresh status after 7 seconds.
-				await new Promise( ( resolve ) => setTimeout( resolve, 7000 ) );
-				return await fetchImportStatus();
+		// Progress step (A-prefixed).
+		const step = +responseCode?.slice( 1 );
+
+		// Avoid progress bar going back
+		if ( step > currentStep ) {
+			currentStep = step;
+			lastProgressAtRef.current = Date.now();
+			updateProgressBar( currentStep, TOTAL_STEPS );
+		}
+
+		// Make sure msg is not empty
+		if ( msg && msg !== 'Done' ) {
+			dispatch( {
+				importStatus: msg,
+			} );
+
+			// Refresh status after 7 seconds.
+			await new Promise( ( resolve ) => setTimeout( resolve, 7000 ) );
+			return await fetchImportStatus();
+		}
+
+		if ( msg === 'Done' ) {
+			dispatch( {
+				importStatus: __( 'Please wait a moment…', 'ai-builder' ),
+			} );
+
+			const reqResponse = await getDemoWithRetry();
+
+			if (
+				! reqResponse.success ||
+				( reqResponse.success &&
+					Object.keys?.( reqResponse )?.length === 0 )
+			) {
+				report(
+					__( 'Failed to create website', 'ai-builder' ),
+					'',
+					reqResponse?.data
+				);
+				return;
 			}
 
-			if ( msg === 'Done' ) {
-				dispatch( {
-					importStatus: __( 'Please wait a moment…', 'ai-builder' ),
-				} );
+			await checkRequiredPlugins( dispatch );
+			checkFileSystemPermissions( dispatch );
 
-				const reqResponse = await getDemoWithRetry();
+			dispatch( {
+				importStatus: __(
+					'The website is created successfully!',
+					'ai-builder'
+				),
+				createSiteStatus: true,
+			} );
 
-				if (
-					! reqResponse.success ||
-					( reqResponse.success &&
-						Object.keys?.( reqResponse )?.length === 0 )
-				) {
-					report(
-						__( 'Failed to create website', 'ai-builder' ),
-						'',
-						reqResponse?.data
-					);
-					return;
-				}
-
-				await checkRequiredPlugins( dispatch );
-				checkFileSystemPermissions( dispatch );
-
-				dispatch( {
-					importStatus: __(
-						'The website is created successfully!',
-						'ai-builder'
-					),
-					createSiteStatus: true,
-				} );
-
-				/**
-				 * Start the pre import process.
-				 * 		1. Install Astra Theme
-				 * 		2. Install Required Plugins.
-				 */
-				handleImport();
-			}
-		} else {
-			report( msg );
+			/**
+			 * Start the pre import process.
+			 * 		1. Install Astra Theme
+			 * 		2. Install Required Plugins.
+			 */
+			handleImport();
 		}
 	};
 
@@ -2133,6 +2355,23 @@ const ImportAiSite = () => {
 		if ( isFetchingStatus ) {
 			return;
 		}
+
+		// Stall guard: no forward progress within the window means the backend
+		// event never arrived (or the site was cleaned up). Fail gracefully so the
+		// screen never polls forever.
+		if ( Date.now() - lastProgressAtRef.current > STALL_TIMEOUT_MS ) {
+			// Client-side stall: the backend may still be running, so it has not
+			// necessarily failed the site or restored the credit yet.
+			await handleCreationFailure(
+				__(
+					"This is taking longer than expected and we couldn't finish creating your site. Please try again.",
+					'ai-builder'
+				),
+				false
+			);
+			return;
+		}
+
 		setIsFetchingStatus( true );
 
 		try {
@@ -2150,7 +2389,9 @@ const ImportAiSite = () => {
 			if ( response?.success === true ) {
 				await handleStatusResponse( response );
 			} else if ( response?.success === false ) {
-				report( __( 'Failed to create website', 'ai-builder' ) );
+				await handleCreationFailure(
+					__( 'Failed to create website', 'ai-builder' )
+				);
 			}
 		} catch ( error ) {
 			report( error );
@@ -2236,64 +2477,89 @@ const ImportAiSite = () => {
 		};
 	}, [ importPercent ] );
 
+	const handleClose = () => {
+		window.location.href = `${ aiBuilderVars.adminUrl }themes.php?page=starter-templates`;
+	};
+
 	return (
 		<>
-			<div className="flex flex-1 flex-col items-center justify-center w-full gap-y-4 pb-10">
-				<div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-					{ showProgressBar && ! importError && (
-						<CircularProgressBar
-							colorCircle="rgba(var(--zip-blue-crayola) / var(--zip-circle-bg-opacity, 0.102))"
-							colorSlice={
-								importError
-									? 'rgb(var(--zip-alert-error))'
-									: 'rgb(var(--accent-st))'
-							}
-							percent={ importPercent }
-							round
-							speed={
-								importError || status === 'retrying' ? 0 : 15 //eslint-disable-line
-							}
-							fontColor="#0F172A"
-							fontSize="18px"
-							fontWeight={ 700 }
-							size={ 72 }
-						/>
-					) }
-					{ importError && (
-						<ErrorModel
-							error={ importErrorMessages }
-							websiteInfo={ websiteInfo }
-							tryAgainCallback={ tryAainCallback }
-						/>
-					) }
-					<div className="flex flex-col">
-						{ ! importEnd && ! importError && (
-							<h4 className="text-xl sm:text-left text-center">
+			<div className="flex flex-1 flex-col items-center justify-center gap-6 w-full py-8 overflow-auto">
+				{ importError ? (
+					<ErrorModel
+						error={ importErrorMessages }
+						websiteInfo={ websiteInfo }
+						tryAgainCallback={ tryAainCallback }
+						showCreditRestore={ isCreationFailure }
+						creditAutoRestore={ creditAutoRestore }
+						hideTryAgain={ tryAgainCount >= 1 }
+					/>
+				) : (
+					<>
+						{ /* Intro */ }
+						<div className="flex flex-col items-center gap-2.5 text-center max-w-[560px]">
+							<span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.07em] uppercase text-gradient-color-3">
+								<span className="w-2 h-2 rounded-full bg-gradient-color-3 animate-blip" />
+								{ __( 'Building your website', 'ai-builder' ) }
+							</span>
+							<h1 className="m-0 text-[28px] font-extrabold tracking-tight text-[#16182a]">
 								{ __(
-									'We are building your website…',
+									"Sit back. We're building your website",
 									'ai-builder'
 								) }
-							</h4>
-						) }
-						{ ! importError && (
-							<div className="zw-sm-normal text-app-text w-[350px]">
+							</h1>
+							<p className="m-0 text-base leading-relaxed text-[#5a6679]">
+								{ __(
+									"This usually takes under a minute. While you wait, here's what you can do with ZipWP.",
+									'ai-builder'
+								) }
+							</p>
+						</div>
+
+						{ /* Feature carousel */ }
+						<FeatureCarousel />
+
+						{ /* Progress ring + status */ }
+						<div className="flex items-center gap-4">
+							<GradientProgressRing percent={ importPercent } />
+							<div className="zw-sm-normal text-[#475569]">
 								<ImportLoaderAi onClickNext={ nextStep } />
 							</div>
-						) }
-					</div>
-				</div>
-				{ ! importError && (
-					<>
-						<div className="relative flex items-center justify-center px-0 sm:px-10 py-6 h-120 w-120 bg-loading-website-grid-texture">
-							<img
-								className="w-[30rem] h-[20.875rem]"
-								src={ migrateSvg }
-								alt={ __( 'Migrating', 'ai-builder' ) }
-							/>
 						</div>
 					</>
 				) }
 			</div>
+
+			{ /* Close button — always visible */ }
+			<div className="fixed top-5 right-5 z-50">
+				{ importError ? (
+					<button
+						onClick={ handleClose }
+						className="w-9 h-9 border-0 rounded-full bg-[rgba(15,23,42,0.05)] text-[#475569] text-[15px] cursor-pointer grid place-items-center transition-colors duration-150 hover:bg-[rgba(15,23,42,0.10)]"
+						aria-label={ __( 'Close', 'ai-builder' ) }
+					>
+						&#10005;
+					</button>
+				) : (
+					<ExitConfirmationPopover
+						onExit={ handleClose }
+						placement="bottom-end"
+						exitButtonClassName="!w-9 !h-9 !rounded-full bg-[rgba(15,23,42,0.05)] text-[#475569] grid place-items-center transition-colors duration-150 hover:bg-[rgba(15,23,42,0.10)]"
+					/>
+				) }
+			</div>
+
+			{ /* Ask Me support CTA */ }
+			<a
+				href={ supportLink }
+				target="_blank"
+				rel="noopener noreferrer"
+				className="fixed right-7 bottom-[26px] z-[6] inline-flex items-center gap-2.5 border-0 bg-white rounded-full py-2.5 pl-2.5 pr-4 shadow-[0_10px_26px_rgba(15,23,42,0.16)] no-underline text-sm font-semibold text-[#1e293b] transition-all duration-150 hover:-translate-y-px hover:shadow-[0_14px_30px_rgba(15,23,42,0.2)]"
+			>
+				<span className="w-[30px] h-[30px] rounded-full bg-gradient-1 grid place-items-center">
+					<span className="w-[11px] h-[11px] rounded-[2px_8px_8px_8px] bg-white opacity-95" />
+				</span>
+				{ __( 'Ask Me', 'ai-builder' ) }
+			</a>
 		</>
 	);
 };

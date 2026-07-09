@@ -386,11 +386,15 @@ export function getFeaturePluginList(
 				}
 				break;
 			case 'donations':
-				requiredPlugins.push( {
-					name: 'SureCart',
-					slug: 'surecart',
-					init: 'surecart/surecart.php',
-				} );
+				if (
+					! templateRequiredPluginsSlugList.includes( 'suredonation' )
+				) {
+					requiredPlugins.push( {
+						name: 'SureDonation',
+						slug: 'suredonation',
+						init: 'suredonation/suredonation.php',
+					} );
+				}
 				break;
 			case 'automation-integrations':
 				requiredPlugins.push( {
