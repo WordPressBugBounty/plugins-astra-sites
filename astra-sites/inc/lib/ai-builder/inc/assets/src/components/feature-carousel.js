@@ -152,7 +152,7 @@ const FeatureCarousel = () => {
 			className="flex flex-col items-center gap-5"
 		>
 			{ /* Viewport */ }
-			<div className="w-[520px] overflow-hidden rounded-[20px]">
+			<div className="w-[480px] overflow-hidden rounded-[20px]">
 				<div
 					className="flex transition-transform duration-[250ms] ease-in-out"
 					style={ {

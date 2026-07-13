@@ -37,9 +37,9 @@ class ST_Replace_Images {
 	public static $image_index = 0;
 
 	/**
-	 * Old Images ids
+	 * Old Images urls
 	 *
-	 * @var array<int,int>
+	 * @var array<int,string>
 	 * @since 4.1.0
 	 */
 	public static $old_image_urls = array();

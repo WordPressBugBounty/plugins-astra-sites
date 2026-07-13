@@ -2483,7 +2483,7 @@ const ImportAiSite = () => {
 
 	return (
 		<>
-			<div className="flex flex-1 flex-col items-center justify-center gap-6 w-full py-8 overflow-auto">
+			<div className="flex flex-1 flex-col items-center justify-start gap-6 w-full py-8 overflow-auto">
 				{ importError ? (
 					<ErrorModel
 						error={ importErrorMessages }
@@ -2521,7 +2521,7 @@ const ImportAiSite = () => {
 						{ /* Progress ring + status */ }
 						<div className="flex items-center gap-4">
 							<GradientProgressRing percent={ importPercent } />
-							<div className="zw-sm-normal text-[#475569]">
+							<div className="zw-sm-normal text-[#475569] w-[240px] sm:w-[320px] shrink-0">
 								<ImportLoaderAi onClickNext={ nextStep } />
 							</div>
 						</div>

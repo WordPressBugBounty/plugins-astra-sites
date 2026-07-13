@@ -350,7 +350,192 @@ if ( ! class_exists( 'ST_Replace_Blocks_Images' ) ) :
 
 				case 'uagb/icon-list':
 					$block = $this->parse_social_icons( $block );
+					break;
+
+				case 'core/image':
+					$block = $this->parse_core_image( $block );
+					break;
+
+				case 'spectra/container':
+					$block = $this->parse_spectra_v3_container( $block );
+					break;
 			}
+		}
+
+		/**
+		 * Parses images in the core Image block used by Spectra v3 templates.
+		 *
+		 * @since 1.1.36
+		 * @param array<mixed> $block Block.
+		 * @return array<mixed> $block Block.
+		 */
+		public function parse_core_image( $block ) {
+			ST_Importer_Log::add( 'Starting parse_core_image' );
+
+			$inner_html = isset( $block['innerHTML'] ) && is_string( $block['innerHTML'] ) ? $block['innerHTML'] : '';
+
+			if ( ! preg_match( '/<img[^>]+src="([^"]+)"/', $inner_html, $matches ) ) {
+				ST_Importer_Log::add( 'No image source found in core image block, returning block unchanged' );
+				return $block;
+			}
+
+			$old_url = $matches[1];
+
+			if ( ST_Replace_Images::is_skipable( $old_url ) ) {
+				ST_Importer_Log::add( 'Skipable image, returning block unchanged' );
+				return $block;
+			}
+
+			ST_Importer_Log::add( 'Found image to replace: ' . $old_url );
+
+			$image = ST_Replace_Images::get_instance()->get_image( ST_Replace_Images::$image_index );
+
+			if ( empty( $image ) || ! is_array( $image ) ) {
+				ST_Importer_Log::add( 'No replacement image available at index: ' . ST_Replace_Images::$image_index );
+				return $block;
+			}
+
+			ST_Importer_Log::add( 'Retrieved replacement image from index: ' . ST_Replace_Images::$image_index );
+			$image = ST_Importer_Helper::download_image( $image );
+
+			if ( is_wp_error( $image ) ) {
+				ST_Importer_Log::add( 'Failed to download image: ' . $image->get_error_message() );
+				return $block;
+			}
+
+			ST_Importer_Log::add( 'Successfully downloaded image with ID: ' . $image );
+
+			$attachment = wp_prepare_attachment_for_js( absint( $image ) );
+
+			if ( ! is_array( $attachment ) ) {
+				ST_Importer_Log::add( 'Failed to prepare attachment for JS' );
+				return $block;
+			}
+
+			ST_Replace_Images::$old_image_urls[] = $old_url;
+
+			$old_id   = isset( $block['attrs']['id'] ) ? $block['attrs']['id'] : 0;
+			$alt_text = ! empty( $attachment['alt'] ) ? $attachment['alt'] : '';
+
+			$block['innerHTML'] = str_replace( $old_url, $attachment['url'], $block['innerHTML'] );
+
+			if ( ! empty( $old_id ) ) {
+				$block['innerHTML'] = str_replace( 'wp-image-' . $old_id, 'wp-image-' . $attachment['id'], $block['innerHTML'] );
+			}
+
+			if ( ! empty( $alt_text ) ) {
+				$block['innerHTML'] = str_replace( 'alt=""', 'alt="' . esc_attr( $alt_text ) . '"', $block['innerHTML'] );
+			}
+
+			$replaced_inner_content = 0;
+			foreach ( $block['innerContent'] as $key => $inner_content ) {
+
+				if ( ! is_string( $inner_content ) || '' === trim( $inner_content ) ) {
+					continue;
+				}
+
+				$block['innerContent'][ $key ] = str_replace( $old_url, $attachment['url'], $block['innerContent'][ $key ] );
+
+				if ( ! empty( $old_id ) ) {
+					$block['innerContent'][ $key ] = str_replace( 'wp-image-' . $old_id, 'wp-image-' . $attachment['id'], $block['innerContent'][ $key ] );
+				}
+
+				if ( ! empty( $alt_text ) ) {
+					$block['innerContent'][ $key ] = str_replace( 'alt=""', 'alt="' . esc_attr( $alt_text ) . '"', $block['innerContent'][ $key ] );
+				}
+
+				$replaced_inner_content++;
+			}
+			ST_Importer_Log::add( 'Replaced image URL in ' . $replaced_inner_content . ' inner content items' );
+
+			$block['attrs']['id'] = $attachment['id'];
+
+			ST_Replace_Images::get_instance()->increment_image_index();
+
+			ST_Importer_Log::add( 'Successfully replaced core image - Old: ' . $old_url . ', New: ' . $attachment['url'] );
+
+			return $block;
+		}
+
+		/**
+		 * Parses the background image in the Spectra v3 Container block.
+		 *
+		 * The v3 container stores the background under `attrs.background.media` and
+		 * mirrors it per breakpoint under `attrs.responsiveControls.{lg|md|sm}.background.media`.
+		 *
+		 * @since 1.1.36
+		 * @param array<mixed> $block Block.
+		 * @return array<mixed> $block Block.
+		 */
+		public function parse_spectra_v3_container( $block ) {
+			ST_Importer_Log::add( 'Starting parse_spectra_v3_container' );
+
+			$background = isset( $block['attrs']['background'] ) && is_array( $block['attrs']['background'] ) ? $block['attrs']['background'] : array();
+
+			if (
+			empty( $background['media']['url'] ) ||
+			( isset( $background['type'] ) && 'image' !== $background['type'] ) ||
+			ST_Replace_Images::is_skipable( $background['media']['url'] )
+			) {
+				ST_Importer_Log::add( 'No background image or skipable image, returning block unchanged' );
+				return $block;
+			}
+
+			$old_url = $background['media']['url'];
+			ST_Importer_Log::add( 'Found background image to replace: ' . $old_url );
+
+			$image = ST_Replace_Images::get_instance()->get_image( ST_Replace_Images::$image_index );
+
+			if ( empty( $image ) || ! is_array( $image ) ) {
+				ST_Importer_Log::add( 'No replacement image available at index: ' . ST_Replace_Images::$image_index );
+				return $block;
+			}
+
+			ST_Importer_Log::add( 'Retrieved replacement image from index: ' . ST_Replace_Images::$image_index );
+			$image = ST_Importer_Helper::download_image( $image );
+
+			if ( is_wp_error( $image ) ) {
+				ST_Importer_Log::add( 'Failed to download image: ' . $image->get_error_message() );
+				return $block;
+			}
+
+			ST_Importer_Log::add( 'Successfully downloaded image with ID: ' . $image );
+
+			$attachment = wp_prepare_attachment_for_js( absint( $image ) );
+
+			if ( ! is_array( $attachment ) ) {
+				ST_Importer_Log::add( 'Failed to prepare attachment for JS' );
+				return $block;
+			}
+
+			ST_Replace_Images::$old_image_urls[] = $old_url;
+
+			$new_media = array_merge(
+				$background['media'],
+				array(
+					'id'    => $attachment['id'],
+					'url'   => $attachment['url'],
+					'alt'   => ! empty( $attachment['alt'] ) ? $attachment['alt'] : '',
+					'title' => ! empty( $attachment['title'] ) ? $attachment['title'] : '',
+				)
+			);
+
+			$block['attrs']['background']['media'] = $new_media;
+
+			// Keep per-breakpoint backgrounds pointing at the same replacement image.
+			if ( ! empty( $block['attrs']['responsiveControls'] ) && is_array( $block['attrs']['responsiveControls'] ) ) {
+				foreach ( $block['attrs']['responsiveControls'] as $device => $controls ) {
+					if ( isset( $controls['background']['media']['url'] ) && $old_url === $controls['background']['media']['url'] ) {
+						$block['attrs']['responsiveControls'][ $device ]['background']['media'] = $new_media;
+					}
+				}
+			}
+
+			ST_Replace_Images::get_instance()->increment_image_index();
+
+			ST_Importer_Log::add( 'Successfully replaced v3 container background image - Old: ' . $old_url . ', New: ' . $attachment['url'] );
+
+			return $block;
 		}
 
 		/**

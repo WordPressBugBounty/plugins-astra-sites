@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.7.0
+Stable tag: 4.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,11 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.1 - 13th July 2026
+- Fix:
+    - AI Builder: Progress loader jump and content alignment on the building-website screen.
+    - Importer: Selected images were not replaced in content for V3 templates using core Image and Spectra v3 Container blocks.
+
 v4.7.0 - 8-July-2026
 - New:
     - Added compatibility for SureDonation plugin.
