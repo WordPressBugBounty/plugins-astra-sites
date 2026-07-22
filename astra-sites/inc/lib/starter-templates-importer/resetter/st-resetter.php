@@ -497,7 +497,7 @@ class ST_Resetter {
 		if ( wp_doing_ajax() ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'There was an error your website.', 'astra-sites' ),
+					'message' => __( 'There was an error on your website.', 'astra-sites' ),
 					'stack'   => array(
 						'error-message' => $error,
 						'error'         => $e,
