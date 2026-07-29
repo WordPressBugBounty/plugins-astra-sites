@@ -1,3 +1,7 @@
+v1.2.87 - 28th July 2026
+- Improvement: PHP fatal errors during import are now captured in the import log and reported on the import screen instead of failing silently.
+- Fix: Step tracking now sends the backend-whitelisted step slugs instead of display labels, so build-with-AI onboarding steps are recorded correctly.
+
 v1.2.86 - 21st July 2026
 - Fix: Template search now correctly handles multiple keywords and keywords containing spaces or special characters.
 

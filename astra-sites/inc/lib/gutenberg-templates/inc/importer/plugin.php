@@ -834,6 +834,10 @@ class Plugin {
 			if ( strpos( $link, '/wp-content/plugins/ultimate-addons-for-gutenberg/' ) !== false ) {
 				$content = str_replace( AST_BLOCK_TEMPLATES_LIBRARY_URL, site_url( '/' ), $content );
 			}
+
+			if ( strpos( $link, '/wp-content/plugins/spectra-blocks/' ) !== false ) {
+				$content = str_replace( AST_BLOCK_TEMPLATES_LIBRARY_URL, site_url( '/' ), $content );
+			}
 		}
 
 		return $content;
@@ -851,6 +855,12 @@ class Plugin {
 		$content = str_replace(
 			AST_BLOCK_TEMPLATES_LIBRARY_URL . 'wp-content/plugins/ultimate-addons-for-gutenberg/',
 			site_url( '/wp-content/plugins/ultimate-addons-for-gutenberg/' ),
+			$content
+		);
+
+		$content = str_replace(
+			AST_BLOCK_TEMPLATES_LIBRARY_URL . 'wp-content/plugins/spectra-blocks/',
+			site_url( '/wp-content/plugins/spectra-blocks/' ),
 			$content
 		);
 
