@@ -1165,6 +1165,8 @@ select {
   height: 2.25rem;
 }.h-\[2\.625rem\] {
   height: 2.625rem;
+}.h-\[20\.875rem\] {
+  height: 20.875rem;
 }.h-\[20px\] {
   height: 20px;
 }.h-\[25px\] {
@@ -1352,6 +1354,8 @@ select {
   width: 300px;
 }.w-\[30px\] {
   width: 30px;
+}.w-\[30rem\] {
+  width: 30rem;
 }.w-\[350px\] {
   width: 350px;
 }.w-\[360px\] {
@@ -3488,6 +3492,11 @@ select {
 
   .sm\:p-5 {
     padding: 1.25rem;
+  }
+
+  .sm\:px-10 {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 
   .sm\:px-5 {

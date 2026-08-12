@@ -78,6 +78,11 @@ export const SITE_CREATION_STATUS_CODES = {
 		'ai-builder'
 	),
 	A011: 'Done', // Don't translate 'Done' as it is used as a status check.
+	// Ecommerce-only store tail: emitted by ZipWP between A010 and A011 for store
+	// builds (store setup + dummy product creation). Text-only status updates.
+	S001: __( 'Setting up your store and its essentials…', 'ai-builder' ),
+	S002: __( 'Adding your products and their images…', 'ai-builder' ),
+	S003: __( 'Organizing your catalog and product pages…', 'ai-builder' ),
 	R001: __(
 		'Oops, Site creation hiccupped, we are trying one more time',
 		'ai-builder'

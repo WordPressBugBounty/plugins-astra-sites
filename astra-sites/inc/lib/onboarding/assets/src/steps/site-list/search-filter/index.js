@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { sortBy } from 'underscore';
 import { Search } from '@brainstormforce/starter-templates-components';
 import { useNavigate } from 'react-router-dom';
 import { __ } from '@wordpress/i18n';
@@ -7,7 +8,6 @@ import { useStateValue } from '../../../store/store';
 import './style.scss';
 import { setURLParmsValue } from '../../../utils/url-params';
 import { useFilteredSites } from '..';
-import { applyPriorityPinning } from '../../../utils/priority-templates';
 
 const SiteSearch = ( { setSiteData } ) => {
 	const [
@@ -17,6 +17,8 @@ const SiteSearch = ( { setSiteData } ) => {
 			searchTermsWithCount,
 			builder,
 			siteType,
+			siteOrder,
+			spectraBlocksVersion,
 			stagingConnected,
 		},
 		dispatch,
@@ -49,6 +51,130 @@ const SiteSearch = ( { setSiteData } ) => {
 
 	const ref = useRef();
 	const parentRef = useRef();
+	const isFirstRender = useRef( true );
+	const lastSearchTerm = useRef( siteSearchTerm );
+
+	// The API `type` filter returns an incomplete result set (it drops newer
+	// templates), so fetch without it and filter by type client-side via the
+	// intersection with the already type-filtered sites.
+	const searchParams = new URLSearchParams( {
+		search: siteSearchTerm,
+		'page-builder': builder,
+	} );
+	if ( stagingConnected ) {
+		searchParams.append( 'draft', 'yes' );
+	}
+	const apiUrl = `${
+		astraSitesVars?.ApiDomain
+	}wp-json/starter-templates/v2/sites-search/?${ searchParams.toString() }`;
+
+	// Build the site list from a search API response, intersected with the
+	// currently filtered sites (type, Spectra version).
+	const processSearchResponse = ( response ) => {
+		// When ordered by latest, the filtered sites are an array — index it
+		// back by `id-{N}` so search results can be looked up.
+		const sitesMap = Array.isArray( allFilteredSites )
+			? allFilteredSites.reduce( ( acc, site ) => {
+					if ( site?.id ) {
+						acc[ `id-${ site.id }` ] = site;
+					}
+					return acc;
+			  }, {} )
+			: allFilteredSites;
+
+		let results = {};
+		if ( response.success && response.ids?.length ) {
+			for ( const id of response.ids ) {
+				if (
+					Object.prototype.hasOwnProperty.call( sitesMap, id ) &&
+					sitesMap[ id ]
+				) {
+					const selectedTemplate = sitesMap[ id ];
+					if (
+						selectedTemplate.related_ecommerce_template !==
+							undefined &&
+						selectedTemplate.related_ecommerce_template !== '' &&
+						selectedTemplate.ecommerce_parent_template !==
+							undefined &&
+						selectedTemplate.ecommerce_parent_template !== ''
+					) {
+						// If ecommerce_parent_template is not empty, skip adding the site to allSites.
+						continue;
+					}
+					results[ id ] = sitesMap[ id ];
+				}
+			}
+		}
+
+		// Keep API relevance order for "popular"; sort by publish date for
+		// "latest" (same sort as the browse path in useFilteredSites).
+		if ( siteOrder === 'latest' ) {
+			results = Object.fromEntries(
+				sortBy(
+					Object.entries( results ),
+					( entry ) => entry[ 1 ][ 'publish-date' ]
+				).reverse()
+			);
+		}
+
+		collectTerms( Object.keys( results ).length );
+
+		setSiteData( {
+			sites: results,
+			gridSkeleton: false,
+		} );
+	};
+
+	// Re-run the active search when the builder, site type, Spectra version,
+	// or sort order changes so the results reflect the new selection instead
+	// of the full unfiltered list.
+	useEffect( () => {
+		if ( isFirstRender.current ) {
+			isFirstRender.current = false;
+			return;
+		}
+		if ( ! siteSearchTerm ) {
+			return;
+		}
+		// When the term changed in the same update (e.g. a mega-menu click sets
+		// both the term and the order), the Search component's own debounced
+		// fetch handles it — skip to avoid a duplicate request.
+		if ( lastSearchTerm.current !== siteSearchTerm ) {
+			return;
+		}
+		const controller = new AbortController();
+		setSiteData( { gridSkeleton: true } );
+		fetch( apiUrl, { signal: controller.signal } )
+			.then( ( res ) => res.json() )
+			.then( ( response ) => {
+				// Drop the response if the term changed (cleared or retyped)
+				// while the request was in flight — the term's own flow owns
+				// the grid now.
+				if ( lastSearchTerm.current !== siteSearchTerm ) {
+					return;
+				}
+				processSearchResponse( response );
+			} )
+			.catch( ( error ) => {
+				if ( error?.name === 'AbortError' ) {
+					return;
+				}
+				// Show an empty state instead of the previous selection's
+				// results.
+				setSiteData( { sites: {}, gridSkeleton: false } );
+			} );
+		// Abort the in-flight request when the selection changes again or the
+		// component unmounts, so a stale response can't overwrite newer
+		// results or write state after unmount.
+		return () => controller.abort();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ builder, siteType, spectraBlocksVersion, siteOrder ] );
+
+	// Track the latest term after the effect above has run, so it can detect
+	// a same-update term change.
+	useEffect( () => {
+		lastSearchTerm.current = siteSearchTerm;
+	}, [ siteSearchTerm ] );
 
 	const handleScroll = ( event ) => {
 		event.preventDefault();
@@ -110,7 +236,7 @@ const SiteSearch = ( { setSiteData } ) => {
 		<div className="st-search-box-wrap" ref={ parentRef }>
 			<div className="st-search-filter st-search-box" ref={ ref }>
 				<Search
-					apiUrl={ `${ astraSitesVars?.ApiDomain }wp-json/starter-templates/v2/sites-search/?search=${ siteSearchTerm }&page-builder=${ builder }&type=${ siteType }${ stagingConnected }` }
+					apiUrl={ apiUrl }
 					beforeSearchResult={ () => {
 						if ( ! siteSearchTerm ) {
 							return;
@@ -126,43 +252,7 @@ const SiteSearch = ( { setSiteData } ) => {
 							} );
 							return;
 						}
-						const results = [];
-						if ( response.success ) {
-							if ( response.ids.length ) {
-								for ( const id of response.ids ) {
-									if ( allFilteredSites[ id ] ) {
-										const selectedTemplate =
-											allFilteredSites[ id ];
-										if (
-											selectedTemplate.related_ecommerce_template !==
-												undefined &&
-											selectedTemplate.related_ecommerce_template !==
-												'' &&
-											selectedTemplate.ecommerce_parent_template !==
-												undefined &&
-											selectedTemplate.ecommerce_parent_template !==
-												''
-										) {
-											// If ecommerce_parent_template is not empty, skip adding the site to allSites.
-											continue;
-										}
-										results[ id ] = allFilteredSites[ id ];
-									}
-								}
-							}
-						}
-
-						collectTerms( Object.keys( results ).length );
-
-						const pinnedResults = applyPriorityPinning(
-							results,
-							siteSearchTerm
-						);
-
-						setSiteData( {
-							sites: pinnedResults,
-							gridSkeleton: false,
-						} );
+						processSearchResponse( response );
 					} }
 					value={ decodeEntities( siteSearchTerm ) }
 					placeholder={ __(

@@ -1102,6 +1102,17 @@ class Ai_Builder_ZipWP_Api {
 		}
 		$response_code = wp_remote_retrieve_response_code( $response );
 		$response_body = wp_remote_retrieve_body( $response );
+
+		/*
+		 * Transient upstream states while the async site-build job is still
+		 * writing its export data. A fetch that lands before that job commits
+		 * returns one of these; the frontend retries them instead of failing
+		 * the import. 202 = build accepted/pending, 404 = export data not
+		 * persisted yet.
+		 */
+		$retryable_codes = array( 202, 404 );
+		$is_retryable    = in_array( (int) $response_code, $retryable_codes, true );
+
 		if ( 201 === $response_code || 200 === $response_code ) {
 			$response_data = json_decode( $response_body, true );
 			if ( is_array( $response_data ) ) {
@@ -1131,18 +1142,20 @@ class Ai_Builder_ZipWP_Api {
 			} else {
 				wp_send_json_error(
 					array(
-						'data'   => 'Failed ' . $response_body,
-						'status' => false,
-
+						'data'      => 'Failed - ' . $response_body,
+						'status'    => false,
+						'code'      => $response_code,
+						'retryable' => $is_retryable,
 					)
 				);
 			}
 		} else {
 			wp_send_json_error(
 				array(
-					'data'   => 'Failed - ' . $response_body,
-					'status' => false,
-
+					'data'      => 'Failed - ' . $response_body,
+					'status'    => false,
+					'code'      => $response_code,
+					'retryable' => $is_retryable,
 				)
 			);
 		}

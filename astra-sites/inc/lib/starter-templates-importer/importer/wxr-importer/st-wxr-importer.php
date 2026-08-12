@@ -49,6 +49,23 @@ class ST_WXR_Importer {
 	private $wxr_post_ids = array();
 
 	/**
+	 * Whether this request is the one running the WXR import.
+	 * Guard requests never set this, so their SSE pings don't refresh the heartbeat.
+	 *
+	 * @since 1.1.39
+	 * @var bool
+	 */
+	private $is_importing = false;
+
+	/**
+	 * Timestamp of the last heartbeat write, used to throttle transient updates.
+	 *
+	 * @since 1.1.39
+	 * @var int
+	 */
+	private $last_heartbeat = 0;
+
+	/**
 	 * Initiator of this class.
 	 *
 	 * @since 1.0.0
@@ -476,7 +493,16 @@ class ST_WXR_Importer {
 	 * @since 1.1.24
 	 */
 	public function wxr_import_transient_start() {
-		set_transient( $this->wxr_import_progress_key, 'ongoing', 300 ); // 5 minutes.
+		$this->is_importing   = true;
+		$this->last_heartbeat = time();
+		set_transient(
+			$this->wxr_import_progress_key,
+			array(
+				'status'    => 'ongoing',
+				'heartbeat' => $this->last_heartbeat,
+			),
+			300
+		); // 5 minutes.
 	}
 
 	/**
@@ -485,7 +511,32 @@ class ST_WXR_Importer {
 	 * @since 1.1.24
 	 */
 	public function wxr_import_transient_cleanup() {
+		$this->is_importing = false;
 		set_transient( $this->wxr_import_progress_key, 'completed', 30 ); // 30 seconds.
+	}
+
+	/**
+	 * Refresh the WXR import heartbeat so concurrent requests can tell the
+	 * importing worker is still alive. Throttled to one write per 10 seconds.
+	 * Only the request that started the import (via `import_start`) writes it.
+	 *
+	 * @since 1.1.39
+	 * @return void
+	 */
+	public function refresh_wxr_import_heartbeat() {
+		if ( ! $this->is_importing || ( time() - $this->last_heartbeat ) < 10 ) {
+			return;
+		}
+
+		$this->last_heartbeat = time();
+		set_transient(
+			$this->wxr_import_progress_key,
+			array(
+				'status'    => 'ongoing',
+				'heartbeat' => $this->last_heartbeat,
+			),
+			300
+		);
 	}
 
 	/**
@@ -507,8 +558,18 @@ class ST_WXR_Importer {
 				'error'  => false,
 			);
 		} else {
+			// An import is marked ongoing — make sure its worker is still alive.
+			// A missing or stale heartbeat means the worker died before cleanup
+			// ran (uncatchable fatal or killed connection); clear the lock so the
+			// import can restart instead of leaving the client reconnecting forever.
+			$heartbeat = is_array( $wxr_progress ) && isset( $wxr_progress['heartbeat'] ) ? (int) $wxr_progress['heartbeat'] : 0;
+			if ( ( time() - $heartbeat ) > 2 * MINUTE_IN_SECONDS ) {
+				delete_transient( $this->wxr_import_progress_key );
+				return false;
+			}
+
 			$data = array(
-				'action' => 'updatedDelta',
+				'action' => 'in_progress',
 				'type'   => 'status',
 				'delta'  => 1,
 			);
@@ -587,8 +648,16 @@ class ST_WXR_Importer {
 
 		// Check for existing progress to prevent duplicate content.
 		if ( $this->is_wxr_import_in_progress() ) {
+			if ( wp_doing_ajax() ) {
+				exit;
+			}
 			return;
 		}
+
+		// Take the lock right away — `import_start` fires only once the importer
+		// begins, leaving validation and the WXR prescan unlocked otherwise.
+		// Every failure path below releases it via wxr_import_transient_cleanup().
+		$this->wxr_import_transient_start();
 
 		// Enhanced XML file validation.
 		if ( empty( $xml_url ) ) {
@@ -666,6 +735,16 @@ class ST_WXR_Importer {
 		if ( function_exists( 'set_time_limit' ) ) {
 			\set_time_limit( 0 ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Required for long-running import process.
 		}
+
+		// Keep the import running even if the SSE connection drops — flush() on a
+		// dead connection would otherwise kill PHP mid-import and leave the
+		// progress lock stale.
+		ignore_user_abort( true ); // phpcs:ignore Generic.PHP.ForbiddenFunctions.FoundWithAlternative -- Deliberate: the import must keep running if the SSE client disconnects, otherwise the progress lock is left stale.
+
+		// Uncatchable fatals (OOM, hard timeout) bypass the try/catch below —
+		// release the progress lock and notify the client on shutdown instead of
+		// leaving the client reconnecting against a stale lock.
+		register_shutdown_function( array( $this, 'handle_import_shutdown' ) );
 
 		// Ensure we're not buffered.
 		wp_ob_end_flush_all();
@@ -821,6 +900,10 @@ class ST_WXR_Importer {
 		if ( is_multisite() && $has_content_filter ) {
 			add_filter( 'content_save_pre', 'wp_filter_post_kses' );
 		}
+
+		// Release the lock on every exit path — a WP_Error returned before
+		// `import_start` fired would otherwise leave the early lock held.
+		$this->wxr_import_transient_cleanup();
 
 		$this->emit_sse_message( $complete );
 		if ( wp_doing_ajax() ) {
@@ -1015,6 +1098,10 @@ class ST_WXR_Importer {
 	 * @param array $terms Terms on the post.
 	 */
 	public function pre_process_post( $data, $meta, $comments, $terms ) {
+
+		// Mark the import alive before this item is processed — attachment
+		// downloads can take longer than the heartbeat staleness window.
+		$this->refresh_wxr_import_heartbeat();
 
 		// Skip orphaned attachments whose post_parent references a post ID that
 		// does not exist in the WXR file. These are template catalog screenshots
@@ -1876,6 +1963,8 @@ class ST_WXR_Importer {
 	 * @param mixed $data Data to be JSON-encoded and sent in the message.
 	 */
 	public function emit_sse_message( $data ) {
+		// Progress events double as the import's liveness signal.
+		$this->refresh_wxr_import_heartbeat();
 
 		if ( wp_doing_ajax() ) {
 			echo "event: message\n";
@@ -1886,6 +1975,45 @@ class ST_WXR_Importer {
 		}
 
 		flush();
+	}
+
+	/**
+	 * Release the import lock and notify the client when the import dies on an
+	 * uncatchable fatal (out of memory, hard timeout). Registered as a shutdown
+	 * function in sse_import(); a no-op unless this request owns a still-running
+	 * import and PHP is dying on a fatal error.
+	 *
+	 * @since 1.1.39
+	 * @return void
+	 */
+	public function handle_import_shutdown() {
+		if ( ! $this->is_importing ) {
+			return;
+		}
+
+		$error = error_get_last();
+		if ( empty( $error ) || ! in_array( $error['type'], array( E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR ), true ) ) {
+			return;
+		}
+
+		ST_Importer_Log::add(
+			'fatal',
+			'Uncatchable fatal error during WXR import: ' . $error['message'],
+			array(
+				'error_type' => $error['type'],
+				'error_file' => $error['file'],
+				'error_line' => $error['line'],
+			)
+		);
+
+		$this->wxr_import_transient_cleanup();
+		$this->emit_sse_message(
+			array(
+				'action'    => 'complete',
+				'error'     => $this->get_contextual_import_error_message( $error['message'] ),
+				'technical' => $error['message'],
+			)
+		);
 	}
 	/**
 	 * Track Imported Post

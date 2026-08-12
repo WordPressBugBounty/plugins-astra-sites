@@ -5,7 +5,7 @@ Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.7.3
+Stable tag: 4.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,19 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.4 - 12th-August-2026
+- Security:
+    - Prevented PHP object injection by disallowing object instantiation when deserializing imported post meta.
+- Improvement:
+    - Changing the page builder, filter, toggle, or sort order while a search is active now updates results instead of clearing the search.
+    - AI Builder: Ecommerce AI site builds now show live status updates during the final step instead of appearing stalled.
+    - AI Builder: The import screen now shows a waiting state when a previous import request is still running, instead of stalling without feedback.
+    - ST Importer: Content import now survives dropped connections, running in the background, and reports a clear error on fatal failures instead of failing silently.
+- Fix:
+    - AI Builder: AI site import now retries when export data isn't ready yet, instead of erroring under high-volume site creation.
+    - AI Builder: Interrupted imports no longer get stuck in an endless retry loop; dead imports are now detected via a heartbeat and recovered automatically.
+    - ST Importer: SureDonation donation forms no longer import with blank fields and missing labels; form and campaign content now runs through block-content normalization.
+
 v4.7.3  - 29th-July-2026
 - Improvement:
     - Refined the Elementor Template Library premium tooltips for better usability, clarity, and dark mode accessibility.

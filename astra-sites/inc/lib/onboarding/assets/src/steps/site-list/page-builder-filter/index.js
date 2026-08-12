@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ToggleDropdown } from '@brainstormforce/starter-templates-components';
 import { __ } from '@wordpress/i18n';
 import { useStateValue } from '../../../store/store';
-import { initialState } from '../../../store/reducer';
 const {
 	imageDir,
 	isElementorDisabled,
@@ -235,13 +234,11 @@ const PageBuilder = ( { placement = 'bottom-end', isDisabled } ) => {
 			}
 			return ( window.location = `${ astraSitesVars?.adminURL }themes.php?page=ai-builder` );
 		}
+		// Keep the active search term and filters so switching the page
+		// builder re-runs the search for the new builder instead of
+		// resetting the library.
 		dispatch( {
 			type: 'set',
-			siteSearchTerm: '',
-			siteBusinessType: initialState.siteBusinessType,
-			selectedMegaMenu: initialState.selectedMegaMenu,
-			siteType: '',
-			siteOrder: 'popular',
 			onMyFavorite: false,
 			currentIndex: 2,
 		} );

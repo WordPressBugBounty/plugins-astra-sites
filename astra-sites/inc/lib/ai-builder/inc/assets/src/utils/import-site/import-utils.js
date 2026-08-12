@@ -127,32 +127,67 @@ export const getDemo = async ( id, storedState ) => {
 		} );
 };
 
+// The site's export data is written by an async backend job, so a fetch made
+// before that job commits returns a transient failure (the backend flags it
+// with `retryable: true`). Retry a bounded number of times with a short delay
+// before surfacing the error, instead of failing the import on the first miss.
+const EXPORT_MAX_ATTEMPTS = 4;
+const EXPORT_RETRY_DELAY_MS = 5000;
+
+const wait = ( ms ) => new Promise( ( resolve ) => setTimeout( resolve, ms ) );
+
 export const getAiDemo = async (
 	{ businessName, selectedTemplate },
 	dispatch,
 	websiteInfo
 ) => {
 	const { uuid } = websiteInfo;
-	const aiResponse = await apiFetch( {
-		path: 'zipwp/v1/ai-site',
-		method: 'POST',
-		data: {
-			template: selectedTemplate,
-			business_name: businessName,
-			uuid,
-		},
-	} );
 
-	if ( aiResponse.success ) {
-		dispatch( {
-			templateId: selectedTemplate,
-			templateResponse: aiResponse.data?.data,
-			importErrorMessages: {},
-			importErrorResponse: [],
-			importError: false,
-		} );
-		return { success: true, data: aiResponse.data?.data };
+	let aiResponse;
+	for ( let attempt = 1; attempt <= EXPORT_MAX_ATTEMPTS; attempt++ ) {
+		try {
+			aiResponse = await apiFetch( {
+				path: 'zipwp/v1/ai-site',
+				method: 'POST',
+				data: {
+					template: selectedTemplate,
+					business_name: businessName,
+					uuid,
+				},
+			} );
+		} catch ( error ) {
+			// The proxy always responds 200 and carries the retryable flag in
+			// the body, so the not-ready (202/404) states arrive on the resolved
+			// path above. A thrown error here is a transport-level failure
+			// (offline, server error, nonce) — not a not-ready state — so it is
+			// not retried.
+			aiResponse = {
+				success: false,
+				data: { data: error?.message ?? '', retryable: false },
+			};
+		}
+
+		if ( aiResponse?.success ) {
+			dispatch( {
+				templateId: selectedTemplate,
+				templateResponse: aiResponse.data?.data,
+				importErrorMessages: {},
+				importErrorResponse: [],
+				importError: false,
+			} );
+			return { success: true, data: aiResponse.data?.data };
+		}
+
+		// Only retry failures the backend marked transient, and only while
+		// attempts remain.
+		const isRetryable = aiResponse?.data?.retryable === true;
+		if ( ! isRetryable || attempt === EXPORT_MAX_ATTEMPTS ) {
+			break;
+		}
+
+		await wait( EXPORT_RETRY_DELAY_MS );
 	}
+
 	dispatch( {
 		importError: true,
 		importErrorMessages: {
@@ -160,7 +195,7 @@ export const getAiDemo = async (
 			secondaryText: '',
 			errorCode: '',
 			errorText:
-				typeof aiResponse.data === 'string'
+				typeof aiResponse?.data === 'string'
 					? aiResponse.data
 					: aiResponse?.data?.data ?? '',
 			solutionText: '',

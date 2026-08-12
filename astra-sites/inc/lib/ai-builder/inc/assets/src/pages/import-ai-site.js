@@ -180,6 +180,9 @@ const ImportAiSite = () => {
 	const percentage = useRef( importPercent );
 	// Timestamp of the last forward progress; drives the stall guard in fetchImportStatus.
 	const lastProgressAtRef = useRef( Date.now() );
+	// Last status code seen. The status endpoint re-emits the current code on every
+	// poll, so the stall guard is only refreshed when the code actually changes.
+	const lastStatusCodeRef = useRef( null );
 	const randomMessage = useMemo( getMessage, [] );
 
 	let currentStep = 0;
@@ -1496,12 +1499,32 @@ const ImportAiSite = () => {
 		sseImport.data = data;
 		sseImport.render( dispatch, percentage.current );
 
+		// A closed stream makes EventSource reconnect automatically — track
+		// liveness so a dead server-side import doesn't leave it reconnecting
+		// forever without ever surfacing an error.
+		let lastMessageTime = Date.now();
+		let reconnectErrorCount = 0;
+		const MAX_RECONNECT_ERRORS = 20;
+		const STALL_TIMEOUT = 3 * 60 * 1000;
+
 		const evtSource = new EventSource( sseImport.data.url );
 		evtSource.onmessage = ( message ) => {
+			lastMessageTime = Date.now();
+			reconnectErrorCount = 0;
 			const eventData = JSON.parse( message.data );
 			switch ( eventData.action ) {
 				case 'updateDelta':
 					sseImport.updateDelta( eventData.type, eventData.delta );
+					break;
+
+				case 'in_progress':
+					// Another request is still running the import — keep waiting.
+					dispatch( {
+						importStatus: __(
+							'Import already in progress…',
+							'ai-builder'
+						),
+					} );
 					break;
 
 				case 'complete':
@@ -1524,7 +1547,13 @@ const ImportAiSite = () => {
 		};
 
 		evtSource.onerror = ( error ) => {
-			if ( ! ( error && error?.isTrusted ) ) {
+			reconnectErrorCount++;
+			const stalled = Date.now() - lastMessageTime > STALL_TIMEOUT;
+			if (
+				reconnectErrorCount > MAX_RECONNECT_ERRORS ||
+				stalled ||
+				! ( error && error?.isTrusted )
+			) {
 				evtSource.close();
 				report(
 					__(
@@ -2071,8 +2100,10 @@ const ImportAiSite = () => {
 	};
 
 	const handleImportStart = async () => {
-		// Get the import data from the AI site.
-		await getAiDemo( stepsData, dispatch, websiteInfo );
+		// The export data is already fetched (and stored server-side) once the
+		// build reports 'Done', so it is not re-fetched here. Re-checking the
+		// required plugins is still needed — on a try again some of them may
+		// already be installed.
 		await checkRequiredPlugins( dispatch );
 		checkFileSystemPermissions( dispatch );
 
@@ -2277,15 +2308,20 @@ const ImportAiSite = () => {
 			return;
 		}
 
-		// Auto-retry in progress (R-prefixed) — recoverable, keep polling and show
-		// a non-error message. Counts as activity so the stall guard does not fire.
-		if ( responseCodeType === 'R' ) {
-			lastProgressAtRef.current = Date.now();
-			if ( msg ) {
-				dispatch( {
-					importStatus: msg,
-				} );
+		// Auto-retry (R-prefixed) and the ecommerce store tail (S-prefixed): both
+		// keep polling and show a non-error message without touching the progress
+		// bar. Store codes are emitted only for ecommerce builds, between A010 and
+		// A011. The stall guard is refreshed only when the code changes, not on
+		// every poll — the status endpoint re-emits the current code each time, so
+		// resetting unconditionally would let a genuinely hung phase poll forever.
+		if ( responseCodeType === 'R' || responseCodeType === 'S' ) {
+			if ( responseCode !== lastStatusCodeRef.current ) {
+				lastStatusCodeRef.current = responseCode;
+				lastProgressAtRef.current = Date.now();
 			}
+			dispatch( {
+				importStatus: msg,
+			} );
 			await new Promise( ( resolve ) => setTimeout( resolve, 7000 ) );
 			return await fetchImportStatus();
 		}
@@ -2480,6 +2516,54 @@ const ImportAiSite = () => {
 	const handleClose = () => {
 		window.location.href = `${ aiBuilderVars.adminUrl }themes.php?page=starter-templates`;
 	};
+
+	// Fall back to the classic progress loader when the promotional feature
+	// carousel is disabled (via the `ai_builder_should_show_import_carousel` filter).
+	if ( ! aiBuilderVars.showImportCarousel ) {
+		return (
+			<div className="flex flex-1 flex-col items-center justify-center w-full gap-y-4 pb-10">
+				<div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+					{ ! importError && (
+						<GradientProgressRing percent={ importPercent } />
+					) }
+					{ importError && (
+						<ErrorModel
+							error={ importErrorMessages }
+							websiteInfo={ websiteInfo }
+							tryAgainCallback={ tryAainCallback }
+							showCreditRestore={ isCreationFailure }
+							creditAutoRestore={ creditAutoRestore }
+							hideTryAgain={ tryAgainCount >= 1 }
+						/>
+					) }
+					<div className="flex flex-col">
+						{ ! importError && (
+							<h4 className="text-xl sm:text-left text-center">
+								{ __(
+									'We are building your website…',
+									'ai-builder'
+								) }
+							</h4>
+						) }
+						{ ! importError && (
+							<div className="zw-sm-normal text-app-text w-[350px]">
+								<ImportLoaderAi onClickNext={ nextStep } />
+							</div>
+						) }
+					</div>
+				</div>
+				{ ! importError && (
+					<div className="relative flex items-center justify-center px-0 sm:px-10 py-6 h-120 w-120 bg-loading-website-grid-texture">
+						<img
+							className="w-[30rem] h-[20.875rem]"
+							src={ aiBuilderVars.migrateSvg }
+							alt={ __( 'Migrating', 'ai-builder' ) }
+						/>
+					</div>
+				) }
+			</div>
+		);
+	}
 
 	return (
 		<>

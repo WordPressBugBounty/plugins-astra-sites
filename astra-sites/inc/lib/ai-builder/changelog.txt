@@ -1,3 +1,11 @@
+v1.2.89 - 11th August 2026
+- Improvement: Ecommerce AI site builds now show live status updates during the final step instead of appearing stalled.
+- Fix: AI site import now retries when export data isn't ready yet, instead of erroring under high-volume site creation.
+
+v1.2.88 - 29th July 2026
+- Improvement: The import screen now shows a waiting state when a previous import request is still running, instead of stalling without feedback.
+- Fix: Content import no longer reconnects endlessly when the server-side import dies mid-way — the import screen now reports a clear error after repeated connection failures instead of looping silently.
+
 v1.2.87 - 28th July 2026
 - Improvement: PHP fatal errors during import are now captured in the import log and reported on the import screen instead of failing silently.
 - Fix: Step tracking now sends the backend-whitelisted step slugs instead of display labels, so build-with-AI onboarding steps are recorded correctly.

@@ -427,6 +427,14 @@ class Ai_Builder_Plugin_Loader {
 
 		$support_link = 'https://wpastra.com/starter-templates-support/?ip=' . $this->get_client_ip();
 
+		/**
+		 * Filter to determine if the AI Builder is a white-label version, which impacts certain features such as the images engine used for Russian clients.
+		 *
+		 * @param bool $is_white_label Default value indicating if this is a white-label version of AI Builder. Default is `false`.
+		 * @since 1.2.77
+		 */
+		$is_white_label = (bool) apply_filters( 'ai_builder_is_white_label', false );
+
 		return array(
 			'ajax_url'                 => admin_url( 'admin-ajax.php' ),
 			'_ajax_nonce'              => wp_create_nonce( 'astra-sites' ),
@@ -498,13 +506,14 @@ class Ai_Builder_Plugin_Loader {
 			'isMultisite'              => is_multisite(),
 			'canInstallPlugins'        => current_user_can( 'install_plugins' ),
 			'canActivatePlugins'       => current_user_can( 'activate_plugins' ),
+			'isWhiteLabelAIBuilder'    => $is_white_label,
 			/**
-			 * Filter to determine if the AI Builder is a white-label version, which impacts certain features such as the images engine used for Russian clients.
+			 * Filter to toggle the promotional feature carousel on the import loading
+			 * screen. When disabled, the classic progress loader is shown instead.
 			 *
-			 * @param bool $is_white_label Default value indicating if this is a white-label version of AI Builder. Default is `false`.
-			 * @since 1.2.77
+			 * @since 1.2.89
 			 */
-			'isWhiteLabelAIBuilder'    => (bool) apply_filters( 'ai_builder_is_white_label', false ),
+			'showImportCarousel'       => (bool) apply_filters( 'ai_builder_should_show_import_carousel', ! $is_white_label ),
 		);
 	}
 

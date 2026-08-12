@@ -78,8 +78,9 @@ if ( ! class_exists( 'Astra_Sites_Compatibility_WooCommerce' ) ) :
 				return $meta;
 			}
 
-			// Safely unserialize data.
-			$unserialized_data = maybe_unserialize( $meta['value'] );
+			// Security: decode data only, never instantiate objects, to prevent PHP object injection from imported meta.
+			// Value is guaranteed serialized by the is_serialized() check above.
+			$unserialized_data = unserialize( $meta['value'], array( 'allowed_classes' => false ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize, PHPCompatibility.FunctionUse.NewFunctionParameters.unserialize_optionsFound -- Object injection prevented via allowed_classes => false; options param requires PHP 7.0+, plugin requires PHP 7.4+.
 			if ( false === $unserialized_data || ! is_array( $unserialized_data ) ) {
 				return $meta;
 			}

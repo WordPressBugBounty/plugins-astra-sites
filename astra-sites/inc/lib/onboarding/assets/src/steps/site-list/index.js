@@ -164,10 +164,24 @@ const SiteList = () => {
 			templateId: 0,
 		} );
 
+		// When a search is active, skip resetting to the full unfiltered list.
+		// The search component re-runs the query for the new selection instead,
+		// so results stay in sync with the visible search term.
+		if ( siteSearchTerm ) {
+			return;
+		}
+
 		setSiteData( {
 			sites: allFilteredSites,
 		} );
-	}, [ builder, siteType, spectraBlocksVersion, siteOrder, allSitesData ] );
+	}, [
+		builder,
+		siteType,
+		spectraBlocksVersion,
+		siteOrder,
+		allSitesData,
+		siteSearchTerm,
+	] );
 
 	useEffect( () => {
 		// Track template listing step when component mounts
@@ -438,20 +452,15 @@ const SiteList = () => {
 											<SiteOrder
 												value={ siteOrder }
 												onClick={ ( event, order ) => {
+													// Keep the active search term so
+													// changing the order re-sorts the
+													// search results instead of
+													// clearing the search.
 													dispatch( {
 														type: 'set',
 														siteOrder: order.id,
 														onMyFavorite: false,
-														siteBusinessType: '',
-														selectedMegaMenu: '',
-														siteSearchTerm: '',
 													} );
-													const urlParam =
-														setURLParmsValue(
-															's',
-															''
-														);
-													history( `?${ urlParam }` );
 												} }
 											/>
 										</div>

@@ -1604,7 +1604,11 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					} else {
 
 						if ( is_serialized( $meta_value, true ) ) {
-							$raw_data = maybe_unserialize( stripslashes( $meta_value ) );
+							// Security: decode data only, never instantiate objects, to prevent PHP object injection.
+							$raw_data = unserialize( stripslashes( $meta_value ), array( 'allowed_classes' => false ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize, PHPCompatibility.FunctionUse.NewFunctionParameters.unserialize_optionsFound -- Object injection prevented via allowed_classes => false; options param requires PHP 7.0+, plugin requires PHP 7.4+.
+							if ( false === $raw_data || is_object( $raw_data ) ) {
+								$raw_data = '';
+							}
 						} elseif ( is_array( $meta_value ) ) {
 							$raw_data = json_decode( stripslashes( $meta_value ), true );
 						} else {
@@ -1650,7 +1654,11 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 					} else {
 
 						if ( is_serialized( $meta_value, true ) ) {
-							$raw_data = maybe_unserialize( stripslashes( $meta_value ) );
+							// Security: decode data only, never instantiate objects, to prevent PHP object injection.
+							$raw_data = unserialize( stripslashes( $meta_value ), array( 'allowed_classes' => false ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize, PHPCompatibility.FunctionUse.NewFunctionParameters.unserialize_optionsFound -- Object injection prevented via allowed_classes => false; options param requires PHP 7.0+, plugin requires PHP 7.4+.
+							if ( false === $raw_data || is_object( $raw_data ) ) {
+								$raw_data = '';
+							}
 						} elseif ( is_array( $meta_value ) ) {
 							$raw_data = json_decode( stripslashes( $meta_value ), true );
 						} else {

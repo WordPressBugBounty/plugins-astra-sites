@@ -1,3 +1,10 @@
+v1.1.40 - 11-August-2026
+- Fix: SureDonation donation forms no longer import with blank fields and missing labels; form and campaign post types now run through block-content normalization.
+
+v1.1.39 - 29-July-2026
+- Improvement: Content import now survives dropped connections — the import keeps running in the background, and uncatchable fatal errors during import report a clear error message instead of failing silently.
+- Fix: Content import getting stuck in an endless retry loop when a previous import attempt was interrupted mid-way; dead imports are now detected via a heartbeat on the import lock and recovered automatically.
+
 v1.1.38 - 28-July-2026
 - Improvement: Import log entries are now appended atomically so concurrent requests no longer overwrite each other, and PHP fatal errors during reset are captured in the import log.
 - Improvement: Added import compatibility for SureCart products with variants.
