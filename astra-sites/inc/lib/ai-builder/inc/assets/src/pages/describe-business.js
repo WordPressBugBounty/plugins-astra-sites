@@ -24,16 +24,12 @@ import AISitesNotice from '../components/ai-sites-notice';
 import { classNames, toastBody } from '../helpers';
 import toast from 'react-hot-toast';
 import improveUsingAiModal from '../components/improve-using-ai-modal';
-import AdvancedDetails from '../components/advanced-details';
-import { useDebounceWithCancel } from '../hooks/use-debounce';
 
 const generateContentOptions = async ( {
 	businessName,
 	formBusinessDetails,
 	businessType,
 	siteLanguage,
-	siteGoals,
-	siteGoalsOther,
 } ) => {
 	try {
 		const response = await apiFetch( {
@@ -47,8 +43,6 @@ const generateContentOptions = async ( {
 				business_description: formBusinessDetails,
 				category: businessType,
 				language: siteLanguage,
-				site_goals: siteGoals,
-				site_goals_other: siteGoalsOther,
 			},
 		} );
 
@@ -70,9 +64,6 @@ const DescribeBusiness = () => {
 			businessName,
 			siteLanguage,
 			descriptionListStore,
-			siteGoals,
-			siteGoalsOther,
-			keywords,
 		} = useSelect( ( select ) => {
 			const { getAIStepData } = select( STORE_KEY );
 			return getAIStepData();
@@ -109,10 +100,6 @@ const DescribeBusiness = () => {
 		setFocus,
 	} = useForm( { defaultValues: { businessDetails } } );
 	const formBusinessDetails = watch( 'businessDetails' );
-	const [ debouncedDescriptionValue ] = useDebounceWithCancel(
-		formBusinessDetails,
-		800
-	);
 
 	const handleFetchSuggestion = async () => {
 		try {
@@ -121,8 +108,6 @@ const DescribeBusiness = () => {
 				businessType,
 				formBusinessDetails,
 				siteLanguage,
-				siteGoals,
-				siteGoalsOther,
 			} );
 			return improvedDescription;
 		} catch ( error ) {
@@ -172,8 +157,6 @@ const DescribeBusiness = () => {
 			businessType,
 			formBusinessDetails,
 			siteLanguage,
-			siteGoals,
-			siteGoalsOther,
 		} );
 
 		if ( description ) {
@@ -543,14 +526,6 @@ const DescribeBusiness = () => {
 						</div>
 					) }
 				</div>
-
-				<AdvancedDetails
-					imageKeywords={ keywords }
-					debouncedDescriptionValue={ debouncedDescriptionValue }
-					currentDescriptionValue={ formBusinessDetails }
-					description={ businessDetails }
-					fetchKeywords={ fetchImageKeywords }
-				/>
 			</div>
 			<Divider className="my-[28px]" />
 			<NavigationButtons

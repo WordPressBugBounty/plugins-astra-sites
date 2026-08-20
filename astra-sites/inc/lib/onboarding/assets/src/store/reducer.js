@@ -153,6 +153,18 @@ export const initialState = {
 			plugins: [ 'surecookie' ],
 		},
 		{
+			title: __( 'Conversion Testing', 'astra-sites' ),
+			id: 'sigmize',
+			description: __(
+				'Run A/B tests and see what converts best',
+				'astra-sites'
+			),
+			enabled: false,
+			compulsory: false,
+			icon: 'sigmize',
+			plugins: [ 'sigmize' ],
+		},
+		{
 			title: __( 'Free Live Chat', 'astra-sites' ),
 			id: 'live-chat',
 			description: __(

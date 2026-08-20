@@ -469,6 +469,13 @@ export function getFeaturePluginList(
 					init: 'surecookie/surecookie.php',
 				} );
 				break;
+			case 'sigmize':
+				requiredPlugins.push( {
+					name: 'Sigmize',
+					slug: 'sigmize',
+					init: 'sigmize/sigmize.php',
+				} );
+				break;
 			default:
 				break;
 		}

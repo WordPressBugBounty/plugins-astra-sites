@@ -79,18 +79,6 @@ const selectors = {
 		return siteFeatures;
 	},
 
-	getSiteGoals( { stepData: { siteGoals, siteGoalsOther } } ) {
-		return { siteGoals, siteGoalsOther };
-	},
-
-	getSiteTone( { stepData: { siteTone } } ) {
-		return siteTone;
-	},
-
-	getUserKeywords( { stepData: { userKeywords } } ) {
-		return userKeywords;
-	},
-
 	getSiteFeaturesData( state ) {
 		return state.stepData?.siteFeaturesData || {};
 	},

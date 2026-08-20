@@ -71,6 +71,22 @@ if ( ! class_exists( 'Astra_Sites_Astra_Onboarding' ) ) {
 			}
 
 			$this->register_astra_onboarding();
+
+			add_filter( 'astra_sites_do_activation_redirect', array( $this, 'maybe_skip_activation_redirect' ) );
+		}
+
+		/**
+		 * Skip the activation redirect when the user is already headed to the wizard.
+		 *
+		 * @since  4.7.5
+		 *
+		 * @param bool $do_redirect Whether to redirect.
+		 * @return bool
+		 */
+		public function maybe_skip_activation_redirect( $do_redirect ) {
+			$current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only screen check, nothing is written.
+
+			return 'astra-onboarding' === $current_page ? false : $do_redirect;
 		}
 
 		/**

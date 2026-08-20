@@ -38,6 +38,59 @@ class ST_Importer_Log {
 	private static $log_file = null;
 
 	/**
+	 * Pending log entries, keyed by log file path.
+	 *
+	 * Entries are buffered in memory and written in batches. A locked append per
+	 * entry costs ~0.4s on hosts backing the uploads directory with a network
+	 * filesystem, which is enough to push a single import request past the host's
+	 * gateway timeout.
+	 *
+	 * @since 1.1.41
+	 * @var array<string, array<int, string>>
+	 */
+	private static $buffer = array();
+
+	/**
+	 * Whether the shutdown flush callback has been registered.
+	 *
+	 * @since 1.1.41
+	 * @var bool
+	 */
+	private static $flush_registered = false;
+
+	/**
+	 * Whether shutdown has begun, after which entries are written straight away.
+	 *
+	 * @since 1.1.41
+	 * @var bool
+	 */
+	private static $shutting_down = false;
+
+	/**
+	 * Number of buffered entries that triggers an automatic flush.
+	 *
+	 * @since 1.1.41
+	 * @var int
+	 */
+	const BUFFER_LIMIT = 25;
+
+	/**
+	 * Seconds after which buffered entries are written even when the buffer is not full.
+	 *
+	 * @since 1.1.41
+	 * @var int
+	 */
+	const FLUSH_INTERVAL = 2;
+
+	/**
+	 * Microtime of the last write, used to apply the flush interval.
+	 *
+	 * @since 1.1.41
+	 * @var float
+	 */
+	private static $last_flush = 0.0;
+
+	/**
 	 * Get instance
 	 *
 	 * @since 1.1.25
@@ -331,9 +384,25 @@ class ST_Importer_Log {
 		// Style separator.
 		$separator = PHP_EOL;
 
-		// WP_Filesystem lacks an append mode — a read-modify-write drops entries when concurrent requests write the log.
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		file_put_contents( $log_file, $separator . $formatted_content, FILE_APPEND | LOCK_EX );
+		self::$buffer[ $log_file ][] = $separator . $formatted_content;
+
+		if ( ! self::$flush_registered ) {
+			self::$flush_registered = true;
+			register_shutdown_function( array( __CLASS__, 'flush_on_shutdown' ) );
+		}
+
+		$interval_elapsed = ( microtime( true ) - self::$last_flush ) >= self::FLUSH_INTERVAL;
+
+		// Failures are written straight away — a request that is about to die may never reach shutdown.
+		// Entries logged after the shutdown flush has run would otherwise be dropped.
+		//
+		// The interval bounds how much of the log a terminated request can lose. A host that cuts
+		// the request at the gateway kills the process outright, so shutdown callbacks never run and
+		// whatever is still buffered is gone — which is the log tail naming the step that overran.
+		// On a healthy host the buffer fills well inside the interval, so this adds no writes there.
+		if ( self::$shutting_down || 'error' === $severity || 'fatal' === $severity || self::buffer_count() >= self::BUFFER_LIMIT || $interval_elapsed ) {
+			self::flush();
+		}
 
 		/**
 		 * Fires after adding content to the import log file.
@@ -348,6 +417,64 @@ class ST_Importer_Log {
 		 * @param array<string, mixed> $context  Additional context data for the log entry.
 		 */
 		do_action( 'st_importer_log_after_add', $message, $severity, $context );
+	}
+
+	/**
+	 * Flush the buffer at shutdown and write any later entries immediately.
+	 *
+	 * @since 1.1.41
+	 * @return void
+	 */
+	public static function flush_on_shutdown() {
+		self::$shutting_down = true;
+		self::flush();
+	}
+
+	/**
+	 * Write the buffered log entries to disk.
+	 *
+	 * Registered as a shutdown callback and also called once the buffer fills or the
+	 * flush interval elapses, so a long-running import never holds more than a handful
+	 * of entries in memory. Each flush is a single locked append, which keeps entries
+	 * intact when concurrent requests write the same log.
+	 *
+	 * @since 1.1.41
+	 * @return void
+	 */
+	public static function flush() {
+		if ( empty( self::$buffer ) ) {
+			return;
+		}
+
+		$pending          = self::$buffer;
+		self::$buffer     = array();
+		self::$last_flush = microtime( true );
+
+		foreach ( $pending as $log_file => $entries ) {
+			if ( empty( $entries ) ) {
+				continue;
+			}
+
+			// WP_Filesystem lacks an append mode — a read-modify-write drops entries when concurrent requests write the log.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+			file_put_contents( $log_file, implode( '', $entries ), FILE_APPEND | LOCK_EX );
+		}
+	}
+
+	/**
+	 * Count the entries waiting to be written.
+	 *
+	 * @since 1.1.41
+	 * @return int Number of buffered entries.
+	 */
+	private static function buffer_count() {
+		$count = 0;
+
+		foreach ( self::$buffer as $entries ) {
+			$count += count( $entries );
+		}
+
+		return $count;
 	}
 
 	/**

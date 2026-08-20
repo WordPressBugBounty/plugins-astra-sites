@@ -1,3 +1,8 @@
+v.2.4.33 - 19-August-2026
+- Improvement: Spectra Blocks plugin is now installed from the WordPress.org repository, removing the temporary hardcoded download URL.
+- Fix: Restricted the ZipWP authentication return handler to users who can manage the site, so lower-privileged roles can no longer overwrite the site-wide ZipWP credentials.
+- Fix: Design Library button in the editor toolbar no longer sits shorter than the adjacent wp-admin and page builder buttons.
+
 v.2.4.32 - 16-July-2026
 - Fix: Version toggle no longer appears when UAGB is inactive, even if stale database options from a previous install are present.
 
@@ -5,6 +10,7 @@ v.2.4.31 - 8-July-2026
 - New: Added a consent popup that installs and activates the required Spectra and form plugins before a pattern is inserted, with a tooltip on the Insert button listing the required plugin.
 - Improvement: Show Spectra Blocks (v3) patterns by default in all cases, and only show the version toggle when Spectra Legacy is active, with Spectra Blocks selected by default.
 - Improvement: Pattern import no longer shows the upfront ZipWP connection prompt.
+- Improvement: Added standalone Spectra Blocks plugin compatibility for asset URL rewriting in imported block and pattern content.
 - Fix: Prevented a crash on the AI Personalization language step when the site-languages API returned a non-array response.
 - Fix: Avoided an unnecessary page reload after block import on sites running the standalone Spectra Blocks plugin.
 - Fix: Auto-open Design Library no longer closes third-party plugin modals.

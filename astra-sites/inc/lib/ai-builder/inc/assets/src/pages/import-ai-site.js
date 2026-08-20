@@ -1528,8 +1528,10 @@ const ImportAiSite = () => {
 					break;
 
 				case 'complete':
+					// Close in both outcomes — leaving the stream open after an
+					// error would auto-reconnect against the finished import.
+					evtSource.close();
 					if ( false === eventData.error ) {
-						evtSource.close();
 						dispatch( {
 							xmlImportDone: true,
 						} );
@@ -2567,7 +2569,7 @@ const ImportAiSite = () => {
 
 	return (
 		<>
-			<div className="flex flex-1 flex-col items-center justify-start gap-6 w-full pb-8 overflow-auto">
+			<div className="flex flex-1 flex-col items-center justify-start gap-6 w-full pb-8">
 				{ importError ? (
 					<ErrorModel
 						error={ importErrorMessages }

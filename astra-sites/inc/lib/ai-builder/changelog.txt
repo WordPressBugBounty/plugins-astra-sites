@@ -1,3 +1,9 @@
+v1.2.90 - 19th August 2026
+- Improvement: Added AVIF image support, so templates using AVIF images bring them across along with the other formats.
+- Improvement: Removed the goals selection screen and the tone and keywords options from the AI website builder onboarding.
+- Fix: The import stream now closes after an import error instead of silently reconnecting against the finished import.
+- Fix: Security - Enforced TLS certificate verification on the ZipWP plan API request.
+
 v1.2.89 - 11th August 2026
 - Improvement: Ecommerce AI site builds now show live status updates during the final step instead of appearing stalled.
 - Fix: AI site import now retries when export data isn't ready yet, instead of erroring under high-volume site creation.

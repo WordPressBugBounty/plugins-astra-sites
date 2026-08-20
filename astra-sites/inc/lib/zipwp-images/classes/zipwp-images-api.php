@@ -288,12 +288,19 @@ class Zipwp_Images_Api {
 		$name  = pathinfo( (string) $name, PATHINFO_FILENAME ) . '-' . $photo_id . '.jpg';
 		$image = $this->create_image_from_url( $url, $name, (string) $photo_id, $desc );
 
-		if ( empty( $image ) ) {
+		// A failed download or sideload returns a WP_Error, which is not empty — check for it
+		// explicitly so the request fails loudly instead of reporting a bogus attachment.
+		if ( is_wp_error( $image ) || empty( $image ) || ! is_numeric( $image ) ) {
 			wp_send_json_error( __( 'Could not download the image.', 'astra-sites' ) );
 		}
 
 		$image                    = intval( $image );
-		$result['attachmentData'] = wp_prepare_attachment_for_js( $image );
+		$attachment_data          = wp_prepare_attachment_for_js( $image );
+		$result['attachmentData'] = $attachment_data;
+
+		if ( empty( $attachment_data ) ) {
+			wp_send_json_error( __( 'Could not download the image.', 'astra-sites' ) );
+		}
 
 		if ( did_action( 'elementor/loaded' ) ) {
 			$result['data'] = $this->get_attachment_data( $image );
@@ -343,9 +350,9 @@ class Zipwp_Images_Api {
 		// Download file to temp location.
 		$file_array['tmp_name'] = download_url( $url );
 
-		// If error storing temporarily, return the error.
+		// If error storing temporarily, return the error itself so callers can detect it.
 		if ( is_wp_error( $file_array['tmp_name'] ) ) {
-			return $file_array;
+			return $file_array['tmp_name'];
 		}
 
 		// Do the validation and storage stuff.
@@ -416,61 +423,178 @@ class Zipwp_Images_Api {
 	 * Image size.
 	 *
 	 * @since 1.0.0
-	 * @param array<string, array<string, mixed>> $image Image Array.
+	 * @param array<string, mixed> $image Image Array.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function get_image_size( $image ) {
-		$sizes = array();
+		$details = isset( $image['details'] ) && is_array( $image['details'] ) ? $image['details'] : array();
+		$engine  = isset( $image['engine'] ) ? $image['engine'] : '';
 
-		if ( empty( $image['details'] ) ) {
+		$image_url = isset( $image['url'] ) ? (string) $image['url'] : '';
+
+		switch ( $engine ) {
+			case 'pexels':
+				$sizes = $this->get_pexels_sizes( $details, $image_url );
+				break;
+			case 'pixabay':
+				$sizes = $this->get_pixabay_sizes( $details );
+				break;
+			default:
+				$sizes = array();
+				break;
+		}
+
+		// Drop any entries that are missing a usable URL so they never reach the UI.
+		$sizes = array_values(
+			array_filter(
+				$sizes,
+				static function ( $size ) {
+					return ! empty( $size['url'] );
+				}
+			)
+		);
+
+		if ( ! empty( $sizes ) ) {
 			return $sizes;
 		}
 
-		switch ( $image['engine'] ) {
-			case 'pexels':
-				$available_image_sizes = $image['details']['src'];
-
-				if ( is_array( $available_image_sizes ) ) {
-					foreach ( $available_image_sizes as $size_key => $url ) {
-						$dimensions = $this->get_image_dimensions( $url );
-						$value      = array(
-							'id'     => $size_key,
-							'url'    => $url,
-							'width'  => $dimensions['width'],
-							'height' => $dimensions['height'],
-						);
-						$sizes[]    = $value;
-					}
-				}
-
-				return $sizes;
-			case 'pixabay':
-				$sizes = array(
-					array(
-						'id'     => 'original',
-						'url'    => $image['details']['largeImageURL'],
-						'width'  => $image['details']['webformatWidth'],
-						'height' => $image['details']['webformatHeight'],
-					),
-					array(
-						'id'     => 'medium',
-						'url'    => $image['details']['webformatURL'],
-						'width'  => $image['details']['webformatWidth'],
-						'height' => $image['details']['webformatHeight'],
-					),
-					array(
-						'id'     => 'small',
-						'url'    => $image['details']['previewURL'],
-						'width'  => $image['details']['previewWidth'],
-						'height' => $image['details']['previewHeight'],
-					),
-				);
-
-				return $sizes;
-			default:
-				return $sizes;
+		// No mapped sizes and nothing to fall back to.
+		if ( empty( $image['url'] ) ) {
+			return array();
 		}
+
+		/*
+		 * Fallback: guarantee at least the original image is selectable. Without this,
+		 * an engine whose size data is missing or could not be mapped leaves the
+		 * "Choose a size" selector blank and the Insert action without a URL.
+		 */
+		$original_url = (string) $image['url'];
+		$dimensions   = $this->get_image_dimensions( $original_url );
+
+		return array(
+			array(
+				'id'     => 'original',
+				'url'    => $original_url,
+				'width'  => $dimensions['width'],
+				'height' => $dimensions['height'],
+			),
+		);
+	}
+
+	/**
+	 * Map Pexels image details to selectable sizes.
+	 *
+	 * The upstream API does not return a `details.src` object for Pexels, so the
+	 * sizes are derived from the resizable Pexels CDN URL instead. When `details.src`
+	 * is present it is preferred.
+	 *
+	 * @since 1.0.31
+	 * @param array<string, mixed> $details   Pexels image `details` payload.
+	 * @param string               $image_url Top-level image URL (resizable Pexels CDN URL).
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function get_pexels_sizes( $details, $image_url = '' ) {
+		$available_image_sizes = isset( $details['src'] ) && is_array( $details['src'] ) ? $details['src'] : array();
+
+		if ( empty( $available_image_sizes ) ) {
+			return $this->get_pexels_sizes_from_url( $image_url );
+		}
+
+		$sizes = array();
+		foreach ( $available_image_sizes as $size_key => $url ) {
+			if ( empty( $url ) ) {
+				continue;
+			}
+			$dimensions = $this->get_image_dimensions( $url );
+			$sizes[]    = array(
+				'id'     => $size_key,
+				'url'    => $url,
+				'width'  => $dimensions['width'],
+				'height' => $dimensions['height'],
+			);
+		}
+
+		return $sizes;
+	}
+
+	/**
+	 * Derive Pexels selectable sizes from the resizable CDN URL.
+	 *
+	 * Pexels image URLs (`https://images.pexels.com/photos/{id}/pexels-photo-{id}.jpeg`)
+	 * are resized on the fly via the `w` query argument. The base URL (no width) serves
+	 * the full-resolution original.
+	 *
+	 * @since 1.0.31
+	 * @param string $image_url Pexels CDN URL to derive sizes from.
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function get_pexels_sizes_from_url( $image_url ) {
+		if ( empty( $image_url ) || strpos( $image_url, 'images.pexels.com' ) === false ) {
+			return array();
+		}
+
+		// Strip any existing query so widths are applied to a clean base URL.
+		$base = strtok( $image_url, '?' );
+
+		// Size id => target width in pixels. 0 keeps the full-resolution original.
+		$variants = array(
+			'original' => 0,
+			'medium'   => 640,
+			'small'    => 300,
+		);
+
+		$sizes = array();
+		foreach ( $variants as $size_key => $width ) {
+			$args = array(
+				'auto' => 'compress',
+				'cs'   => 'tinysrgb',
+			);
+			if ( $width > 0 ) {
+				$args['w'] = $width;
+			}
+			$sizes[] = array(
+				'id'     => $size_key,
+				'url'    => add_query_arg( $args, $base ),
+				'width'  => $width > 0 ? (string) $width : '',
+				'height' => '',
+			);
+		}
+
+		return $sizes;
+	}
+
+	/**
+	 * Map Pixabay image details to selectable sizes.
+	 *
+	 * @since 1.0.31
+	 * @param array<string, mixed> $details Pixabay image `details` payload.
+	 *
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function get_pixabay_sizes( $details ) {
+		return array(
+			array(
+				'id'     => 'original',
+				'url'    => isset( $details['largeImageURL'] ) ? $details['largeImageURL'] : '',
+				'width'  => isset( $details['imageWidth'] ) ? $details['imageWidth'] : '',
+				'height' => isset( $details['imageHeight'] ) ? $details['imageHeight'] : '',
+			),
+			array(
+				'id'     => 'medium',
+				'url'    => isset( $details['webformatURL'] ) ? $details['webformatURL'] : '',
+				'width'  => isset( $details['webformatWidth'] ) ? $details['webformatWidth'] : '',
+				'height' => isset( $details['webformatHeight'] ) ? $details['webformatHeight'] : '',
+			),
+			array(
+				'id'     => 'small',
+				'url'    => isset( $details['previewURL'] ) ? $details['previewURL'] : '',
+				'width'  => isset( $details['previewWidth'] ) ? $details['previewWidth'] : '',
+				'height' => isset( $details['previewHeight'] ) ? $details['previewHeight'] : '',
+			),
+		);
 	}
 
 	/**

@@ -141,7 +141,6 @@ class Astra_Sites_ZipWP_Integration {
 		$request_args = array(
 			'headers' => Astra_Sites_ZipWP_Api::get_instance()->get_api_headers(),
 			'timeout' => 100,
-            'sslverify' => false,
 		);
 		$response = wp_safe_remote_get( $api_endpoint, $request_args );
 

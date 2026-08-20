@@ -16,7 +16,7 @@ msgstr ""
 #: astra-sites.php:133
 #: inc/classes/class-astra-sites-nps-notice.php:121
 #: inc/classes/class-astra-sites-utils.php:87
-#: inc/classes/class-astra-sites.php:3072
+#: inc/classes/class-astra-sites.php:3097
 #: inc/lib/onboarding/class-onboarding-loader.php:111
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
@@ -64,38 +64,38 @@ msgid "There was an error on your website."
 msgstr "Er was een fout op uw website."
 
 #. translators: %1$s refers to the plugin name
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:149
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:202
 #, php-format
 msgid "Required File Permissions to import the templates from %s are missing."
 msgstr "Vereiste bestandsrechten om de sjablonen van %s te importeren ontbreken."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:156
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:209
 msgid "This is usually due to inconsistent file permissions."
 msgstr "Dit komt meestal door inconsistente bestandsrechten."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:159
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:212
 msgid "You can easily update permissions by adding the following code into the wp-config.php file."
 msgstr "Je kunt eenvoudig de permissies bijwerken door de volgende code toe te voegen aan het wp-config.php-bestand."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:443
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:570
 msgid "Enabled"
 msgstr "Ingeschakeld"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:446
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:573
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:530
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:587
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:657
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:714
 msgid "Yes"
 msgstr "Ja"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:533
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:590
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:660
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:717
 msgid "No"
 msgstr "Nee"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:605
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:732
 msgid "You currently have no scheduled cron events."
 msgstr "U heeft momenteel geen geplande cron-evenementen."
 
@@ -116,13 +116,13 @@ msgstr "U heeft momenteel geen geplande cron-evenementen."
 #: inc/lib/ai-builder/inc/ajax/plugin.php:372
 #: inc/lib/ai-builder/inc/ajax/plugin.php:377
 #: inc/lib/ai-builder/inc/traits/helper.php:965
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:247
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:314
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:358
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:382
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:482
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:576
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1111
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:252
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:319
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:363
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:387
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:487
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:581
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1117
 #: inc/lib/gutenberg-templates/inc/importer/sync-library.php:361
 #: inc/lib/gutenberg-templates/inc/importer/sync-library.php:488
 #: inc/lib/gutenberg-templates/inc/importer/sync-library.php:513
@@ -512,7 +512,8 @@ msgstr "Ongeldige aanvraag-URL - %s"
 msgid "Need to send URL of the image to be downloaded"
 msgstr "Moet de URL van de afbeelding verzenden die gedownload moet worden"
 
-#: inc/lib/zipwp-images/classes/zipwp-images-api.php:292
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:294
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:302
 msgid "Could not download the image."
 msgstr "Kon de afbeelding niet downloaden."
 
@@ -521,7 +522,7 @@ msgid "Get Started"
 msgstr "Beginnen"
 
 #: inc/classes/class-astra-sites.php:1988
-#: inc/classes/class-astra-sites.php:2607
+#: inc/classes/class-astra-sites.php:2632
 #: inc/includes/templates.php:321
 msgid "Get Access!"
 msgstr "Toegang krijgen!"
@@ -699,60 +700,60 @@ msgstr "Flexbox-container inschakelen vanuit Elementor"
 msgid "The Flexbox Container widget is disabled on your website. With this disabled, the import process will be affected. Kindly enable it to continue importing the Starter Template."
 msgstr "De Flexbox Container-widget is uitgeschakeld op uw website. Als dit is uitgeschakeld, wordt het importproces beïnvloed. Schakel het in om door te gaan met het importeren van de Starter Template."
 
-#: inc/classes/class-astra-sites.php:2611
+#: inc/classes/class-astra-sites.php:2636
 msgid "Template"
 msgstr "Sjabloon"
 
-#: inc/classes/class-astra-sites.php:2612
+#: inc/classes/class-astra-sites.php:2637
 msgid "Block"
 msgstr "Blok"
 
-#: inc/classes/class-astra-sites.php:2613
+#: inc/classes/class-astra-sites.php:2638
 #: inc/includes/templates.php:78
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Dismiss"
 msgstr "Afwijzen"
 
-#: inc/classes/class-astra-sites.php:2614
+#: inc/classes/class-astra-sites.php:2639
 msgid "Install Required Plugins"
 msgstr "Vereiste plugins installeren"
 
-#: inc/classes/class-astra-sites.php:2618
+#: inc/classes/class-astra-sites.php:2643
 msgid "You can locate <strong>Starter Templates Settings</strong> under the <strong>Page Settings</strong> of the Style Tab."
 msgstr "U kunt <strong>Starter Templates Instellingen</strong> vinden onder de <strong>Pagina-instellingen</strong> van het Stijl-tabblad."
 
-#: inc/classes/class-astra-sites.php:2620
+#: inc/classes/class-astra-sites.php:2645
 msgid "Read More →"
 msgstr "Lees meer →"
 
-#: inc/classes/class-astra-sites.php:2994
+#: inc/classes/class-astra-sites.php:3019
 msgid "Template library refreshed!"
 msgstr "Sjabloonbibliotheek vernieuwd!"
 
-#: inc/classes/class-astra-sites.php:3074
+#: inc/classes/class-astra-sites.php:3099
 msgid "Build Your Dream Site in Minutes With AI"
 msgstr "Bouw uw droomsite in enkele minuten met AI"
 
-#: inc/classes/class-astra-sites.php:3075
+#: inc/classes/class-astra-sites.php:3100
 msgid "Say goodbye to the days of spending weeks designing and building your website.<br/> You can now create professional-grade websites in minutes."
 msgstr "Zeg vaarwel tegen de dagen van wekenlang ontwerpen en bouwen van je website.<br/> Je kunt nu binnen enkele minuten websites van professionele kwaliteit maken."
 
-#: inc/classes/class-astra-sites.php:3077
+#: inc/classes/class-astra-sites.php:3102
 #: inc/lib/one-onboarding/build/main.js:16
 msgid "Let’s Get Started"
 msgstr "Laten we beginnen"
 
-#: inc/classes/class-astra-sites.php:3078
+#: inc/classes/class-astra-sites.php:3103
 msgid "I want to build this website from scratch"
 msgstr "Ik wil deze website helemaal opnieuw bouwen"
 
-#: inc/classes/class-astra-sites.php:3113
+#: inc/classes/class-astra-sites.php:3138
 msgid "Required WP_Filesystem Permissions to import the templates from Starter Templates are missing."
 msgstr "Vereiste WP_Filesystem-machtigingen om de sjablonen van Starter Templates te importeren ontbreken."
 
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1060
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1078
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1043
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1049
 msgid "You are not allowed to perform this action."
 msgstr "U mag deze actie niet uitvoeren."
 
@@ -1058,25 +1059,25 @@ msgstr "Sorry, je mag dat niet doen."
 
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:703
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:745
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:872
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:965
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1073
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1177
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1271
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1352
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1423
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1499
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1579
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1678
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1774
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1850
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1915
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1980
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2051
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2122
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2189
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2216
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2308
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:871
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:964
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1072
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1176
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1268
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1347
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1418
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1494
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1574
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1673
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1769
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1845
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1910
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1975
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2046
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2117
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2184
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2211
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2303
 #: inc/lib/getting-started/classes/class-gs-api.php:158
 #: inc/lib/getting-started/classes/class-gs-api.php:377
 #: inc/lib/gutenberg-templates/inc/api/blocks.php:93
@@ -1099,13 +1100,13 @@ msgstr "Sorry, je mag dat niet doen."
 msgid "Nonce verification failed."
 msgstr "Verificatie van nonce mislukt."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1025
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1024
 #: inc/lib/starter-templates-importer/importer/st-importer.php:614
 msgid "There was an error downloading the XML file."
 msgstr "Er is een fout opgetreden bij het downloaden van het XML-bestand."
 
 #: inc/lib/ai-builder/inc/ajax/importer.php:572
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1037
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1036
 #: inc/lib/ai-builder/inc/traits/helper.php:669
 #: inc/lib/ai-builder/inc/traits/helper.php:703
 #: inc/lib/ai-builder/inc/traits/helper.php:741
@@ -1179,20 +1180,20 @@ msgstr "Doc:"
 msgid "Resolve file permission issue"
 msgstr "Los het probleem met de bestandsrechten op"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:279
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:290
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:466
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:284
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:295
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:471
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:296
 #: inc/lib/ai-builder/inc/assets/build/main.js:184
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "Something went wrong"
 msgstr "Er is iets misgegaan"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1123
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1129
 msgid "Something wrong"
 msgstr "Iets mis"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1356
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1362
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Design Library"
 msgstr "Ontwerp Bibliotheek"
@@ -1747,14 +1748,14 @@ msgstr "Als u liever doorgaat, klik dan op 'Annuleren'."
 msgid "Exit"
 msgstr "Afsluiten"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1613
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1709
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1619
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1715
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
 msgid "Light"
 msgstr "Licht"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1619
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1715
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1625
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1721
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
 msgid "Dark"
 msgstr "Donker"
@@ -2190,7 +2191,7 @@ msgstr "Instagram"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:235
+#: inc/classes/class-astra-sites-astra-onboarding.php:251
 #: inc/lib/ai-builder/inc/assets/build/main.js:192
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "YouTube"
@@ -2204,7 +2205,7 @@ msgstr "Google Mijn Bedrijf"
 msgid "Yelp"
 msgstr "Yelp"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:234
+#: inc/classes/class-astra-sites-astra-onboarding.php:250
 #: inc/lib/ai-builder/inc/assets/build/main.js:192
 #: inc/lib/gutenberg-templates/dist/main.js:2
 #: inc/lib/one-onboarding/build/main.js:1
@@ -2610,7 +2611,6 @@ msgstr "Selecteer de afbeeldingen"
 msgid "Add more relevant keywords…"
 msgstr "Voeg meer relevante trefwoorden toe…"
 
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Suggested Keywords"
@@ -3010,8 +3010,8 @@ msgstr "Je hebt het gedaan! Je gloednieuwe website is helemaal klaar om online t
 msgid "See Your Website"
 msgstr "Bekijk uw website"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:270
-#: inc/classes/class-astra-sites-astra-onboarding.php:279
+#: inc/classes/class-astra-sites-astra-onboarding.php:286
+#: inc/classes/class-astra-sites-astra-onboarding.php:295
 #: inc/lib/ai-builder/inc/assets/build/main.js:245
 msgid "Visit Dashboard"
 msgstr "Bezoek Dashboard"
@@ -3323,6 +3323,7 @@ msgstr "We konden niets vinden met uw trefwoord."
 msgid "No images are selected yet."
 msgstr "Er zijn nog geen afbeeldingen geselecteerd."
 
+#: inc/lib/getting-started/build/main.js:1
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Connect"
 msgstr "Verbinden"
@@ -3488,7 +3489,7 @@ msgstr "Installeer & Activeer Astra-thema"
 msgid "To import the site in the original format, you would need the Astra theme activated. You can import it with any other theme, but the site might lose some of the design settings and look a bit different."
 msgstr "Om de site in het oorspronkelijke formaat te importeren, moet je het Astra-thema geactiveerd hebben. Je kunt het met elk ander thema importeren, maar de site kan enkele ontwerpinstellingen verliezen en er iets anders uitzien."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:283
+#: inc/lib/getting-started/classes/class-gs-helper.php:288
 #: inc/lib/getting-started/build/main.js:1
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:126
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:143
@@ -3749,7 +3750,7 @@ msgstr "Pagina Bouwer"
 msgid "Design pages with visual website builder"
 msgstr "Ontwerp pagina's met een visuele websitebouwer"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:294
+#: inc/lib/getting-started/classes/class-gs-helper.php:299
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Contact Form"
 msgstr "Contactformulier"
@@ -4006,7 +4007,6 @@ msgid "Vietnamese"
 msgstr "Vietnamees"
 
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:797
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Friendly"
 msgstr "Vriendelijk"
@@ -4022,13 +4022,11 @@ msgid "Casual"
 msgstr "Informeel"
 
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:799
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Professional"
 msgstr "Professioneel"
 
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:798
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Informative"
 msgstr "Informatief"
@@ -4044,7 +4042,6 @@ msgid "Serious"
 msgstr "Serieus"
 
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:802
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Humorous"
 msgstr "Humoristisch"
@@ -4590,7 +4587,7 @@ msgid "Quick Feedback"
 msgstr "Snelle feedback"
 
 #: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:307
-#: inc/classes/class-astra-sites-astra-onboarding.php:237
+#: inc/classes/class-astra-sites-astra-onboarding.php:253
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "Other"
 msgstr "Anders"
@@ -4883,7 +4880,7 @@ msgstr "Het is niet gelukt om de Setup-wizard te sluiten en te verwijderen."
 msgid "Successfully dismissed and removed the Setup wizard."
 msgstr "Setup-wizard succesvol gesloten en verwijderd."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:553
+#: inc/lib/getting-started/classes/class-gs-helper.php:558
 msgid "Embed videos with modern features like chapters, overlays, and custom branding and keep people watching and make your content unforgettable."
 msgstr "Embed video's met moderne functies zoals hoofdstukken, overlays en aangepaste branding en zorg ervoor dat mensen blijven kijken en maak je inhoud onvergetelijk."
 
@@ -4951,168 +4948,168 @@ msgstr "Stapstatus bijgewerkt."
 msgid "Action items failed to update!"
 msgstr "Actie-items konden niet worden bijgewerkt!"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:56
+#: inc/lib/getting-started/classes/class-gs-helper.php:61
 msgid "WordPress Basics"
 msgstr "WordPress Basisprincipes"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:57
+#: inc/lib/getting-started/classes/class-gs-helper.php:62
 msgid "Get your site’s foundation rock-solid so it looks professional and runs smoothly from day one."
 msgstr "Zorg ervoor dat de basis van je site rotsvast is, zodat het er professioneel uitziet en soepel draait vanaf dag één."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:63
+#: inc/lib/getting-started/classes/class-gs-helper.php:68
 msgid "Set Site Title & Tagline"
 msgstr "Stel Site Titel & Ondertitel in"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:70
+#: inc/lib/getting-started/classes/class-gs-helper.php:75
 msgid "Your site title and tagline show up in browser tabs and search results. Make a strong first impression by customizing them to match your brand. A 10-second tweak that boosts professionalism and SEO."
 msgstr "Je site titel en ondertitel verschijnen in browsertabbladen en zoekresultaten. Maak een sterke eerste indruk door ze aan te passen aan je merk. Een aanpassing van 10 seconden die de professionaliteit en SEO verbetert."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:83
+#: inc/lib/getting-started/classes/class-gs-helper.php:88
 msgid "Review Admin Email"
 msgstr "Controleer Admin E-mail"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:85
-#: inc/lib/getting-started/classes/class-gs-helper.php:135
-#: inc/lib/getting-started/classes/class-gs-helper.php:255
-#: inc/lib/getting-started/classes/class-gs-helper.php:307
-#: inc/lib/getting-started/classes/class-gs-helper.php:331
+#: inc/lib/getting-started/classes/class-gs-helper.php:90
+#: inc/lib/getting-started/classes/class-gs-helper.php:140
+#: inc/lib/getting-started/classes/class-gs-helper.php:260
+#: inc/lib/getting-started/classes/class-gs-helper.php:312
+#: inc/lib/getting-started/classes/class-gs-helper.php:336
 msgid "Review"
 msgstr "Beoordeling"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:91
+#: inc/lib/getting-started/classes/class-gs-helper.php:96
 msgid "Your admin email is where you’ll receive important site alerts like user messages, order updates, and security notifications. Make sure it’s correct so you don’t miss anything critical."
 msgstr "Je admin e-mail is waar je belangrijke sitewaarschuwingen ontvangt, zoals gebruikersberichten, bestelupdates en beveiligingsmeldingen. Zorg ervoor dat het correct is, zodat je niets belangrijks mist."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:104
+#: inc/lib/getting-started/classes/class-gs-helper.php:109
 msgid "Choose how your page links look"
 msgstr "Kies hoe je paginalinks eruitzien"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:111
+#: inc/lib/getting-started/classes/class-gs-helper.php:116
 msgid "Set up clean, readable URLs for your website that look better, help with SEO, and are easier to share. Setting your permalinks takes just a few click and makes your site feel pro from day one."
 msgstr "Stel schone, leesbare URL's in voor je website die er beter uitzien, helpen met SEO en gemakkelijker te delen zijn. Het instellen van je permalinks kost slechts een paar klikken en zorgt ervoor dat je site vanaf dag één professioneel aanvoelt."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:117
+#: inc/lib/getting-started/classes/class-gs-helper.php:122
 msgid "Bad example: yourwebsite.com/page_id=123"
 msgstr "Slecht voorbeeld: yourwebsite.com/page_id=123"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:118
+#: inc/lib/getting-started/classes/class-gs-helper.php:123
 msgid "Good example: yourwebsite.com/about-us"
 msgstr "Goed voorbeeld: yourwebsite.com/about-us"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:133
+#: inc/lib/getting-started/classes/class-gs-helper.php:138
 msgid "Search Engine Visibility"
 msgstr "Zoekmachine Zichtbaarheid"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:141
+#: inc/lib/getting-started/classes/class-gs-helper.php:146
 msgid "If this setting is left unchecked, search engines can’t find your site even if it’s ready. Make sure your site is visible to Google and others so you can start showing up in search results."
 msgstr "Als deze instelling niet is aangevinkt, kunnen zoekmachines je site niet vinden, zelfs als deze klaar is. Zorg ervoor dat je site zichtbaar is voor Google en anderen, zodat je in zoekresultaten kunt verschijnen."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:163
+#: inc/lib/getting-started/classes/class-gs-helper.php:168
 msgid "Design, Style & Theme"
 msgstr "Ontwerp, Stijl & Thema"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:164
+#: inc/lib/getting-started/classes/class-gs-helper.php:169
 msgid "Create a memorable brand experience that looks professional and instantly recognizable."
 msgstr "Creëer een gedenkwaardige merkervaring die er professioneel uitziet en direct herkenbaar is."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:174
+#: inc/lib/getting-started/classes/class-gs-helper.php:179
 msgid "Customize Style Guide"
 msgstr "Stijl Gids Aanpassen"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:190
+#: inc/lib/getting-started/classes/class-gs-helper.php:195
 msgid "Add Logo and Site Icon"
 msgstr "Voeg Logo en Site-icoon toe"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:206
+#: inc/lib/getting-started/classes/class-gs-helper.php:211
 msgid "Customize Header"
 msgstr "Pas Header aan"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:222
+#: inc/lib/getting-started/classes/class-gs-helper.php:227
 msgid "Customize Footer"
 msgstr "Pas Footer aan"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:242
+#: inc/lib/getting-started/classes/class-gs-helper.php:247
 msgid "Website Pages"
 msgstr "Website Pagina's"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:243
+#: inc/lib/getting-started/classes/class-gs-helper.php:248
 msgid "Review and polish every page so your message is crystal clear and your audience knows exactly what to do."
 msgstr "Beoordeel en verfijn elke pagina zodat je boodschap glashelder is en je publiek precies weet wat te doen."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:253
+#: inc/lib/getting-started/classes/class-gs-helper.php:258
 msgid "Review Pages"
 msgstr "Pagina's Beoordelen"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:267
+#: inc/lib/getting-started/classes/class-gs-helper.php:272
 msgid "Ensure your site’s emails land in inboxes so you never miss an opportunity to connect or sell."
 msgstr "Zorg ervoor dat de e-mails van je site in inboxen terechtkomen, zodat je nooit een kans mist om te verbinden of te verkopen."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:277
+#: inc/lib/getting-started/classes/class-gs-helper.php:282
 msgid "Connect SMTP provider"
 msgstr "Verbind SMTP-provider"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:295
+#: inc/lib/getting-started/classes/class-gs-helper.php:300
 msgid "Make it effortless for visitors to reach out to you, turning curious browsers into real leads."
 msgstr "Maak het moeiteloos voor bezoekers om contact met je op te nemen, waardoor nieuwsgierige browsers echte leads worden."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:305
+#: inc/lib/getting-started/classes/class-gs-helper.php:310
 msgid "Review contact form"
 msgstr "Controleer contactformulier"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:355
+#: inc/lib/getting-started/classes/class-gs-helper.php:360
 msgid "Launch Your Store"
 msgstr "Lanceer Je Winkel"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:356
+#: inc/lib/getting-started/classes/class-gs-helper.php:361
 msgid "Start selling and generating revenue by setting up an online store seamlessly in minutes."
 msgstr "Begin met verkopen en genereer inkomsten door naadloos binnen enkele minuten een online winkel op te zetten."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:366
+#: inc/lib/getting-started/classes/class-gs-helper.php:371
 msgid "Set up SureCart account"
 msgstr "Stel SureCart-account in"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:374
+#: inc/lib/getting-started/classes/class-gs-helper.php:379
 msgid "Create new product"
 msgstr "Maak nieuw product"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:383
+#: inc/lib/getting-started/classes/class-gs-helper.php:388
 msgid "Design Shop Page"
 msgstr "Ontwerp Winkelpagina"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:392
-#: inc/lib/getting-started/classes/class-gs-helper.php:503
+#: inc/lib/getting-started/classes/class-gs-helper.php:397
+#: inc/lib/getting-started/classes/class-gs-helper.php:508
 msgid "Connect payment gateway"
 msgstr "Verbind betalingsgateway"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:405
+#: inc/lib/getting-started/classes/class-gs-helper.php:410
 msgid "Create Funnel"
 msgstr "Maak Trechter"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:406
+#: inc/lib/getting-started/classes/class-gs-helper.php:411
 msgid "Guide your visitors step-by-step to buy more, boosting sales without extra ad spend."
 msgstr "Leid uw bezoekers stap voor stap om meer te kopen, waardoor de verkoop wordt verhoogd zonder extra advertentiekosten."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:416
+#: inc/lib/getting-started/classes/class-gs-helper.php:421
 msgid "Create product you're selling"
 msgstr "Maak product dat je verkoopt"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:424
+#: inc/lib/getting-started/classes/class-gs-helper.php:429
 msgid "Setup Store Checkout"
 msgstr "Stel Winkel Checkout in"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:432
+#: inc/lib/getting-started/classes/class-gs-helper.php:437
 msgid "Design beautiful Thank-You page"
 msgstr "Ontwerp een mooie Bedankpagina"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:440
+#: inc/lib/getting-started/classes/class-gs-helper.php:445
 msgid "Offer a related product to sell"
 msgstr "Bied een gerelateerd product aan om te verkopen"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:476
+#: inc/lib/getting-started/classes/class-gs-helper.php:481
 msgid "Accept Appointments"
 msgstr "Accepteer Afspraken"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:477
+#: inc/lib/getting-started/classes/class-gs-helper.php:482
 msgid "Streamline your booking process so clients can book and pay you with zero hassle."
 msgstr "Vereenvoudig uw boekingsproces zodat klanten zonder gedoe kunnen boeken en betalen."
 
@@ -5120,63 +5117,63 @@ msgstr "Vereenvoudig uw boekingsproces zodat klanten zonder gedoe kunnen boeken 
 msgid "Learn how"
 msgstr "Leer hoe"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:487
+#: inc/lib/getting-started/classes/class-gs-helper.php:492
 msgid "Add Service"
 msgstr "Voeg Dienst toe"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:495
+#: inc/lib/getting-started/classes/class-gs-helper.php:500
 msgid "Enable notifications"
 msgstr "Schakel meldingen in"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:515
+#: inc/lib/getting-started/classes/class-gs-helper.php:520
 msgid "Add Engaging Videos"
 msgstr "Voeg Boeiende Video's toe"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:516
+#: inc/lib/getting-started/classes/class-gs-helper.php:521
 msgid "Showcase your brand personality with videos that inform, inspire, and engage."
 msgstr "Toon de persoonlijkheid van uw merk met video's die informeren, inspireren en betrekken."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:526
+#: inc/lib/getting-started/classes/class-gs-helper.php:531
 msgid "Upload video to Media Hub"
 msgstr "Upload video naar Media Hub"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:533
+#: inc/lib/getting-started/classes/class-gs-helper.php:538
 msgid "The media hub is a flexible way to add audio or video to your site. It allows you to save media which you can later use in any post or page on your site."
 msgstr "De mediahub is een flexibele manier om audio of video aan uw site toe te voegen. Hiermee kunt u media opslaan die u later in elk bericht of elke pagina op uw site kunt gebruiken."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:546
+#: inc/lib/getting-started/classes/class-gs-helper.php:551
 msgid "Add Presto Player block to pages"
 msgstr "Voeg Presto Player-blok toe aan pagina's"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:597
+#: inc/lib/getting-started/classes/class-gs-helper.php:635
 msgid "Automate Recurring Website Tasks"
 msgstr "Automatiseer Terugkerende Website Taken"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:598
+#: inc/lib/getting-started/classes/class-gs-helper.php:636
 msgid "Save hours each week by automating routine website tasks, so you can focus on growing your business."
 msgstr "Bespaar elke week uren door routinematige websitestaken te automatiseren, zodat u zich kunt concentreren op het laten groeien van uw bedrijf."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:608
+#: inc/lib/getting-started/classes/class-gs-helper.php:646
 msgid "Create OttoKit account"
 msgstr "Maak OttoKit-account aan"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:616
+#: inc/lib/getting-started/classes/class-gs-helper.php:654
 msgid "Add connections"
 msgstr "Voeg verbindingen toe"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:624
+#: inc/lib/getting-started/classes/class-gs-helper.php:662
 msgid "Set up “when this happens, do that” actions"
 msgstr "Stel \"wanneer dit gebeurt, doe dat\" acties in"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:661
+#: inc/lib/getting-started/classes/class-gs-helper.php:699
 msgid "Set Up The Basics"
 msgstr "Stel De Basis In"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:664
+#: inc/lib/getting-started/classes/class-gs-helper.php:702
 msgid "Start Selling Online"
 msgstr "Begin Online Te Verkopen"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:667
+#: inc/lib/getting-started/classes/class-gs-helper.php:705
 msgid "Level Up Your Site"
 msgstr "Verhoog Uw Site"
 
@@ -5376,9 +5373,9 @@ msgstr "Het bijwerken van de stapstatus is mislukt:"
 msgid "Error updating step status:"
 msgstr "Fout bij het bijwerken van de stapstatus:"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:340
-#: inc/lib/getting-started/classes/class-gs-helper.php:465
-#: inc/lib/getting-started/classes/class-gs-helper.php:583
+#: inc/lib/getting-started/classes/class-gs-helper.php:345
+#: inc/lib/getting-started/classes/class-gs-helper.php:470
+#: inc/lib/getting-started/classes/class-gs-helper.php:588
 #: inc/lib/getting-started/build/main.js:1
 msgid "Set Up"
 msgstr "Instellen"
@@ -5443,163 +5440,163 @@ msgstr "Ga verder om de installatie te voltooien"
 msgid "Help Us Improve Your Experience"
 msgstr "Help ons je ervaring te verbeteren"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:96
+#: inc/classes/class-astra-sites-astra-onboarding.php:112
 msgid "Global Color & Typography Controls"
 msgstr "Globale kleur- en typografie-instellingen"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:97
+#: inc/classes/class-astra-sites-astra-onboarding.php:113
 msgid "Set global fonts and colors to save time and keep your website looking polished."
 msgstr "Stel globale lettertypen en kleuren in om tijd te besparen en uw website er verzorgd uit te laten zien."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:100
+#: inc/classes/class-astra-sites-astra-onboarding.php:116
 msgid "Flexible Layout Options"
 msgstr "Flexibele lay-outopties"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:101
+#: inc/classes/class-astra-sites-astra-onboarding.php:117
 msgid "Customize headers, footers, sidebars, blogs, and archive layouts effortlessly."
 msgstr "Pas eenvoudig headers, footers, zijbalken, blogs en archieflay-outs aan."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:104
+#: inc/classes/class-astra-sites-astra-onboarding.php:120
 msgid "Transparent Header"
 msgstr "Transparante header"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:105
+#: inc/classes/class-astra-sites-astra-onboarding.php:121
 msgid "Create a transparent header for a modern look that keeps the focus on your content."
 msgstr "Maak een transparante header voor een moderne uitstraling die de focus op uw inhoud houdt."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:109
+#: inc/classes/class-astra-sites-astra-onboarding.php:125
 msgid "Site Builder"
 msgstr "Sitebouwer"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:110
+#: inc/classes/class-astra-sites-astra-onboarding.php:126
 msgid "Build fully custom websites with more control over design and layout."
 msgstr "Bouw volledig aangepaste websites met meer controle over ontwerp en lay-out."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:115
+#: inc/classes/class-astra-sites-astra-onboarding.php:131
 msgid "Header & Footer Builder"
 msgstr "Header- en footerbouwer"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:116
+#: inc/classes/class-astra-sites-astra-onboarding.php:132
 msgid "Build headers and footers that give your website a polished, professional look."
 msgstr "Bouw headers en footers die uw website een verzorgde, professionele uitstraling geven."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:121
+#: inc/classes/class-astra-sites-astra-onboarding.php:137
 msgid "Modern WooCommerce Stores"
 msgstr "Moderne WooCommerce-winkels"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:122
+#: inc/classes/class-astra-sites-astra-onboarding.php:138
 msgid "Easily create beautiful WooCommerce stores that boost sales and grow your business."
 msgstr "Maak eenvoudig prachtige WooCommerce-winkels die de verkoop stimuleren en uw bedrijf laten groeien."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:173
+#: inc/classes/class-astra-sites-astra-onboarding.php:189
 msgid "Powerful visual website builder made for WordPress. Just click, drag, and create anything, no code, no limits."
 msgstr "Krachtige visuele websitebouwer gemaakt voor WordPress. Klik, sleep en creëer alles, zonder code, zonder grenzen."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:179
+#: inc/classes/class-astra-sites-astra-onboarding.php:195
 msgid "Just a simple, lightweight SEO assistant that helps your site rise in the rankings."
 msgstr "Gewoon een eenvoudige, lichte SEO-assistent die uw site helpt stijgen in de ranglijsten."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:185
+#: inc/classes/class-astra-sites-astra-onboarding.php:201
 msgid "Create forms that feel like a chat. One question at a time keeps users engaged."
 msgstr "Maak formulieren die aanvoelen als een chat. Eén vraag tegelijk houdt gebruikers betrokken."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:191
+#: inc/classes/class-astra-sites-astra-onboarding.php:207
 msgid "Send emails that get delivered. SureMails is a simple, lightweight email delivery service."
 msgstr "Verstuur e-mails die worden afgeleverd. SureMails is een eenvoudige, lichte e-mailbezorgdienst."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:205
+#: inc/classes/class-astra-sites-astra-onboarding.php:221
 msgid "Astra Onboarding"
 msgstr "Astra Onboarding"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:208
+#: inc/classes/class-astra-sites-astra-onboarding.php:224
 msgid "Astra"
 msgstr "Astra"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:214
+#: inc/classes/class-astra-sites-astra-onboarding.php:230
 msgid "Build a fast, beautiful WordPress site, effortlessly."
 msgstr "Bouw moeiteloos een snelle, mooie WordPress-site."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:218
+#: inc/classes/class-astra-sites-astra-onboarding.php:234
 msgid "Getting Started with"
 msgstr "Aan de slag met"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:222
+#: inc/classes/class-astra-sites-astra-onboarding.php:238
 msgid "Trusted by 1.8M+ websites worldwide"
 msgstr "Vertrouwd door meer dan 1,8 miljoen websites wereldwijd"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:223
+#: inc/classes/class-astra-sites-astra-onboarding.php:239
 msgid "Blazing fast and lightweight for better performance"
 msgstr "Razendsnel en lichtgewicht voor betere prestaties"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:224
+#: inc/classes/class-astra-sites-astra-onboarding.php:240
 msgid "Easy customization, no coding or design skills"
 msgstr "Eenvoudige aanpassing, geen codeer- of ontwerpvaardigheden nodig"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:225
+#: inc/classes/class-astra-sites-astra-onboarding.php:241
 msgid "WooCommerce-ready for quick online store setup"
 msgstr "WooCommerce-klaar voor snelle online winkelopzet"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:230
+#: inc/classes/class-astra-sites-astra-onboarding.php:246
 msgid "Get helpful updates, new features, and tips to make your website better, while helping us improve Astra."
 msgstr "Ontvang nuttige updates, nieuwe functies en tips om uw website te verbeteren, terwijl u ons helpt Astra te verbeteren."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:232
+#: inc/classes/class-astra-sites-astra-onboarding.php:248
 msgid "WordPress Themes Directory"
 msgstr "WordPress-thema's directory"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:233
+#: inc/classes/class-astra-sites-astra-onboarding.php:249
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "Google Search"
 msgstr "Google Zoeken"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:236
+#: inc/classes/class-astra-sites-astra-onboarding.php:252
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "A friend or colleague"
 msgstr "Een vriend of collega"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:240
+#: inc/classes/class-astra-sites-astra-onboarding.php:256
 msgid "AI and Templates will help me design quickly"
 msgstr "AI en sjablonen helpen me snel ontwerpen"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:241
+#: inc/classes/class-astra-sites-astra-onboarding.php:257
 msgid "I need a fast-loading theme"
 msgstr "Ik heb een snel ladend thema nodig"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:242
+#: inc/classes/class-astra-sites-astra-onboarding.php:258
 msgid "I need advanced design flexibility without a bloated builder for free"
 msgstr "Ik heb geavanceerde ontwerpflexibiliteit nodig zonder een opgeblazen bouwer, gratis"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:243
+#: inc/classes/class-astra-sites-astra-onboarding.php:259
 msgid "I trust Brainstorm Force for regular updates and support"
 msgstr "Ik vertrouw op Brainstorm Force voor regelmatige updates en ondersteuning"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:244
+#: inc/classes/class-astra-sites-astra-onboarding.php:260
 msgid "Other (please specify)"
 msgstr "Anders (specificeer alstublieft)"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:248
+#: inc/classes/class-astra-sites-astra-onboarding.php:264
 #: inc/lib/nps-survey/dist/main.js:1
 #: inc/lib/one-onboarding/build/main.js:22
 msgid "Privacy Policy"
 msgstr "Privacybeleid"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:257
+#: inc/classes/class-astra-sites-astra-onboarding.php:273
 msgid "Unlock more design control, faster setup, and powerful customization, so you can build a better website, effortlessly."
 msgstr "Ontgrendel meer ontwerpcontrole, snellere installatie en krachtige aanpassing, zodat u moeiteloos een betere website kunt bouwen."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:269
+#: inc/classes/class-astra-sites-astra-onboarding.php:285
 msgid "Customize Your Website"
 msgstr "Pas uw website aan"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:271
+#: inc/classes/class-astra-sites-astra-onboarding.php:287
 msgid "View Documentation"
 msgstr "Bekijk documentatie"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:275
+#: inc/classes/class-astra-sites-astra-onboarding.php:291
 msgid "Customize Your Site"
 msgstr "Pas uw site aan"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:283
+#: inc/classes/class-astra-sites-astra-onboarding.php:299
 msgid "Docs & Help Center"
 msgstr "Documentatie & Helpcentrum"
 
@@ -5624,7 +5621,7 @@ msgid "Image downloaded successfully!"
 msgstr "Afbeelding succesvol gedownload!"
 
 #. translators: %s is the error message
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:799
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:798
 #, php-format
 msgid "Failed %s"
 msgstr "Mislukt %s"
@@ -5929,6 +5926,7 @@ msgstr "Kon %s niet instellen."
 msgid "Failed to setup addons"
 msgstr "Kon addons niet instellen"
 
+#: inc/lib/getting-started/build/main.js:1
 #: inc/lib/one-onboarding/build/main.js:40
 msgid "Setting up…"
 msgstr "Bezig met instellen…"
@@ -6575,39 +6573,39 @@ msgstr "Probeer het opnieuw. Als het probleem aanhoudt, probeer dan een andere s
 msgid "Your Website is Almost Ready!"
 msgstr "Uw website is bijna klaar!"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:266
+#: inc/lib/getting-started/classes/class-gs-helper.php:271
 msgid "Setup Emails"
 msgstr "E-mails instellen"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:318
+#: inc/lib/getting-started/classes/class-gs-helper.php:323
 msgid "Optimize Your Site"
 msgstr "Optimaliseer uw site"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:319
+#: inc/lib/getting-started/classes/class-gs-helper.php:324
 msgid "Make your pages accessible and optimized for users, AI bots and search engines"
 msgstr "Maak uw pagina's toegankelijk en geoptimaliseerd voor gebruikers, AI-bots en zoekmachines"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:329
+#: inc/lib/getting-started/classes/class-gs-helper.php:334
 msgid "Review Site Optimization"
 msgstr "Site-optimalisatie beoordelen"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:338
+#: inc/lib/getting-started/classes/class-gs-helper.php:343
 msgid "Connect Search Console"
 msgstr "Zoekconsole verbinden"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:452
+#: inc/lib/getting-started/classes/class-gs-helper.php:457
 msgid "Customize Your Cart Style"
 msgstr "Pas uw winkelwagenstijl aan"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:453
+#: inc/lib/getting-started/classes/class-gs-helper.php:458
 msgid "Add a sleek, slide-out cart to match your brand style that enhances your WooCommerce store’s shopping experience and boosts conversions"
 msgstr "Voeg een slanke, uitschuifbare winkelwagen toe die past bij uw merkstijl en de winkelervaring van uw WooCommerce-winkel verbetert en conversies verhoogt"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:463
+#: inc/lib/getting-started/classes/class-gs-helper.php:468
 msgid "Set and Enable Modern Cart"
 msgstr "Moderne winkelwagen instellen en inschakelen"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:501
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:506
 msgid "Empty SureForms URL"
 msgstr "Lege SureForms URL"
 
@@ -6983,11 +6981,11 @@ msgstr "Waarschuwing: Kon Astra Builder Widget Controller niet initialiseren. Fo
 msgid "Warning: Fatal error encountered while initializing Astra Builder Widget Controller. Error: %s"
 msgstr "Waarschuwing: Fatale fout opgetreden bij het initialiseren van Astra Builder Widget Controller. Fout: %s"
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:842
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:841
 msgid "We couldn't verify an active plan for your account. Please check your ZipWP subscription."
 msgstr "We konden geen actief plan voor uw account verifiëren. Controleer uw ZipWP-abonnement."
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1721
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1727
 msgid "Highlight"
 msgstr "Markeren"
 
@@ -7107,11 +7105,11 @@ msgstr "tekens (minimum)"
 msgid "Error: Missing or invalid plugin initialization parameter."
 msgstr "Fout: Ontbrekende of ongeldige plugin initialisatieparameter."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:664
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:791
 msgid "Log Files"
 msgstr "Logbestanden"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:678
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:805
 msgid "Backup Files"
 msgstr "Back-upbestanden"
 
@@ -7177,169 +7175,9 @@ msgstr "Pixabay API-sleutel is niet geconfigureerd. Stel deze in via de astra_si
 msgid "Missing required authentication data."
 msgstr "Ontbrekende vereiste authenticatiegegevens."
 
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Sell Products"
-msgstr "Producten Verkopen"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For online stores or product catalogs. Helps us set up the right shop layout and e-commerce tools."
-msgstr "Voor online winkels of productcatalogi. Helpt ons de juiste winkelindeling en e-commerce tools in te stellen."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Collect Donations"
-msgstr "Donaties Verzamelen"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For fundraising or charity pages. Guides us to generate persuasive copy and enable donation features."
-msgstr "Voor fondsenwerving of liefdadigheidspagina's. Begeleidt ons om overtuigende teksten te genereren en donatiefuncties in te schakelen."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Offer Services"
-msgstr "Diensten Aanbieden"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For service-based businesses. Helps create service pages and booking functionality."
-msgstr "Voor servicegerichte bedrijven. Helpt bij het maken van servicepagina's en boekingsfunctionaliteit."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Generate Leads"
-msgstr "Leads Genereren"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For businesses that want inquiries or form submissions. Optimizes copy and lead-capture tools."
-msgstr "Voor bedrijven die vragen of formulierinzendingen willen. Optimaliseert teksten en lead-capture tools."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Promote Events"
-msgstr "Evenementen Promoten"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For workshops, launches, or meetups. Helps us create event pages and promotional messaging."
-msgstr "Voor workshops, lanceringen of bijeenkomsten. Helpt ons evenementpagina's en promotionele berichten te maken."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Publish Blogs"
-msgstr "Blogs Publiceren"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For educational or content-driven sites. Shapes long-form copy and blog structure."
-msgstr "Voor educatieve of inhoudgestuurde sites. Vormt lange teksten en blogstructuur."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Build Brand Trust"
-msgstr "Merkvertrouwen Opbouwen"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For awareness-focused sites that highlight credibility. Improves tone, testimonials, and trust-driven copy."
-msgstr "Voor bewustzijnsgerichte sites die geloofwaardigheid benadrukken. Verbetert toon, getuigenissen en vertrouwenwekkende teksten."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Others"
-msgstr "Overige"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Balanced"
-msgstr "Gebalanceerd"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Default: Balanced tone suitable for most websites. A mix of clarity, engagement, and structure."
-msgstr "Standaard: Gebalanceerde toon geschikt voor de meeste websites. Een mix van duidelijkheid, betrokkenheid en structuur."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Clear, formal, and business-appropriate. Ideal for corporate and service brands."
-msgstr "Duidelijk, formeel en zakelijk geschikt. Ideaal voor corporate en service merken."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Warm and approachable language. Works well for lifestyle and local services."
-msgstr "Warme en toegankelijke taal. Werkt goed voor lifestyle en lokale diensten."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Fact-driven and structured copy. Best for product education and detailed pages."
-msgstr "Feitgedreven en gestructureerde teksten. Beste voor producteducatie en gedetailleerde pagina's."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Engaging"
-msgstr "Boeiend"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Attention-holding and expressive writing. Good for brands that want stronger interaction."
-msgstr "Aandacht vasthoudend en expressief schrijven. Goed voor merken die sterkere interactie willen."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Conversational"
-msgstr "Conversatie"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Natural, casual phrasing like real speech. Makes copy feel more human."
-msgstr "Natuurlijke, informele zinsbouw zoals echte spraak. Maakt teksten menselijker."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Persuasive"
-msgstr "Overtuigend"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Influence-driven writing that motivates action. Strong for decisions and signups."
-msgstr "Invloedgedreven schrijven dat actie motiveert. Sterk voor beslissingen en aanmeldingen."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Sales-focused"
-msgstr "Verkoopgericht"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Benefit-heavy, conversion-oriented copy. Designed to support revenue pages."
-msgstr "Voordelenrijke, conversiegerichte tekst. Ontworpen om omzetpagina's te ondersteunen."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Light-hearted copy with playful elements. Best for casual brands and social campaigns."
-msgstr "Luchtige tekst met speelse elementen. Het beste voor informele merken en sociale campagnes."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Advanced"
-msgstr "Geavanceerd"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Add Some Keywords"
-msgstr "Voeg Enkele Trefwoorden Toe"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Add keywords"
-msgstr "Voeg trefwoorden toe"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Separate with commas or the Enter key. Enter between 5 and 10 keywords"
-msgstr "Scheid met komma's of de Enter-toets. Voer tussen de 5 en 10 trefwoorden in"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Choose Your Tone"
-msgstr "Kies Uw Toon"
-
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
 msgid "Default"
 msgstr "Standaard"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "What are the goals of this site?"
-msgstr "Wat zijn de doelen van deze site?"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "Select all that apply. This helps personalize content for your site."
-msgstr "Selecteer alles wat van toepassing is. Dit helpt om inhoud voor uw site te personaliseren."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "Any additional goals"
-msgstr "Eventuele aanvullende doelen"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "Tell us more (Optional)"
-msgstr "Vertel ons meer (Optioneel)"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "Goals"
-msgstr "Doelen"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "What do you want to achieve"
-msgstr "Wat wilt u bereiken"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
 msgid "Select 15 to 18 images for best results."
@@ -7355,7 +7193,7 @@ msgstr "Kleuren Schudden"
 msgid "Learn more."
 msgstr "Meer informatie."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:251
+#: inc/classes/class-astra-sites-astra-onboarding.php:267
 msgid "Get helpful updates, new features, and tips to make your website better, while helping us improve Astra by sharing how you use it."
 msgstr "Ontvang nuttige updates, nieuwe functies en tips om je website te verbeteren, terwijl je ons helpt Astra te verbeteren door te delen hoe je het gebruikt."
 
@@ -7553,15 +7391,15 @@ msgstr "MySQL-versie te oud"
 msgid "Your MySQL version is below 5.7. Some templates require MySQL 5.7 or higher for full utf8mb4 collation support. Please upgrade your database server."
 msgstr "Uw MySQL-versie is lager dan 5.7. Sommige sjablonen vereisen MySQL 5.7 of hoger voor volledige utf8mb4-collatieondersteuning. Upgrade uw databaseserver."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:570
+#: inc/lib/getting-started/classes/class-gs-helper.php:575
 msgid "Manage Your Contacts"
 msgstr "Beheer uw contacten"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:571
+#: inc/lib/getting-started/classes/class-gs-helper.php:576
 msgid "Keep all your customer relationships in one place so you can follow up faster, automate smarter, and never lose track of a lead"
 msgstr "Houd al uw klantrelaties op één plek zodat u sneller kunt opvolgen, slimmer kunt automatiseren en nooit een lead uit het oog verliest"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:581
+#: inc/lib/getting-started/classes/class-gs-helper.php:586
 msgid "Connect SureContact account"
 msgstr "Verbind SureContact-account"
 
@@ -7606,7 +7444,7 @@ msgstr "CRM & Contacten"
 msgid "Keep all your customer relationships in one place"
 msgstr "Houd al uw klantrelaties op één plek"
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:827
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:826
 msgid "Your ZipWP team was not found. Please reconnect your account to continue."
 msgstr "Uw ZipWP-team is niet gevonden. Verbind uw account opnieuw om door te gaan."
 
@@ -7634,7 +7472,7 @@ msgstr "Customizer-afbeeldingen vervangen."
 msgid "Image replacement cleanup complete."
 msgstr "Opruimen van afbeeldingsvervanging voltooid."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2134
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2129
 msgid "Site not found."
 msgstr "Site niet gevonden."
 
@@ -7644,19 +7482,19 @@ msgstr "Site niet gevonden."
 msgid "Sorry, you are not allowed to perform this action."
 msgstr "Sorry, je bent niet gemachtigd om deze actie uit te voeren."
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1051
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1057
 msgid "Plugin slug is missing."
 msgstr "Plugin-slug ontbreekt."
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1071
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1077
 msgid "This plugin is not allowed to be activated."
 msgstr "Deze plugin mag niet worden geactiveerd."
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1880
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1886
 msgid "Spectra Legacy"
 msgstr "Spectra Legacy"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1881
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1887
 #: inc/lib/gutenberg-templates/dist/640.js:1
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Spectra Blocks"
@@ -8118,13 +7956,13 @@ msgid "Invalid Template ID - %s"
 msgstr "Ongeldige sjabloon-ID - %s"
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2553
+#: inc/classes/class-astra-sites.php:2578
 #, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">View pricing</a> to get access."
 msgstr "Dit is een premium sjabloon beschikbaar met Essential en Business Toolkits. <a href=\"%s\" target=\"_blank\">Bekijk de prijzen</a> om toegang te krijgen."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2557
+#: inc/classes/class-astra-sites.php:2582
 #, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">Validate your license key</a> to import this template."
 msgstr "Dit is een premium sjabloon beschikbaar met Essential en Business Toolkits. <a href=\"%s\" target=\"_blank\">Valideer uw licentiesleutel</a> om deze sjabloon te importeren."
@@ -8149,14 +7987,62 @@ msgstr "Importeren al aan de gang…"
 msgid "Migrating"
 msgstr "Migreren"
 
+#: inc/lib/getting-started/classes/class-gs-helper.php:604
+msgid "See How Visitors Use Your Site"
+msgstr "Zie hoe bezoekers uw site gebruiken"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:605
+msgid "Turn on heatmaps and session recordings to see where people click, how far they scroll, and where they drop off."
+msgstr "Schakel heatmaps en sessie-opnames in om te zien waar mensen klikken, hoe ver ze scrollen en waar ze afhaken."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:611
+msgid "Start tracking visitors"
+msgstr "Begin met het volgen van bezoekers"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "This step is misconfigured and cannot be run from here."
+msgstr "Deze stap is verkeerd geconfigureerd en kan hier niet worden uitgevoerd."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Setup unavailable"
+msgstr "Installatie niet beschikbaar"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "One more step"
+msgstr "Nog één stap"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Something went wrong. Please try again."
+msgstr "Er is iets misgegaan. Probeer het opnieuw."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Setup failed"
+msgstr "Installatie mislukt"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "This step is now complete."
+msgstr "Deze stap is nu voltooid."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "All set"
+msgstr "Alles klaar"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "Conversion Testing"
+msgstr "Conversietesten"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "Run A/B tests and see what converts best"
+msgstr "Voer A/B-tests uit en zie wat het beste converteert"
+
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:463
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:590
 #, php-format
 msgctxt "Recommended Memory Limit"
 msgid "Current memory limit %1$s. We recommend setting memory to at least %2$s."
 msgstr "Huidige geheugenlimiet %1$s. We raden aan om het geheugen in te stellen op ten minste %2$s."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:544
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:671
 msgctxt "PHP Version"
 msgid "We recommend to use php 5.4 or higher"
 msgstr "We raden aan om php 5.4 of hoger te gebruiken"

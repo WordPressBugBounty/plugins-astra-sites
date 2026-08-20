@@ -16,7 +16,7 @@ msgstr ""
 #: astra-sites.php:133
 #: inc/classes/class-astra-sites-nps-notice.php:121
 #: inc/classes/class-astra-sites-utils.php:87
-#: inc/classes/class-astra-sites.php:3072
+#: inc/classes/class-astra-sites.php:3097
 #: inc/lib/onboarding/class-onboarding-loader.php:111
 #: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:123
@@ -64,38 +64,38 @@ msgid "There was an error on your website."
 msgstr "Teie veebisaidil oli viga."
 
 #. translators: %1$s refers to the plugin name
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:149
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:202
 #, php-format
 msgid "Required File Permissions to import the templates from %s are missing."
 msgstr "Nõutavad failiload %s mallide importimiseks puuduvad."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:156
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:209
 msgid "This is usually due to inconsistent file permissions."
 msgstr "See on tavaliselt tingitud ebajärjekindlatest faililubadest."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:159
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:212
 msgid "You can easily update permissions by adding the following code into the wp-config.php file."
 msgstr "Saate õigusi hõlpsasti uuendada, lisades järgmise koodi wp-config.php faili."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:443
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:570
 msgid "Enabled"
 msgstr "Lubatud"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:446
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:573
 msgid "Disabled"
 msgstr "Keelatud"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:530
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:587
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:657
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:714
 msgid "Yes"
 msgstr "Jah"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:533
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:590
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:660
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:717
 msgid "No"
 msgstr "Ei"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:605
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:732
 msgid "You currently have no scheduled cron events."
 msgstr "Teil ei ole praegu ühtegi ajastatud cron sündmust."
 
@@ -116,13 +116,13 @@ msgstr "Teil ei ole praegu ühtegi ajastatud cron sündmust."
 #: inc/lib/ai-builder/inc/ajax/plugin.php:372
 #: inc/lib/ai-builder/inc/ajax/plugin.php:377
 #: inc/lib/ai-builder/inc/traits/helper.php:965
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:247
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:314
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:358
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:382
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:482
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:576
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1111
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:252
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:319
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:363
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:387
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:487
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:581
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1117
 #: inc/lib/gutenberg-templates/inc/importer/sync-library.php:361
 #: inc/lib/gutenberg-templates/inc/importer/sync-library.php:488
 #: inc/lib/gutenberg-templates/inc/importer/sync-library.php:513
@@ -512,7 +512,8 @@ msgstr "Kehtetu päringu URL - %s"
 msgid "Need to send URL of the image to be downloaded"
 msgstr "Vaja on saata allalaaditava pildi URL"
 
-#: inc/lib/zipwp-images/classes/zipwp-images-api.php:292
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:294
+#: inc/lib/zipwp-images/classes/zipwp-images-api.php:302
 msgid "Could not download the image."
 msgstr "Pilti ei saanud alla laadida."
 
@@ -521,7 +522,7 @@ msgid "Get Started"
 msgstr "Alusta"
 
 #: inc/classes/class-astra-sites.php:1988
-#: inc/classes/class-astra-sites.php:2607
+#: inc/classes/class-astra-sites.php:2632
 #: inc/includes/templates.php:321
 msgid "Get Access!"
 msgstr "Hangi juurdepääs!"
@@ -732,60 +733,60 @@ msgstr "Ebapiisav mälupiirang"
 msgid "The memory limit of your site is below the recommended 256MB. While you can proceed, increasing the memory limit is advised for a seamless import experience."
 msgstr "Teie saidi mälupiirang on alla soovitatud 256 MB. Kuigi saate jätkata, on sujuva importimise kogemuse tagamiseks soovitatav mälupiirangut suurendada."
 
-#: inc/classes/class-astra-sites.php:2611
+#: inc/classes/class-astra-sites.php:2636
 msgid "Template"
 msgstr "Mall"
 
-#: inc/classes/class-astra-sites.php:2612
+#: inc/classes/class-astra-sites.php:2637
 msgid "Block"
 msgstr "Blokeeri"
 
-#: inc/classes/class-astra-sites.php:2613
+#: inc/classes/class-astra-sites.php:2638
 #: inc/includes/templates.php:78
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:14
 msgid "Dismiss"
 msgstr "Loobu"
 
-#: inc/classes/class-astra-sites.php:2614
+#: inc/classes/class-astra-sites.php:2639
 msgid "Install Required Plugins"
 msgstr "Installige vajalikud pistikprogrammid"
 
-#: inc/classes/class-astra-sites.php:2618
+#: inc/classes/class-astra-sites.php:2643
 msgid "You can locate <strong>Starter Templates Settings</strong> under the <strong>Page Settings</strong> of the Style Tab."
 msgstr "Leiad <strong>Starter Templates Settings</strong> <strong>Page Settings</strong> all Style Tabi alt."
 
-#: inc/classes/class-astra-sites.php:2620
+#: inc/classes/class-astra-sites.php:2645
 msgid "Read More →"
 msgstr "Loe edasi →"
 
-#: inc/classes/class-astra-sites.php:2994
+#: inc/classes/class-astra-sites.php:3019
 msgid "Template library refreshed!"
 msgstr "Mallide kogu värskendatud!"
 
-#: inc/classes/class-astra-sites.php:3074
+#: inc/classes/class-astra-sites.php:3099
 msgid "Build Your Dream Site in Minutes With AI"
 msgstr "Looge oma unistuste sait minutitega tehisintellekti abil"
 
-#: inc/classes/class-astra-sites.php:3075
+#: inc/classes/class-astra-sites.php:3100
 msgid "Say goodbye to the days of spending weeks designing and building your website.<br/> You can now create professional-grade websites in minutes."
 msgstr "Ütle hüvasti nädalatepikkusele veebisaidi kujundamisele ja ehitamisele.<br/> Nüüd saate luua professionaalse tasemega veebisaite minutitega."
 
-#: inc/classes/class-astra-sites.php:3077
+#: inc/classes/class-astra-sites.php:3102
 #: inc/lib/one-onboarding/build/main.js:16
 msgid "Let’s Get Started"
 msgstr "Alustame"
 
-#: inc/classes/class-astra-sites.php:3078
+#: inc/classes/class-astra-sites.php:3103
 msgid "I want to build this website from scratch"
 msgstr "Ma tahan seda veebisaiti nullist üles ehitada"
 
-#: inc/classes/class-astra-sites.php:3113
+#: inc/classes/class-astra-sites.php:3138
 msgid "Required WP_Filesystem Permissions to import the templates from Starter Templates are missing."
 msgstr "Starter Templates'i mallide importimiseks on vajalikud WP_Filesystemi õigused puudu."
 
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1060
 #: inc/importers/batch-processing/class-astra-sites-batch-processing.php:1078
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1043
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1049
 msgid "You are not allowed to perform this action."
 msgstr "Teil ei ole lubatud seda toimingut teha."
 
@@ -1091,25 +1092,25 @@ msgstr "Kahjuks ei ole sul lubatud seda teha."
 
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:703
 #: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:745
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:872
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:965
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1073
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1177
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1271
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1352
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1423
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1499
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1579
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1678
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1774
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1850
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1915
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1980
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2051
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2122
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2189
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2216
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2308
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:871
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:964
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1072
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1176
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1268
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1347
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1418
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1494
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1574
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1673
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1769
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1845
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1910
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1975
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2046
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2117
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2184
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2211
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2303
 #: inc/lib/getting-started/classes/class-gs-api.php:158
 #: inc/lib/getting-started/classes/class-gs-api.php:377
 #: inc/lib/gutenberg-templates/inc/api/blocks.php:93
@@ -1132,13 +1133,13 @@ msgstr "Kahjuks ei ole sul lubatud seda teha."
 msgid "Nonce verification failed."
 msgstr "Nonce'i kontrollimine ebaõnnestus."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1025
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1024
 #: inc/lib/starter-templates-importer/importer/st-importer.php:614
 msgid "There was an error downloading the XML file."
 msgstr "XML-faili allalaadimisel tekkis viga."
 
 #: inc/lib/ai-builder/inc/ajax/importer.php:572
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1037
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:1036
 #: inc/lib/ai-builder/inc/traits/helper.php:669
 #: inc/lib/ai-builder/inc/traits/helper.php:703
 #: inc/lib/ai-builder/inc/traits/helper.php:741
@@ -1212,20 +1213,20 @@ msgstr "Dok:"
 msgid "Resolve file permission issue"
 msgstr "Lahenda failiõiguste probleem"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:279
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:290
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:466
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:284
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:295
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:471
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:296
 #: inc/lib/ai-builder/inc/assets/build/main.js:184
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:6
 msgid "Something went wrong"
 msgstr "Midagi läks valesti"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1123
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1129
 msgid "Something wrong"
 msgstr "Midagi on valesti"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1356
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1362
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Design Library"
 msgstr "Disainiraamatukogu"
@@ -1784,14 +1785,14 @@ msgstr "Kui eelistate jätkata, klõpsake 'Tühista'."
 msgid "Exit"
 msgstr "Välju"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1613
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1709
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1619
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1715
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
 msgid "Light"
 msgstr "Valgus"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1619
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1715
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1625
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1721
 #: inc/lib/ai-builder/inc/assets/build/main.js:2
 msgid "Dark"
 msgstr "Tume"
@@ -2233,7 +2234,7 @@ msgstr "Instagram"
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:235
+#: inc/classes/class-astra-sites-astra-onboarding.php:251
 #: inc/lib/ai-builder/inc/assets/build/main.js:192
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "YouTube"
@@ -2247,7 +2248,7 @@ msgstr "Google Minu Ettevõte"
 msgid "Yelp"
 msgstr "Yelp"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:234
+#: inc/classes/class-astra-sites-astra-onboarding.php:250
 #: inc/lib/ai-builder/inc/assets/build/main.js:192
 #: inc/lib/gutenberg-templates/dist/main.js:2
 #: inc/lib/one-onboarding/build/main.js:1
@@ -2666,7 +2667,6 @@ msgstr "Valige pildid"
 msgid "Add more relevant keywords…"
 msgstr "Lisa rohkem asjakohaseid märksõnu…"
 
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Suggested Keywords"
@@ -3086,8 +3086,8 @@ msgstr "Sa tegid seda! Sinu uus veebisait on valmis veebis särama."
 msgid "See Your Website"
 msgstr "Vaata oma veebisaiti"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:270
-#: inc/classes/class-astra-sites-astra-onboarding.php:279
+#: inc/classes/class-astra-sites-astra-onboarding.php:286
+#: inc/classes/class-astra-sites-astra-onboarding.php:295
 #: inc/lib/ai-builder/inc/assets/build/main.js:245
 msgid "Visit Dashboard"
 msgstr "Külastage armatuurlauda"
@@ -3399,6 +3399,7 @@ msgstr "Me ei leidnud teie märksõnaga midagi."
 msgid "No images are selected yet."
 msgstr "Pilte pole veel valitud."
 
+#: inc/lib/getting-started/build/main.js:1
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Connect"
 msgstr "Ühenda"
@@ -3600,7 +3601,7 @@ msgstr "Installige ja aktiveerige Astra teema"
 msgid "To import the site in the original format, you would need the Astra theme activated. You can import it with any other theme, but the site might lose some of the design settings and look a bit different."
 msgstr "Selleks, et saiti algses formaadis importida, peab Astra teema olema aktiveeritud. Sa võid selle importida ka mõne teise teemaga, kuid sait võib kaotada osa kujundusseadistustest ja näha välja veidi teistsugune."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:283
+#: inc/lib/getting-started/classes/class-gs-helper.php:288
 #: inc/lib/getting-started/build/main.js:1
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:126
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:143
@@ -3909,7 +3910,7 @@ msgstr "Lehekülje koostaja"
 msgid "Design pages with visual website builder"
 msgstr "Kujunda lehti visuaalse veebisaidi ehitajaga"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:294
+#: inc/lib/getting-started/classes/class-gs-helper.php:299
 #: inc/lib/onboarding/assets/dist/onboarding/main.js:171
 msgid "Contact Form"
 msgstr "Kontaktivorm"
@@ -4124,7 +4125,6 @@ msgid "Vietnamese"
 msgstr "Vietnami"
 
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:797
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Friendly"
 msgstr "Sõbralik"
@@ -4140,13 +4140,11 @@ msgid "Casual"
 msgstr "Vaba"
 
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:799
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Professional"
 msgstr "Professionaalne"
 
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:798
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Informative"
 msgstr "Informatiivne"
@@ -4162,7 +4160,6 @@ msgid "Serious"
 msgstr "Tõsine"
 
 #: inc/lib/zip-ai/classes/sidebar-configurations.php:802
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
 #: inc/lib/zip-ai/sidebar/build/sidebar-app.js:1
 msgid "Humorous"
 msgstr "Humoorikas"
@@ -4590,7 +4587,7 @@ msgid "Quick Feedback"
 msgstr "Kiire tagasiside"
 
 #: admin/bsf-analytics/modules/deactivation-survey/classes/class-deactivation-survey-feedback.php:307
-#: inc/classes/class-astra-sites-astra-onboarding.php:237
+#: inc/classes/class-astra-sites-astra-onboarding.php:253
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "Other"
 msgstr "Muu"
@@ -4883,7 +4880,7 @@ msgstr "Seadistusviisardi sulgemine ja eemaldamine ebaõnnestus."
 msgid "Successfully dismissed and removed the Setup wizard."
 msgstr "Seadistusviisard edukalt suletud ja eemaldatud."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:553
+#: inc/lib/getting-started/classes/class-gs-helper.php:558
 msgid "Embed videos with modern features like chapters, overlays, and custom branding and keep people watching and make your content unforgettable."
 msgstr "Sisesta videoid kaasaegsete funktsioonidega nagu peatükid, ülekatteid ja kohandatud brändingut, et hoida inimesi vaatamas ja muuta oma sisu unustamatuks."
 
@@ -4951,168 +4948,168 @@ msgstr "Sammu olek uuendatud."
 msgid "Action items failed to update!"
 msgstr "Tegevuse üksuste uuendamine ebaõnnestus!"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:56
+#: inc/lib/getting-started/classes/class-gs-helper.php:61
 msgid "WordPress Basics"
 msgstr "WordPressi põhialused"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:57
+#: inc/lib/getting-started/classes/class-gs-helper.php:62
 msgid "Get your site’s foundation rock-solid so it looks professional and runs smoothly from day one."
 msgstr "Tehke oma saidi vundament kindlaks, et see näeks välja professionaalne ja töötaks sujuvalt alates esimesest päevast."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:63
+#: inc/lib/getting-started/classes/class-gs-helper.php:68
 msgid "Set Site Title & Tagline"
 msgstr "Määrake saidi pealkiri ja silt"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:70
+#: inc/lib/getting-started/classes/class-gs-helper.php:75
 msgid "Your site title and tagline show up in browser tabs and search results. Make a strong first impression by customizing them to match your brand. A 10-second tweak that boosts professionalism and SEO."
 msgstr "Teie saidi pealkiri ja silt kuvatakse brauseri vahekaartidel ja otsingutulemustes. Jätke tugev esmamulje, kohandades neid oma brändiga sobivaks. 10-sekundiline muudatus, mis suurendab professionaalsust ja SEO-d."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:83
+#: inc/lib/getting-started/classes/class-gs-helper.php:88
 msgid "Review Admin Email"
 msgstr "Vaadake üle administraatori e-post"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:85
-#: inc/lib/getting-started/classes/class-gs-helper.php:135
-#: inc/lib/getting-started/classes/class-gs-helper.php:255
-#: inc/lib/getting-started/classes/class-gs-helper.php:307
-#: inc/lib/getting-started/classes/class-gs-helper.php:331
+#: inc/lib/getting-started/classes/class-gs-helper.php:90
+#: inc/lib/getting-started/classes/class-gs-helper.php:140
+#: inc/lib/getting-started/classes/class-gs-helper.php:260
+#: inc/lib/getting-started/classes/class-gs-helper.php:312
+#: inc/lib/getting-started/classes/class-gs-helper.php:336
 msgid "Review"
 msgstr "Ülevaade"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:91
+#: inc/lib/getting-started/classes/class-gs-helper.php:96
 msgid "Your admin email is where you’ll receive important site alerts like user messages, order updates, and security notifications. Make sure it’s correct so you don’t miss anything critical."
 msgstr "Teie administraatori e-post on koht, kuhu saate olulisi saidi teateid, nagu kasutajasõnumid, tellimuste uuendused ja turvateated. Veenduge, et see oleks õige, et te ei jääks millestki olulisest ilma."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:104
+#: inc/lib/getting-started/classes/class-gs-helper.php:109
 msgid "Choose how your page links look"
 msgstr "Valige, kuidas teie lehe lingid välja näevad"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:111
+#: inc/lib/getting-started/classes/class-gs-helper.php:116
 msgid "Set up clean, readable URLs for your website that look better, help with SEO, and are easier to share. Setting your permalinks takes just a few click and makes your site feel pro from day one."
 msgstr "Seadistage oma veebisaidile puhtad, loetavad URL-id, mis näevad paremad välja, aitavad SEO-le kaasa ja on lihtsam jagada. Permalinkide seadistamine võtab vaid mõned klõpsud ja muudab teie saidi esimesest päevast alates professionaalseks."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:117
+#: inc/lib/getting-started/classes/class-gs-helper.php:122
 msgid "Bad example: yourwebsite.com/page_id=123"
 msgstr "Halb näide: yourwebsite.com/page_id=123"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:118
+#: inc/lib/getting-started/classes/class-gs-helper.php:123
 msgid "Good example: yourwebsite.com/about-us"
 msgstr "Hea näide: yourwebsite.com/about-us"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:133
+#: inc/lib/getting-started/classes/class-gs-helper.php:138
 msgid "Search Engine Visibility"
 msgstr "Otsingumootori nähtavus"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:141
+#: inc/lib/getting-started/classes/class-gs-helper.php:146
 msgid "If this setting is left unchecked, search engines can’t find your site even if it’s ready. Make sure your site is visible to Google and others so you can start showing up in search results."
 msgstr "Kui see seade jääb märkimata, ei leia otsingumootorid teie saiti isegi siis, kui see on valmis. Veenduge, et teie sait oleks Google'ile ja teistele nähtav, et saaksite hakata otsingutulemustes ilmuma."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:163
+#: inc/lib/getting-started/classes/class-gs-helper.php:168
 msgid "Design, Style & Theme"
 msgstr "Disain, stiil ja teema"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:164
+#: inc/lib/getting-started/classes/class-gs-helper.php:169
 msgid "Create a memorable brand experience that looks professional and instantly recognizable."
 msgstr "Looge meeldejääv brändikogemus, mis näeb välja professionaalne ja koheselt äratuntav."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:174
+#: inc/lib/getting-started/classes/class-gs-helper.php:179
 msgid "Customize Style Guide"
 msgstr "Kohandage stiilijuhendit"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:190
+#: inc/lib/getting-started/classes/class-gs-helper.php:195
 msgid "Add Logo and Site Icon"
 msgstr "Lisage logo ja saidi ikoon"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:206
+#: inc/lib/getting-started/classes/class-gs-helper.php:211
 msgid "Customize Header"
 msgstr "Kohandage päist"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:222
+#: inc/lib/getting-started/classes/class-gs-helper.php:227
 msgid "Customize Footer"
 msgstr "Kohandage jalust"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:242
+#: inc/lib/getting-started/classes/class-gs-helper.php:247
 msgid "Website Pages"
 msgstr "Veebisaidi lehed"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:243
+#: inc/lib/getting-started/classes/class-gs-helper.php:248
 msgid "Review and polish every page so your message is crystal clear and your audience knows exactly what to do."
 msgstr "Vaadake üle ja lihvige iga lehte, et teie sõnum oleks kristallselge ja teie publik teaks täpselt, mida teha."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:253
+#: inc/lib/getting-started/classes/class-gs-helper.php:258
 msgid "Review Pages"
 msgstr "Vaadake lehed üle"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:267
+#: inc/lib/getting-started/classes/class-gs-helper.php:272
 msgid "Ensure your site’s emails land in inboxes so you never miss an opportunity to connect or sell."
 msgstr "Veenduge, et teie saidi e-kirjad jõuaksid postkastidesse, et te ei jääks ilma võimalusest ühendust võtta või müüa."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:277
+#: inc/lib/getting-started/classes/class-gs-helper.php:282
 msgid "Connect SMTP provider"
 msgstr "Ühendage SMTP pakkuja"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:295
+#: inc/lib/getting-started/classes/class-gs-helper.php:300
 msgid "Make it effortless for visitors to reach out to you, turning curious browsers into real leads."
 msgstr "Tehke külastajatele lihtsaks teiega ühenduse võtmine, muutes uudishimulikud sirvijad tõelisteks juhtideks."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:305
+#: inc/lib/getting-started/classes/class-gs-helper.php:310
 msgid "Review contact form"
 msgstr "Vaadake üle kontaktvorm"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:355
+#: inc/lib/getting-started/classes/class-gs-helper.php:360
 msgid "Launch Your Store"
 msgstr "Käivitage oma pood"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:356
+#: inc/lib/getting-started/classes/class-gs-helper.php:361
 msgid "Start selling and generating revenue by setting up an online store seamlessly in minutes."
 msgstr "Alustage müüki ja tulu teenimist, seadistades veebipoe sujuvalt mõne minutiga."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:366
+#: inc/lib/getting-started/classes/class-gs-helper.php:371
 msgid "Set up SureCart account"
 msgstr "Seadista SureCart konto"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:374
+#: inc/lib/getting-started/classes/class-gs-helper.php:379
 msgid "Create new product"
 msgstr "Loo uus toode"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:383
+#: inc/lib/getting-started/classes/class-gs-helper.php:388
 msgid "Design Shop Page"
 msgstr "Kujunda poe leht"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:392
-#: inc/lib/getting-started/classes/class-gs-helper.php:503
+#: inc/lib/getting-started/classes/class-gs-helper.php:397
+#: inc/lib/getting-started/classes/class-gs-helper.php:508
 msgid "Connect payment gateway"
 msgstr "Ühenda makselüüs"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:405
+#: inc/lib/getting-started/classes/class-gs-helper.php:410
 msgid "Create Funnel"
 msgstr "Loo lehter"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:406
+#: inc/lib/getting-started/classes/class-gs-helper.php:411
 msgid "Guide your visitors step-by-step to buy more, boosting sales without extra ad spend."
 msgstr "Juhenda oma külastajaid samm-sammult rohkem ostma, suurendades müüki ilma lisareklaamikuludeta."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:416
+#: inc/lib/getting-started/classes/class-gs-helper.php:421
 msgid "Create product you're selling"
 msgstr "Loo toode, mida müüd"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:424
+#: inc/lib/getting-started/classes/class-gs-helper.php:429
 msgid "Setup Store Checkout"
 msgstr "Seadista poe kassasüsteem"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:432
+#: inc/lib/getting-started/classes/class-gs-helper.php:437
 msgid "Design beautiful Thank-You page"
 msgstr "Kujunda kaunis tänuleht"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:440
+#: inc/lib/getting-started/classes/class-gs-helper.php:445
 msgid "Offer a related product to sell"
 msgstr "Paku seotud toodet müügiks"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:476
+#: inc/lib/getting-started/classes/class-gs-helper.php:481
 msgid "Accept Appointments"
 msgstr "Võta vastu kohtumisi"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:477
+#: inc/lib/getting-started/classes/class-gs-helper.php:482
 msgid "Streamline your booking process so clients can book and pay you with zero hassle."
 msgstr "Lihtsusta oma broneerimisprotsessi, et kliendid saaksid broneerida ja maksta ilma vaevata."
 
@@ -5120,63 +5117,63 @@ msgstr "Lihtsusta oma broneerimisprotsessi, et kliendid saaksid broneerida ja ma
 msgid "Learn how"
 msgstr "Õpi, kuidas"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:487
+#: inc/lib/getting-started/classes/class-gs-helper.php:492
 msgid "Add Service"
 msgstr "Lisa teenus"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:495
+#: inc/lib/getting-started/classes/class-gs-helper.php:500
 msgid "Enable notifications"
 msgstr "Luba teavitused"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:515
+#: inc/lib/getting-started/classes/class-gs-helper.php:520
 msgid "Add Engaging Videos"
 msgstr "Lisa kaasahaaravaid videoid"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:516
+#: inc/lib/getting-started/classes/class-gs-helper.php:521
 msgid "Showcase your brand personality with videos that inform, inspire, and engage."
 msgstr "Näita oma brändi isikupära videote abil, mis informeerivad, inspireerivad ja kaasavad."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:526
+#: inc/lib/getting-started/classes/class-gs-helper.php:531
 msgid "Upload video to Media Hub"
 msgstr "Laadi video üles meedia keskusesse"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:533
+#: inc/lib/getting-started/classes/class-gs-helper.php:538
 msgid "The media hub is a flexible way to add audio or video to your site. It allows you to save media which you can later use in any post or page on your site."
 msgstr "Meedia keskus on paindlik viis heli või video lisamiseks oma saidile. See võimaldab salvestada meediat, mida saate hiljem kasutada mis tahes postituses või lehel oma saidil."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:546
+#: inc/lib/getting-started/classes/class-gs-helper.php:551
 msgid "Add Presto Player block to pages"
 msgstr "Lisa Presto Player plokk lehtedele"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:597
+#: inc/lib/getting-started/classes/class-gs-helper.php:635
 msgid "Automate Recurring Website Tasks"
 msgstr "Automatiseeri korduvad veebisaidi ülesanded"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:598
+#: inc/lib/getting-started/classes/class-gs-helper.php:636
 msgid "Save hours each week by automating routine website tasks, so you can focus on growing your business."
 msgstr "Säästa iga nädal tunde, automatiseerides rutiinseid veebisaidi ülesandeid, et saaksid keskenduda oma äri kasvatamisele."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:608
+#: inc/lib/getting-started/classes/class-gs-helper.php:646
 msgid "Create OttoKit account"
 msgstr "Loo OttoKit konto"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:616
+#: inc/lib/getting-started/classes/class-gs-helper.php:654
 msgid "Add connections"
 msgstr "Lisa ühendused"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:624
+#: inc/lib/getting-started/classes/class-gs-helper.php:662
 msgid "Set up “when this happens, do that” actions"
 msgstr "Seadista \"kui see juhtub, tee seda\" tegevused"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:661
+#: inc/lib/getting-started/classes/class-gs-helper.php:699
 msgid "Set Up The Basics"
 msgstr "Seadista põhitõed"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:664
+#: inc/lib/getting-started/classes/class-gs-helper.php:702
 msgid "Start Selling Online"
 msgstr "Alusta veebimüüki"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:667
+#: inc/lib/getting-started/classes/class-gs-helper.php:705
 msgid "Level Up Your Site"
 msgstr "Tõsta oma saidi taset"
 
@@ -5376,9 +5373,9 @@ msgstr "Sammu oleku uuendamine ebaõnnestus:"
 msgid "Error updating step status:"
 msgstr "Viga sammu oleku uuendamisel:"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:340
-#: inc/lib/getting-started/classes/class-gs-helper.php:465
-#: inc/lib/getting-started/classes/class-gs-helper.php:583
+#: inc/lib/getting-started/classes/class-gs-helper.php:345
+#: inc/lib/getting-started/classes/class-gs-helper.php:470
+#: inc/lib/getting-started/classes/class-gs-helper.php:588
 #: inc/lib/getting-started/build/main.js:1
 msgid "Set Up"
 msgstr "Seadista"
@@ -5443,163 +5440,163 @@ msgstr "Jätkake seadistuse lõpetamiseks"
 msgid "Help Us Improve Your Experience"
 msgstr "Aita meil parandada sinu kogemust"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:96
+#: inc/classes/class-astra-sites-astra-onboarding.php:112
 msgid "Global Color & Typography Controls"
 msgstr "Globaalne värvi- ja tüpograafiakontroll"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:97
+#: inc/classes/class-astra-sites-astra-onboarding.php:113
 msgid "Set global fonts and colors to save time and keep your website looking polished."
 msgstr "Määrake globaalsed fondid ja värvid, et säästa aega ja hoida oma veebisait viimistletud välimusega."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:100
+#: inc/classes/class-astra-sites-astra-onboarding.php:116
 msgid "Flexible Layout Options"
 msgstr "Paindlikud paigutusvalikud"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:101
+#: inc/classes/class-astra-sites-astra-onboarding.php:117
 msgid "Customize headers, footers, sidebars, blogs, and archive layouts effortlessly."
 msgstr "Kohandage päiseid, jaluseid, külgribasid, blogisid ja arhiivipaigutusi vaevata."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:104
+#: inc/classes/class-astra-sites-astra-onboarding.php:120
 msgid "Transparent Header"
 msgstr "Läbipaistev päis"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:105
+#: inc/classes/class-astra-sites-astra-onboarding.php:121
 msgid "Create a transparent header for a modern look that keeps the focus on your content."
 msgstr "Looge läbipaistev päis, et saavutada kaasaegne välimus, mis hoiab fookuse teie sisul."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:109
+#: inc/classes/class-astra-sites-astra-onboarding.php:125
 msgid "Site Builder"
 msgstr "Saidi ehitaja"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:110
+#: inc/classes/class-astra-sites-astra-onboarding.php:126
 msgid "Build fully custom websites with more control over design and layout."
 msgstr "Looge täielikult kohandatud veebisaite, millel on rohkem kontrolli disaini ja paigutuse üle."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:115
+#: inc/classes/class-astra-sites-astra-onboarding.php:131
 msgid "Header & Footer Builder"
 msgstr "Päise ja jaluse ehitaja"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:116
+#: inc/classes/class-astra-sites-astra-onboarding.php:132
 msgid "Build headers and footers that give your website a polished, professional look."
 msgstr "Looge päiseid ja jaluseid, mis annavad teie veebisaidile viimistletud ja professionaalse välimuse."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:121
+#: inc/classes/class-astra-sites-astra-onboarding.php:137
 msgid "Modern WooCommerce Stores"
 msgstr "Kaasaegsed WooCommerce'i poed"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:122
+#: inc/classes/class-astra-sites-astra-onboarding.php:138
 msgid "Easily create beautiful WooCommerce stores that boost sales and grow your business."
 msgstr "Looge hõlpsalt kauneid WooCommerce'i poode, mis suurendavad müüki ja kasvatavad teie äri."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:173
+#: inc/classes/class-astra-sites-astra-onboarding.php:189
 msgid "Powerful visual website builder made for WordPress. Just click, drag, and create anything, no code, no limits."
 msgstr "Võimas visuaalne veebisaidi ehitaja, mis on loodud WordPressi jaoks. Lihtsalt klõpsake, lohistage ja looge kõike, ilma koodita, ilma piiranguteta."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:179
+#: inc/classes/class-astra-sites-astra-onboarding.php:195
 msgid "Just a simple, lightweight SEO assistant that helps your site rise in the rankings."
 msgstr "Lihtne ja kerge SEO assistent, mis aitab teie saidil tõusta edetabelites."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:185
+#: inc/classes/class-astra-sites-astra-onboarding.php:201
 msgid "Create forms that feel like a chat. One question at a time keeps users engaged."
 msgstr "Looge vorme, mis tunduvad nagu vestlus. Üks küsimus korraga hoiab kasutajad kaasatuna."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:191
+#: inc/classes/class-astra-sites-astra-onboarding.php:207
 msgid "Send emails that get delivered. SureMails is a simple, lightweight email delivery service."
 msgstr "Saatke e-kirju, mis jõuavad kohale. SureMails on lihtne ja kerge e-posti kohaletoimetamise teenus."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:205
+#: inc/classes/class-astra-sites-astra-onboarding.php:221
 msgid "Astra Onboarding"
 msgstr "Astra sissejuhatus"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:208
+#: inc/classes/class-astra-sites-astra-onboarding.php:224
 msgid "Astra"
 msgstr "Astra"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:214
+#: inc/classes/class-astra-sites-astra-onboarding.php:230
 msgid "Build a fast, beautiful WordPress site, effortlessly."
 msgstr "Looge kiire ja kaunis WordPressi sait vaevata."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:218
+#: inc/classes/class-astra-sites-astra-onboarding.php:234
 msgid "Getting Started with"
 msgstr "Alustamine koos"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:222
+#: inc/classes/class-astra-sites-astra-onboarding.php:238
 msgid "Trusted by 1.8M+ websites worldwide"
 msgstr "Usaldatud üle 1,8 miljoni veebisaidi poolt kogu maailmas"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:223
+#: inc/classes/class-astra-sites-astra-onboarding.php:239
 msgid "Blazing fast and lightweight for better performance"
 msgstr "Välkkiire ja kerge paremaks jõudluseks"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:224
+#: inc/classes/class-astra-sites-astra-onboarding.php:240
 msgid "Easy customization, no coding or design skills"
 msgstr "Lihtne kohandamine, ilma kodeerimis- või disainioskusteta"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:225
+#: inc/classes/class-astra-sites-astra-onboarding.php:241
 msgid "WooCommerce-ready for quick online store setup"
 msgstr "WooCommerce'i valmidus kiireks veebipoe seadistamiseks"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:230
+#: inc/classes/class-astra-sites-astra-onboarding.php:246
 msgid "Get helpful updates, new features, and tips to make your website better, while helping us improve Astra."
 msgstr "Saage kasulikke uuendusi, uusi funktsioone ja näpunäiteid, et muuta oma veebisait paremaks, aidates samal ajal meil Astra täiustada."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:232
+#: inc/classes/class-astra-sites-astra-onboarding.php:248
 msgid "WordPress Themes Directory"
 msgstr "WordPressi teemade kataloog"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:233
+#: inc/classes/class-astra-sites-astra-onboarding.php:249
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "Google Search"
 msgstr "Google'i otsing"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:236
+#: inc/classes/class-astra-sites-astra-onboarding.php:252
 #: inc/lib/one-onboarding/build/main.js:1
 msgid "A friend or colleague"
 msgstr "Sõber või kolleeg"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:240
+#: inc/classes/class-astra-sites-astra-onboarding.php:256
 msgid "AI and Templates will help me design quickly"
 msgstr "AI ja mallid aitavad mul kiiresti disainida"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:241
+#: inc/classes/class-astra-sites-astra-onboarding.php:257
 msgid "I need a fast-loading theme"
 msgstr "Vajan kiiresti laadivat teemat"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:242
+#: inc/classes/class-astra-sites-astra-onboarding.php:258
 msgid "I need advanced design flexibility without a bloated builder for free"
 msgstr "Vajan täiustatud disainipaindlikkust ilma mahuka ehitajata tasuta"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:243
+#: inc/classes/class-astra-sites-astra-onboarding.php:259
 msgid "I trust Brainstorm Force for regular updates and support"
 msgstr "Usaldan Brainstorm Force'i regulaarsete uuenduste ja toe osas"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:244
+#: inc/classes/class-astra-sites-astra-onboarding.php:260
 msgid "Other (please specify)"
 msgstr "Muu (palun täpsustage)"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:248
+#: inc/classes/class-astra-sites-astra-onboarding.php:264
 #: inc/lib/nps-survey/dist/main.js:1
 #: inc/lib/one-onboarding/build/main.js:22
 msgid "Privacy Policy"
 msgstr "Privaatsuspoliitika"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:257
+#: inc/classes/class-astra-sites-astra-onboarding.php:273
 msgid "Unlock more design control, faster setup, and powerful customization, so you can build a better website, effortlessly."
 msgstr "Avage rohkem disainikontrolli, kiirem seadistamine ja võimas kohandamine, et saaksite vaevata luua parema veebisaidi."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:269
+#: inc/classes/class-astra-sites-astra-onboarding.php:285
 msgid "Customize Your Website"
 msgstr "Kohandage oma veebisaiti"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:271
+#: inc/classes/class-astra-sites-astra-onboarding.php:287
 msgid "View Documentation"
 msgstr "Vaadake dokumentatsiooni"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:275
+#: inc/classes/class-astra-sites-astra-onboarding.php:291
 msgid "Customize Your Site"
 msgstr "Kohandage oma saiti"
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:283
+#: inc/classes/class-astra-sites-astra-onboarding.php:299
 msgid "Docs & Help Center"
 msgstr "Dokumendid ja abikeskus"
 
@@ -5624,7 +5621,7 @@ msgid "Image downloaded successfully!"
 msgstr "Pilt edukalt alla laaditud!"
 
 #. translators: %s is the error message
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:799
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:798
 #, php-format
 msgid "Failed %s"
 msgstr "Ebaõnnestus %s"
@@ -5929,6 +5926,7 @@ msgstr "Ebaõnnestus seadistada %s."
 msgid "Failed to setup addons"
 msgstr "Lisandmoodulite seadistamine ebaõnnestus"
 
+#: inc/lib/getting-started/build/main.js:1
 #: inc/lib/one-onboarding/build/main.js:40
 msgid "Setting up…"
 msgstr "Seadistamine…"
@@ -6575,39 +6573,39 @@ msgstr "Palun proovige uuesti. Kui probleem püsib, proovige teist malli."
 msgid "Your Website is Almost Ready!"
 msgstr "Teie veebisait on peaaegu valmis!"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:266
+#: inc/lib/getting-started/classes/class-gs-helper.php:271
 msgid "Setup Emails"
 msgstr "Seadista e-kirjad"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:318
+#: inc/lib/getting-started/classes/class-gs-helper.php:323
 msgid "Optimize Your Site"
 msgstr "Optimeeri oma saiti"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:319
+#: inc/lib/getting-started/classes/class-gs-helper.php:324
 msgid "Make your pages accessible and optimized for users, AI bots and search engines"
 msgstr "Muuda oma lehed kasutajatele, AI-bottidele ja otsingumootoritele ligipääsetavaks ja optimeerituks"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:329
+#: inc/lib/getting-started/classes/class-gs-helper.php:334
 msgid "Review Site Optimization"
 msgstr "Vaata üle saidi optimeerimine"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:338
+#: inc/lib/getting-started/classes/class-gs-helper.php:343
 msgid "Connect Search Console"
 msgstr "Ühenda otsingukonsooliga"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:452
+#: inc/lib/getting-started/classes/class-gs-helper.php:457
 msgid "Customize Your Cart Style"
 msgstr "Kohanda oma ostukorvi stiili"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:453
+#: inc/lib/getting-started/classes/class-gs-helper.php:458
 msgid "Add a sleek, slide-out cart to match your brand style that enhances your WooCommerce store’s shopping experience and boosts conversions"
 msgstr "Lisa oma brändi stiiliga sobiv elegantne, välja libisev ostukorv, mis parandab teie WooCommerce poe ostukogemust ja suurendab konversioone"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:463
+#: inc/lib/getting-started/classes/class-gs-helper.php:468
 msgid "Set and Enable Modern Cart"
 msgstr "Määra ja luba kaasaegne ostukorv"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:501
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:506
 msgid "Empty SureForms URL"
 msgstr "Tühi SureForms URL"
 
@@ -6983,11 +6981,11 @@ msgstr "Hoiatus: Ebaõnnestus Astra Builder Widget Controlleri initsialiseerimin
 msgid "Warning: Fatal error encountered while initializing Astra Builder Widget Controller. Error: %s"
 msgstr "Hoiatus: Tõsine viga Astra Builder Widget Controlleri initsialiseerimisel. Viga: %s"
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:842
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:841
 msgid "We couldn't verify an active plan for your account. Please check your ZipWP subscription."
 msgstr "Me ei saanud teie konto aktiivset plaani kinnitada. Palun kontrollige oma ZipWP tellimust."
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1721
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1727
 msgid "Highlight"
 msgstr "Esiletõst"
 
@@ -7107,11 +7105,11 @@ msgstr "tähemärki (miinimum)"
 msgid "Error: Missing or invalid plugin initialization parameter."
 msgstr "Viga: Puuduv või vigane plugina initsialiseerimise parameeter."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:664
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:791
 msgid "Log Files"
 msgstr "Logifailid"
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:678
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:805
 msgid "Backup Files"
 msgstr "Varukoopia failid"
 
@@ -7177,169 +7175,9 @@ msgstr "Pixabay API võti pole konfigureeritud. Määrake see astra_sites_pixaba
 msgid "Missing required authentication data."
 msgstr "Puuduvad vajalikud autentimisandmed."
 
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Sell Products"
-msgstr "Müü tooteid"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For online stores or product catalogs. Helps us set up the right shop layout and e-commerce tools."
-msgstr "Veebipoodide või tootekataloogide jaoks. Aitab meil seadistada õige poe paigutuse ja e-kaubanduse tööriistad."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Collect Donations"
-msgstr "Koguge annetusi"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For fundraising or charity pages. Guides us to generate persuasive copy and enable donation features."
-msgstr "Korjanduste või heategevuslehtede jaoks. Juhendab meid looma veenvat koopiat ja lubama annetuste funktsioone."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Offer Services"
-msgstr "Pakkuge teenuseid"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For service-based businesses. Helps create service pages and booking functionality."
-msgstr "Teenusepõhiste ettevõtete jaoks. Aitab luua teenuse lehti ja broneerimisfunktsionaalsust."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Generate Leads"
-msgstr "Loo kontakte"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For businesses that want inquiries or form submissions. Optimizes copy and lead-capture tools."
-msgstr "Ettevõtetele, kes soovivad päringuid või vormide esitamist. Optimeerib koopiat ja kontaktide kogumise tööriistu."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Promote Events"
-msgstr "Reklaami üritusi"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For workshops, launches, or meetups. Helps us create event pages and promotional messaging."
-msgstr "Töötubade, lansseerimiste või kohtumiste jaoks. Aitab meil luua ürituste lehti ja reklaamsõnumeid."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Publish Blogs"
-msgstr "Avalda blogisid"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For educational or content-driven sites. Shapes long-form copy and blog structure."
-msgstr "Haridus- või sisupõhistele saitidele. Kujundab pika vormi koopiat ja blogi struktuuri."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Build Brand Trust"
-msgstr "Ehita brändi usaldust"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "For awareness-focused sites that highlight credibility. Improves tone, testimonials, and trust-driven copy."
-msgstr "Teadlikkusele keskendunud saitidele, mis rõhutavad usaldusväärsust. Parandab tooni, iseloomustusi ja usaldusväärset koopiat."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Others"
-msgstr "Muud"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Balanced"
-msgstr "Tasakaalustatud"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Default: Balanced tone suitable for most websites. A mix of clarity, engagement, and structure."
-msgstr "Vaikimisi: Tasakaalustatud toon, mis sobib enamiku veebisaitide jaoks. Selguse, kaasamise ja struktuuri segu."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Clear, formal, and business-appropriate. Ideal for corporate and service brands."
-msgstr "Selge, ametlik ja ärile sobiv. Ideaalne ettevõtete ja teenusebrändide jaoks."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Warm and approachable language. Works well for lifestyle and local services."
-msgstr "Soe ja ligipääsetav keel. Sobib hästi elustiili ja kohalike teenuste jaoks."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Fact-driven and structured copy. Best for product education and detailed pages."
-msgstr "Faktipõhine ja struktureeritud koopia. Parim tootehariduse ja üksikasjalike lehtede jaoks."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Engaging"
-msgstr "Kaasahaarav"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Attention-holding and expressive writing. Good for brands that want stronger interaction."
-msgstr "Tähelepanu hoidmine ja väljendusrikas kirjutamine. Hea brändidele, kes soovivad tugevamat suhtlust."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Conversational"
-msgstr "Vestluslik"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Natural, casual phrasing like real speech. Makes copy feel more human."
-msgstr "Looduslik, juhuslik sõnastus nagu päris kõne. Muudab koopia inimlikumaks."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Persuasive"
-msgstr "Veenev"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Influence-driven writing that motivates action. Strong for decisions and signups."
-msgstr "Mõjuv kirjutamine, mis motiveerib tegutsema. Tugev otsuste ja registreerumiste jaoks."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Sales-focused"
-msgstr "Müügile keskendunud"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Benefit-heavy, conversion-oriented copy. Designed to support revenue pages."
-msgstr "Kasu rõhutav, konversioonile orienteeritud tekst. Mõeldud tulu lehtede toetamiseks."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Light-hearted copy with playful elements. Best for casual brands and social campaigns."
-msgstr "Kerge ja mänguline tekst. Parim juhuslikele brändidele ja sotsiaalkampaaniatele."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Advanced"
-msgstr "Täpsem"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Add Some Keywords"
-msgstr "Lisa mõned märksõnad"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Add keywords"
-msgstr "Lisa märksõnad"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Separate with commas or the Enter key. Enter between 5 and 10 keywords"
-msgstr "Eralda komade või Enter-klahviga. Sisesta 5 kuni 10 märksõna"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:191
-msgid "Choose Your Tone"
-msgstr "Vali oma toon"
-
 #: inc/lib/ai-builder/inc/assets/build/main.js:195
 msgid "Default"
 msgstr "Vaikimisi"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "What are the goals of this site?"
-msgstr "Mis on selle saidi eesmärgid?"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "Select all that apply. This helps personalize content for your site."
-msgstr "Valige kõik, mis kehtivad. See aitab isikupärastada teie saidi sisu."
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "Any additional goals"
-msgstr "Mis tahes täiendavad eesmärgid"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "Tell us more (Optional)"
-msgstr "Räägi meile rohkem (valikuline)"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "Goals"
-msgstr "Eesmärgid"
-
-#: inc/lib/ai-builder/inc/assets/build/main.js:195
-msgid "What do you want to achieve"
-msgstr "Mida soovite saavutada"
 
 #: inc/lib/ai-builder/inc/assets/build/main.js:208
 msgid "Select 15 to 18 images for best results."
@@ -7355,7 +7193,7 @@ msgstr "Sega värve"
 msgid "Learn more."
 msgstr "Lisateave."
 
-#: inc/classes/class-astra-sites-astra-onboarding.php:251
+#: inc/classes/class-astra-sites-astra-onboarding.php:267
 msgid "Get helpful updates, new features, and tips to make your website better, while helping us improve Astra by sharing how you use it."
 msgstr "Saage kasulikke uuendusi, uusi funktsioone ja näpunäiteid, et muuta oma veebisait paremaks, aidates samal ajal meil Astra täiustada, jagades, kuidas te seda kasutate."
 
@@ -7553,15 +7391,15 @@ msgstr "MySQL versioon on liiga vana"
 msgid "Your MySQL version is below 5.7. Some templates require MySQL 5.7 or higher for full utf8mb4 collation support. Please upgrade your database server."
 msgstr "Teie MySQL versioon on alla 5.7. Mõned mallid nõuavad MySQL 5.7 või uuemat täieliku utf8mb4 kollatsiooni toe jaoks. Palun uuendage oma andmebaasi serverit."
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:570
+#: inc/lib/getting-started/classes/class-gs-helper.php:575
 msgid "Manage Your Contacts"
 msgstr "Halda oma kontakte"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:571
+#: inc/lib/getting-started/classes/class-gs-helper.php:576
 msgid "Keep all your customer relationships in one place so you can follow up faster, automate smarter, and never lose track of a lead"
 msgstr "Hoidke kõik oma kliendisuhted ühes kohas, et saaksite kiiremini jälgida, nutikamalt automatiseerida ja kunagi ei kaotaks ühtegi kontakti"
 
-#: inc/lib/getting-started/classes/class-gs-helper.php:581
+#: inc/lib/getting-started/classes/class-gs-helper.php:586
 msgid "Connect SureContact account"
 msgstr "Ühendage SureContact konto"
 
@@ -7606,7 +7444,7 @@ msgstr "CRM ja kontaktid"
 msgid "Keep all your customer relationships in one place"
 msgstr "Hoidke kõik oma kliendisuhted ühes kohas"
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:827
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:826
 msgid "Your ZipWP team was not found. Please reconnect your account to continue."
 msgstr "Teie ZipWP meeskonda ei leitud. Jätkamiseks ühendage oma konto uuesti."
 
@@ -7634,7 +7472,7 @@ msgstr "Kohandaja pildid asendatud."
 msgid "Image replacement cleanup complete."
 msgstr "Pildi asendamise puhastamine lõpetatud."
 
-#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2134
+#: inc/lib/ai-builder/inc/classes/zipwp/class-ai-builder-zipwp-api.php:2129
 msgid "Site not found."
 msgstr "Saidi ei leitud."
 
@@ -7644,19 +7482,19 @@ msgstr "Saidi ei leitud."
 msgid "Sorry, you are not allowed to perform this action."
 msgstr "Vabandust, teil ei ole lubatud seda toimingut sooritada."
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1051
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1057
 msgid "Plugin slug is missing."
 msgstr "Plugin'i slug puudub."
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1071
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1077
 msgid "This plugin is not allowed to be activated."
 msgstr "Selle plugin'i aktiveerimine ei ole lubatud."
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1880
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1886
 msgid "Spectra Legacy"
 msgstr "Spectra Legacy"
 
-#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1881
+#: inc/lib/gutenberg-templates/inc/importer/plugin.php:1887
 #: inc/lib/gutenberg-templates/dist/640.js:1
 #: inc/lib/gutenberg-templates/dist/main.js:2
 msgid "Spectra Blocks"
@@ -8118,13 +7956,13 @@ msgid "Invalid Template ID - %s"
 msgstr "Kehtetu malli ID - %s"
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2553
+#: inc/classes/class-astra-sites.php:2578
 #, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">View pricing</a> to get access."
 msgstr "See on premium mall, mis on saadaval Essential ja Business tööriistakomplektidega. <a href=\"%s\" target=\"_blank\">Vaata hindu</a>, et saada juurdepääs."
 
 #. translators: %s are link.
-#: inc/classes/class-astra-sites.php:2557
+#: inc/classes/class-astra-sites.php:2582
 #, php-format
 msgid "This is a premium template available with Essential and Business Toolkits. <a href=\"%s\" target=\"_blank\">Validate your license key</a> to import this template."
 msgstr "See on premium mall, mis on saadaval Essential ja Business tööriistakomplektidega. <a href=\"%s\" target=\"_blank\">Kinnita oma litsentsivõti</a>, et seda malli importida."
@@ -8149,14 +7987,62 @@ msgstr "Importimine on juba käimas…"
 msgid "Migrating"
 msgstr "Migreerimine"
 
+#: inc/lib/getting-started/classes/class-gs-helper.php:604
+msgid "See How Visitors Use Your Site"
+msgstr "Vaata, kuidas külastajad sinu saiti kasutavad"
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:605
+msgid "Turn on heatmaps and session recordings to see where people click, how far they scroll, and where they drop off."
+msgstr "Lülita sisse soojuskaardid ja sessioonide salvestused, et näha, kuhu inimesed klikivad, kui kaugele nad kerivad ja kus nad katkestavad."
+
+#: inc/lib/getting-started/classes/class-gs-helper.php:611
+msgid "Start tracking visitors"
+msgstr "Alusta külastajate jälgimist"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "This step is misconfigured and cannot be run from here."
+msgstr "See samm on valesti seadistatud ja seda ei saa siit käivitada."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Setup unavailable"
+msgstr "Seadistamine pole saadaval"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "One more step"
+msgstr "Üks samm veel"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Something went wrong. Please try again."
+msgstr "Midagi läks valesti. Palun proovi uuesti."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "Setup failed"
+msgstr "Seadistamine ebaõnnestus"
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "This step is now complete."
+msgstr "See samm on nüüd lõpetatud."
+
+#: inc/lib/getting-started/build/main.js:1
+msgid "All set"
+msgstr "Kõik valmis"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "Conversion Testing"
+msgstr "Konversioonitestimine"
+
+#: inc/lib/onboarding/assets/dist/onboarding/main.js:171
+msgid "Run A/B tests and see what converts best"
+msgstr "Tehke A/B teste ja vaadake, mis kõige paremini konverteerib"
+
 #. translators: %1$s Memory Limit, %2$s Recommended memory limit.
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:463
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:590
 #, php-format
 msgctxt "Recommended Memory Limit"
 msgid "Current memory limit %1$s. We recommend setting memory to at least %2$s."
 msgstr "Praegune mälupiirang %1$s. Soovitame seada mälu vähemalt %2$s."
 
-#: inc/lib/starter-templates-importer/importer/st-importer-log.php:544
+#: inc/lib/starter-templates-importer/importer/st-importer-log.php:671
 msgctxt "PHP Version"
 msgid "We recommend to use php 5.4 or higher"
 msgstr "Soovitame kasutada php versiooni 5.4 või uuemat"

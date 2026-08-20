@@ -50,6 +50,7 @@ const PLUGIN_ICON_MAP = {
 	surerank: 'surerank.svg',
 	suretriggers: 'ottokit.svg',
 	surecookie: 'surecookie.svg',
+	sigmize: 'sigmize.svg',
 	'ultimate-addons-for-gutenberg': 'spectra.svg',
 	'ultimate-elementor': 'uae.svg',
 	'variation-swatches-woo': 'variation-swatches-woo.svg',

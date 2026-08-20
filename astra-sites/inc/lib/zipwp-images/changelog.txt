@@ -1,3 +1,7 @@
+v1.0.31 - 17-August-2026
+- Fix: Image size options now always render and insert correctly — with a fallback to original size, Pexels sizes derived from its CDN URL, and accurate Pixabay "Original" dimensions.
+- Fix: Failed image downloads now return an error instead of a false success, so the media dialog no longer switches away without inserting.
+
 v1.0.30 - 20-May-2026
 - Fix: Use integer type and absint sanitize_callback for the per_page REST arg.
 - Fix: Replace raw remote error message with a generic string to prevent info disclosure.

@@ -20,6 +20,7 @@ import {
 	CalendarIcon,
 	ArrowTrendingUpIcon,
 	UsersIcon,
+	BeakerIcon,
 } from '@heroicons/react/24/outline';
 import { classNames, trackOnboardingStep } from '../../utils/functions';
 import {
@@ -45,6 +46,7 @@ const ICON_SET = {
 	calendar: CalendarIcon,
 	'arrow-trending-up': ArrowTrendingUpIcon,
 	users: UsersIcon,
+	sigmize: BeakerIcon,
 };
 
 const getPluginProps = ( id ) => {

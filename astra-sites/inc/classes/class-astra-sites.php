@@ -2456,8 +2456,8 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 
 			$max_execution_time = (int) ini_get( 'max_execution_time' );
-			// 0 means unlimited — no warning needed.
-			if ( $max_execution_time > 0 && $max_execution_time < 300 ) {
+			// 0 means unlimited — no warning needed. ZipWP-hosted sites don't expose PHP settings to users, so the warning is not actionable there.
+			if ( $max_execution_time > 0 && $max_execution_time < 300 && ! $this->is_zipwp_hosted_site() ) {
 				$compatibilities['warnings']['max-execution-time'] = $data['max-execution-time'];
 			}
 
@@ -2504,6 +2504,31 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 		
 			return $memory_limit;
+		}
+
+		/**
+		 * Check if the current site is hosted on ZipWP infrastructure.
+		 *
+		 * ZipWP-hosted sites (sandbox and white-label) are identified by the options
+		 * stored by the ZipWP Client MU plugin, with a fallback check on the site
+		 * host for ZipWP sandbox domains (e.g. example.zipwp.xyz).
+		 *
+		 * @since 4.7.5
+		 *
+		 * @return bool True if the site is hosted on ZipWP, false otherwise.
+		 */
+		public function is_zipwp_hosted_site() {
+			if (
+				get_option( 'zipwp_site_uuid' ) ||
+				get_option( 'zipwp_site_auth_token' ) ||
+				get_option( 'zipwp_guest_site' )
+			) {
+				return true;
+			}
+
+			$host = wp_parse_url( home_url(), PHP_URL_HOST );
+
+			return is_string( $host ) && false !== strpos( $host, '.zipwp.' );
 		}
 
 		/**

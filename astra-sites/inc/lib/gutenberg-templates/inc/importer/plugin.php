@@ -177,6 +177,11 @@ class Plugin {
 	public function init() {
 		// Add token when user authorized from GT library.
 		if ( isset( $_GET['ast_action'] ) && 'auth' === $_GET['ast_action'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			// Only users who can manage the site are allowed to store site-wide credentials.
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
 			// Get the nonce.
 			$nonce = ( isset( $_GET['nonce'] ) ) ? sanitize_key( wp_unslash( $_GET['nonce'] ) ) : '';
 
@@ -834,7 +839,7 @@ class Plugin {
 			if ( strpos( $link, '/wp-content/plugins/ultimate-addons-for-gutenberg/' ) !== false ) {
 				$content = str_replace( AST_BLOCK_TEMPLATES_LIBRARY_URL, site_url( '/' ), $content );
 			}
-
+			// Replace the library URL with site URL if link static link from Spectra Blocks plugin.
 			if ( strpos( $link, '/wp-content/plugins/spectra-blocks/' ) !== false ) {
 				$content = str_replace( AST_BLOCK_TEMPLATES_LIBRARY_URL, site_url( '/' ), $content );
 			}
@@ -851,13 +856,14 @@ class Plugin {
 	 * @return string                  Content.
 	 */
 	public function replace( $content, $dynamic_content ) {
-		// Replace the library URL with site URL if link static link from Spectra plugin.
+		// Replace the library URL with site URL if link is static link from Spectra plugin.
 		$content = str_replace(
 			AST_BLOCK_TEMPLATES_LIBRARY_URL . 'wp-content/plugins/ultimate-addons-for-gutenberg/',
 			site_url( '/wp-content/plugins/ultimate-addons-for-gutenberg/' ),
 			$content
 		);
 
+		// Replace the library URL with site URL if link is static link from Spectra Blocks plugin.
 		$content = str_replace(
 			AST_BLOCK_TEMPLATES_LIBRARY_URL . 'wp-content/plugins/spectra-blocks/',
 			site_url( '/wp-content/plugins/spectra-blocks/' ),

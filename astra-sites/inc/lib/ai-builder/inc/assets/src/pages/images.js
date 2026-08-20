@@ -215,8 +215,6 @@ const Images = () => {
 			businessContact,
 			templateList,
 			siteLanguage,
-			userKeywords,
-			siteTone,
 		},
 		updateImages,
 		loadingNextStep,
@@ -725,8 +723,6 @@ const Images = () => {
 				business_phone: businessContact?.phone || '',
 				business_email: businessContact?.email || '',
 				social_profiles: businessContact?.socialMedia || [],
-				user_keywords: userKeywords || [],
-				site_tone: siteTone || '',
 			},
 		} )
 			.then( () => {} )

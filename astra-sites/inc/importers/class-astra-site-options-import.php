@@ -6,7 +6,6 @@
  * @package Astra Addon
  */
 
-use STImporter\Importer\ST_Importer_Helper;
 use STImporter\Importer\Helpers\ST_Image_Importer;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,6 +47,29 @@ class Astra_Site_Options_Import {
 	public function __construct() {
 		add_filter( 'st_importer_site_options', array( $this, 'classic_templates_options' ), 10, 1 );
 		add_action( 'st_importer_import_site_options', array( $this, 'import_classic_templates_options' ), 10, 1 );
+	}
+
+	/**
+	 * WooCommerce page title options.
+	 *
+	 * Each of these carries a page title in the template payload, and is mapped onto
+	 * its `_id` counterpart once the pages exist. Shared by the option whitelist and
+	 * the importer so both stay in step when a page is added or removed.
+	 *
+	 * @since 4.7.5
+	 * @return array<int, string> List of WooCommerce page title option names.
+	 */
+	private static function woocommerce_page_title_options() {
+		return array(
+			'woocommerce_shop_page_title',
+			'woocommerce_cart_page_title',
+			'woocommerce_checkout_page_title',
+			'woocommerce_myaccount_page_title',
+			'woocommerce_edit_address_page_title',
+			'woocommerce_view_order_page_title',
+			'woocommerce_change_password_page_title',
+			'woocommerce_logout_page_title',
+		);
 	}
 
 	/**
@@ -97,17 +119,6 @@ class Astra_Site_Options_Import {
 			'_fl_builder_user_access',
 			'_fl_builder_enabled_templates',
 
-			// Plugin: WooCommerce.
-			// Pages.
-			'woocommerce_shop_page_title',
-			'woocommerce_cart_page_title',
-			'woocommerce_checkout_page_title',
-			'woocommerce_myaccount_page_title',
-			'woocommerce_edit_address_page_title',
-			'woocommerce_view_order_page_title',
-			'woocommerce_change_password_page_title',
-			'woocommerce_logout_page_title',
-
 			// Account & Privacy.
 			'woocommerce_enable_guest_checkout',
 			'woocommerce_enable_checkout_login_reminder',
@@ -133,6 +144,9 @@ class Astra_Site_Options_Import {
 			'astra-typography-presets',
 		);
 
+		// Plugin: WooCommerce pages.
+		$classic_templates_options = array_merge( $classic_templates_options, self::woocommerce_page_title_options() );
+
 		return array_merge( $default_options, $classic_templates_options );
 	}
 
@@ -147,122 +161,39 @@ class Astra_Site_Options_Import {
 	 */
 	public function import_classic_templates_options( $options ) {
 
-		if ( ! isset( $options ) ) {
+		if ( empty( $options ) || ! is_array( $options ) ) {
 			Astra_Sites_Importer_Log::add( 'No site options found to import.' );
 			return;
 		}
 
+		/**
+		 * Only the WooCommerce specific mappings are handled here.
+		 *
+		 * Every other option in the payload — including the logo, menu locations, front
+		 * page and the plain `update_option()` writes — has already been imported by
+		 * ST_Importer::import_options() before this hook fires. Walking the full option
+		 * set again doubled the work of a step that already runs close to the request
+		 * timeout on slower hosts.
+		 */
 		try {
-			Astra_Sites_Importer_Log::add( 'Processing site options import - Total options: ' . count( $options ) );
-
-			foreach ( $options as $option_name => $option_value ) {
-
-				// Is option exist in defined array site_options()?
-				if ( null !== $option_value ) {
-
-					switch ( $option_name ) {
-
-						// Set WooCommerce page ID by page Title.
-						case 'woocommerce_shop_page_title':
-						case 'woocommerce_cart_page_title':
-						case 'woocommerce_checkout_page_title':
-						case 'woocommerce_myaccount_page_title':
-						case 'woocommerce_edit_address_page_title':
-						case 'woocommerce_view_order_page_title':
-						case 'woocommerce_change_password_page_title':
-						case 'woocommerce_logout_page_title':
-								$this->update_woocommerce_page_id_by_option_value( $option_name, $option_value );
-							break;
-
-						case 'page_for_posts':
-						case 'page_on_front':
-								$this->update_page_id_by_option_value( $option_name, $option_value );
-							break;
-
-						// nav menu locations.
-						case 'nav_menu_locations':
-								$this->set_nav_menu_locations( $option_value );
-							break;
-
-						// import WooCommerce category images.
-						case 'woocommerce_product_cat':
-								$this->set_woocommerce_product_cat( $option_value );
-							break;
-
-						// insert logo.
-						case 'custom_logo':
-								$this->insert_logo( $option_value );
-							break;
-
-						case 'elementor_active_kit':
-							if ( '' !== $option_value ) {
-								$this->set_elementor_kit();
-							}
-							break;
-
-						case 'site_title':
-							try {
-								Astra_Sites_Importer_Log::add( 'Site title (blogname) updated successfully to ' . $option_value );
-								update_option( 'blogname', $option_value );
-							} catch ( \Exception $e ) {
-								// Failed silently: sometimes Elementor throws exception as it hooks into `update_option_blogname`.
-								Astra_Sites_Importer_Log::add( 'Failed to update site title: ' . $e->getMessage(), 'warning' );
-								astra_sites_error_log( 'Silently handled exception while updating blogname: ' . $e->getMessage() );
-							}
-							break;
-
-						default:
-							Astra_Sites_Importer_Log::add( 'Updated option: ' . $option_name, 'info', $option_value );
-							update_option( $option_name, $option_value );
-							break;
-					}
+			foreach ( self::woocommerce_page_title_options() as $option_name ) {
+				if ( ! empty( $options[ $option_name ] ) ) {
+					$this->update_woocommerce_page_id_by_option_value( $option_name, $options[ $option_name ] );
 				}
 			}
 
-			Astra_Sites_Importer_Log::add( 'Classic templates options import completed successfully', 'success' );
+			if ( ! empty( $options['woocommerce_product_cat'] ) ) {
+				$this->set_woocommerce_product_cat( $options['woocommerce_product_cat'] );
+			}
+
+			Astra_Sites_Importer_Log::add( 'Classic templates WooCommerce options import completed successfully', 'success' );
 		} catch ( Exception $e ) {
-			// Do nothing.
+			// Failed silently: the remaining options are already imported, so a WooCommerce
+			// mapping failure should not abort the import.
 			Astra_Sites_Importer_Log::add( 'Site options import exception: ' . $e->getMessage(), 'warning' );
 			astra_sites_error_log( 'Error while importing site options: ' . $e->getMessage() );
 		}
 	}
-
-	/**
-	 * Update post option
-	 *
-	 * @since 2.2.2
-	 *
-	 * @return void
-	 */
-	private function set_elementor_kit() {
-		Astra_Sites_Importer_Log::add( 'Searching for Elementor kit to set as active' );
-
-		// Update Elementor Theme Kit Option.
-		$args = array(
-			'post_type'   => 'elementor_library',
-			'post_status' => 'publish',
-			'numberposts' => 1,
-			'meta_query'  => array( //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Setting elementor kit. WP Query would have been expensive.
-				array(
-					'key'   => '_astra_sites_imported_post',
-					'value' => '1',
-				),
-				array(
-					'key'   => '_elementor_template_type',
-					'value' => 'kit',
-				),
-			),
-		);
-
-		$query = get_posts( $args );
-		if ( ! empty( $query ) && isset( $query[0] ) && isset( $query[0]->ID ) ) {
-			Astra_Sites_Importer_Log::add( 'Elementor active kit set to ID: ' . $query[0]->ID );
-			update_option( 'elementor_active_kit', $query[0]->ID );
-		} else {
-			Astra_Sites_Importer_Log::add( 'No Elementor kit found to set as active', 'warning' );
-		}
-	}
-
 
 	/**
 	 * Get post from post title and post type.
@@ -336,35 +267,6 @@ class Astra_Site_Options_Import {
 	}
 
 	/**
-	 * In WP nav menu is stored as ( 'menu_location' => 'menu_id' );
-	 * In export we send 'menu_slug' like ( 'menu_location' => 'menu_slug' );
-	 * In import we set 'menu_id' from menu slug like ( 'menu_location' => 'menu_id' );
-	 *
-	 * @since 1.0.0
-	 * @param array $nav_menu_locations Array of nav menu locations.
-	 */
-	private function set_nav_menu_locations( $nav_menu_locations = array() ) {
-		Astra_Sites_Importer_Log::add( 'Setting nav menu locations - Total menus: ' . count( $nav_menu_locations ) );
-
-		$menu_locations = array();
-
-		// Update menu locations.
-		if ( isset( $nav_menu_locations ) ) {
-			foreach ( $nav_menu_locations as $menu => $value ) {
-				$term = get_term_by( 'slug', $value, 'nav_menu' );
-
-				if ( is_object( $term ) ) {
-					Astra_Sites_Importer_Log::add( 'Menu location \'' . $menu . '\' set to term ID: ' . $term->term_id );
-					$menu_locations[ $menu ] = $term->term_id;
-				}
-			}
-
-			Astra_Sites_Importer_Log::add( 'Nav menu locations updated successfully', 'success' );
-			set_theme_mod( 'nav_menu_locations', $menu_locations );
-		}
-	}
-
-	/**
 	 * Set WooCommerce category images.
 	 *
 	 * @since 1.1.4
@@ -399,31 +301,6 @@ class Astra_Site_Options_Import {
 		}
 	}
 
-	/**
-	 * Insert Logo By URL
-	 *
-	 * @since 1.0.0
-	 * @param  string $image_url Logo URL.
-	 * @return void
-	 */
-	private function insert_logo( $image_url = '' ) {
-		Astra_Sites_Importer_Log::add( 'Inserting custom logo from URL: ' . $image_url );
-
-		$downloaded_image = ST_Image_Importer::get_instance()->import(
-			array(
-				'url' => $image_url,
-				'id'  => 0,
-			)
-		);
-
-		if ( $downloaded_image['id'] ) {
-			Astra_Sites_Importer_Log::add( 'Custom logo set successfully - ID: ' . $downloaded_image['id'], 'success' );
-			ST_Importer_Helper::track_post( $downloaded_image['id'] );
-			set_theme_mod( 'custom_logo', $downloaded_image['id'] );
-		} else {
-			Astra_Sites_Importer_Log::add( 'Failed to download logo image from: ' . $image_url, 'warning' );
-		}
-	}
 }
 
 /**

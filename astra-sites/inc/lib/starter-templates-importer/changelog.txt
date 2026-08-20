@@ -1,3 +1,6 @@
+v1.1.41 - 19-August-2026
+- Fix: Import log entries are now buffered and written in batches instead of one locked file write per entry, which kept long import steps within the request limit enforced by some hosts.
+
 v1.1.40 - 11-August-2026
 - Fix: SureDonation donation forms no longer import with blank fields and missing labels; form and campaign post types now run through block-content normalization.
 

@@ -4,8 +4,8 @@ Donate link: https://wpastra.com/pro/
 Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
 Requires at least: 6.6
 Requires PHP: 7.4
-Tested up to: 7.0
-Stable tag: 4.7.4
+Tested up to: 7.1
+Stable tag: 4.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -245,6 +245,25 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.4 - 20th-August-2026
+- New:
+    - Added Sigmize (Conversion Testing) to the features selection step in the onboarding flow.
+    - Finish Setup: Added Sigmize action item to the Finish Setup checklist.
+- Improvement:
+    - Ensured compatibility with WordPress 7.1.
+    - AI Builder: Added AVIF image support, so templates using AVIF images bring them across along with the other formats.
+    - AI Builder: Removed the goals selection screen and the tone and keywords options from the AI website builder onboarding.
+    - Design Kit: Spectra Blocks plugin is now installed from the WordPress.org repository, removing the temporary hardcoded download URL.
+    - Finish Setup: Setup steps can now complete directly from the checklist instead of sending you to another screen.
+- Fix:
+    - ST Importer: Site Options import no longer times out on hosts with a strict request limit — log entries are written in batches and the option set is no longer processed twice.
+    - Elementor template library: Long page titles no longer wrap onto a second line or push the action button out of alignment — titles are now truncated with an ellipsis, keeping the card footer always single-row.
+    - Security - Enforced TLS certificate verification on ZipWP API requests in the onboarding flow.
+    - Design Kit: Restricted the ZipWP authentication return handler to users who can manage the site, so lower-privileged roles can no longer overwrite the site-wide ZipWP credentials.
+    - Design Kit: Design Library button in the editor toolbar no longer sits shorter than the adjacent wp-admin and page builder buttons.
+    - ST Importer: The import stream now closes after an import error instead of silently reconnecting against the finished import.
+    - ST Importer: Import log entries are now buffered and written in batches instead of one locked file write per entry, which kept long import steps within the request limit enforced by some hosts.
+
 v4.7.4 - 12th-August-2026
 - Security:
     - Prevented PHP object injection by disallowing object instantiation when deserializing imported post meta.

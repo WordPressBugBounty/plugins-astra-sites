@@ -43,6 +43,11 @@ class GS_Helper {
 	 */
 	public static function get_default_action_items() {
 
+		// Load plugin.php to use is_plugin_active() function.
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
 		$admin_url = admin_url();
 
 		// Dynamic completion checks.
@@ -588,6 +593,39 @@ class GS_Helper {
 			];
 		}
 
+		if ( is_plugin_active( 'sigmize/sigmize.php' ) ) {
+			// Below this, sigmize/v1/auth/provision is not registered and an action cta would 404 into a dead button.
+			$sigmize_provisioning_version = '1.2.0';
+			$sigmize_can_provision        = defined( 'SIGMIZE_VERSION' )
+				&& version_compare( (string) constant( 'SIGMIZE_VERSION' ), $sigmize_provisioning_version, '>=' );
+
+			$action_items[] = [
+				'id'          => 'sigmize',
+				'title'       => __( 'See How Visitors Use Your Site', 'astra-sites' ),
+				'description' => __( 'Turn on heatmaps and session recordings to see where people click, how far they scroll, and where they drop off.', 'astra-sites' ),
+				'category'    => 'level-up',
+				'steps'       => [
+					[
+						'id'        => 'connect-sigmize-account',
+						'completed' => self::is_sigmize_connected(),
+						'title'     => __( 'Start tracking visitors', 'astra-sites' ),
+						'cta'       => $sigmize_can_provision
+							? [
+								'type'     => 'action',
+								'endpoint' => 'sigmize/v1/auth/provision',
+								'method'   => 'POST',
+								'data'     => [
+									'source' => self::get_source(), // Which product's checklist this click came from.
+								],
+							]
+							: [
+								'url' => esc_url( $admin_url ) . 'admin.php?page=sigmize-dashboard',
+							],
+					],
+				],
+			];
+		}
+
 		if ( is_plugin_active( 'suretriggers/suretriggers.php' ) ) {
 			// OttoKit dynamic checks.
 			$is_ottokit_connected = class_exists( '\SureTriggers\Models\SaasApiToken' ) && \SureTriggers\Models\SaasApiToken::get();
@@ -691,6 +729,68 @@ class GS_Helper {
 		}
 
 		return ! empty( get_option( 'surecontact_bearer_token' ) );
+	}
+
+	/**
+	 * Checks if Sigmize is connected to a workspace.
+	 *
+	 * Keyed on the workspace UUID rather than the bearer token: it is what the
+	 * plugin's SDK gates on, so it means "this site is being tracked".
+	 *
+	 * @since 1.0.9
+	 *
+	 * @return bool
+	 */
+	public static function is_sigmize_connected() {
+		if ( ! is_plugin_active( 'sigmize/sigmize.php' ) ) {
+			return false;
+		}
+
+		return ! empty( get_option( 'sigmize_workspace_uuid' ) );
+	}
+
+	/**
+	 * Which product this checklist is running as part of.
+	 *
+	 * Derived from where GS_FILE lives, since only one copy of this library
+	 * ever loads. The mu-plugins check comes first because plugin_basename()
+	 * strips WPMU_PLUGIN_DIR too, making an mu-plugin copy indistinguishable
+	 * from a standalone install.
+	 *
+	 * @since 1.0.9
+	 *
+	 * @return string Product slug, e.g. 'zipwp', 'astra-sites', 'astra-pro-sites', 'getting-started'.
+	 */
+	public static function get_source() {
+		$file     = wp_normalize_path( GS_FILE );
+		$relative = plugin_basename( GS_FILE );
+
+		// ZipWP installs this library into mu-plugins rather than vendoring it
+		// inside a plugin, so loading from there identifies it. A host wanting
+		// to be certain should declare itself through the filter below.
+		if ( 0 === strpos( $file, trailingslashit( wp_normalize_path( WPMU_PLUGIN_DIR ) ) ) ) {
+			$source = 'zipwp';
+		} elseif ( $relative === $file ) {
+			// Nothing was stripped, so the first segment is a directory, not a slug.
+			$source = 'getting-started';
+		} else {
+			$source = strtok( $relative, '/' );
+			$source = false === $source ? 'getting-started' : $source;
+		}
+
+		/**
+		 * Filters the product slug reported as the checklist's source.
+		 *
+		 * A host this cannot identify should declare itself here.
+		 *
+		 * @since 1.0.9
+		 *
+		 * @param string|mixed $source Product slug, e.g. 'zipwp', 'astra-sites'.
+		 */
+		$filtered = apply_filters( 'getting_started_source', $source );
+
+		// Not a bare (string) cast: that warns on arrays and fatals on objects.
+		return sanitize_key( is_scalar( $filtered ) ? (string) $filtered : $source );
 	}
 
 	/**
