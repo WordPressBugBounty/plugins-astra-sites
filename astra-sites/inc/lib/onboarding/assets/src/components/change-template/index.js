@@ -14,6 +14,7 @@ const ChangeTemplate = () => {
 			currentIndex,
 			licenseStatus,
 			selectedTemplateType,
+			isExternalDeepLink,
 		},
 		dispatch,
 	] = useStateValue();
@@ -29,6 +30,7 @@ const ChangeTemplate = () => {
 				type: 'set',
 				currentIndex: currentIndex - 1,
 				currentCustomizeIndex: 0,
+				isExternalDeepLink: false,
 			} );
 		}, 300 );
 	};
@@ -45,9 +47,13 @@ const ChangeTemplate = () => {
 					) }
 				</div>
 			</div>
-			<div className="change-btn-wrap" onClick={ goToShowcase }>
-				<XMarkIcon className="w-6 h-6 text-zip-body-text" />
-			</div>
+			{ ! (
+				starterTemplates.lockDeepLinkedTemplate && isExternalDeepLink
+			) && (
+				<div className="change-btn-wrap" onClick={ goToShowcase }>
+					<XMarkIcon className="w-6 h-6 text-zip-body-text" />
+				</div>
+			) }
 		</div>
 	);
 };

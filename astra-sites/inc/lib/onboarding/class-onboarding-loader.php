@@ -328,6 +328,17 @@ class Intelligent_Starter_Templates_Loader {
 			'isMultisite' => is_multisite(),
 			'canInstallPlugins' => current_user_can( 'install_plugins' ),
 			'canActivatePlugins' => current_user_can( 'activate_plugins' ),
+			/**
+			 * Filter to lock the onboarding flow to a deep linked template.
+			 *
+			 * When enabled, the `template_id` URL parameter persists across reloads and the
+			 * back / change template controls stay hidden until the features step, locking
+			 * the user to the deep linked template.
+			 *
+			 * @since 4.7.6
+			 * @param bool $lock_deep_linked_template Whether to lock the flow to the deep linked template. Default false.
+			 */
+			'lockDeepLinkedTemplate' => (bool) apply_filters( 'starter_templates_lock_deep_linked_template', false ),
 			'isWPFreshSite' => Astra_Sites::get_instance()->is_wp_fresh_site(),
 		);
 

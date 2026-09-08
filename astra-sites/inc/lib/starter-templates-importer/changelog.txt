@@ -1,3 +1,8 @@
+v1.1.42 - 7-September-2026
+- Fix: SureMembers restrictions now work right after import; the skipped access group priority meta is restored.
+- Fix: SureMembers restriction precedence and rule references now resolve on the imported site.
+- Improvement: Security - Enforced TLS certificate verification on remote image and content downloads during import.
+
 v1.1.41 - 19-August-2026
 - Fix: Import log entries are now buffered and written in batches instead of one locked file write per entry, which kept long import steps within the request limit enforced by some hosts.
 

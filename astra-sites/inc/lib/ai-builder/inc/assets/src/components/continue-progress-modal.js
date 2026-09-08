@@ -8,6 +8,7 @@ import Modal from './modal';
 import Button from './button';
 import { useNavigateSteps } from '../router';
 import { getCookie } from '../utils/helpers';
+import { clearFunnelSession } from '../utils/funnel-session';
 
 const ContinueProgressModal = () => {
 	const {
@@ -39,6 +40,7 @@ const ContinueProgressModal = () => {
 
 		setConfirmationStartOverModal( { open: false } );
 		removeLocalStorageItem( 'ai-builder-onboarding-details' );
+		clearFunnelSession(); // Next build must be reported as a fresh attempt.
 		setWebsiteOnboardingAIDetails( defaultOnboardingAIState );
 		setContinueProgressModal( { open: false } );
 		navigateTo( {

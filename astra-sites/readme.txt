@@ -1,94 +1,53 @@
-=== Starter Templates – AI-Powered Templates for Elementor & Gutenberg ===
+=== Starter Templates: AI-Powered Website Templates for Elementor & Gutenberg ===
 Contributors: brainstormforce
 Donate link: https://wpastra.com/pro/
-Tags: Elementor,Templates,Gutenberg,Block Editor,Astra Starter Sites
+Tags: templates, website templates, elementor templates, gutenberg templates, starter sites
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.7.5
+Stable tag: 4.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The growing library of 300+ ready-to-use templates that work with all WordPress themes including Astra, Hello, OceanWP, GeneratePress and more
+300+ free WordPress website templates, page templates & block patterns. A starter sites library for Elementor, Gutenberg & any theme.
 
 == Description ==
 
-= Starter Templates: AI Website Builder and Elementor Templates =
+= Website Templates, Page Templates and Block Patterns for WordPress =
 
-The future of website creation is here! With Starter Templates, you can create professional-looking websites in just minutes, powered by AI.
+Starter Templates is a growing library of 300+ ready-to-use website templates for WordPress. Import a complete website design, a single page template, or an individual section, in one click.
 
-Leverage the Starter Templates AI website builder to generate websites with:
+Every template works with any WordPress theme, and with the page builder you already use: Elementor, Beaver Builder, Spectra, or the WordPress block editor (Gutenberg).
 
-- Stunning designs
-- All relevant sections and pages
-- High quality stock images to help engage visitors
-- Compelling website copy tailored to your business
-- Extensive customization options
+[Starter Templates demo](https://bsf.io/starter-templates-demo)
 
-Say goodbye to spending days or weeks designing and building a website. With Starter Templates, you can build websites faster than ever with AI.
+**Highlights**
 
-[Try the live demo of Starter Templates](https://bsf.io/starter-templates-demo)
+- 300+ website templates and ready-made site designs
+- Free Elementor templates and Gutenberg templates
+- 200+ page sections, block patterns and layouts
+- Pre-built sections designed for specific use-cases
+- Full site templates, page templates and section templates
+- AI website builder with built-in AI assistant
+- Adaptive design library with royalty-free images
+- Works with any WordPress theme
+- Supported page builders: Elementor, Spectra, Beaver Builder, and WordPress Block Editor
 
-= HIGHLIGHTS =
+= One-Click Website Templates and Template Kits =
 
-★ WordPress AI website builder
-★ Built-in AI assistant
-★ Fast and easy to use
-★ Large library of Elementor templates
-★ Hundreds of WordPress block editor (Gutenberg) templates
-★ 200+ Sections and block patterns
-★ Supported page builders: Spectra, Elementor, WordPress editor
-★ Fully customizable websites
+Building a website design from a blank page takes weeks. With Starter Templates you pick a template, import it, and edit the content.
 
-= How Does Starter Template AI Website Builder Work? =
+Every design is a complete template kit, not just a demo page, but the pages, layouts and settings that make a finished website.
 
-Starter Templates integrates with ZipWP, our amazing AI website building platform. It takes care of everything for you, from design to content generation.
+You can import at three levels:
 
-Let AI do the heavy lifting, so you can focus on your ideas!
+- **Full website templates**: Every page, menu, and setting for a complete site
+- **Page templates**: A single page design dropped into your existing site
+- **Sections and block patterns**: Individual layouts added to any page
 
-Our mission is to unlock the power of the internet for small businesses. Creating a website shouldn't be difficult, and growing a business on the internet shouldn't be complicated.
+Preview any template as a live demo before you import it, so you always know what you are getting.
 
-With Starter Templates, you can create a stunning website in a matter of minutes. Simply describe your idea, and watch as a WordPress website is built before your eyes.
-
-Want to create a lightweight website for your business that also looks exceptional?
-
-= Follow the steps below: =
-
-1. Select the type of website you're creating (portfolio, business site, landing page, or something else).
-2. Provide your business name.
-3. Describe your business. Use AI to refine your description prompt if you need to.
-4. The AI will suggest images based on your input. Select the images you want to use.
-5. Add your contact details and social media handles so people can interact.
-6. Choose the website structure from the options.
-7. Select any site features you need.
-8. The AI will generate a website in under 2 minutes.
-9. Customize your site as you see fit!
-
-Whether you're a beginner with no website building experience, or a seasoned web designer, Starter Templates has you covered.
-
-= All Features =
-
-Starter Template has all the essentials you need to create amazing websites!
-
-= AI Website Builder =
-
-Thanks to the power of AI, you can create your dream website effortlessly. Our AI analyzes your business description and goals, then selects the perfect design, generates professional copy, and curates visuals to match your brand.
-
-No more wrestling with complex themes or plugins – just describe your idea and let AI do the rest!
-
-= Lightning Fast Websites =
-
-Starter Templates prioritizes speed and efficiency without compromising quality.
-
-Here's what sets us apart:
-
-= Optimized Code =
-
-Pages created with Starter Templates have efficient code, and are free from all unnecessary elements.
-
-This translates to faster load times and a smoother user experience for visitors regardless of browser or device.
-
-= Realistic Templates =
+= Realistic Templates for Every Business =
 
 Starter Templates goes beyond stunning design. It delivers readymade website templates specifically crafted with your business in mind.
 
@@ -98,35 +57,35 @@ Creating a business website? We have dozens of professional-quality designs read
 
 No matter your industry or niche, we have a template that perfectly aligns with your vision.
 
-= Classic Starter Templates =
+= Free Elementor Templates =
 
-Whether you're a small business owner, freelancer, or nonprofit organization, there's a template that suits your needs. Templates are carefully crafted to provide a polished and attractive look for your website.
+A fan of Elementor? Look no further. Starter Templates offers a vast collection of professionally designed Elementor templates, with more than 300 Elementor templates available.
 
-The cherry on top? Starter Template supports multiple page builders, including Elementor, Spectra and Gutenberg.
+Import entire websites built with Elementor, individual page templates, or specific blocks to enhance your site's layout and design.
 
-You have the flexibility to customize your website your way.
+Then just drag, drop, customize, and launch your website.
+
+= WordPress Block Editor (Gutenberg) Templates =
+
+The WordPress block editor is changing the game for website creation, and building from scratch is still slow.
+
+Starter Templates offers a large library of readymade Gutenberg templates, block patterns and page layouts, all editable natively in the block editor.
 
 = Hundreds of Sections and Block Patterns =
 
-Want to customize your website to make it truly unique? Use sections and block patterns to add your personal style.
+Every section is built for a specific use-case. A hero to open a landing page, a pricing table for a service business, a testimonial layout for social proof, a team grid for an about page.
 
-Available sections include:
+Drop one into any page and the layout, spacing and styling are already handled. Swap the text and images, and the section is done.
 
-- Hero
-- Page Header
-- About
-- Services
-- Features
-- Contact
-- Why Choose Us
-- Call To Action
-- Portfolio
-- Gallery
-- Testimonials
-- Pricing
-- FAQ
-- Team
-- Statistics
+Want to customize your website design to make it truly unique? Use sections, block patterns and layouts to add your personal style.
+
+Available sections include: Hero, Page Header, About, Services, Features, Contact, Why Choose Us, Call To Action, Portfolio, Gallery, Testimonials, Pricing, FAQ, Team, Statistics.
+
+= Templates That Install the Plugins They Need =
+
+Depending on the type of template you import, Starter Templates also installs the plugins that template needs to work.
+
+Import a booking template and the plugins that provide booking are set up for you. Import an online store template and the eCommerce plugins come with it. You do not need to go hunting for another plugin after importing a template, because the design arrives ready to run.
 
 = AI-Integrated Adaptive Design Library =
 
@@ -134,25 +93,34 @@ Personalize blocks and patterns to match your website style with the power of AI
 
 The design library within the Starter Templates plugin is integrated with AI and royalty-free image repositories. All elements come pre-populated with relevant text and images that you can easily customize to match your brand.
 
-= Elementor Templates =
+= Lightning Fast Websites =
 
-A fan of Elementor? Look no further! Starter Templates offers a vast collection of professionally designed Elementor templates.
+Starter Templates prioritizes speed and efficiency without compromising quality.
 
-You can effortlessly import entire websites crafted with Elementor, individual pages, or even specific blocks to enhance your site's functionality and aesthetic appeal.
+Pages created with Starter Templates have efficient, clean code and are free from unnecessary elements. This means faster load times and a smoother experience for visitors on any browser or device.
 
-Then just drag, drop, customize, and launch your website!
+= AI Website Builder =
 
-= WordPress Block Editor Templates =
+Alongside the template library, Starter Templates includes an AI website builder.
 
-The WordPress block editor (formerly Gutenberg) is changing the game for website creation.
+Describe your business and the AI selects a design, generates professional copy, and curates visuals to match your brand, producing a complete website in under two minutes, which you then edit like any other template.
 
-Building from scratch can be time-consuming. Fortunately, Starter Templates offers a vast library of readymade templates to ignite your website's potential.
+Follow the steps below:
+
+- Enter the name of your website and select the type of website you're creating (portfolio, business site, landing page, or something else).
+- Describe your business. Use AI to refine your description prompt if you need to.
+- Add your contact details and social media handles so people can interact.
+- The AI will suggest images based on your input. Select the images you want to use.
+- Choose the website structure from the options.
+- Select any site features you need.
+- The AI will generate a website in under 2 minutes.
+- Customize your site as you see fit!
 
 = AI Assistant for WordPress =
 
 Our AI Assistant works in a similar way to ChatGPT but is specifically tailored for WordPress.
 
-With just a click of a button, you can use the power of artificial intelligence to help write copy for landing pages, proofread blog posts, translate content into different languages, generate custom HTML and CSS codes, and much more!
+With just a click of a button, you can use AI to help write copy for landing pages, proofread blog posts, translate content into different languages, generate custom HTML and CSS codes, and much more.
 
 = Royalty-Free Images =
 
@@ -162,72 +130,115 @@ You have access to millions of top-tier images within your WordPress dashboard. 
 
 = Training Videos =
 
-As the saying goes, "Give someone a fish, and they will eat for a day; teach them how to fish, and they will eat for a lifetime."
-
-Embracing this philosophy, we offer a range of comprehensive training videos designed to complement our templates. They provide the knowledge and skills necessary to build, launch, and maintain your website.
+We offer a range of comprehensive training videos designed to complement our templates. They provide the knowledge and skills necessary to build, launch, and maintain your website.
 
 = Types of Websites You Can Create =
 
-Starter Templates is perfect for building websites for:
+Starter Templates is perfect for building websites for: personal branding, restaurants, service providers, nonprofits and charities, events, startups, local businesses, wellness businesses, landing pages, lead generation websites, eCommerce stores, blogs, manufacturing businesses, and any other type of WordPress website.
 
-✔ Personal branding
-✔ Restaurants
-✔ Service providers
-✔ Nonprofits and charities
-✔ Events
-✔ Startups
-✔ Local businesses
-✔ Wellness businesses
-✔ Landing pages
-✔ Lead generation websites
-✔ eCommerce stores
-✔ Blogs
-✔ Manufacturing businesses
-✔ Any other type of WordPress website
+There's no limit to what you can create.
 
-There’s no limit to what you can create!
-
-Please note: To access templates and AI features, you’ll need a ZipWP account. [ZipWP platform](https://zipwp.com/). Signing up is quick, easy, and 100% free.
+Please note: To access AI-generated templates and websites, you'll need a [ZipWP account](https://zipwp.com/). Signing up is quick, easy, and 100% free.
 
 = Fun Facts About Starter Templates =
 
-➜ Over 5,000 websites are built with Starter Templates every day.
-➜ The plugin has been installed on more than 2 million websites.
-➜ Starter Templates has more than 4,500 five-star reviews.
-➜ Our team of dedicated full-time WordPress experts help and support hundreds of users daily.
-➜ A devoted team full-time designers keep the design library up to date.
-➜ Our plugin offers more than 100 free Elementor templates.
-➜ You can import a complete website, individual page, or section of a page in seconds.
-➜ We support 2 page builders: Spectra and Elementor as well as the WordPress editor
-➜ "eCommerce" is the most searched keyword in our library.
+✓ Over 5,000 websites are built with Starter Templates every day.
 
-= The Starter Templates Plugin Works With... =
+✓ The plugin has been installed on more than 2 million websites.
 
-➜ Astra Theme
-➜ Spectra website builder
-➜ WordPress block editor/Gutenberg
-➜ Elementor page builder
-➜ WooCommerce
-➜ WPForms
-➜ Sitekit
+✓ Starter Templates has more than 4,500 five-star reviews.
+
+✓ Our team of dedicated full-time WordPress experts help and support hundreds of users daily.
+
+✓ A devoted team of full-time designers keeps the design library up to date.
+
+✓ Our plugin offers more than 150 free Elementor templates.
+
+✓ You can import a complete website, individual page, or section of a page in seconds.
 
 == Frequently Asked Questions ==
 
-= Why Is this awesome plugin free? =
+= Do I need to know how to code to use Starter Templates? =
 
-Free is always the best price. We offer Starter Templates for free to showcase what our team is capable of. It’s also good business.
+No. Starter Templates is built for people who do not write code. You pick a website template, import it, then replace the text and images with your own. Everything is edited visually in your page builder or in the WordPress block editor.
 
-If you have a positive experience with Starter Templates, you might be tempted by the extra features included in premium versions of ZipWP, the Astra WordPress theme and other products we produce.
+= Will Starter Templates work with my WordPress theme? =
 
-We’re not afraid to prove our worth and offering a plugin for free is a great way to do that.
+Yes. Starter Templates work with all WordPress themes. The templates are designed to adapt to the theme you already have, so you do not need to switch themes to use them.
 
-= Which theme Is used by the AI website builder? =
+= Which page builders does Starter Templates support? =
 
-Starter Templates, uses the Astra theme. It’s the world's most popular WordPress theme with millions of users. Since Starter Templates and Astra are developed by the same company, we can control their development plans to make the AI website builder work perfectly every time.
+Starter Templates supports Elementor, Beaver Builder, Spectra, and the WordPress block editor (Gutenberg). You can filter the template library by builder and only see designs built for the one you use.
+
+= Do I need Elementor to use Starter Templates? =
+
+No. Elementor is one of several supported options. If you prefer the WordPress block editor, there is a full library of Gutenberg templates and block patterns that need no page builder plugin at all.
+
+= Are the website templates free? =
+
+The plugin is free and includes a large library of free website templates, page templates and block patterns, with more than 150 free website templates. Some designs in the library are available with higher plans.
+
+= What is the difference between a website template, a page template and a block pattern? =
+
+A website template is a complete site: every page, the menus and the settings, imported in one step. A page template is a single page design added to a site you already have. A block pattern is one section of a page, such as a hero, a pricing table or a testimonial layout, dropped into any page you like.
+
+= What is a template kit? =
+
+A template kit is a full set of matching designs rather than a single page. Every Starter Templates design is a complete kit, so the pages, layouts, colors and typography all fit together once imported.
+
+= Can I import a single page template instead of a full website? =
+
+Yes. You can import a complete website, a single page template, or an individual section or block pattern.
+
+= Can I import a template into an existing website? =
+
+Yes. You can add individual page templates, sections and block patterns to a site that is already live.
+
+= Will importing a template overwrite my existing content? =
+
+Yes, when you import a new template, your existing pages will be overwritten. It's recommended you import a template on a clean website instance before migrating it to your existing website.
+
+= Do I still need to keep the plugin active after I import a template? =
+
+No. Once you import a template, you can deactivate the plugin. However, if you'd like to import a template again, you would need to install the plugin again.
+
+= Will Starter Templates slow down my website? =
+
+No. Pages built with Starter Templates use clean, efficient code and are free from unnecessary elements, which means faster load times and a smoother experience for visitors on any browser or device.
+
+= Do the templates work with WooCommerce? =
+
+Yes. The library includes eCommerce and online store designs, and the plugin works alongside WooCommerce and SureCart.
+
+= Can I customize a template after importing it? =
+
+Yes. Once a template is imported it becomes ordinary WordPress content. You can change colors, fonts, text and images, rearrange sections, and add new pages exactly as you would on any other site.
+
+= Where do the images in the templates come from? =
+
+Starter Templates integrates with royalty-free image libraries including Pexels and Unsplash, so you can search millions of images from inside your WordPress dashboard and swap them into any template.
+
+= Do I need a ZipWP account? =
+
+If you're importing pre-designed templates, you don't need a ZipWP account. For AI-generated templates, you will need a ZipWP account. Signing up is quick, easy, and 100% free.
+
+= Which theme is used by the AI website builder and other website templates? =
+
+Starter Templates uses the Astra theme. It is the world's most popular WordPress theme with millions of users. Starter Templates and Astra are developed by the same company, Brainstorm Force.
 
 = What kind of customizations can I make to an AI generated website? =
 
 Once your website is generated, you have complete control over its content and layout. You can customize it as you would any other website, including changing colors, text, adding images, and creating new sections and pages.
+
+= Can I use Starter Templates on client websites? =
+
+Yes, you can use Starter Templates to build websites for your clients.
+
+= Why is this awesome plugin free? =
+
+Free is always the best price. We offer Starter Templates for free to showcase what our team is capable of. It is also good business.
+
+If you have a positive experience with Starter Templates, you might be tempted by the extra features included in premium versions of ZipWP, the Astra WordPress theme and other products we produce.
 
 = How can I report a security bug? =
 
@@ -245,12 +256,27 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
-v4.7.4 - 20th-August-2026
+v4.7.6 - 8th-September-2026
+- New:
+    - Classic Templates: Added a custom color palette generator that creates a full color scheme from a primary color, with live preview and st-color URL parameter support.
+    - Added deep-link support for inhouse plugins to launch the template import onboarding directly.
+- Security:
+    - ST Importer: Enforced TLS certificate verification on remote image and content downloads during import.
+- Fix:
+    - Security - Elementor: Inserting a template no longer overwrites the layout of an unrelated page, and site wide Elementor settings are now changed by administrators only.
+    - Imported content restrictions now work without re-saving each memberships in Suremembers plugin data.
+    - Blocked visitors now get the intended restriction in memberships, on the imported site instead of the demo.
+    - AI Builder: Template import reported a generic import failure and logged a PHP warning when the site details were not yet stored.
+    - ST Importer: SureMembers restrictions now work right after import; the skipped access group priority meta is restored.
+    - ST Importer: SureMembers restriction precedence and rule references now resolve on the imported site.
+
+v4.7.5 - 20th-August-2026
 - New:
     - Added Sigmize (Conversion Testing) to the features selection step in the onboarding flow.
     - Finish Setup: Added Sigmize action item to the Finish Setup checklist.
 - Improvement:
     - Ensured compatibility with WordPress 7.1.
+    - Updated readme with rewritten, template-focused content covering website templates, page templates, block patterns, supported builders, and expanded FAQs.
     - AI Builder: Added AVIF image support, so templates using AVIF images bring them across along with the other formats.
     - AI Builder: Removed the goals selection screen and the tone and keywords options from the AI website builder onboarding.
     - Design Kit: Spectra Blocks plugin is now installed from the WordPress.org repository, removing the temporary hardcoded download URL.

@@ -229,6 +229,11 @@ class Ai_Builder_ZipWP_Api {
 							'required'          => true,
 							'sanitize_callback' => 'sanitize_text_field',
 						],
+						'funnel_session_id' => [
+							'type'              => 'string',
+							'required'          => false,
+							'sanitize_callback' => 'sanitize_text_field',
+						],
 					],
 				],
 			]
@@ -2050,8 +2055,18 @@ class Ai_Builder_ZipWP_Api {
 			);
 		}
 
-		$site         = get_option( 'zipwp_import_site_details', array() );
-		$uuid         = is_array( $site ) ? $site['uuid'] : '';
+		$site = get_option( 'zipwp_import_site_details', array() );
+		$uuid = is_array( $site ) && ! empty( $site['uuid'] ) ? $site['uuid'] : '';
+
+		if ( empty( $uuid ) ) {
+			wp_send_json_error(
+				array(
+					'data'   => __( 'Site not found.', 'astra-sites' ),
+					'status' => false,
+				)
+			);
+		}
+
 		$api_endpoint = $this->get_api_domain( false ) . '/sites/import-status/' . $uuid . '/';
 		$request_args = array(
 			'headers' => $this->get_api_headers(),
@@ -2315,6 +2330,13 @@ class Ai_Builder_ZipWP_Api {
 			'email'             => $this->get_zip_user_email(),
 			'source'            => self::get_site_source(),
 		];
+
+		// UUID generated once per wizard session so ZipWP can count each build as its own attempt.
+		// The ZipWP endpoint validates it as nullable|uuid, so only forward a well-formed UUID.
+		$funnel_session_id = isset( $request['funnel_session_id'] ) ? strtolower( sanitize_text_field( $request['funnel_session_id'] ) ) : '';
+		if ( wp_is_uuid( $funnel_session_id ) ) {
+			$post_data['funnel_session_id'] = $funnel_session_id;
+		}
 
 		$body = wp_json_encode( $post_data );
 

@@ -22,7 +22,12 @@ const { reportError, supportLink } = aiBuilderVars;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
 import { STORE_KEY } from '../store';
 import ErrorModel from '../components/error-model';
-import { stepNextButtonClick, TOTAL_STEPS, useNavigateSteps } from '../router';
+import {
+	SITE_BUILDING_STEP,
+	stepNextButtonClick,
+	TOTAL_STEPS,
+	useNavigateSteps,
+} from '../router';
 import { SITE_CREATION_STATUS_CODES, getLocalStorageItem } from '../helpers';
 import FeatureCarousel from '../components/feature-carousel';
 import ExitConfirmationPopover from '../components/exit-confirmation-popover';
@@ -183,6 +188,8 @@ const ImportAiSite = () => {
 	// Last status code seen. The status endpoint re-emits the current code on every
 	// poll, so the stall guard is only refreshed when the code actually changes.
 	const lastStatusCodeRef = useRef( null );
+	// Whether the 'site_building' funnel step has been recorded for this build.
+	const siteBuildingRecordedRef = useRef( false );
 	const randomMessage = useMemo( getMessage, [] );
 
 	let currentStep = 0;
@@ -1984,14 +1991,12 @@ const ImportAiSite = () => {
 				// Save customizations.
 				await customizeWebsite();
 
+				// Reaching 100% triggers ImportLoaderAi's effect, which calls
+				// nextStep() and records the final 'done' funnel step from the
+				// route config. No direct record here, so 'done' is sent once.
 				dispatch( {
 					importPercent: 100,
 					importEnd: true,
-				} );
-
-				stepNextButtonClick( {
-					stepNumber: 8,
-					slug: 'building-website',
 				} );
 
 				setShowProgressBar( false );
@@ -2330,6 +2335,15 @@ const ImportAiSite = () => {
 
 		// Progress step (A-prefixed).
 		const step = +responseCode?.slice( 1 );
+
+		// First build-progress code from ZipWP: the site is actually being built.
+		if ( ! siteBuildingRecordedRef.current ) {
+			siteBuildingRecordedRef.current = true;
+			stepNextButtonClick( {
+				stepNumber: SITE_BUILDING_STEP.stepNumber,
+				slug: SITE_BUILDING_STEP.slug,
+			} );
+		}
 
 		// Avoid progress bar going back
 		if ( step > currentStep ) {

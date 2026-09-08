@@ -295,12 +295,18 @@ class ST_WXR_Importer {
 	/**
 	 * Remap SureMembers access-group relations to the imported IDs.
 	 *
-	 * Two directions need fixing once the import completes:
+	 * Five directions need fixing once the import completes:
 	 * 1. Rule metas on each imported access group (include/exclude/drips/rules)
 	 *    hold rule strings such as "post-{id}-|", "postchild-{id}-|" and
 	 *    "tax-{term_id}-single-{taxonomy}" that still carry source-site IDs.
 	 * 2. Restricted posts carry the source access-group IDs in their
 	 *    "suremembers_post_access_group" meta.
+	 * 3. The restriction rules describing what a blocked visitor gets still
+	 *    point at the source site.
+	 * 4. URL-restriction patterns exported as absolute demo URLs can never
+	 *    match a URL on the imported site.
+	 * 5. The priority meta the restriction query joins on never survives the
+	 *    import.
 	 *
 	 * Runs on `import_end`, when the post/term/group ID maps captured during
 	 * the WXR import are complete. Each object is remapped only once (guarded
@@ -349,10 +355,134 @@ class ST_WXR_Importer {
 				}
 			}
 
+			$this->remap_suremembers_restriction_rules( $new_group_id, $post_id_map );
+			$this->remap_suremembers_restricted_url( $new_group_id );
+			$this->restore_suremembers_plan_priority( $new_group_id );
+
 			update_post_meta( $new_group_id, '_astra_sites_suremembers_remapped', true );
 		}
 
 		$this->remap_suremembers_post_access_groups( $access_group_id_map );
+	}
+
+	/**
+	 * Remap the source-site references inside an access group's restriction rules.
+	 *
+	 * The "suremembers_plan_rules" meta describes what a blocked visitor gets.
+	 * Its "restrict" block survives the import still pointing at the source
+	 * site in two ways:
+	 * - "restrict_page_post" — a "post-{id}-|" reference to the page rendered
+	 *   in place of the restricted content. A stale ID either renders nothing
+	 *   or, worse, serves whatever unrelated post now holds that ID.
+	 * - Demo-site URLs in any string value: "redirect_url" (sends blocked
+	 *   visitors off the imported site) as well as "preview_content" and
+	 *   "preview_button", which are rendered to every blocked visitor and can
+	 *   carry demo-site links.
+	 *
+	 * @since 1.1.42
+	 *
+	 * @param int                    $group_id    Imported access group ID.
+	 * @param array<int|string, int> $post_id_map Old → new post IDs.
+	 * @return void
+	 */
+	public function remap_suremembers_restriction_rules( $group_id, $post_id_map ) {
+		$rules = get_post_meta( $group_id, 'suremembers_plan_rules', true );
+
+		if ( ! is_array( $rules ) ) {
+			return;
+		}
+
+		$original = $rules;
+
+		if ( ! empty( $rules['restrict'] ) && is_array( $rules['restrict'] ) ) {
+			$restrict = $rules['restrict'];
+
+			if ( ! empty( $restrict['restrict_page_post'] ) && is_string( $restrict['restrict_page_post'] ) ) {
+				$remapped = preg_replace_callback(
+					'/^post-(\d+)-/',
+					static function ( $matches ) use ( $post_id_map ) {
+						$old_id = (int) $matches[1];
+						$new_id = isset( $post_id_map[ $old_id ] ) ? (int) $post_id_map[ $old_id ] : $old_id;
+						return 'post-' . $new_id . '-';
+					},
+					$restrict['restrict_page_post']
+				);
+
+				if ( null !== $remapped ) {
+					$restrict['restrict_page_post'] = $remapped;
+				}
+			}
+
+			// Scrub demo-site URLs from every string in the block — covers
+			// redirect_url, preview_content and preview_button in one pass.
+			// restrict_page_post carries no URL, so this is a no-op for it.
+			$rules['restrict'] = ST_Importer_Helper::replace_source_site_url( $restrict );
+		}
+
+		// The group mirrors its own ID inside the rules; keep it in sync.
+		if ( isset( $rules['id'] ) ) {
+			$rules['id'] = (string) $group_id;
+		}
+
+		if ( $rules !== $original ) {
+			update_post_meta( $group_id, 'suremembers_plan_rules', $rules );
+		}
+	}
+
+	/**
+	 * Restore the access-group priority meta dropped during the WXR import.
+	 *
+	 * SureMembers writes an empty string to "suremembers_plan_priority" when no
+	 * priority is set on the membership, and the WXR parser skips postmeta
+	 * carrying an empty value, so the row never reaches the imported group.
+	 * Its restriction lookup INNER JOINs the postmeta table on that exact meta
+	 * key, so a missing row drops the group out of every restriction check —
+	 * the protected content stays public until the membership is saved again,
+	 * which is what recreates the row.
+	 *
+	 * The value is intentionally left empty: that is what SureMembers itself
+	 * stores for an unset priority, and its ordering treats it as zero.
+	 *
+	 * @since 1.1.42
+	 *
+	 * @param int $group_id Imported access group ID.
+	 * @return void
+	 */
+	public function restore_suremembers_plan_priority( $group_id ) {
+		if ( metadata_exists( 'post', $group_id, 'suremembers_plan_priority' ) ) {
+			return;
+		}
+
+		add_post_meta( $group_id, 'suremembers_plan_priority', '' );
+	}
+
+	/**
+	 * Rewrite demo-site URLs inside an access group's URL-restriction meta.
+	 *
+	 * The "suremembers_restricted_url" meta holds the URL patterns a group
+	 * restricts, matched by substring (or regex) against the visited URL.
+	 * A pattern exported as an absolute demo URL can never match a URL on
+	 * the imported site, so the restriction silently protects nothing.
+	 * Rewriting the demo base to the imported site's URL keeps the tail
+	 * path intact, which is what the substring match keys on.
+	 *
+	 * @since 1.1.42
+	 *
+	 * @param int $group_id Imported access group ID.
+	 * @return void
+	 */
+	public function remap_suremembers_restricted_url( $group_id ) {
+		$restricted_url = get_post_meta( $group_id, 'suremembers_restricted_url', true );
+
+		if ( empty( $restricted_url ) ) {
+			return;
+		}
+
+		$scrubbed = ST_Importer_Helper::replace_source_site_url( $restricted_url );
+
+		if ( $scrubbed !== $restricted_url ) {
+			update_post_meta( $group_id, 'suremembers_restricted_url', $scrubbed );
+		}
 	}
 
 	/**
@@ -1148,7 +1278,22 @@ class ST_WXR_Importer {
 		/**
 		 * Setting the publish date to current date.
 		 */
-		if ( isset( $data['post_date'] ) ) {
+		$post_type = isset( $data['post_type'] ) ? $data['post_type'] : '';
+
+		$preserve_post_date = in_array( $post_type, self::get_preserved_post_date_post_types(), true );
+
+		// Never preserve a future source date: wp_insert_post() demotes a
+		// `publish` post to `future` when its post_date_gmt is ahead of now,
+		// and SureMembers' restriction queries only see `publish` groups.
+		// The positive-epoch check rejects the "0000-00-00 00:00:00" zero
+		// date drafts ship with, which strtotime() parses to a negative
+		// timestamp rather than failing.
+		if ( $preserve_post_date ) {
+			$post_date_gmt      = isset( $data['post_date_gmt'] ) && is_string( $data['post_date_gmt'] ) ? strtotime( $data['post_date_gmt'] ) : false;
+			$preserve_post_date = false !== $post_date_gmt && $post_date_gmt > 0 && $post_date_gmt < time();
+		}
+
+		if ( isset( $data['post_date'] ) && ! $preserve_post_date ) {
 			$post_modified         = current_time( 'mysql' );
 			$post_modified_gmt     = current_time( 'mysql', 1 );
 			$data['post_date']     = $post_modified;
@@ -1156,6 +1301,40 @@ class ST_WXR_Importer {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Post types whose original publish date drives behaviour, not just display.
+	 *
+	 * Imported content is normally re-dated to the import time so a fresh site
+	 * does not look years old. That is wrong for post types where the publish
+	 * date is read as data: SureMembers orders the access groups restricting a
+	 * request by `post_date` whenever their priorities tie, so collapsing every
+	 * group onto the same import timestamp leaves the winner — and therefore
+	 * which restriction a blocked visitor gets — down to MySQL's undefined tie
+	 * order.
+	 *
+	 * @since 1.1.42
+	 *
+	 * @return array<int, string> Post types imported with their original dates.
+	 */
+	public static function get_preserved_post_date_post_types() {
+		// SureMembers access group ( SUREMEMBERS_POST_TYPE ), kept as a literal
+		// because the constant is unavailable when the plugin is not active.
+		$post_types = array( 'wsm_access_group' );
+
+		/**
+		 * Filters the post types that keep their original publish date on import.
+		 *
+		 * @since 1.1.42
+		 *
+		 * @param array<int, string> $post_types Post types to import as-dated.
+		 */
+		$post_types = apply_filters( 'astra_sites_preserve_post_date_post_types', $post_types );
+
+		// Cast rather than trust the filter: this feeds in_array() once per
+		// imported post, and a non-array return would fatal the whole import.
+		return (array) $post_types;
 	}
 
 	/**

@@ -6,15 +6,27 @@ import { __ } from '@wordpress/i18n';
 import { useStateValue } from '../store/store';
 import ICONS from '../../icons';
 import Logo from '../components/logo';
-import { getStepIndex, storeCurrentState } from '../utils/functions';
+import {
+	getStepIndex,
+	getStoredState,
+	storeCurrentState,
+} from '../utils/functions';
+import {
+	getDemo,
+	checkRequiredPlugins,
+	checkFileSystemPermissions,
+} from './import-site/import-utils';
+import LoadingSpinner from '../components/loading-spinner';
 import { STEPS } from './util';
+import toast from 'react-hot-toast';
 const { adminUrl } = starterTemplates;
 const $ = jQuery;
 
 const pageBuilders = [ 'gutenberg', 'elementor', 'beaver-builder' ];
 
 const Steps = () => {
-	const [ stateValue, dispatch ] = useStateValue();
+	const storedState = useStateValue();
+	const [ stateValue, dispatch ] = storedState;
 	const {
 		builder,
 		searchTerms,
@@ -26,6 +38,18 @@ const Steps = () => {
 		importError,
 	} = stateValue;
 	const [ settingHistory, setSettinghistory ] = useState( true );
+	// Captured during the first render. Effects declared above the deep link one
+	// rewrite the query string, so reading it later loses the entry values.
+	const [ deepLinkParams ] = useState( () => {
+		const params = new URLSearchParams( window.location.search );
+		return {
+			templateId: params.get( 'template_id' ) || '',
+			stepIndex: parseInt( params.get( 'ci' ), 10 ) || 0,
+		};
+	} );
+	const [ deepLinkLoading, setDeepLinkLoading ] = useState(
+		() => !! deepLinkParams.templateId
+	);
 	const [ settingIndex, setSettingIndex ] = useState( true );
 	const current = STEPS[ currentIndex ];
 	const history = useNavigate();
@@ -216,6 +240,135 @@ const Steps = () => {
 		setSettingIndex( false );
 	}, [ currentIndex, templateResponse, designStep ] );
 
+	useEffect( () => {
+		if ( ! stateValue.isExternalDeepLink || ! templateResponse ) {
+			return;
+		}
+
+		const templateUpdates = {};
+		const templateName = templateResponse?.title?.rendered || '';
+		const templateType = templateResponse?.[ 'astra-site-type' ] || '';
+
+		// Only overwrite what the response actually carries, an empty value
+		// would blank out the name/type the site list already stored.
+		if ( templateName ) {
+			templateUpdates.selectedTemplateName = templateName;
+		}
+		if ( templateType ) {
+			templateUpdates.selectedTemplateType = templateType;
+		}
+
+		if ( Object.keys( templateUpdates ).length ) {
+			dispatch( {
+				type: 'set',
+				...templateUpdates,
+			} );
+		}
+	}, [ templateResponse, stateValue.isExternalDeepLink ] );
+
+	useEffect( () => {
+		const templateIdParam = deepLinkParams.templateId;
+
+		if ( ! templateIdParam ) {
+			return;
+		}
+
+		const dropTemplateIdParam = () => {
+			const urlParams = new URLSearchParams( window.location.search );
+			urlParams.delete( 'template_id' );
+			history( window.location.pathname + '?' + urlParams.toString() );
+		};
+
+		const templateIdValue = parseInt( templateIdParam, 10 );
+
+		// A non numeric id never resolves to a template, bail before requesting it.
+		if ( isNaN( templateIdValue ) || templateIdValue <= 0 ) {
+			dropTemplateIdParam();
+			setDeepLinkLoading( false );
+			return;
+		}
+
+		// Strict mode keeps `template_id` in the URL, so this effect runs again on
+		// every reload. Leave the restored step alone once the user is past the
+		// customizer, but only when the stored state belongs to this template.
+		// Stored state for a different template would rehydrate that one instead
+		// and silently import it, and with nothing stored at all the step guards
+		// drop the user on the site list, so reloading the deep linked template
+		// is the better recovery in both cases.
+		const storedDeepLinkState = getStoredState();
+
+		if (
+			deepLinkParams.stepIndex > getStepIndex( 'customizer' ) &&
+			hasTemplateData( storedDeepLinkState ) &&
+			storedDeepLinkState?.selectedTemplateID === templateIdValue
+		) {
+			setDeepLinkLoading( false );
+			return;
+		}
+
+		if ( ! starterTemplates.lockDeepLinkedTemplate ) {
+			dropTemplateIdParam();
+		}
+
+		const loadDeepLinkedTemplate = async () => {
+			dispatch( {
+				type: 'set',
+				selectedTemplateID: templateIdValue,
+				isExternalDeepLink: true,
+			} );
+
+			const templateData = await getDemo( templateIdValue, storedState );
+
+			// `getDemo` handles its own errors, so an empty response is the only
+			// signal the template could not be fetched. Advancing anyway strands
+			// the user on a customizer with no template and no way back.
+			if ( ! templateData ) {
+				dropTemplateIdParam();
+
+				// Clearing the flag also restores the back / change template
+				// controls that strict mode hides, so the fallback is usable.
+				dispatch( {
+					type: 'set',
+					isExternalDeepLink: false,
+					currentIndex: getStepIndex( 'site-list' ),
+				} );
+				setDeepLinkLoading( false );
+
+				toast.error(
+					__(
+						'We could not load that template. Choose another one to continue.',
+						'astra-sites'
+					),
+					{ duration: 6000 }
+				);
+				return;
+			}
+
+			const templateBuilder =
+				templateData?.[ 'astra-site-page-builder' ] || '';
+
+			dispatch( {
+				type: 'set',
+				builder: pageBuilders.includes( templateBuilder )
+					? templateBuilder
+					: 'gutenberg',
+			} );
+
+			await checkRequiredPlugins( storedState );
+			checkFileSystemPermissions( storedState );
+
+			dispatch( {
+				type: 'set',
+				currentIndex: getStepIndex( 'customizer' ),
+				currentCustomizeIndex: 1,
+			} );
+
+			setDeepLinkLoading( false );
+		};
+
+		loadDeepLinkedTemplate();
+	}, [] );
+
 	window.onpopstate = () => {
 		if (
 			!! designStep &&
@@ -246,40 +399,53 @@ const Steps = () => {
 
 	return (
 		<div className={ `st-step ${ current?.class ?? '' }` }>
-			{ ! [ getStepIndex( 'customizer' ) ].includes( currentIndex ) && (
-				<div className="step-header">
-					{ current.header ? (
-						current.header
-					) : (
-						<div className="row">
-							<div className="col">
-								<Logo />
-							</div>
-							<div className="right-col">
-								<div className="col exit-link">
-									<a href={ adminUrl }>
-										<Tooltip
-											content={ __(
-												'Exit to Dashboard',
-												'astra-sites'
-											) }
-										>
-											{ ICONS.remove }
-										</Tooltip>
-									</a>
+			{ ! deepLinkLoading &&
+				! [ getStepIndex( 'customizer' ) ].includes( currentIndex ) && (
+					<div className="step-header">
+						{ current.header ? (
+							current.header
+						) : (
+							<div className="row">
+								<div className="col">
+									<Logo />
+								</div>
+								<div className="right-col">
+									<div className="col exit-link">
+										<a href={ adminUrl }>
+											<Tooltip
+												content={ __(
+													'Exit to Dashboard',
+													'astra-sites'
+												) }
+											>
+												{ ICONS.remove }
+											</Tooltip>
+										</a>
+									</div>
 								</div>
 							</div>
-						</div>
-					) }
+						) }
 
-					<canvas
-						id="ist-bashcanvas"
-						width={ window.innerWidth }
-						height={ window.innerHeight }
+						<canvas
+							id="ist-bashcanvas"
+							width={ window.innerWidth }
+							height={ window.innerHeight }
+						/>
+					</div>
+				) }
+			{ deepLinkLoading && (
+				<div className="flex items-center justify-center w-full h-screen">
+					<LoadingSpinner
+						widthClassName="w-10"
+						heightClassName="h-10"
+						colorClassName="text-accent-st"
 					/>
 				</div>
 			) }
-			{ settingHistory === false && settingIndex === false && current
+			{ settingHistory === false &&
+			settingIndex === false &&
+			deepLinkLoading === false &&
+			current
 				? current.content
 				: null }
 		</div>

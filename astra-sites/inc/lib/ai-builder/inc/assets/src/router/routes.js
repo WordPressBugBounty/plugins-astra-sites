@@ -124,7 +124,7 @@ const steps = [
 		path: '/building-website',
 		component: ImportAiSite,
 		layoutConfig: {
-			stepNumber: 8,
+			stepNumber: 9,
 			stepSlug: 'done',
 			name: __( 'Done', 'ai-builder' ),
 			description: __( 'Your website is ready!', 'ai-builder' ),
@@ -156,5 +156,24 @@ const steps = [
 ];
 
 export const TOTAL_STEPS = steps.length;
+
+// Funnel-only steps recorded between the last wizard screen and 'done'. They have
+// no route of their own: 'provisioning_started' fires when the wizard moves on
+// from the features (or design) screen after ZipWP accepts the create-site
+// request, and 'site_building' fires on the first build-progress status ZipWP
+// reports.
+export const PROVISIONING_STARTED_STEP = {
+	stepNumber: 7,
+	slug: 'provisioning_started',
+};
+export const SITE_BUILDING_STEP = {
+	stepNumber: 8,
+	slug: 'site_building',
+};
+
+// Highest step number in the wizard; recording it marks a build attempt as completed.
+export const FINAL_STEP_NUMBER = Math.max(
+	...steps.map( ( step ) => step?.layoutConfig?.stepNumber ?? 0 )
+);
 
 export default Object.seal( steps );

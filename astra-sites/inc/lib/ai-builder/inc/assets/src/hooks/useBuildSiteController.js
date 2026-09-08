@@ -1,6 +1,10 @@
 import { useState, useReducer } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { useNavigateSteps } from '../router';
+import {
+	PROVISIONING_STARTED_STEP,
+	stepNextButtonClick,
+	useNavigateSteps,
+} from '../router';
 import { STORE_KEY } from '../store';
 import apiFetch from '@wordpress/api-fetch';
 import toast from 'react-hot-toast';
@@ -216,6 +220,12 @@ const useBuildSiteController = () => {
 			} );
 			setCookie( 'ai-show-start-over-warning', true, 2 * 24 * 60 * 60 ); // 2 days in seconds.
 			nextStep();
+			// ZipWP has accepted the site and the wizard is moving on to the build
+			// screen: record the provisioning stage of the funnel.
+			stepNextButtonClick( {
+				stepNumber: PROVISIONING_STARTED_STEP.stepNumber,
+				slug: PROVISIONING_STARTED_STEP.slug,
+			} );
 		} else {
 			const error = response?.data?.data?.errors,
 				statusCode = response?.data?.http_status_code,

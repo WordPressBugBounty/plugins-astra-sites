@@ -36,6 +36,7 @@ import PlanUpgradePromoModal from '../plan-upgrade-promo';
 import SignupLoginModal from '../signup-login-modal';
 import ReconnectModal from '../reconnect-modal';
 import SaleInfobar from '../sale-infobar';
+import { adoptFunnelSessionId } from '../../utils/funnel-session';
 
 const { logoUrlLight } = aiBuilderVars;
 
@@ -179,7 +180,13 @@ const OnboardingAI = () => {
 	useLayoutEffect( () => {
 		const token = urlParams.get( 'token' );
 		const shouldResume = urlParams.get( 'should_resume' );
-		if ( token || shouldResume ) {
+		// ZipWP passes the funnel id it minted during signup through the hand-off
+		// URL so the cross-domain journey is tracked as one attempt.
+		const inboundFunnelSessionId = urlParams.get( 'funnel_session_id' );
+		if ( inboundFunnelSessionId ) {
+			adoptFunnelSessionId( inboundFunnelSessionId );
+		}
+		if ( token || shouldResume || inboundFunnelSessionId ) {
 			const url = removeQueryArgs(
 				window.location.href,
 				'token',
@@ -187,10 +194,15 @@ const OnboardingAI = () => {
 				'action',
 				'credit_token',
 				'security',
-				'should_resume'
+				'should_resume',
+				'funnel_session_id'
 			);
 
 			window.onbeforeunload = null;
+			// removeQueryArgs drops the fragment, so the auth route is re-applied
+			// explicitly. Every ZipWP return URL carries `token`, so landing on the
+			// first step here is the existing behaviour, not something new for
+			// `funnel_session_id`.
 			window.history.replaceState( {}, '', url + '#/' );
 		}
 	}, [ currentStep, currentStepURL, aiOnboardingDetails ] );

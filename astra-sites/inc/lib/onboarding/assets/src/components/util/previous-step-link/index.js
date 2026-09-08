@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStateValue } from '../../../store/store';
+import { getStepIndex } from '../../../utils/functions';
 import { Link } from '../../../ui/style';
 
 const PreviousStepLink = ( {
@@ -10,8 +11,21 @@ const PreviousStepLink = ( {
 	customizeStep,
 	disabled,
 	hidden,
+	forceVisible,
 } ) => {
-	const [ { currentIndex }, dispatch ] = useStateValue();
+	const [ { currentIndex, isExternalDeepLink }, dispatch ] = useStateValue();
+
+	// `forceVisible` is the escape hatch for a locked step that offers the user
+	// no way forward. Hiding both controls would leave them with no navigation
+	// at all, so the caller can keep this link reachable.
+	if (
+		! forceVisible &&
+		starterTemplates.lockDeepLinkedTemplate &&
+		isExternalDeepLink &&
+		currentIndex < getStepIndex( 'features' )
+	) {
+		return null;
+	}
 	const handleClick = ( event ) => {
 		if ( true !== customizeStep ) {
 			dispatch( {

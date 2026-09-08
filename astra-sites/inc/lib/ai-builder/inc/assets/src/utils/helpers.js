@@ -291,7 +291,8 @@ export const setCookie = ( name, value, expiryInSeconds = 60 ) => {
 	const date = new Date();
 	date.setTime( date.getTime() + expiryInSeconds * 1000 ); // in milliseconds.
 	const expires = 'expires=' + date.toUTCString();
-	document.cookie = `${ name }=${ value }; ${ expires }; path=/`;
+	const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+	document.cookie = `${ name }=${ value }; ${ expires }; path=/; SameSite=Lax${ secure }`;
 };
 
 export const getCookie = ( name ) => {

@@ -11,6 +11,11 @@ const root = createRoot(
 root.render(
 	<StateProvider reducer={ reducer } initialState={ initialState }>
 		<App />
-		<Toaster position="top-right" reverseOrder={ false } gutter={ 8 } />
+		<Toaster
+			position="top-right"
+			reverseOrder={ false }
+			gutter={ 8 }
+			containerStyle={ { top: 88 } }
+		/>
 	</StateProvider>
 );

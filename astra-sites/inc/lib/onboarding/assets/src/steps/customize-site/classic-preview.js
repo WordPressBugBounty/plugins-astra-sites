@@ -5,6 +5,7 @@ import ChangeTemplate from '../../components/change-template';
 import LicenseValidation from './license-validation';
 import SiteLogo from './site-logo';
 import ColorPalettes from './color-palettes';
+import CustomColorPalette from './custom-color-palette';
 import FontSelector from './font-selector';
 import Button from '../../components/button/button';
 import PreviousStepLink from '../../components/util/previous-step-link/index';
@@ -42,6 +43,12 @@ const ClassicPreview = () => {
 			}
 		}
 	}, [ templateResponse ] );
+
+	// Drives the Continue button, and the back link's escape hatch with it, so
+	// the two cannot drift apart.
+	const canContinue =
+		( licenseStatus && selectedTemplateType !== 'free' ) ||
+		selectedTemplateType === 'free';
 
 	const lastStep = () => {
 		dispatch( {
@@ -88,7 +95,12 @@ const ClassicPreview = () => {
 				{ templateResponse ? (
 					<>
 						<FontSelector />
-						{ builder !== 'beaver-builder' && <ColorPalettes /> }
+						{ builder !== 'beaver-builder' && (
+							<>
+								<ColorPalettes />
+								<CustomColorPalette />
+							</>
+						) }
 					</>
 				) : (
 					<div className="space-y-5">
@@ -110,8 +122,7 @@ const ClassicPreview = () => {
 					<LicenseValidation setErrorCB={ setErrorCallback } />
 				) }
 				<div className="flex flex-col gap-2 mt-2">
-					{ ( ( licenseStatus && selectedTemplateType !== 'free' ) ||
-						selectedTemplateType === 'free' ) && (
+					{ canContinue && (
 						<Button
 							className={ `w-full flex gap-2 items-center ${
 								( ! licenseStatus &&
@@ -137,6 +148,7 @@ const ClassicPreview = () => {
 						className="w-full"
 						onClick={ lastStep }
 						customizeStep={ true }
+						forceVisible={ ! canContinue }
 					>
 						{ __( 'Back', 'astra-sites' ) }
 					</PreviousStepLink>

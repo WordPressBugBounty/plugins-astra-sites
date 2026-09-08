@@ -292,6 +292,10 @@ const setPreviewValues = ( eventData ) => {
 							index
 						].replace( /-/g, '' ) }: ${ paletteItem[ 1 ] };`,
 						`${ paletteStylePrefix }${ index }: ${ paletteItem[ 1 ] };`,
+						// Override the WordPress preset color family so text using
+						// block preset classes (e.g. `has-ast-global-color-2-color`)
+						// also recolors in the preview.
+						`--wp--preset--color--${ paletteEleStylePrefix[ index ] }: ${ paletteItem[ 1 ] };`,
 					];
 				} )
 				.map( ( item ) => item.join( '' ) )

@@ -1,13 +1,33 @@
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import steps from './routes';
+import steps, { FINAL_STEP_NUMBER } from './routes';
 import { useSelect } from '@wordpress/data';
 import { STORE_KEY } from '../store';
 import apiFetch from '@wordpress/api-fetch';
+import {
+	getFunnelSessionId,
+	markFunnelSessionCompleted,
+} from '../utils/funnel-session';
 
+/**
+ * Record a completed wizard step with ZipWP.
+ *
+ * Attaches the per-session funnel id so each build is counted as one attempt,
+ * and marks the funnel session as completed once the final step is recorded.
+ *
+ * @param {Object} args
+ * @param {number} args.stepNumber The wizard step number being recorded.
+ * @param {string} args.slug       The backend-whitelisted step slug.
+ */
 export const stepNextButtonClick = async ( { stepNumber, slug } ) => {
 	if ( ! stepNumber || ! slug ) {
 		return;
 	}
+
+	const isFinalStep = stepNumber >= FINAL_STEP_NUMBER;
+	// UUID that stays stable for this wizard session (cookie-backed, survives tab close) so
+	// ZipWP counts each build as one attempt. Null on a lone final step; the field is then
+	// omitted (ZipWP accepts it as nullable).
+	const funnelSessionId = getFunnelSessionId( { isFinalStep } );
 
 	try {
 		await apiFetch( {
@@ -20,10 +40,17 @@ export const stepNextButtonClick = async ( { stepNumber, slug } ) => {
 				action: 'next-step',
 				current_step: stepNumber,
 				current_step_name: slug,
+				...( funnelSessionId && {
+					funnel_session_id: funnelSessionId,
+				} ),
 			} ),
 		} );
 	} catch ( error ) {
-		console.error( 'Error generating next step button:', error );
+		console.error( 'Error recording wizard step:', error );
+	}
+
+	if ( isFinalStep ) {
+		markFunnelSessionCompleted();
 	}
 };
 

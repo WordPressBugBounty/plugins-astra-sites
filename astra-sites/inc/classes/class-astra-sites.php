@@ -912,30 +912,35 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				wp_send_json_error( __( 'Invalid Post Meta', 'astra-sites' ) );
 			}
 
-			$meta    = json_decode( $data['post-meta']['_elementor_data'], true );
-			$post_id = isset( $_POST['id'] ) ? absint( sanitize_key( $_POST['id'] ) ) : '';
+			$meta = json_decode( $data['post-meta']['_elementor_data'], true );
 
-			if ( empty( $post_id ) || empty( $meta ) ) {
-				wp_send_json_error( __( 'Invalid Post ID or Elementor Meta', 'astra-sites' ) );
+			if ( empty( $meta ) ) {
+				wp_send_json_error( __( 'Invalid Elementor Meta', 'astra-sites' ) );
 			}
 
-			if ( isset( $data['astra-page-options-data'] ) && isset( $data['astra-page-options-data']['elementor_load_fa4_shim'] ) ) {
-				update_option( 'elementor_load_fa4_shim', $data['astra-page-options-data']['elementor_load_fa4_shim'] );
+			// Site wide Elementor settings are an administrator level change, so only update
+			// them when the current user is actually allowed to manage the site options.
+			if ( current_user_can( 'manage_options' ) ) {
+				if ( isset( $data['astra-page-options-data'] ) && isset( $data['astra-page-options-data']['elementor_load_fa4_shim'] ) ) {
+					update_option( 'elementor_load_fa4_shim', $data['astra-page-options-data']['elementor_load_fa4_shim'] );
+				}
+
+				// Check flexbox container, If inactive then activate it.
+				$flexbox_container = get_option( 'elementor_experiment-container' );
+				// Check if the value is 'inactive'.
+				if ( 'inactive' === $flexbox_container ) {
+					// Delete the option to clear the cache.
+					delete_option( 'elementor_experiment-container' );
+
+					// Update the option to 'active' to activate the flexbox container.
+					update_option( 'elementor_experiment-container', 'active' );
+				}
 			}
 
-			// Check flexbox container, If inactive then activate it.
-			$flexbox_container = get_option( 'elementor_experiment-container' );
-			// Check if the value is 'inactive'.
-			if ( 'inactive' === $flexbox_container ) {
-				// Delete the option to clear the cache.
-				delete_option( 'elementor_experiment-container' );
-
-				// Update the option to 'active' to activate the flexbox container.
-				update_option( 'elementor_experiment-container', 'active' );
-			}
-
+			// The `id` received here is the remote template ID, not a local post ID. The processed
+			// data is handed back to the Elementor editor, so nothing is written onto a local post.
 			$import      = new \Elementor\TemplateLibrary\Astra_Sites_Elementor_Pages();
-			$import_data = $import->import( $post_id, $meta );
+			$import_data = $import->import( $meta );
 
 			delete_option( 'astra_sites_import_elementor_data_' . $id );
 			wp_send_json_success( $import_data );

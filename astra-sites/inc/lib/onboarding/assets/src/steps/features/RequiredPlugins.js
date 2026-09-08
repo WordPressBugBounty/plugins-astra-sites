@@ -16,6 +16,8 @@ const PLUGIN_ICON_MAP = {
 	suredonation: 'suredonation.png',
 	sureforms: 'sureforms.svg',
 	suremails: 'suremails.svg',
+	suremembers: 'suremembers.svg',
+	'suremembers-core': 'suremembers.svg',
 	surerank: 'surerank.svg',
 	suretriggers: 'ottokit.svg',
 	surecookie: 'surecookie.svg',

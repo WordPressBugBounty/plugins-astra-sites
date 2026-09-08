@@ -371,8 +371,7 @@ if ( ! class_exists( 'ST_Image_Importer' ) ) :
 				wp_safe_remote_get(
 					$attachment['url'],
 					array(
-						'timeout'   => '60',
-						'sslverify' => false,
+						'timeout' => '60',
 					)
 				)
 			);

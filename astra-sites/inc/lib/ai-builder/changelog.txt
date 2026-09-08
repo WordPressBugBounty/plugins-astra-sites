@@ -1,3 +1,7 @@
+v1.2.91 - 7th September 2026
+- Improvement: Build-with-AI step tracking now sends a per-session funnel id and records the provisioning and site-building stages, so each website build is counted as its own attempt in ZipWP analytics.
+- Fix: AI website builder reported a generic import failure and logged a PHP warning when the site details were not yet stored.
+
 v1.2.90 - 19th August 2026
 - Improvement: Added AVIF image support, so templates using AVIF images bring them across along with the other formats.
 - Improvement: Removed the goals selection screen and the tone and keywords options from the AI website builder onboarding.

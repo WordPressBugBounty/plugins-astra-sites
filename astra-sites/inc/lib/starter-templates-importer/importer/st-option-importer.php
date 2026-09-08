@@ -362,8 +362,7 @@ class ST_Option_Importer {
 			wp_safe_remote_get(
 				$attachment['url'],
 				array(
-					'timeout'   => 60,
-					'sslverify' => false,
+					'timeout' => 60,
 				)
 			)
 		);

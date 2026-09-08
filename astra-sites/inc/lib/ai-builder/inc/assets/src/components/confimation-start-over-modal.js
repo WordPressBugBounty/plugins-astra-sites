@@ -14,6 +14,7 @@ import { ExclamationTriangleColorfulIcon } from '../ui/icons';
 import ModalTitle from './modal-title';
 import { renderToString } from '@wordpress/element';
 import { copyToClipboard, deleteCookie } from '../utils/helpers';
+import { clearFunnelSession } from '../utils/funnel-session';
 
 const supportLink = (
 	<a
@@ -43,6 +44,7 @@ const ConfirmationStartOverModal = () => {
 	const handleStartOver = () => {
 		setConfirmationStartOverModal( { open: false } );
 		removeLocalStorageItem( 'ai-builder-onboarding-details' );
+		clearFunnelSession(); // Next build must be reported as a fresh attempt.
 		setWebsiteOnboardingAIDetails( defaultOnboardingAIState );
 		setContinueProgressModal( { open: false } );
 		deleteCookie( 'ai-show-start-over-warning' ); // Clear the cookie.
