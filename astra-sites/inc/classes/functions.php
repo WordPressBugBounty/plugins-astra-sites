@@ -152,3 +152,76 @@ if ( ! function_exists( 'astra_sites_sanitize_recursive' ) ) :
 		return sanitize_text_field( $data );
 	}
 endif;
+
+if ( ! function_exists( 'astra_sites_localize_script_multiline' ) ) {
+	/**
+	 * Drop-in replacement for wp_localize_script() that prints each top-level entry on its own line.
+	 *
+	 * Use it for large payloads: some servers (Apache/LiteSpeed mod_substitute) reject
+	 * responses containing a line longer than 1 MB. Values match wp_localize_script() output.
+	 *
+	 * @since 4.7.7
+	 *
+	 * @param string $handle      Registered script handle to attach the data to.
+	 * @param string $object_name Name of the JavaScript global to define.
+	 * @param mixed  $data        Data to expose, keyed by property name. Expected to be an array;
+	 *                            anything else is handed to wp_localize_script() as is.
+	 * @return void
+	 */
+	function astra_sites_localize_script_multiline( $handle, $object_name, $data ) {
+		// Non-array data: keep core's _doing_it_wrong() notice and back-compat output.
+		if ( ! is_array( $data ) ) {
+			wp_localize_script( $handle, $object_name, $data );
+			return;
+		}
+
+		/**
+		 * Filters whether the data is printed one entry per line; return false to fall back to wp_localize_script().
+		 *
+		 * @since 4.7.7
+		 *
+		 * @param bool   $multiline   Whether to print one entry per line. Default true.
+		 * @param string $handle      Script handle the data is attached to.
+		 * @param string $object_name Name of the JavaScript global.
+		 */
+		if ( ! apply_filters( 'astra_sites_use_multiline_localize_script', true, $handle, $object_name ) ) {
+			wp_localize_script( $handle, $object_name, $data );
+			return;
+		}
+
+		// Same flags as WP_Scripts::localize() so `<` and `>` never reach the <script> body raw.
+		// Fall back to `null` on encoding failure so the output stays valid JavaScript.
+		$encode = function ( $value ) {
+			$json = wp_json_encode( $value, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ); // phpcs:ignore PHPCompatibility.Constants.NewConstants.json_unescaped_slashesFound -- PHP 5.4+ constant; the plugin requires PHP 7.4.
+			return false === $json ? 'null' : $json;
+		};
+
+		$lines = array();
+
+		foreach ( $data as $key => $value ) {
+			if ( is_scalar( $value ) ) {
+				$value = html_entity_decode( (string) $value, ENT_QUOTES, 'UTF-8' );
+			}
+
+			if ( is_array( $value ) && ! empty( $value ) ) {
+				// One entry per line; nested values stay compact.
+				$is_list = array_keys( $value ) === range( 0, count( $value ) - 1 );
+				$entries = array();
+
+				foreach ( $value as $entry_key => $entry ) {
+					$entries[] = ( $is_list ? '' : $encode( (string) $entry_key ) . ':' ) . $encode( $entry );
+				}
+
+				$encoded = $is_list
+					? "[\n" . implode( ",\n", $entries ) . "\n]"
+					: "{\n" . implode( ",\n", $entries ) . "\n}";
+			} else {
+				$encoded = $encode( $value );
+			}
+
+			$lines[] = $encode( (string) $key ) . ':' . $encoded;
+		}
+
+		wp_add_inline_script( $handle, 'var ' . $object_name . " = {\n" . implode( ",\n", $lines ) . "\n};", 'before' );
+	}
+}

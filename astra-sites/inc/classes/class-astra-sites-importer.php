@@ -642,7 +642,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 				// Verify Nonce.
 				check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
-				if ( ! current_user_can( 'edit_posts' ) ) {
+				if ( ! current_user_can( 'manage_options' ) ) {
 					wp_send_json_error( __( "Permission Denied: You don't have permission to import CartFlows flows. Please contact your site administrator.", 'astra-sites' ) );
 				}
 			}
@@ -743,7 +743,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 					// Verify Nonce.
 					check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
-					if ( ! current_user_can( 'edit_posts' ) ) {
+					if ( ! current_user_can( 'manage_options' ) ) {
 						wp_send_json_error(
 							__( "Permission denied: You don't have permission to import Cart Abandonment Recovery data. Please contact your site administrator.", 'astra-sites' )
 						);
@@ -823,7 +823,7 @@ if ( ! class_exists( 'Astra_Sites_Importer' ) ) {
 				// Verify Nonce.
 				check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
-				if ( ! current_user_can( 'edit_posts' ) ) {
+				if ( ! current_user_can( 'manage_options' ) ) {
 					wp_send_json_error(
 						__( "Permission denied: You don't have permission to import LatePoint data. Please contact your site administrator.", 'astra-sites' )
 					);

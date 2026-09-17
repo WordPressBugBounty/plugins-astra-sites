@@ -5,7 +5,7 @@ Tags: templates, website templates, elementor templates, gutenberg templates, st
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.7.6
+Stable tag: 4.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -256,6 +256,13 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.7 - 16th-September-2026
+- Fix:
+    - The Starter Templates page no longer returns a 404 on Apache/LiteSpeed hosts with mod_substitute active, caused by the response exceeding the server's line-length limit.
+- Security:
+    - Restricted the CartFlows, Cart Abandonment Recovery and LatePoint import endpoints and the template data request endpoint to administrators only.
+    - Image sideload endpoints now download from approved stock image hosts only, preventing server side request forgery against internal network servi
+
 v4.7.6 - 8th-September-2026
 - New:
     - Classic Templates: Added a custom color palette generator that creates a full color scheme from a primary color, with live preview and st-color URL parameter support.

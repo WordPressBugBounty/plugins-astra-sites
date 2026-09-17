@@ -156,6 +156,8 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			add_filter( 'ai_builder_languages_directory', array( $this, 'change_languages_directory' ), 10, 1 );
 			add_filter( 'one_onboarding_textdomain', array( $this, 'get_astra_sites_textdomain' ) );
 			add_filter( 'one_onboarding_languages_directory', array( $this, 'change_languages_directory' ) );
+			add_filter( 'astra_sites_valid_url', array( $this, 'add_valid_image_hosts' ) );
+			add_filter( 'zipwp_images_allowed_hosts', array( $this, 'add_valid_image_hosts' ) );
 
 			// AJAX.
 			$this->ajax = array(
@@ -956,7 +958,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			// Verify Nonce.
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
-			if ( ! current_user_can( 'edit_posts' ) ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
 				wp_send_json_error();
 			}
 
@@ -1462,6 +1464,29 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 		}
 
 		/**
+		 * Allowlist the stock image CDN hosts used by the image sideload handlers.
+		 *
+		 * Registered on the global `astra_sites_valid_url` and
+		 * `zipwp_images_allowed_hosts` filters so both handlers share one list.
+		 *
+		 * @since 4.7.7
+		 * @param array<int, string> $hosts Valid hosts.
+		 * @return array<int, string>
+		 */
+		public function add_valid_image_hosts( $hosts ) {
+			return array_merge(
+				(array) $hosts,
+				array(
+					'images.pexels.com',
+					'cdn.pixabay.com',
+					'pixabay.com',
+					'images.unsplash.com',
+					'plus.unsplash.com',
+				)
+			);
+		}
+
+		/**
 		 * Download and save the image in the media library.
 		 *
 		 * @since  2.0.0
@@ -1480,6 +1505,10 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 
 			if ( false === $url ) {
 				wp_send_json_error( __( 'Need to send URL of the image to be downloaded', 'astra-sites' ) );
+			}
+
+			if ( ! astra_sites_is_valid_url( $url ) ) {
+				wp_send_json_error( __( 'Invalid image URL.', 'astra-sites' ) );
 			}
 
 			$image  = '';

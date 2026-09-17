@@ -282,6 +282,11 @@ class Zipwp_Images_Api {
 			wp_send_json_error( __( 'Need to send URL of the image to be downloaded', 'astra-sites' ) );
 		}
 
+		// Reject non-allowlisted hosts (SSRF guard).
+		if ( ! $this->is_allowed_image_url( $url ) ) {
+			wp_send_json_error( __( 'Invalid image URL.', 'astra-sites' ) );
+		}
+
 		$image  = '';
 		$result = array();
 
@@ -321,6 +326,34 @@ class Zipwp_Images_Api {
 		$result['updated-saved-images'] = get_option( 'zipwp-images-saved-images', array() );
 
 		wp_send_json_success( $result );
+	}
+
+	/**
+	 * Check whether an image URL points at an allowlisted stock image host.
+	 *
+	 * @since 1.0.32
+	 * @param string $url Image URL to validate.
+	 * @return bool
+	 */
+	public function is_allowed_image_url( $url ) {
+		$allowed_hosts = apply_filters(
+			'zipwp_images_allowed_hosts',
+			array(
+				'images.pexels.com',
+				'cdn.pixabay.com',
+				'pixabay.com',
+				'images.unsplash.com',
+				'plus.unsplash.com',
+			)
+		);
+
+		$host = wp_parse_url( (string) $url, PHP_URL_HOST );
+
+		if ( is_string( $host ) && in_array( $host, (array) $allowed_hosts, true ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

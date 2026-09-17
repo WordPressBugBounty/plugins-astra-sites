@@ -224,7 +224,10 @@ class Intelligent_Starter_Templates_Loader {
 
 		$data = Astra_Sites::get_instance()->get_local_vars();
 
-		wp_localize_script( 'jquery', 'astraSitesVars', $data );
+		// Not wp_localize_script(): the payload includes the whole template catalog and a
+		// single multi-megabyte line trips mod_substitute's SubstituteMaxLineLength on
+		// Apache/LiteSpeed hosts, which then serve a 404 for this page.
+		astra_sites_localize_script_multiline( 'jquery', 'astraSitesVars', $data );
 
 		$file = INTELLIGENT_TEMPLATES_DIR . 'assets/dist/onboarding/main.asset.php';
 		if ( ! file_exists( $file ) ) {
