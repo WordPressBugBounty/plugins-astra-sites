@@ -69,12 +69,17 @@ class License extends Api_Base {
 	/**
 	 * Make sure 'astra-pro-sites' plugin is initialized in the products array.
 	 *
-	 * @param array<string, mixed> $products Products.
+	 * @param mixed $products Products. Can be `false` when the option does not exist yet.
 	 * @return array<string, mixed> $products Products.
 	 */
 	public static function bsf_maybe_update_products_option( $products ) {
+		// The option may not exist yet, in which case `false` is passed. Normalize it before writing to it.
+		if ( ! is_array( $products ) ) {
+			$products = array();
+		}
+
 		// Make sure 'astra-pro-sites' plugin is initialized in the products array.
-		if ( ! isset( $products['plugins'] ) ) {
+		if ( ! isset( $products['plugins'] ) || ! is_array( $products['plugins'] ) ) {
 			$products['plugins'] = array(
 				'astra-pro-sites' => array(),
 			);

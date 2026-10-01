@@ -760,6 +760,12 @@ class Helper {
 	 */
 	public static function import_end() {
 
+		// Guarantee a buffer exists even with output_buffering=Off, so stray
+		// listener output reaches the response-boundary drain instead of the socket.
+		if ( wp_doing_ajax() ) {
+			ob_start();
+		}
+
 		Ai_Builder_Importer_Log::add( 'Finalizing import process', 'info' );
 
 		self::verify_ajax_request( 'customize', __( "Permission denied: You don't have sufficient permissions to import. Please contact your site administrator.", 'astra-sites' ) );
@@ -794,13 +800,30 @@ class Helper {
 		update_option( 'astra-site-permalink-update-status', 'no' );
 
 		// Safely execute import complete action.
+		$hook_error = '';
 		try {
 			Ai_Builder_Importer_Log::add( 'Executing import complete actions', 'info' );
 			do_action( 'astra_sites_import_complete', $demo_data );
-		} catch ( \Exception $e ) {
-			astra_sites_error_log( 'Import End: Exception in import_complete action - ' . $e->getMessage() );
-			Ai_Builder_Importer_Log::add( 'Warning: Exception in import_complete action - ' . $e->getMessage(), 'warning' );
-			// Continue execution - don't fail the entire import for hook issues.
+		} catch ( \Throwable $e ) { // \Throwable: a listener fatal must not white-screen the response.
+			// Assignment only — a logging hook throwing here must not escape the catch.
+			// get_class(), not $e::class: the plugin supports PHP 7.4 and $var::class is PHP 8+.
+			$hook_error = get_class( $e ) . ': ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+		}
+
+		if ( '' !== $hook_error ) {
+			astra_sites_error_log( 'Import End: import_complete listener failed - ' . $hook_error );
+			Ai_Builder_Importer_Log::add( 'import_complete listener failed, listeners registered after it were skipped - ' . $hook_error, 'error' );
+			if ( defined( 'WP_CLI' ) ) {
+				\WP_CLI::warning( 'import_complete listener failed: ' . $hook_error ); // @phpstan-ignore-line -- WP_CLI stub lacks warning().
+			}
+			self::success_response(
+				array(
+					'message'                 => __( 'Import completed with warnings.', 'astra-sites' ),
+					// Generic on purpose: file/line stay in the import log, not the browser.
+					'import_complete_warning' => __( 'A finishing action failed. Check the import log for details.', 'astra-sites' ),
+				)
+			);
+			return;
 		}
 
 		self::success_response( __( 'Import completed successfully!', 'astra-sites' ) );
@@ -968,6 +991,7 @@ class Helper {
 			// Log the error.
 			Ai_Builder_Importer_Log::add( $error_message, 'error' );
 
+			self::discard_stray_output();
 			wp_send_json_error( $error_message );
 		}
 	}
@@ -1013,7 +1037,57 @@ class Helper {
 
 			\WP_CLI::error( $error );
 		} elseif ( wp_doing_ajax() ) {
+			self::discard_stray_output();
 			wp_send_json_error( $data );
+		}
+	}
+
+	/**
+	 * Discard pending output buffers before sending an AJAX JSON response.
+	 *
+	 * Stray output ahead of the wp_send_json_*() body (a listener's echoed
+	 * notice, a BOM, a deprecation warning) corrupts the JSON and surfaces
+	 * client-side as a parse error. Drains every removable buffer and logs
+	 * the length plus first line of what was discarded.
+	 *
+	 * @since 1.2.93
+	 * @return void
+	 */
+	public static function discard_stray_output() {
+		// Too late to fix the response, and popping a compression handler now would corrupt it further.
+		if ( headers_sent() ) {
+			return;
+		}
+
+		$stray = '';
+		while ( ob_get_level() > 0 ) {
+			$status = ob_get_status();
+			$flags  = isset( $status['flags'] ) && is_int( $status['flags'] ) ? $status['flags'] : 0;
+			if ( ! ( $flags & PHP_OUTPUT_HANDLER_REMOVABLE ) ) {
+				break;
+			}
+			$stray .= (string) ob_get_clean();
+		}
+
+		if ( '' === trim( $stray ) ) {
+			return;
+		}
+
+		$first_line = strtok( trim( $stray ), "\n" );
+		$first_line = str_replace( array( "\r", "\t" ), ' ', (string) $first_line );
+
+		// Buffer the log write: its public hooks can echo, and there is no buffer left in front of the response.
+		ob_start();
+		try {
+			Ai_Builder_Importer_Log::add(
+				'Discarded ' . strlen( $stray ) . ' bytes of stray output before JSON response: ' . substr( $first_line, 0, 200 ),
+				'warning'
+			);
+		} catch ( \Throwable $e ) {
+			// A throwing log hook must never block the JSON response.
+			unset( $e );
+		} finally {
+			ob_end_clean();
 		}
 	}
 
@@ -1057,6 +1131,7 @@ class Helper {
 		}
 
 		if ( wp_doing_ajax() ) {
+			self::discard_stray_output();
 			$response = empty( $data ) ? array() : $data;
 			wp_send_json_success( $response );
 		}

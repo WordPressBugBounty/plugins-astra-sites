@@ -9,6 +9,7 @@
 namespace AiBuilder\Inc\Classes\Importer;
 
 use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
+use AiBuilder\Inc\Traits\Helper;
 use AiBuilder\Inc\Traits\Instance;
 use Exception;
 use Throwable;
@@ -105,6 +106,7 @@ class Ai_Builder_Error_Handler {
 		);
 
 		if ( wp_doing_ajax() ) {
+			Helper::discard_stray_output();
 			wp_send_json_error(
 				array(
 					'message' => __( 'There was an error on your website.', 'astra-sites' ),
@@ -159,6 +161,7 @@ class Ai_Builder_Error_Handler {
 		);
 
 		if ( wp_doing_ajax() ) {
+			Helper::discard_stray_output();
 			wp_send_json_error(
 				array(
 					'message' => __( 'There was an error on your website.', 'astra-sites' ),

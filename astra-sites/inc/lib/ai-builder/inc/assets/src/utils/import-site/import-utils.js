@@ -358,6 +358,13 @@ export const getFeaturePluginList = (
 					init: 'surecookie/surecookie.php',
 				} );
 				break;
+			case 'sigmize':
+				requiredPlugins.push( {
+					name: 'Sigmize',
+					slug: 'sigmize',
+					init: 'sigmize/sigmize.php',
+				} );
+				break;
 			case 'sales-funnels':
 				requiredPlugins.push( {
 					name: 'CartFlows',

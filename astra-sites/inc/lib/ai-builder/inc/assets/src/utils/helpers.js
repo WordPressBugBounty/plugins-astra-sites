@@ -413,8 +413,12 @@ export const isValidURL = ( url ) => {
 };
 
 export const isValidImageURL = ( fileURL ) => {
-	// regex only matches letters, numbers, spaces, dots, underscores, colons, slashes, and hyphens
-	const validPattern = /^[a-zA-Z0-9_\-\. :~/]+$/;
+	// Allows letters and digits from any script (so Cyrillic/CJK/accented file
+	// names pass), plus spaces, dots, underscores, colons, slashes, hyphens,
+	// tildes and percent signs (WordPress percent-encodes non-ASCII names in
+	// attachment URLs). Everything else — quotes, backticks, angle brackets,
+	// query strings — is still rejected.
+	const validPattern = /^[\p{L}\p{N}\p{M}_\-\. :~/%]+$/u;
 
 	if ( ! isValidURL( fileURL ) ) {
 		return false;

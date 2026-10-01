@@ -1,3 +1,9 @@
+v1.1.44 - 30-September-2026
+- Security: Hardened upload file type checks so SVG uploads need the unfiltered HTML capability and XML or JSON files are no longer allowed site-wide by the importer.
+
+v1.1.43 - 17-September-2026
+- Fix: SureMembers URL-based restrictions and blocked-visitor messages now point at the imported site; access groups keep valid publish dates on import.
+
 v1.1.42 - 7-September-2026
 - Fix: SureMembers restrictions now work right after import; the skipped access group priority meta is restored.
 - Fix: SureMembers restriction precedence and rule references now resolve on the imported site.

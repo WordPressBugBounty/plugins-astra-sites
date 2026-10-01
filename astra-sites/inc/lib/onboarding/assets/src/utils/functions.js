@@ -173,7 +173,13 @@ export const getAllSites = () => {
 };
 
 export const getSupportLink = ( templateId, subject ) => {
-	return `${ starterTemplates.supportLink }&template-id=${ templateId }&subject=${ subject }`;
+	// Encode and cap: subject can carry a server-response diagnostic — a raw
+	// '&' or '#' would otherwise break the query string of supportLink.
+	return `${ starterTemplates.supportLink }&template-id=${ encodeURIComponent(
+		templateId ?? ''
+	) }&subject=${ encodeURIComponent(
+		String( subject ?? '' ).substring( 0, 200 )
+	) }`;
 };
 
 export const getGridItem = ( site ) => {

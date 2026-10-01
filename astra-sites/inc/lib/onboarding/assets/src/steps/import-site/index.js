@@ -149,7 +149,7 @@ const ImportSite = () => {
 		reportErr.append( 'template_type', selectedTemplateType );
 
 		reportErr.append( 'error', error );
-		reportErr.append( 'id', templateResponse.id );
+		reportErr.append( 'id', templateResponse?.id || templateId || '' );
 		reportErr.append( 'plugins', JSON.stringify( requiredPlugins ) );
 		fetch( ajaxurl, {
 			method: 'post',
@@ -359,7 +359,11 @@ const ImportSite = () => {
 			} );
 		}
 
-		if ( finalStepStatus ) {
+		// Strict true: a 'soft-fail' finish must not fire the success lead —
+		// push_to_import_analytics() deletes astra_sites_cached_import_error
+		// on success, which would erase the soft-fail record before the
+		// reporting cron ships it.
+		if ( true === finalStepStatus ) {
 			generateAnalyticsLead( tryAgainCount, true, {
 				id: templateId,
 				page_builder: builder,
@@ -1180,6 +1184,16 @@ const ImportSite = () => {
 				{ type: 'parse_error', raw: text }
 			);
 		}
+		// Non-object JSON (admin-ajax's bare '-1'/'0' replies) is garbage,
+		// not a wp_send_json_*() envelope — classify it as a parse error.
+		if ( typeof data !== 'object' || data === null ) {
+			throw Object.assign(
+				new Error(
+					`${ importerName }: Server returned a non-JSON-API response.`
+				),
+				{ type: 'parse_error', raw: text }
+			);
+		}
 		if ( ! data.success ) {
 			throw Object.assign(
 				new Error(
@@ -1189,6 +1203,42 @@ const ImportSite = () => {
 			);
 		}
 		return data;
+	};
+
+	/**
+	 * Build an analytics diagnostic (HTTP status + response snippet) from a
+	 * failed importer response. Tags/'<'/'>' stripped (a dangling '<' nulls
+	 * the payload in push_to_import_analytics()); paths, credentials, tokens
+	 * and IPs redacted. httpStatus 0 means fetch itself rejected.
+	 *
+	 * @param {Error|string} error      The thrown parse/server error.
+	 * @param {number}       httpStatus HTTP status code of the AJAX response.
+	 * @param {string}       text       Raw response body.
+	 * @return {string} Diagnostic string.
+	 */
+	const buildImporterErrorText = ( error, httpStatus, text ) => {
+		const statusLabel = httpStatus
+			? `HTTP ${ httpStatus }`
+			: 'No HTTP response (network error)';
+		return `${ statusLabel }: ${
+			error?.message || error
+		} | Response: ${ String( text ) }`
+			.replace( /<[^>]*>/g, ' ' )
+			.replace( /[<>]/g, ' ' )
+			.replace( /\/\/[^\s/@]+@/g, '//[redacted]@' )
+			.replace( /(?:\/[\w~.-]+){2,}/g, '[path]' )
+			.replace(
+				/(?:[A-Za-z]:\\|\\\\)(?:[^\\'"|\r\n<>]*\\)*[^\s\\'"|]*/g,
+				'[path]'
+			)
+			.replace( /eyJ[\w-]+\.[\w-]+\.[\w-]+/g, '[token]' )
+			.replace( /\b\d{1,3}(?:\.\d{1,3}){3}\b/g, '[ip]' )
+			.replace(
+				/\b(?:[0-9a-fA-F]{1,4}:){3,7}[0-9a-fA-F]{1,4}\b/g,
+				'[ip]'
+			)
+			.replace( /\s+/g, ' ' )
+			.substring( 0, 400 );
 	};
 
 	/**
@@ -1972,11 +2022,15 @@ const ImportSite = () => {
 		siteOptions.append( 'action', 'astra-sites-import_options' );
 		siteOptions.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
+		let httpStatus = 0;
 		const status = await fetch( ajaxurl, {
 			method: 'post',
 			body: siteOptions,
 		} )
-			.then( ( response ) => response.text() )
+			.then( ( response ) => {
+				httpStatus = response.status;
+				return response.text();
+			} )
 			.then( ( text ) => {
 				try {
 					parseImporterResponse( text, 'Site Options Import' );
@@ -1996,10 +2050,7 @@ const ImportSite = () => {
 							'astra-sites'
 						),
 						'',
-						error,
-						'',
-						'',
-						text
+						buildImporterErrorText( error, httpStatus, text )
 					);
 					return false;
 				}
@@ -2011,7 +2062,7 @@ const ImportSite = () => {
 				report(
 					__( 'Importing Site Options Failed.', 'astra-sites' ),
 					'',
-					error
+					buildImporterErrorText( error, httpStatus, '' )
 				);
 				return false;
 			} );
@@ -2045,11 +2096,15 @@ const ImportSite = () => {
 		widgets.append( 'widgets_data', widgetsData );
 		widgets.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
+		let httpStatus = 0;
 		const status = await fetch( ajaxurl, {
 			method: 'post',
 			body: widgets,
 		} )
-			.then( ( response ) => response.text() )
+			.then( ( response ) => {
+				httpStatus = response.status;
+				return response.text();
+			} )
 			.then( ( text ) => {
 				try {
 					parseImporterResponse( text, 'Widgets Import' );
@@ -2068,10 +2123,7 @@ const ImportSite = () => {
 							'astra-sites'
 						),
 						'',
-						error,
-						'',
-						'',
-						text
+						buildImporterErrorText( error, httpStatus, text )
 					);
 					return false;
 				}
@@ -2083,7 +2135,7 @@ const ImportSite = () => {
 				report(
 					__( 'Importing Widgets Failed.', 'astra-sites' ),
 					'',
-					error
+					buildImporterErrorText( error, httpStatus, '' )
 				);
 				return false;
 			} );
@@ -2119,11 +2171,15 @@ const ImportSite = () => {
 		finalSteps.append( 'action', 'astra-sites-import_end' );
 		finalSteps.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 
+		let httpStatus = 0;
 		const status = await fetch( ajaxurl, {
 			method: 'post',
 			body: finalSteps,
 		} )
-			.then( ( response ) => response.text() )
+			.then( ( response ) => {
+				httpStatus = response.status;
+				return response.text();
+			} )
 			.then( ( text ) => {
 				try {
 					parseImporterResponse( text, 'Final Finishings' );
@@ -2140,22 +2196,44 @@ const ImportSite = () => {
 					if ( suppressErrorReporting ) {
 						return false;
 					}
-					// report() flips importError so the ErrorScreen renders.
-					// Don't bump importPercent to 100 here — that would visually
-					// claim success while the user sees the failure body, and
-					// it triggers the "Congratulations" header path. importEnd
-					// still flips so the runner halts.
-					report(
-						__(
-							'Final finishings failed due to parse JSON error.',
-							'astra-sites'
-						),
-						'',
-						error,
-						'',
-						'',
-						text
-					);
+					// Soft-fail only when the handler demonstrably ran and its
+					// response got dirtied: HTTP 200, a parse failure, AND a
+					// success envelope visible in the raw body. Status alone is
+					// not proof — permission denials and the fatal shutdown
+					// handler also answer 200 via wp_send_json_error(), and
+					// behind stray output those parse-fail too. Anything else
+					// (WAF 403, nonce -1, error envelope) means the finishing
+					// hooks never ran, so it stays a hard failure.
+					const isDirtiedSuccess =
+						httpStatus === 200 &&
+						error?.type === 'parse_error' &&
+						/"success"\s*:\s*true/.test( String( text ) );
+					if ( ! isDirtiedSuccess ) {
+						// report() flips importError so the ErrorScreen renders.
+						// No importEnd/percent dispatch and no st-import-end
+						// stamp here: report() clears both localStorage stamps,
+						// and a delayed importEnd dispatch races a "Try Again"
+						// click into a stuck "Congratulations" state.
+						report(
+							__(
+								'Final finishings failed due to parse JSON error.',
+								'astra-sites'
+							),
+							'',
+							buildImporterErrorText( error, httpStatus, text )
+						);
+						return false;
+					}
+					// Soft-fail: content and finishing hooks are in place; only
+					// the JSON was corrupted. The ErrorScreen's "Try Again"
+					// restarts the entire import and fails here again
+					// (telemetry: 73% of affected sites never recover). Set the
+					// success state first so a reporting hiccup can't undo it;
+					// report under a distinct, untranslated reason. Returning
+					// 'soft-fail' (not true) keeps importPart2 from firing the
+					// success lead, which would delete the cached error record
+					// before it ships.
+					localStorage.setItem( 'st-import-end', +new Date() );
 					setTimeout( function () {
 						dispatch( {
 							type: 'set',
@@ -2163,8 +2241,33 @@ const ImportSite = () => {
 							importEnd: true,
 						} );
 					}, successMessageDelay );
-					localStorage.setItem( 'st-import-end', +new Date() );
-					return false;
+					const softFailReason =
+						'Final finishings soft failure - completed with warnings.';
+					const softFailDetail = buildImporterErrorText(
+						error,
+						httpStatus,
+						text
+					);
+					try {
+						sendErrorReport( softFailReason, '', softFailDetail );
+						// Ship the failure lead now: sendErrorReport() alone
+						// records nothing on hosts where reportError is false,
+						// and only fires a lead after two manual retries.
+						if ( tryAgainCount < 2 ) {
+							generateAnalyticsLead( tryAgainCount, false, {
+								id: templateResponse?.id || templateId,
+								page_builder: builder,
+								template_type: selectedTemplateType,
+								error: JSON.stringify( {
+									primaryText: softFailReason,
+									errorText: softFailDetail,
+								} ),
+							} ).catch( () => {} );
+						}
+					} catch ( reportingError ) {
+						// Reporting must never undo the soft-fail.
+					}
+					return 'soft-fail';
 				}
 			} )
 			.catch( ( error ) => {
@@ -2174,7 +2277,7 @@ const ImportSite = () => {
 				report(
 					__( 'Final finishings Failed.', 'astra-sites' ),
 					'',
-					error
+					buildImporterErrorText( error, httpStatus, '' )
 				);
 				return false;
 			} );

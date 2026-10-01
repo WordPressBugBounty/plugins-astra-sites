@@ -1,3 +1,10 @@
+v.2.4.35 - 30-September-2026
+- Improvement: Removed the Pages filter option from the Favorites dropdown when the standalone Spectra Blocks plugin is active, as it does not provide page patterns.
+
+v.2.4.34 - 21-September-2026
+- Fix: Resolved a PHP deprecation notice on PHP 8.1 and above that appeared in the error log when the licensing product list had not been created yet.
+- Fix: Premium pattern Get Access / Upgrade Now buttons now open the Premium Starter Templates license popup on Spectra Blocks (V3) sites instead of redirecting to the pricing page.
+
 v.2.4.33 - 19-August-2026
 - Improvement: Spectra Blocks plugin is now installed from the WordPress.org repository, removing the temporary hardcoded download URL.
 - Fix: Restricted the ZipWP authentication return handler to users who can manage the site, so lower-privileged roles can no longer overwrite the site-wide ZipWP credentials.

@@ -32,6 +32,14 @@ class ST_WXR_Importer {
 	private static $instance = null;
 
 	/**
+	 * Whether download_file() is sideloading an import file.
+	 *
+	 * @since 1.1.44
+	 * @var bool
+	 */
+	private static $is_downloading_import_file = false;
+
+	/**
 	 * Transient key for WXR import progress.
 	 *
 	 * @since 1.1.24
@@ -466,7 +474,7 @@ class ST_WXR_Importer {
 	 * Rewriting the demo base to the imported site's URL keeps the tail
 	 * path intact, which is what the substring match keys on.
 	 *
-	 * @since 1.1.42
+	 * @since 1.1.43
 	 *
 	 * @param int $group_id Imported access group ID.
 	 * @return void
@@ -594,27 +602,43 @@ class ST_WXR_Importer {
 	}
 
 	/**
-	 * Add .xml files as supported format in the uploader.
+	 * Allow SVG uploads for trusted users.
 	 *
 	 * @since 1.1.5 Added SVG file support.
+	 * @since 1.1.44 Trusted users only; dropped XML and JSON.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array $mimes Already supported mime types.
+	 * @return array
 	 */
 	public function custom_upload_mimes( $mimes ) {
+
+		if ( ! $this->can_upload_svg() ) {
+			return $mimes;
+		}
 
 		// Allow SVG files.
 		$mimes['svg']  = 'image/svg+xml';
 		$mimes['svgz'] = 'image/svg+xml';
 
-		// Allow XML files.
-		$mimes['xml'] = 'text/xml';
-
-		// Allow JSON files.
-		$mimes['json'] = 'application/json';
-
 		return $mimes;
+	}
+
+	/**
+	 * Check if the user can upload SVG files.
+	 *
+	 * @since 1.1.44
+	 *
+	 * @return bool
+	 */
+	private function can_upload_svg() {
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			return true;
+		}
+
+		// SVG can hold scripts, like core `html`. WPForms import uses `customize`.
+		return ( current_user_can( 'manage_options' ) || current_user_can( 'customize' ) ) && current_user_can( 'unfiltered_html' );
 	}
 
 	/**
@@ -1380,23 +1404,27 @@ class ST_WXR_Importer {
 		);
 
 		// Get actual file extension.
-		$file_extension = pathinfo( $filename, PATHINFO_EXTENSION );
+		$file_extension = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
 
 		// Reject files with no valid extension or mismatched extensions.
 		if ( false === $filetype['type'] || empty( $file_extension ) ) {
 			return $defaults;
 		}
 
+		// XML and JSON types are forced only for import downloads.
+		$is_import_file = self::$is_downloading_import_file;
+		$can_upload_svg = $this->can_upload_svg();
+
 		// Set EXT and real MIME type only for the file name `wxr.xml`.
 		// Ensure the actual extension is 'xml' to prevent double extension attacks like 'test.wxr.php'.
-		if ( 'xml' === $file_extension && strpos( $filename, 'wxr' ) !== false ) {
+		if ( $is_import_file && 'xml' === $file_extension && strpos( $filename, 'wxr' ) !== false ) {
 			$defaults['ext']  = 'xml';
 			$defaults['type'] = 'text/xml';
 		}
 
 		// Set EXT and real MIME type only for the file name `wpforms.json`, `cartflows.json`, or `spectra.json`.
 		// Ensure the actual extension is 'json' to prevent double extension attacks.
-		if ( 'json' === $file_extension && ( strpos( $filename, 'wpforms' ) !== false || strpos( $filename, 'cartflows' ) !== false || strpos( $filename, 'spectra' ) !== false ) ) {
+		if ( $is_import_file && 'json' === $file_extension && ( strpos( $filename, 'wpforms' ) !== false || strpos( $filename, 'cartflows' ) !== false || strpos( $filename, 'spectra' ) !== false ) ) {
 			$defaults['ext']  = 'json';
 			$defaults['type'] = 'text/plain';
 		}
@@ -1410,8 +1438,10 @@ class ST_WXR_Importer {
 			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 
 			// Update mime type and extension.
-			$defaults['type'] = 'image/svg+xml';
-			$defaults['ext']  = 'svg';
+			if ( $can_upload_svg ) {
+				$defaults['type'] = 'image/svg+xml';
+				$defaults['ext']  = 'svg';
+			}
 		}
 
 		if ( 'svgz' === $file_extension ) {
@@ -1433,8 +1463,10 @@ class ST_WXR_Importer {
 			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 
 			// Update mime type and extension.
-			$defaults['type'] = 'image/svg+xml';
-			$defaults['ext']  = 'svgz';
+			if ( $can_upload_svg ) {
+				$defaults['type'] = 'image/svg+xml';
+				$defaults['ext']  = 'svgz';
+			}
 		}
 
 		return $defaults;
@@ -1823,7 +1855,12 @@ class ST_WXR_Importer {
 		$overrides = wp_parse_args( $overrides, $defaults );
 
 		// Move the temporary file into the uploads directory.
-		$results = wp_handle_sideload( $file_args, $overrides );
+		self::$is_downloading_import_file = true;
+		try {
+			$results = wp_handle_sideload( $file_args, $overrides );
+		} finally {
+			self::$is_downloading_import_file = false;
+		}
 
 		if ( isset( $results['error'] ) ) {
 			// Log sideload failure.

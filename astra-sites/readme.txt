@@ -5,7 +5,7 @@ Tags: templates, website templates, elementor templates, gutenberg templates, st
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.7.7
+Stable tag: 4.7.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -256,12 +256,24 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.8 - 1st-October-2026
+- New:
+    - AI Builder: AI-built sites now save the hosting partner's affiliate IDs sent by ZipWP, so Astra, Spectra and Zip AI upgrade links carry the referral tag. Existing IDs are kept.
+- Security:
+    - ST Importer: Hardened upload file type checks so SVG uploads need the unfiltered HTML capability and XML or JSON files are no longer allowed site-wide by the importer.
+- Improvement:
+    - Design Kit: Removed the Pages filter option from the Favorites dropdown when the standalone Spectra Blocks plugin is active, as it does not provide page patterns.
+- Fix:
+    - Template imports no longer fail at the final finishing step when the server response is invalid. (#2576)
+    - AI-Builder: Replacing images in pages during an AI site import no longer fails when an SEO or page builder plugin prints inline styles while the pages are saved.
+    - AI-Builder: Selecting the Heatmaps & Website Recordings feature now lists the Sigmize plugin with its icon in the required plugins section, and the feature card shows its eye icon.
+
 v4.7.7 - 16th-September-2026
 - Fix:
     - The Starter Templates page no longer returns a 404 on Apache/LiteSpeed hosts with mod_substitute active, caused by the response exceeding the server's line-length limit.
 - Security:
     - Restricted the CartFlows, Cart Abandonment Recovery and LatePoint import endpoints and the template data request endpoint to administrators only.
-    - Image sideload endpoints now download from approved stock image hosts only, preventing server side request forgery against internal network servi
+    - Image sideload endpoints now download from approved stock image hosts only, preventing server side request forgery against internal network services.
 
 v4.7.6 - 8th-September-2026
 - New:

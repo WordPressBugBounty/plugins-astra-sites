@@ -45,7 +45,9 @@ class Importer extends AjaxBase {
 	 * Constructor
 	 */
 	public function __construct() {
-		add_action( 'astra_sites_import_complete', array( $this, 'update_required_options' ) );
+		// Priority 1: the completion flags must be written before the default-priority
+		// listeners, any of which can throw and abort the rest of the hook queue.
+		add_action( 'astra_sites_import_complete', array( $this, 'update_required_options' ), 1 );
 	}
 
 	/**
@@ -67,6 +69,11 @@ class Importer extends AjaxBase {
 	 * @return void
 	 */
 	public function update_required_options() {
+		// First: this disarms the always-on error handler and unblocks re-imports.
+		// The update_option() calls below fire hooks a third party can throw from,
+		// and the import_end catch would swallow that, stranding the flag forever.
+		delete_option( 'astra_sites_import_started' );
+
 		update_option( 'astra_sites_import_complete', 'yes', false );
 
 		// Mark setup wizard as shown.
@@ -83,7 +90,6 @@ class Importer extends AjaxBase {
 		} else {
 			update_option( 'astra_sites_batch_process_complete', 'no' );
 		}
-		delete_option( 'astra_sites_import_started' );
 	}
 
 	/**
@@ -545,6 +551,11 @@ class Importer extends AjaxBase {
 	 * @return void
 	 */
 	public function image_replacement_batch() {
+		// Buffer so stray output from post-save listeners is drained before the JSON response.
+		if ( wp_doing_ajax() ) {
+			ob_start();
+		}
+
 		Helper::verify_ajax_request( 'customize' );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is done in verify_ajax_request().

@@ -102,6 +102,24 @@ const GradientProgressRing = ( { percent } ) => {
 // treat the build as stalled, stop polling and surface a recoverable failure.
 const STALL_TIMEOUT_MS = 10 * 60 * 1000;
 
+/**
+ * Whether an unparseable response body still ends with a valid success envelope.
+ *
+ * @param {string} text Raw response body.
+ * @return {boolean} True when only stray output precedes a success JSON.
+ */
+const endsWithSuccessEnvelope = ( text ) => {
+	const start = text.lastIndexOf( '{"success":true' );
+	if ( start === -1 ) {
+		return false;
+	}
+	try {
+		return JSON.parse( text.slice( start ) )?.success === true;
+	} catch {
+		return false;
+	}
+};
+
 const ImportAiSite = () => {
 	const { nextStep } = useNavigateSteps();
 
@@ -1848,8 +1866,11 @@ const ImportAiSite = () => {
 				method: 'post',
 				body: formData,
 			} )
-				.then( ( response ) => response.text() )
-				.then( ( text ) => {
+				.then( async ( response ) => ( {
+					ok: response.ok,
+					text: await response.text(),
+				} ) )
+				.then( ( { ok, text } ) => {
 					try {
 						const data = JSON.parse( text );
 						if ( data.success ) {
@@ -1857,6 +1878,10 @@ const ImportAiSite = () => {
 						}
 						throw data.data;
 					} catch ( error ) {
+						// The step ran; a third-party listener only dirtied the JSON.
+						if ( ok && endsWithSuccessEnvelope( text ) ) {
+							return true;
+						}
 						report( errorMsg, '', error, '', '', text );
 						return false;
 					}

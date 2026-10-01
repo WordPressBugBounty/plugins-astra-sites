@@ -15,6 +15,7 @@ import {
 	EnvelopeIcon,
 	CalendarIcon,
 	ArrowTrendingUpIcon,
+	EyeIcon,
 } from '@heroicons/react/24/outline';
 import { __ } from '@wordpress/i18n';
 import { useDispatch, useSelect } from '@wordpress/data';
@@ -156,6 +157,7 @@ const ICON_SET = {
 	envelope: EnvelopeIcon,
 	calendar: CalendarIcon,
 	'arrow-trending-up': ArrowTrendingUpIcon,
+	eye: EyeIcon,
 };
 
 const Features = ( {

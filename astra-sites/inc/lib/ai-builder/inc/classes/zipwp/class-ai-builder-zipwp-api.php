@@ -719,8 +719,28 @@ class Ai_Builder_ZipWP_Api {
 			$old_business_details = array();
 		}
 
+		// Canonical business-detail keys; intersecting against the stored option would wipe first writes.
+		$allowed_keys = array(
+			'business_name'          => true,
+			'business_address'       => true,
+			'business_phone'         => true,
+			'business_email'         => true,
+			'business_category'      => true,
+			'business_category_name' => true,
+			'business_description'   => true,
+			'templates'              => true,
+			'language'               => true,
+			'images'                 => true,
+			'image_keyword'          => true,
+			'social_profiles'        => true,
+		);
+
 		if ( is_array( $business_details ) && ! empty( $business_details ) ) {
-			$business_details = array_merge( $old_business_details, array_intersect_key( $business_details, $old_business_details ) );
+			// Failed-site step_data stores the description under business_desc.
+			if ( isset( $business_details['business_desc'] ) && ! isset( $business_details['business_description'] ) ) {
+				$business_details['business_description'] = $business_details['business_desc'];
+			}
+			$business_details = array_merge( $old_business_details, array_intersect_key( $business_details, $allowed_keys ) );
 		}
 		update_option( 'zipwp_user_business_details', $business_details );
 		delete_option( 'ast_sites_downloaded_images' );
@@ -936,6 +956,10 @@ class Ai_Builder_ZipWP_Api {
 				$site_data['step_data'] = $post_data;
 			}
 			update_option( 'zipwp_import_site_details', $site_data );
+
+			if ( is_array( $response_data ) && isset( $response_data['affiliate_ids'] ) ) {
+				self::set_partner_affiliate_ids( $response_data['affiliate_ids'] );
+			}
 
 			wp_send_json_success(
 				array(
@@ -2301,6 +2325,40 @@ class Ai_Builder_ZipWP_Api {
 		 * @since 1.2.85
 		 */
 		return apply_filters( 'ai_builder_site_source', 'starter-templates' );
+	}
+
+	/**
+	 * Store the partner affiliate IDs returned by the ZipWP site creation response.
+	 *
+	 * An option that already holds a value is never overwritten, so IDs set by the
+	 * white-label onboarding plugin or manually by the partner always win.
+	 *
+	 * @param mixed $affiliate_ids Affiliate IDs keyed by programme.
+	 * @since 1.2.93
+	 * @return void
+	 */
+	public static function set_partner_affiliate_ids( $affiliate_ids ) {
+		if ( ! is_array( $affiliate_ids ) ) {
+			return;
+		}
+
+		$option_map = array(
+			'astra_affiliate_id'    => 'astra_partner_url_param',
+			'spectra_affiliate_id'  => 'spectra_partner_url_param',
+			'zipwp_ai_affiliate_id' => 'zipwp_partner_url_param',
+		);
+
+		foreach ( $option_map as $response_key => $option_name ) {
+			if ( empty( $affiliate_ids[ $response_key ] ) || ! is_scalar( $affiliate_ids[ $response_key ] ) ) {
+				continue;
+			}
+
+			$value = sanitize_text_field( (string) $affiliate_ids[ $response_key ] );
+
+			if ( '' !== $value && ! get_option( $option_name ) ) {
+				update_option( $option_name, $value );
+			}
+		}
 	}
 
 	/**
