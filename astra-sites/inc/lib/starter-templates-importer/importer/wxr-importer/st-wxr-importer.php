@@ -775,7 +775,7 @@ class ST_WXR_Importer {
 			}
 
 			// Start the event stream.
-			header( 'Content-Type: text/event-stream, charset=UTF-8' );
+			header( 'Content-Type: text/event-stream; charset=UTF-8' );
 			header( 'Cache-Control: no-cache' );
 			header( 'Connection: keep-alive' );
 			// Turn off PHP output compression.

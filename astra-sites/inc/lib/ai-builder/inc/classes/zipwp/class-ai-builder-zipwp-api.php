@@ -1144,13 +1144,22 @@ class Ai_Builder_ZipWP_Api {
 		if ( 201 === $response_code || 200 === $response_code ) {
 			$response_data = json_decode( $response_body, true );
 			if ( is_array( $response_data ) ) {
-				$exported_data = $response_data['data'];
+				$exported_data = $response_data['data'] ?? null;
 
-				if ( ! is_array( $exported_data ) ) {
-					$exported_data = array();
+				// An empty export means the build job has not committed its data yet. Saving it
+				// would make every import step fail with empty data, so let the frontend retry.
+				if ( empty( $exported_data ) || ! is_array( $exported_data ) ) {
+					wp_send_json_error(
+						array(
+							'data'      => __( 'Website data is not ready yet. Please try again.', 'astra-sites' ),
+							'status'    => false,
+							'code'      => $response_code,
+							'retryable' => true,
+						)
+					);
 				}
 
-				$exported_data['astra-site-url'] = $exported_data['host'];
+				$exported_data['astra-site-url'] = $exported_data['host'] ?? '';
 
 				if ( class_exists( 'STImporter\Importer\ST_Importer_File_System' ) ) {
 					ST_Importer_File_System::get_instance()->update_demo_data( $exported_data );

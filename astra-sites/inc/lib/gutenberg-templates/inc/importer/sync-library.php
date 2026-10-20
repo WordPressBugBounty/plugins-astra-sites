@@ -754,8 +754,9 @@ class Sync_Library {
 		$query_args = apply_filters(
 			'ast_block_templates_get_total_pages_args',
 			array(
-				'page_builder' => 'gutenberg',
-				'per_page' => 30,
+				'page_builder'       => 'gutenberg',
+				'per_page'           => 30,
+				'spectra-blocks-ver' => $this->get_spectra_blocks_version(),
 			)
 		);
 

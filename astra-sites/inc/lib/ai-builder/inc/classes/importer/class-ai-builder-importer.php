@@ -105,6 +105,18 @@ class Ai_Builder_Importer {
 	 * @since 3.1.3
 	 */
 	public function delete_related_transient() {
+		// A previous import's batch can finish while a newer import is running, or after the
+		// newer import fetched its template data but before it set the start flag. Keep that
+		// import's state; the next batch completion with no newer import cleans it up.
+		$batch_started = get_option( 'astra_sites_batch_process_started_time', 0 );
+		$data_saved    = get_option( 'astra_sites_import_data_saved_time', 0 );
+		$data_is_newer = is_numeric( $batch_started ) && is_numeric( $data_saved )
+			&& (int) $batch_started > 0 && (int) $data_saved > (int) $batch_started;
+
+		if ( astra_sites_has_import_started() || $data_is_newer ) {
+			return;
+		}
+
 		delete_option( 'astra_sites_batch_process_started' );
 		delete_option( 'astra_sites_batch_process_started_time' );
 		delete_option( 'astra_sites_batch_process_complete' );

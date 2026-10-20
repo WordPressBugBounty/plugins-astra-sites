@@ -543,8 +543,15 @@ class ST_Importer {
 				'status'  => true,
 				'message' => __( 'Customizer data imported successfully.', 'astra-sites' ),
 			);
-		} catch ( \Exception $e ) {
-			ST_Importer_Log::add( 'Customizer settings import exception', 'error', array( 'exception' => $e->getMessage() ) );
+		} catch ( \Throwable $e ) {
+			ST_Importer_Log::add(
+				'Customizer settings import exception',
+				'error',
+				array(
+					'exception' => $e->getMessage(),
+					'file'      => $e->getFile() . ':' . $e->getLine(),
+				)
+			);
 			return array(
 				'status' => false,
 				'error'  => $e->getMessage(),

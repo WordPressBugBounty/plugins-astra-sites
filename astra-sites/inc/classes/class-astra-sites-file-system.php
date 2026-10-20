@@ -34,6 +34,14 @@ if ( ! class_exists( 'Astra_Sites_File_System' ) ) {
 		public static $folder_name = 'json';
 
 		/**
+		 * Main site JSON folder, resolved once per request on multisite.
+		 *
+		 * @var string|null
+		 * @since 4.7.9
+		 */
+		private static $main_site_dir = null;
+
+		/**
 		 * Instance of Astra_Sites.
 		 *
 		 * @since  4.2.0
@@ -65,15 +73,43 @@ if ( ! class_exists( 'Astra_Sites_File_System' ) ) {
 		}
 
 		/**
+		 * Get the folder that holds a JSON file.
+		 *
+		 * On multisite the library files live on the main site, as the sync flags are network wide.
+		 * The import data file stays per site.
+		 *
+		 * @since 4.7.9
+		 * @param string $file_name File name.
+		 * @return string Folder path without trailing slash.
+		 */
+		private function get_json_dir( $file_name ) {
+			if ( ! is_multisite() || 'astra_sites_import_data.json' === wp_basename( $file_name ) ) {
+				$upload_dir = wp_upload_dir();
+				return $upload_dir['basedir'] . '/astra-sites/' . self::$folder_name;
+			}
+
+			// Resolve the main site folder once per request, as it does not change.
+			if ( null === self::$main_site_dir ) {
+				switch_to_blog( get_main_site_id() );
+				$upload_dir          = wp_upload_dir();
+				self::$main_site_dir = $upload_dir['basedir'] . '/astra-sites/' . self::$folder_name;
+				restore_current_blog();
+			}
+
+			return self::$main_site_dir;
+		}
+
+		/**
 		 * Delete a JSON file from the uploads directory.
+		 *
+		 * Library files resolve to the shared main site folder, so only call this for per-site files.
 		 *
 		 * @param string $file_name File name to be deleted.
 		 * @return void True on success, false on failure.
 		 */
 		public function delete_json_file( $file_name ) {
 			$file_name = wp_basename( $file_name );
-			$upload_dir = wp_upload_dir();
-			$file_name = $upload_dir['basedir'] . '/astra-sites/' . self::$folder_name . '/' . $file_name;
+			$file_name = $this->get_json_dir( $file_name ) . '/' . $file_name;
 			
 			if ( file_exists( $file_name ) ) {
 				wp_delete_file( $file_name );
@@ -92,8 +128,7 @@ if ( ! class_exists( 'Astra_Sites_File_System' ) ) {
 		 */
 		public function get_json_file_content( $file_name, $array_format = true ) {
 			$file_name = wp_basename( $file_name );
-			$upload_dir = wp_upload_dir();
-			$file_name = $upload_dir['basedir'] . '/astra-sites/' . self::$folder_name . '/' . $file_name;
+			$file_name = $this->get_json_dir( $file_name ) . '/' . $file_name;
 
 			if ( file_exists( $file_name ) ) {
 				// Ignoring the rule as it is not a remote file.
@@ -124,7 +159,7 @@ if ( ! class_exists( 'Astra_Sites_File_System' ) ) {
 			}
 
 			// file_put_contents can silently fail on shared hosting (disk quota, permissions).
-			$fallback = get_transient( 'astra_sites_import_data_fallback' );
+			$fallback = get_option( 'astra_sites_import_data_fallback', array() );
 
 			if ( ! empty( $fallback ) && is_array( $fallback ) ) {
 				astra_sites_error_log( 'Demo content JSON file empty or unreadable, using database fallback.' );
@@ -143,6 +178,8 @@ if ( ! class_exists( 'Astra_Sites_File_System' ) ) {
 		 */
 		public function delete_demo_content() {
 			$this->delete_json_file( 'astra_sites_import_data.json' );
+			delete_option( 'astra_sites_import_data_fallback' );
+			delete_option( 'astra_sites_import_data_saved_time' );
 			delete_transient( 'astra_sites_import_data_fallback' );
 		}
 
@@ -178,9 +215,8 @@ if ( ! class_exists( 'Astra_Sites_File_System' ) ) {
 		 */
 		public function update_json_file( $file_name, $file_content ) {
 			$file_name = wp_basename( $file_name );
-			$upload_dir = wp_upload_dir();
 			$dir_info = array(
-				'path' => $upload_dir['basedir'] . '/astra-sites/' . self::$folder_name . '/',
+				'path' => $this->get_json_dir( $file_name ) . '/',
 			);
 			
 			if ( ! file_exists( $dir_info['path'] . $file_name ) ) {
@@ -203,13 +239,27 @@ if ( ! class_exists( 'Astra_Sites_File_System' ) ) {
 		/**
 		 * Setter for update_json_file()
 		 * 
-		 * @param string|int $file_content The file content.
+		 * @param mixed $file_content Template data array; empty or non-array data is not saved.
 		 * 
-		 * @return mixed
+		 * @return bool True when saved, false when the data was rejected.
 		 */
 		public function update_demo_data( $file_content ) {
+			// Never replace the stored demo data with an empty or failed API response.
+			if ( empty( $file_content ) || ! is_array( $file_content ) ) {
+				astra_sites_error_log( 'Demo content is empty or invalid, not saved.' );
+				return false;
+			}
+
 			$this->update_json_file( 'astra_sites_import_data.json', $file_content );
-			set_transient( 'astra_sites_import_data_fallback', $file_content, HOUR_IN_SECONDS );
+
+			// Non-autoloaded option, not a transient: with a persistent object cache a transient
+			// lives only in the cache and is lost to evictions, item size limits and wp_cache_flush().
+			update_option( 'astra_sites_import_data_fallback', $file_content, false );
+
+			// Lets batch-completion cleanup tell this import's data from an older import's.
+			update_option( 'astra_sites_import_data_saved_time', time(), false );
+
+			return true;
 		}
 	}
 

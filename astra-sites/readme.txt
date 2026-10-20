@@ -5,7 +5,7 @@ Tags: templates, website templates, elementor templates, gutenberg templates, st
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.7.8
+Stable tag: 4.7.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,13 +25,14 @@ Every template works with any WordPress theme, and with the page builder you alr
 
 - 300+ website templates and ready-made site designs
 - Free Elementor templates and Gutenberg templates
+- Gutenberg templates and block patterns, powered by Spectra Blocks and edited natively in the block editor
 - 200+ page sections, block patterns and layouts
 - Pre-built sections designed for specific use-cases
 - Full site templates, page templates and section templates
 - AI website builder with built-in AI assistant
 - Adaptive design library with royalty-free images
 - Works with any WordPress theme
-- Supported page builders: Elementor, Spectra, Beaver Builder, and WordPress Block Editor
+- Supported page builders: Elementor, Spectra, Beaver Builder, and the Gutenberg block editor
 
 = One-Click Website Templates and Template Kits =
 
@@ -65,11 +66,13 @@ Import entire websites built with Elementor, individual page templates, or speci
 
 Then just drag, drop, customize, and launch your website.
 
-= WordPress Block Editor (Gutenberg) Templates =
+= Gutenberg Templates for the WordPress Block Editor =
 
-The WordPress block editor is changing the game for website creation, and building from scratch is still slow.
+Starter Templates offers a large library of readymade Gutenberg templates, Gutenberg block patterns and page layouts, all edited natively in the Gutenberg editor rather than in a separate builder interface.
 
-Starter Templates offers a large library of readymade Gutenberg templates, block patterns and page layouts, all editable natively in the block editor.
+Gutenberg templates are built with Spectra Blocks. Starter Templates installs Spectra for you during import, so there is nothing to set up beforehand, and the design stays editable with the Gutenberg controls you already use.
+
+If you build with Gutenberg, you can import a complete Gutenberg website template, a single Gutenberg page template, or one block pattern at a time, without switching to Elementor.
 
 = Hundreds of Sections and Block Patterns =
 
@@ -86,6 +89,19 @@ Available sections include: Hero, Page Header, About, Services, Features, Contac
 Depending on the type of template you import, Starter Templates also installs the plugins that template needs to work.
 
 Import a booking template and the plugins that provide booking are set up for you. Import an online store template and the eCommerce plugins come with it. You do not need to go hunting for another plugin after importing a template, because the design arrives ready to run.
+
+= eCommerce, Portfolio and Business Templates =
+
+You can filter the library by what you are building, so you can start from a template made for your use case instead of reshaping a generic one.
+
+- eCommerce templates for online stores, designed to work alongside WooCommerce
+- Portfolio templates for designers, photographers, studios and creative freelancers
+- Business templates for agencies, consultants, clinics and local service providers
+- Landing page templates for campaigns, lead generation and product launches
+- Blog and magazine templates for publishers and content sites
+- Restaurant, event and nonprofit templates for everything else
+
+Whichever vertical you pick, the template arrives with matching pages, sections and styling rather than a single page you have to build out.
 
 = AI-Integrated Adaptive Design Library =
 
@@ -172,7 +188,7 @@ Starter Templates supports Elementor, Beaver Builder, Spectra, and the WordPress
 
 = Do I need Elementor to use Starter Templates? =
 
-No. Elementor is one of several supported options. If you prefer the WordPress block editor, there is a full library of Gutenberg templates and block patterns that need no page builder plugin at all.
+No. Elementor is one of several supported options. If you prefer the WordPress block editor, there is a large library of Gutenberg templates and block patterns built with Spectra Blocks, which Starter Templates installs for you during import.
 
 = Are the website templates free? =
 
@@ -256,6 +272,21 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.9 - 20th-October-2026
+- Improvement:
+    - Plugin verification retries on time-outs and stray server output, and shows a clear error, not a stuck screen.
+- Fix:
+    - Template library no longer shows a blank list for subsite admins on multisite; every subsite now uses the templates synced on the main site.
+    - Imports no longer fail with "Importing Customizer failed due to parse JSON error" when template data is lost.
+    - Import errors now show the real server message instead of "[object Object]" or a blank reason.
+    - Content import now shows an error instead of hanging forever when the progress stream connection is lost.
+    - The "Disable Debug Mode" notice no longer appears on sites where WP_DEBUG is defined as false.
+    - Design Kit: Design Library no longer drops some template kits, such as Law, when the Spectra version toggle is on, as total kit pages are now fetched with the same Spectra version.
+    - ST Importer: Template import no longer gets stuck in WordPress Playground due to an invalid progress stream header.
+    - ST Importer: A failed template fetch no longer overwrites the stored template data with empty data.
+    - ST Importer: Imported template data is no longer lost when the uploads file write fails on hosts with a persistent object cache.
+
+
 v4.7.8 - 1st-October-2026
 - New:
     - AI Builder: AI-built sites now save the hosting partner's affiliate IDs sent by ZipWP, so Astra, Spectra and Zip AI upgrade links carry the referral tag. Existing IDs are kept.

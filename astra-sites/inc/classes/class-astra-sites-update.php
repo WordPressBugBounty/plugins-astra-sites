@@ -105,6 +105,19 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 				}
 			}
 
+			if ( version_compare( $saved_version, '4.7.9', '<' ) && is_multisite() && ! get_site_option( 'astra-sites-library-moved-to-main-site' ) ) {
+				// Library JSON now lives on the main site, so resync it once for the whole network.
+				delete_site_option( 'astra-sites-fresh-site' );
+				delete_site_option( 'astra-sites-last-export-checksums' );
+				delete_site_option( 'astra-sites-last-export-checksums-latest' );
+				delete_site_option( 'astra-sites-batch-status' );
+				delete_site_option( 'astra-sites-batch-is-complete' );
+				delete_site_option( 'astra-sites-manual-sync-complete' );
+				delete_site_option( 'astra-sites-current-page' );
+				delete_site_transient( 'astra-sites-import-check' );
+				update_site_option( 'astra-sites-library-moved-to-main-site', 'yes' );
+			}
+
 			if ( version_compare( $saved_version, '4.4.2', '<' ) ) {
 				$transient_name = 'nps-survay-form-dismissed';
 				$expiration_time = get_option( '_transient_timeout_' . $transient_name );

@@ -2,6 +2,14 @@ import { __ } from '@wordpress/i18n';
 const { themeStatus } = starterTemplates;
 import apiFetch from '@wordpress/api-fetch';
 
+const createNonJsonError = () =>
+	new Error(
+		__(
+			"Server returned a non-JSON response. This usually means the server timed out or encountered a fatal error. Check your server's max_execution_time and PHP error log, then try again.",
+			'astra-sites'
+		)
+	);
+
 /**
  * Parse a fetch Response as JSON, but throw a clear human-readable error when
  * the server returns an HTML page (e.g. a 504 timeout or PHP fatal) instead of
@@ -12,18 +20,82 @@ import apiFetch from '@wordpress/api-fetch';
  */
 export const safeParseJson = ( response ) => {
 	const contentType = response.headers.get( 'content-type' ) || '';
-	const nonJsonError = new Error(
-		__(
-			"Server returned a non-JSON response. This usually means the server timed out or encountered a fatal error. Check your server's max_execution_time and PHP error log, then try again.",
-			'astra-sites'
-		)
-	);
 	if ( ! contentType.includes( 'application/json' ) ) {
-		throw nonJsonError;
+		throw createNonJsonError();
 	}
 	return response.json().catch( () => {
-		throw nonJsonError;
+		throw createNonJsonError();
 	} );
+};
+
+/**
+ * Parse a wp_send_json() response even when stray PHP output (notices,
+ * warnings) precedes the JSON body and flips the content-type to text/html.
+ *
+ * @param {Response} response Fetch API Response object.
+ * @return {Promise<*>} Parsed JSON value.
+ */
+export const parseJsonIgnoringStrayOutput = async ( response ) => {
+	const text = await response.text();
+	const isEnvelope = ( value ) =>
+		value !== null &&
+		typeof value === 'object' &&
+		typeof value.success === 'boolean';
+
+	// Cut the balanced {...} object that starts at `start`, ignoring braces
+	// inside strings, so output printed after the JSON does not matter.
+	const extractObject = ( start ) => {
+		let depth = 0;
+		let inString = false;
+		for ( let i = start; i < text.length; i++ ) {
+			const char = text[ i ];
+			if ( inString ) {
+				if ( char === '\\' ) {
+					i++;
+				} else if ( char === '"' ) {
+					inString = false;
+				}
+			} else if ( char === '"' ) {
+				inString = true;
+			} else if ( char === '{' ) {
+				depth++;
+			} else if ( char === '}' && --depth === 0 ) {
+				return text.slice( start, i + 1 );
+			}
+		}
+		return '';
+	};
+
+	let whole = null;
+	try {
+		whole = JSON.parse( text );
+	} catch ( error ) {
+		// Stray output around the JSON; look for the envelope below.
+	}
+	// A body that is valid JSON but not an envelope is not stray output.
+	if ( whole !== null ) {
+		if ( isEnvelope( whole ) ) {
+			return whole;
+		}
+		throw createNonJsonError();
+	}
+
+	// WordPress envelopes start with {"success":. Prefer the last one, since
+	// stray notices come before wp_send_json() output.
+	let start = text.lastIndexOf( '{"success":' );
+	while ( start !== -1 ) {
+		try {
+			const candidate = JSON.parse( extractObject( start ) );
+			if ( isEnvelope( candidate ) ) {
+				return candidate;
+			}
+		} catch ( error ) {
+			// Not a complete envelope; try the previous match.
+		}
+		start = start > 0 ? text.lastIndexOf( '{"success":', start - 1 ) : -1;
+	}
+
+	throw createNonJsonError();
 };
 
 /**
@@ -59,9 +131,10 @@ export const extractPluginError = ( err, fallback ) => {
 	return fallback;
 };
 
-export const getDemo = async ( id, storedState ) => {
+export const getDemo = async ( id, storedState, onError = null ) => {
 	const [ , dispatch ] = storedState; // Destructuring assignment only for dispatch method.
 	let templateData = null;
+	let failureText = '';
 
 	const generateData = new FormData();
 	generateData.append( 'action', 'astra-sites-api-request' );
@@ -155,13 +228,15 @@ export const getDemo = async ( id, storedState ) => {
 								),
 								secondaryText: '',
 								errorCode: '',
-								errorText: response.data,
+								errorText:
+									response.data?.message || response.data,
 								solutionText:
 									astraSitesVars?.ajax_request_failed_secondary,
 								tryAgain: false,
 							};
 							break;
 					}
+					failureText = errorMessages.errorText;
 					dispatch( {
 						type: 'set',
 						importError: true,
@@ -169,10 +244,33 @@ export const getDemo = async ( id, storedState ) => {
 						importErrorResponse: response.data,
 						templateResponse: null,
 					} );
+				} else {
+					// Errors without a response code (e.g. empty API URL)
+					// must still stop the import with a visible message.
+					failureText = response.data?.message || '';
+					dispatch( {
+						type: 'set',
+						importError: true,
+						importErrorMessages: {
+							primaryText: __(
+								'Fetching related demo failed.',
+								'astra-sites'
+							),
+							secondaryText: '',
+							errorCode: response.data?.code || '',
+							errorText: response.data?.message || '',
+							solutionText:
+								astraSitesVars?.ajax_request_failed_secondary,
+							tryAgain: true,
+						},
+						importErrorResponse: response.data,
+						templateResponse: null,
+					} );
 				}
 			}
 		} )
 		.catch( ( error ) => {
+			failureText = error?.message || String( error );
 			dispatch( {
 				type: 'set',
 				importError: true,
@@ -190,6 +288,10 @@ export const getDemo = async ( id, storedState ) => {
 				},
 			} );
 		} );
+
+	if ( ! templateData && 'function' === typeof onError ) {
+		onError( failureText );
+	}
 
 	return templateData;
 };

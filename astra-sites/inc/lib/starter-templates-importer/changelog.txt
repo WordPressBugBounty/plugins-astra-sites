@@ -1,3 +1,9 @@
+v1.1.45 - 20-October-2026
+- Fix: Content import no longer gets stuck in WordPress Playground; the progress stream header is now a valid Content-Type that Chrome accepts.
+- Fix: Imported template data is no longer lost when the uploads file write fails on hosts with a persistent object cache.
+- Fix: A failed template fetch no longer overwrites the stored template data with empty data.
+- Fix: Site options import failures now report whether the import data file and its database copy exist, to help trace empty data.
+
 v1.1.44 - 30-September-2026
 - Security: Hardened upload file type checks so SVG uploads need the unfiltered HTML capability and XML or JSON files are no longer allowed site-wide by the importer.
 

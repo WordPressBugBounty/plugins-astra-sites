@@ -1,3 +1,8 @@
+v1.2.94 - 20th-October-2026
+- Fix: AI imports no longer fail with "Customizer data is empty" when the website export is not ready yet or was cleared mid-import.
+- Fix: Customizer import errors now show the real server message instead of "[object Object]" or a blank reason.
+- Fix: The site options import error now reports the state of the import data (file, database copy, batch flags) to help trace empty options.
+
 v1.2.93 - 30th-September-2026
 - New: AI-built sites now save the hosting partner's affiliate IDs sent by ZipWP, so Astra, Spectra and Zip AI upgrade links carry the referral tag. Existing IDs are kept.
 - Fix: The final import step no longer breaks the JSON response when a third-party hook prints a notice or throws a fatal error while the import is being finished.

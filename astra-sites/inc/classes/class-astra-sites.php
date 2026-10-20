@@ -1038,6 +1038,19 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			$code      = (int) wp_remote_retrieve_response_code( $request );
 			$demo_data = json_decode( wp_remote_retrieve_body( $request ), true );
 
+			// A 200 with a non-JSON body (proxy/firewall page, truncated response) must fail here,
+			// otherwise every later import step reads empty demo data. Code '500' maps to the
+			// server-error message in the onboarding getDemo().
+			if ( 200 === $code && ( empty( $demo_data ) || ! is_array( $demo_data ) ) ) {
+				wp_send_json_error(
+					array(
+						'message'       => __( 'The template data received from the server is empty or invalid. Please try again.', 'astra-sites' ),
+						'code'          => '500',
+						'response_code' => $code,
+					)
+				);
+			}
+
 			if ( 200 === $code ) {
 				$class_list = isset( $demo_data['class_list'] ) ? $demo_data['class_list'] : array();
 				if ( in_array( 'astra-site-page-builder-gutenberg', $class_list, true ) ) {
@@ -2011,7 +2024,7 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 				'astra_sites_localize_vars',
 				array(
 					'subscribed'                         => get_user_meta( get_current_user_ID(), 'astra-sites-subscribed', true ),
-					'debug'                              => defined( 'WP_DEBUG' ) ? true : false,
+					'debug'                              => defined( 'WP_DEBUG' ) && WP_DEBUG,
 					'isPro'                              => defined( 'ASTRA_PRO_SITES_NAME' ) ? true : false,
 					'isWhiteLabeled'                     => Astra_Sites_White_Label::get_instance()->is_white_labeled(),
 					'whiteLabelName'                     => Astra_Sites_White_Label::get_instance()->get_white_label_name(),

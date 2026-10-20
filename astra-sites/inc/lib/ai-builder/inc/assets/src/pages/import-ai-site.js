@@ -1248,13 +1248,28 @@ const ImportAiSite = () => {
 					if ( suppressErrorReporting ) {
 						return false;
 					}
+					// Report the real message: a JSON SyntaxError, a server
+					// error string/object, or undefined for a -1/0 reply.
+					let errorText =
+						typeof error === 'string'
+							? error
+							: error?.message || error?.data || '';
+					if (
+						! errorText &&
+						[ '-1', '0' ].includes( String( text ).trim() )
+					) {
+						errorText = __(
+							'Your login session has expired. Please reload the page, log in again and retry the import.',
+							'ai-builder'
+						);
+					}
 					report(
 						__(
 							'Importing Customizer failed due to parse JSON error.',
 							'ai-builder'
 						),
 						'',
-						error,
+						errorText,
 						'',
 						'',
 						text
@@ -1269,7 +1284,7 @@ const ImportAiSite = () => {
 				report(
 					__( 'Importing Customizer Failed.', 'ai-builder' ),
 					'',
-					error
+					error?.message || error
 				);
 				return false;
 			} );

@@ -707,7 +707,21 @@ class Helper {
 		$result = ST_Importer::import_options( $options_data );
 
 		if ( false === $result['status'] ) {
-			self::error_response( $result['error'] );
+			$error = $result['error'];
+
+			if ( empty( $options_data ) && is_string( $error ) && class_exists( 'STImporter\Importer\ST_Importer_File_System' ) ) {
+				$file_system = ST_Importer_File_System::get_instance();
+
+				// Older bundled importer versions do not have get_diagnostics().
+				$diagnostics = is_callable( array( $file_system, 'get_diagnostics' ) ) ? call_user_func( array( $file_system, 'get_diagnostics' ) ) : null; // @phpstan-ignore-line
+
+				if ( is_array( $diagnostics ) ) {
+					Ai_Builder_Importer_Log::add( 'Site options empty, demo data state', 'error', $diagnostics );
+					$error .= ' [' . http_build_query( $diagnostics, '', ' ' ) . ']';
+				}
+			}
+
+			self::error_response( $error );
 			return;
 		}
 

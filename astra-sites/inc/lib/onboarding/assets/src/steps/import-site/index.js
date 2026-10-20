@@ -24,6 +24,7 @@ import {
 	getDemo,
 	extractPluginError,
 	safeParseJson,
+	parseJsonIgnoringStrayOutput,
 } from './import-utils';
 const { reportError } = starterTemplates;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
@@ -157,6 +158,8 @@ const ImportSite = () => {
 		} );
 	};
 
+	const verifyRunRef = React.useRef( 0 );
+
 	/**
 	 * Verify that all required plugins are installed on the server.
 	 * This is a safety check before starting the import process.
@@ -164,6 +167,17 @@ const ImportSite = () => {
 	 * @return {Promise<Object>} Object with verified status and failed plugin details.
 	 */
 	const verifyPluginsBeforeImport = async () => {
+		// Back / unmount bump the run id so a late retry exits without
+		// touching state for an abandoned template.
+		const runId = ++verifyRunRef.current;
+		const isStale = () => runId !== verifyRunRef.current;
+		const cancelled = {
+			verified: false,
+			cancelled: true,
+			missing: [],
+			notActivated: [],
+		};
+
 		const allRequiredPlugins =
 			templateResponse?.[ 'required-plugins' ] || [];
 
@@ -197,54 +211,133 @@ const ImportSite = () => {
 			JSON.stringify( requiredPluginsList )
 		);
 
-		try {
-			const response = await fetch( ajaxurl, {
-				method: 'post',
-				body: formData,
-			} );
-			const result = await safeParseJson( response );
-
-			if ( ! result.success ) {
-				// Plugins missing or not activated - handle recovery.
-				// Repopulating the notInstalled/notActivated lists triggers
-				// the install/activate useEffects to re-run; the all-active
-				// effect then re-fires this verification with a fresh timer.
-				const { missing, not_activated } = result.data || {};
-				const missingPlugins = missing || [];
-				const notActivatedPlugins = not_activated || [];
-
-				// Single atomic dispatch — two separate dispatches would cause two
-				// renders in React 17 (async context, no auto-batching). Between
-				// renders, one list would be empty and the other not, making the
-				// requiredPluginsDone useEffect fire with partial state.
-				dispatch( {
-					type: 'set',
-					notInstalledList: missingPlugins,
-					notActivatedList: notActivatedPlugins,
+		// The check is read-only, so a transient transport failure (timeout,
+		// dropped connection, 5xx, stray output) is safe to retry.
+		let result = null;
+		let requestError = null;
+		for ( let attempt = 1; attempt <= 3; attempt++ ) {
+			let retryable = true;
+			const controller = new AbortController();
+			const timeoutId = setTimeout( () => controller.abort(), 30000 );
+			try {
+				const response = await fetch( ajaxurl, {
+					method: 'post',
+					body: formData,
+					signal: controller.signal,
 				} );
-
-				return {
-					verified: false,
-					missing: missingPlugins,
-					notActivated: notActivatedPlugins,
-				};
+				// Blocked or forbidden requests (4xx) fail the same way on a
+				// retry; only 408 and 429 are worth another attempt.
+				retryable =
+					response.status < 400 ||
+					response.status >= 500 ||
+					response.status === 408 ||
+					response.status === 429;
+				result = await parseJsonIgnoringStrayOutput( response );
+				requestError = null;
+				break;
+			} catch ( error ) {
+				requestError =
+					error?.name === 'AbortError'
+						? new Error(
+								__(
+									'The plugin verification request timed out.',
+									'astra-sites'
+								)
+						  )
+						: error;
+				if ( ! retryable ) {
+					break;
+				}
+				if ( attempt < 3 && ! isStale() ) {
+					await new Promise( ( resolve ) =>
+						setTimeout( resolve, 2000 * attempt )
+					);
+				}
+			} finally {
+				clearTimeout( timeoutId );
 			}
+			if ( isStale() ) {
+				return cancelled;
+			}
+		}
 
-			return { verified: true, missing: [], notActivated: [] };
-		} catch ( error ) {
+		if ( isStale() ) {
+			return cancelled;
+		}
+
+		if ( requestError ) {
 			// Surface the error to the user — silently returning would leave
 			// importPart1() returning early with no state change, and since
 			// no useEffect dependency changes, importPart1 would never retry.
 			report(
 				__( 'Plugin verification failed.', 'astra-sites' ),
 				'',
-				error.message,
+				requestError.message,
 				'',
 				'',
 				''
 			);
-			return { verified: false, missing: [], notActivated: [], error };
+			return {
+				verified: false,
+				missing: [],
+				notActivated: [],
+				error: requestError,
+			};
 		}
+
+		if ( ! result.success ) {
+			// Plugins missing or not activated - handle recovery.
+			// Repopulating the notInstalled/notActivated lists triggers
+			// the install/activate useEffects to re-run; the all-active
+			// effect then re-fires this verification with a fresh timer.
+			const { missing, not_activated, message } = result.data || {};
+			const missingPlugins = missing || [];
+			const notActivatedPlugins = not_activated || [];
+
+			// A failure without plugin lists (e.g. permission denied) gives the
+			// effects nothing to re-run, so report it instead of hanging.
+			if (
+				missingPlugins.length === 0 &&
+				notActivatedPlugins.length === 0
+			) {
+				const error = new Error(
+					message ||
+						__( 'Plugin verification failed.', 'astra-sites' )
+				);
+				report(
+					__( 'Plugin verification failed.', 'astra-sites' ),
+					'',
+					error.message,
+					'',
+					'',
+					''
+				);
+				return {
+					verified: false,
+					missing: [],
+					notActivated: [],
+					error,
+				};
+			}
+
+			// Single atomic dispatch — two separate dispatches would cause two
+			// renders in React 17 (async context, no auto-batching). Between
+			// renders, one list would be empty and the other not, making the
+			// requiredPluginsDone useEffect fire with partial state.
+			dispatch( {
+				type: 'set',
+				notInstalledList: missingPlugins,
+				notActivatedList: notActivatedPlugins,
+			} );
+
+			return {
+				verified: false,
+				missing: missingPlugins,
+				notActivated: notActivatedPlugins,
+			};
+		}
+
+		return { verified: true, missing: [], notActivated: [] };
 	};
 
 	/**
@@ -263,8 +356,23 @@ const ImportSite = () => {
 		let customizerStatus = false;
 		let spectraStatus = false;
 
-		// To make sure template data is available before import.
-		await getDemo( templateId || templateResponse?.id, storedState );
+		// Every later step reads the template data stored by this request, so
+		// stop before resetting the site if it could not be fetched. getDemo()
+		// has already shown the error; only report it here.
+		const demoData = await getDemo(
+			templateId || templateResponse?.id,
+			storedState,
+			( failureText ) =>
+				sendErrorReport(
+					__( 'Fetching related demo failed.', 'astra-sites' ),
+					'',
+					failureText
+				)
+		);
+
+		if ( ! demoData ) {
+			return;
+		}
 
 		resetStatus = await resetOldSite();
 
@@ -1177,15 +1285,36 @@ const ImportSite = () => {
 		try {
 			data = JSON.parse( text );
 		} catch ( parseError ) {
+			// Keep a short plain-text excerpt so the report shows what the
+			// server (or a proxy/firewall in front of it) actually returned.
+			const excerpt = String( text )
+				.replace( /<[^>]*>/g, ' ' )
+				.replace( /\s+/g, ' ' )
+				.trim()
+				.slice( 0, 200 );
 			throw Object.assign(
 				new Error(
-					`${ importerName }: Server returned a non-JSON response.`
+					`${ importerName }: Server returned a non-JSON response.` +
+						( excerpt ? ` ${ excerpt }` : '' )
 				),
 				{ type: 'parse_error', raw: text }
 			);
 		}
-		// Non-object JSON (admin-ajax's bare '-1'/'0' replies) is garbage,
-		// not a wp_send_json_*() envelope — classify it as a parse error.
+		// check_ajax_referer() answers -1 and admin-ajax answers 0 when the
+		// nonce or login session has expired during a long import.
+		if ( -1 === data || 0 === data ) {
+			throw Object.assign(
+				new Error(
+					__(
+						'Your login session has expired. Please reload the page, log in again and retry the import.',
+						'astra-sites'
+					)
+				),
+				{ type: 'server_error', responseData: data }
+			);
+		}
+		// Any other non-object JSON is not a wp_send_json_*() envelope —
+		// classify it as a parse error.
 		if ( typeof data !== 'object' || data === null ) {
 			throw Object.assign(
 				new Error(
@@ -1195,9 +1324,13 @@ const ImportSite = () => {
 			);
 		}
 		if ( ! data.success ) {
+			const serverMessage =
+				typeof data.data === 'string'
+					? data.data
+					: data.data?.message || data.data?.error;
 			throw Object.assign(
 				new Error(
-					data.data || `${ importerName }: Unknown server error.`
+					serverMessage || `${ importerName }: Unknown server error.`
 				),
 				{ type: 'server_error', responseData: data.data }
 			);
@@ -1621,7 +1754,7 @@ const ImportSite = () => {
 				report(
 					__( 'Importing Customizer Failed.', 'astra-sites' ),
 					'',
-					error
+					error?.message || error
 				);
 				return false;
 			} );
@@ -1974,7 +2107,13 @@ const ImportSite = () => {
 		};
 
 		evtSource.onerror = ( error ) => {
-			if ( ! ( error && error?.isTrusted ) ) {
+			// A CLOSED stream means the browser gave up (e.g. it rejected the
+			// response and will not reconnect) — a trusted event in that state
+			// must still be reported, or the import hangs silently.
+			if (
+				evtSource.readyState === EventSource.CLOSED ||
+				! ( error && error?.isTrusted )
+			) {
 				evtSource.close();
 				report(
 					__(
@@ -2360,6 +2499,7 @@ const ImportSite = () => {
 			clearTimeout( pluginVerifyTimeoutRef.current );
 			pluginVerifyTimeoutRef.current = null;
 		}
+		verifyRunRef.current++;
 		dispatch( { type: 'set', currentIndex: getStepIndex( 'site-list' ) } );
 	};
 
@@ -2599,11 +2739,12 @@ const ImportSite = () => {
 						importStatus: __( 'Preparing import…', 'astra-sites' ),
 					} );
 				}
-				// On failure, verifyPluginsBeforeImport repopulated
-				// notInstalledList/notActivatedList; the install/activate
-				// effects will re-fire and on success this effect runs again
-				// with a fresh timer (reset on lists going non-empty, see
-				// effect below).
+				// When the server reports missing or inactive plugins,
+				// verifyPluginsBeforeImport repopulates notInstalledList/
+				// notActivatedList; the install/activate effects re-fire and on
+				// success this effect runs again with a fresh timer (reset on
+				// lists going non-empty, see effect below). Request failures and
+				// list-less errors are reported instead and leave the lists alone.
 			}, 2000 );
 		}
 	}, [
@@ -2621,6 +2762,7 @@ const ImportSite = () => {
 	// step is no longer current.
 	useEffect( () => {
 		return () => {
+			verifyRunRef.current++;
 			if ( pluginVerifyTimeoutRef.current ) {
 				clearTimeout( pluginVerifyTimeoutRef.current );
 				pluginVerifyTimeoutRef.current = null;

@@ -134,7 +134,7 @@ if ( ! class_exists( 'ST_Importer_File_System' ) ) {
 			}
 
 			// file_put_contents can silently fail on shared hosting (disk quota, permissions).
-			$fallback = get_transient( 'astra_sites_import_data_fallback' );
+			$fallback = get_option( 'astra_sites_import_data_fallback', array() );
 
 			if ( ! empty( $fallback ) && is_array( $fallback ) ) {
 				astra_sites_error_log( 'Demo content JSON file empty or unreadable, using database fallback.' );
@@ -153,14 +153,16 @@ if ( ! class_exists( 'ST_Importer_File_System' ) ) {
 		 */
 		public function delete_demo_content() {
 			$this->delete_json_file( 'astra_sites_import_data.json' );
+			delete_option( 'astra_sites_import_data_fallback' );
+			delete_option( 'astra_sites_import_data_saved_time' );
 			delete_transient( 'astra_sites_import_data_fallback' );
 		}
 
 		/**
 		 * Update files/directories.
 		 *
-		 * @param string     $file_name    The file name.
-		 * @param string|int $file_content The file content.
+		 * @param string $file_name    The file name.
+		 * @param mixed  $file_content The file content.
 		 *
 		 * @return void
 		 */
@@ -180,13 +182,54 @@ if ( ! class_exists( 'ST_Importer_File_System' ) ) {
 		/**
 		 * Setter for update_json_file()
 		 *
-		 * @param string|int $file_content The file content.
+		 * @param mixed $file_content Template data array; empty or non-array data is not saved.
 		 *
-		 * @return mixed
+		 * @return bool True when saved, false when the data was rejected.
 		 */
 		public function update_demo_data( $file_content ) {
+			// Never replace the stored demo data with an empty or failed API response.
+			if ( empty( $file_content ) || ! is_array( $file_content ) ) {
+				astra_sites_error_log( 'Demo content is empty or invalid, not saved.' );
+				return false;
+			}
+
 			$this->update_json_file( 'astra_sites_import_data.json', $file_content );
-			set_transient( 'astra_sites_import_data_fallback', $file_content, HOUR_IN_SECONDS );
+
+			// Non-autoloaded option, not a transient: with a persistent object cache a transient
+			// lives only in the cache and is lost to evictions, item size limits and wp_cache_flush().
+			update_option( 'astra_sites_import_data_fallback', $file_content, false );
+
+			// Lets batch-completion cleanup tell this import's data from an older import's.
+			update_option( 'astra_sites_import_data_saved_time', time(), false );
+
+			return true;
+		}
+
+		/**
+		 * Report where the demo content is still available.
+		 *
+		 * @since 1.1.45
+		 *
+		 * @return array<string, string> Keys: file, fallback, data_saved, batch_started, batch_complete.
+		 */
+		public function get_diagnostics() {
+			$upload_dir    = wp_upload_dir();
+			$file          = $upload_dir['basedir'] . '/astra-sites/' . self::$folder_name . '/astra_sites_import_data.json';
+			$data_saved    = (int) get_option( 'astra_sites_import_data_saved_time', 0 );
+			$batch_started = (int) get_option( 'astra_sites_batch_process_started_time', 0 );
+
+			$data_saved_state = 'none';
+			if ( $data_saved > 0 ) {
+				$data_saved_state = $batch_started > 0 && $data_saved > $batch_started ? 'after_batch_start' : 'before_batch_start';
+			}
+
+			return array(
+				'file'           => file_exists( $file ) && filesize( $file ) > 2 ? 'present' : 'missing',
+				'fallback'       => ! empty( get_option( 'astra_sites_import_data_fallback', array() ) ) ? 'present' : 'missing',
+				'data_saved'     => $data_saved_state,
+				'batch_started'  => (string) get_option( 'astra_sites_batch_process_started', 'no' ),
+				'batch_complete' => (string) get_option( 'astra_sites_batch_process_complete', 'no' ),
+			);
 		}
 	}
 
