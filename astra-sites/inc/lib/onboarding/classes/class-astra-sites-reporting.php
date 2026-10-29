@@ -77,7 +77,11 @@ class Astra_Sites_Reporting {
 
         $id = ( isset( $cached_errors['id'] ) ) ? $cached_errors['id'] : 0;
 
-        if ( $id === 0 ) {
+        // An error without a usable template id cannot be traced to a template.
+        // Drop it so the next import can report again.
+        if ( ! self::is_usable_template_id( $id ) ) {
+            update_option( 'astra_sites_has_sent_error_report', 'no' );
+            delete_option( 'astra_sites_cached_import_error' );
             return;
         }
 
@@ -104,11 +108,69 @@ class Astra_Sites_Reporting {
     }
 
     /**
+     * Whether a template id can identify a template in a report.
+     *
+     * @since 4.7.10
+     *
+     * @param mixed $id Template id.
+     * @return bool
+     */
+    public static function is_usable_template_id( $id ) {
+        if ( ! is_scalar( $id ) ) {
+            return false;
+        }
+
+        $id = strtolower( trim( (string) $id ) );
+
+        return '' !== $id && ! in_array( $id, array( '0', 'null', 'undefined' ), true );
+    }
+
+    /**
+     * Whether a template id is a UUID, the id format of AI builder templates.
+     *
+     * Classic templates have a post id, and some events carry a slug such as
+     * woocommerce or id-exporter-allure, so only a full UUID counts.
+     *
+     * @since 4.7.10
+     *
+     * @param mixed $id Template id.
+     * @return bool
+     */
+    public static function is_uuid_template_id( $id ) {
+        return is_string( $id ) && 1 === preg_match( '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', trim( $id ) );
+    }
+
+    /**
+     * Builder type to send with a report.
+     *
+     * AI builder templates have a UUID as template id. The AI builder bundle can
+     * still send the classic key word (astra-sites) or the hyphenated ai-builder
+     * for them, and the analytics server stores astra-sites as classic.
+     *
+     * @since 4.7.10
+     *
+     * @param string $type Type received with the report.
+     * @param mixed  $id   Template id of the report.
+     * @return string
+     */
+    public static function get_report_type( $type, $id ) {
+        if ( 'ai-builder' === $type ) {
+            return 'ai_builder';
+        }
+
+        if ( self::is_uuid_template_id( $id ) && in_array( $type, array( '', 'astra-sites', 'classic' ), true ) ) {
+            return 'ai_builder';
+        }
+
+        return $type;
+    }
+
+    /**
      * Report Error.
-     * 
+     *
      * @param array<string, mixed> $data Error data.
      * @since 3.1.4
-     * 
+     *
      * @return array<string, mixed>
      */
     public function report( $data ) {
@@ -116,6 +178,7 @@ class Astra_Sites_Reporting {
         $import_attempts   = isset( $data['import_attempts'] ) ? absint( $data['import_attempts'] ) : 0;
         $import_status     = isset( $data['import_status'] ) ? sanitize_text_field( $data['import_status'] ) : 'true';
         $type              = isset( $data['type'] ) ? sanitize_text_field( $data['type'] ) : 'astra-sites';
+        $type              = self::get_report_type( $type, $id );
         $page_builder      = isset( $data['page_builder'] ) ? sanitize_text_field( $data['page_builder'] ) : 'gutenberg';
         $exit_intend       = isset( $data['exit_intend'] ) ? sanitize_text_field( $data['exit_intend'] ) : 'false';
         $user_agent_string = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : '';

@@ -1,3 +1,7 @@
+v1.1.46 - 28-October-2026
+- Fix: Import log entries from the options and content importers now show the real severity and message, so failed imports are easy to spot in the log.
+- Security: Import log messages are now written on a single line, so text from errors or remote sources can no longer add fake entries to the log.
+
 v1.1.45 - 20-October-2026
 - Fix: Content import no longer gets stuck in WordPress Playground; the progress stream header is now a valid Content-Type that Chrome accepts.
 - Fix: Imported template data is no longer lost when the uploads file write fails on hosts with a persistent object cache.

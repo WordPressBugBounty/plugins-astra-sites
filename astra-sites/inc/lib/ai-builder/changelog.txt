@@ -1,3 +1,7 @@
+v1.2.95 - 28th-October-2026
+- Improvement: The AI website builder now checks each required plugin's PHP and WordPress requirements before building and clearly blocks the build when your site can't run one, instead of failing midway through the import.
+- Fix: AI import error reports now use the ai_builder type, so failures are no longer counted as classic imports.
+
 v1.2.94 - 20th-October-2026
 - Fix: AI imports no longer fail with "Customizer data is empty" when the website export is not ready yet or was cleared mid-import.
 - Fix: Customizer import errors now show the real server message instead of "[object Object]" or a blank reason.

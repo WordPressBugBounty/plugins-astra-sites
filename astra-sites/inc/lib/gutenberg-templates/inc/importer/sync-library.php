@@ -97,7 +97,7 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$res_data = json_decode( wp_remote_retrieve_body( $response ), true );
 
 			if ( isset( $res_data['data']['customizer_css'] ) ) {
@@ -140,7 +140,7 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$res_data = json_decode( wp_remote_retrieve_body( $response ), true );
 
 			if ( isset( $res_data['data']['spectra-common-styles'] ) ) {
@@ -273,7 +273,7 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$result = json_decode( wp_remote_retrieve_body( $response ), true );
 			$result_data = isset( $result['data'] ) ? $result['data'] : '';
 			return $result_data;
@@ -445,7 +445,7 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$result = json_decode( wp_remote_retrieve_body( $response ), true );
 
 			// Set last export checksums.
@@ -608,7 +608,7 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$total_requests = json_decode( wp_remote_retrieve_body( $response ), true );
 
 			if ( isset( $total_requests['pages'] ) ) {
@@ -622,6 +622,21 @@ class Sync_Library {
 		// returning 0 pages as no return statement exist.
 		return 0;
 
+	}
+
+	/**
+	 * Get a log message for a failed remote request.
+	 *
+	 * @since 2.4.37
+	 * @param array<string, mixed>|\WP_Error $response Remote request response.
+	 * @return string
+	 */
+	public function get_response_error_message( $response ) {
+		if ( is_wp_error( $response ) ) {
+			return $response->get_error_message();
+		}
+
+		return 'HTTP ' . wp_remote_retrieve_response_code( $response );
 	}
 
 	/**
@@ -650,10 +665,10 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$all_categories = json_decode( wp_remote_retrieve_body( $response ), true );
 
-			if ( isset( $all_categories['code'] ) ) {
+			if ( ! is_array( $all_categories ) || isset( $all_categories['code'] ) ) {
 				$message = isset( $all_categories['message'] ) ? $all_categories['message'] : '';
 				if ( ! empty( $message ) ) {
 					Helper::instance()->ast_block_templates_log( 'CATEGORY:HTTP Request Error: ' . $message );
@@ -672,7 +687,7 @@ class Sync_Library {
 				}
 			}
 		} else {
-			Helper::instance()->ast_block_templates_log( 'CATEGORY:API Error: ' . $response->get_error_message() );
+			Helper::instance()->ast_block_templates_log( 'CATEGORY:API Error: ' . $this->get_response_error_message( $response ) );
 		}
 
 		Helper::instance()->ast_block_templates_log( 'CATEGORY:Completed category import.' );
@@ -710,10 +725,10 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$all_blocks = json_decode( wp_remote_retrieve_body( $response ), true );
 
-			if ( isset( $all_blocks['code'] ) ) {
+			if ( ! is_array( $all_blocks ) || isset( $all_blocks['code'] ) ) {
 				$message = isset( $all_blocks['message'] ) ? $all_blocks['message'] : '';
 				if ( ! empty( $message ) ) {
 					Helper::instance()->ast_block_templates_log( 'BLOCK: HTTP Request Error: ' . $message );
@@ -732,7 +747,7 @@ class Sync_Library {
 				}
 			}
 		} else {
-			Helper::instance()->ast_block_templates_log( 'BLOCK: API Error: ' . $response->get_error_message() );
+			Helper::instance()->ast_block_templates_log( 'BLOCK: API Error: ' . $this->get_response_error_message( $response ) );
 		}
 
 		Helper::instance()->ast_block_templates_log( 'BLOCK: Completed request ' . $page );
@@ -766,7 +781,7 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$total_requests = json_decode( wp_remote_retrieve_body( $response ), true );
 
 			if ( isset( $total_requests['pages'] ) ) {
@@ -812,10 +827,10 @@ class Sync_Library {
 
 		$response = wp_safe_remote_get( $api_url, $api_args );
 
-		if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 ) {
+		if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
 			$all_blocks = json_decode( wp_remote_retrieve_body( $response ), true );
 
-			if ( isset( $all_blocks['code'] ) ) {
+			if ( ! is_array( $all_blocks ) || isset( $all_blocks['code'] ) ) {
 				$message = isset( $all_blocks['message'] ) ? $all_blocks['message'] : '';
 				if ( ! empty( $message ) ) {
 					Helper::instance()->ast_block_templates_log( 'SITE: HTTP Request Error: ' . $message );
@@ -835,7 +850,7 @@ class Sync_Library {
 				}
 			}
 		} else {
-			Helper::instance()->ast_block_templates_log( 'SITE: API Error: ' . $response->get_error_message() );
+			Helper::instance()->ast_block_templates_log( 'SITE: API Error: ' . $this->get_response_error_message( $response ) );
 		}
 
 		Helper::instance()->ast_block_templates_log( 'SITE: Completed request ' . $page );

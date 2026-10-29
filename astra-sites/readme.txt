@@ -5,7 +5,7 @@ Tags: templates, website templates, elementor templates, gutenberg templates, st
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.7.9
+Stable tag: 4.7.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -272,6 +272,15 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.10 - 29th-October-2026
+- Improvement:
+    - WooCommerce and Elementor are now set up ahead of the plugins that depend on them during website setup.
+    - The progress bar on the plugin setup step no longer jumps ahead and then back.
+    - AI Builder: Blocks a build upfront when your site's PHP or WordPress version is below a required plugin's minimum, instead of failing midway.
+- Fix:
+    - Plugins that are already active no longer briefly show as "Activating" during website setup.
+    - Reloading the page after choosing a template no longer ends in a "No route was found" error; the chosen template is loaded again.
+
 v4.7.9 - 20th-October-2026
 - Improvement:
     - Plugin verification retries on time-outs and stray server output, and shows a clear error, not a stuck screen.

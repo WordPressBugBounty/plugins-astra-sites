@@ -299,7 +299,12 @@ class Helper {
 		}
 
 		if ( ! empty( $_POST['feature_plugins'] ) ) {
-			$feature_plugins  = is_string( $_POST['feature_plugins'] ) ? json_decode( wp_unslash( $_POST['feature_plugins'] ), true ) : array();
+			$feature_plugins = is_string( $_POST['feature_plugins'] ) ? json_decode( wp_unslash( $_POST['feature_plugins'] ), true ) : array();
+			// Cap the POSTed list so a crafted payload can't trigger a flood of per-slug
+			// lookups and transients. A real feature set is only a handful of plugins.
+			if ( is_array( $feature_plugins ) && count( $feature_plugins ) > 50 ) {
+				$feature_plugins = array_slice( $feature_plugins, 0, 50 );
+			}
 			$required_plugins = '' === $required_plugins ? [] : $required_plugins;
 
 			if ( is_array( $feature_plugins ) && is_array( $required_plugins ) ) {
@@ -368,19 +373,40 @@ class Helper {
 		$incompatible_plugins    = array();
 
 		if ( ! empty( $required_plugins ) ) {
-			$php_version = Helper::get_php_version();
 			foreach ( $required_plugins as $key => $plugin ) {
 
 				$plugin = (array) $plugin;
 
-				if ( 'woocommerce' === $plugin['slug'] && version_compare( $php_version, '7.0', '<' ) ) {
-					$plugin['min_php_version'] = '7.0';
-					$incompatible_plugins[]    = $plugin;
-				}
+				// Any plugin the import still has to install or activate is subject to WordPress
+				// core's PHP/WP requirement check, which would fail the import mid-way. Skip plugins
+				// whose dependency is already satisfied — the lite build is active, or an active pro
+				// build replaces it — since the import then installs/activates nothing for them.
+				$plugin_init  = ! empty( $plugin['init'] ) ? $plugin['init'] : '';
+				$plugin_pro   = '' !== $plugin_init ? Helper::pro_plugin_exist( $plugin_init ) : false;
+				$is_satisfied = '' !== $plugin_init && is_plugin_active( $plugin_init );
+				$is_satisfied = $is_satisfied || ( is_array( $plugin_pro ) && ! empty( $plugin_pro['init'] ) && is_plugin_active( $plugin_pro['init'] ) );
+				$plugin_slug  = ! empty( $plugin['slug'] ) ? $plugin['slug'] : '';
 
-				if ( 'presto-player' === $plugin['slug'] && version_compare( $php_version, '7.3', '<' ) ) {
-					$plugin['min_php_version'] = '7.3';
-					$incompatible_plugins[]    = $plugin;
+				if ( ! $is_satisfied && ( '' !== $plugin_slug || '' !== $plugin_init ) ) {
+					$min_requirements = self::get_plugin_min_requirements( $plugin_slug, $plugin );
+					$is_incompatible  = false;
+
+					// Match WordPress core's install-time check (is_php_version_compatible /
+					// is_wp_version_compatible). Those normalise -RC/-beta/-src suffixes and a
+					// trailing .0, so the gate never blocks a setup core would happily install on.
+					if ( ! empty( $min_requirements['requires_php'] ) && ! is_php_version_compatible( $min_requirements['requires_php'] ) ) {
+						$plugin['min_php_version'] = $min_requirements['requires_php'];
+						$is_incompatible           = true;
+					}
+
+					if ( ! empty( $min_requirements['requires'] ) && ! is_wp_version_compatible( $min_requirements['requires'] ) ) {
+						$plugin['min_wp_version'] = $min_requirements['requires'];
+						$is_incompatible          = true;
+					}
+
+					if ( $is_incompatible ) {
+						$incompatible_plugins[] = $plugin;
+					}
 				}
 
 				/**
@@ -527,6 +553,114 @@ class Helper {
 			'update_avilable_plugins'      => $update_avilable_plugins,
 			'incompatible_plugins'         => $incompatible_plugins,
 			'error'                        => $is_error,
+		);
+	}
+
+	/**
+	 * Resolve a plugin's minimum "Requires PHP" / "Requires at least" versions.
+	 *
+	 * Reads from the required-plugins payload, else an installed plugin's own header, else
+	 * the wp.org plugins API (cached per slug). Fails open — empty strings on any API error —
+	 * so a hiccup never blocks an import.
+	 *
+	 * @param string               $slug   Plugin slug.
+	 * @param array<string, mixed> $plugin Plugin data from the required-plugins payload.
+	 * @since 1.2.95
+	 * @return array<string, string> Keys `requires_php` and `requires`; either may be empty.
+	 */
+	public static function get_plugin_min_requirements( $slug, $plugin = array() ) {
+		// Normalise the slug once — it feeds a transient key and the plugins_api request,
+		// and can arrive from the POSTed feature_plugins payload.
+		$slug = sanitize_key( (string) $slug );
+		// A transient key must stay within the 191-char option_name limit. The longest key
+		// variant is _transient_timeout_ (19) + astra_sites_plugin_reqs_ (24) + slug, so cap
+		// the slug at 148; a slug this long is not a real plugin anyway — drop it and fall
+		// back to the payload requirements.
+		if ( strlen( $slug ) > 148 ) {
+			$slug = '';
+		}
+
+		$requirements = array(
+			'requires_php' => isset( $plugin['requires_php'] ) && is_scalar( $plugin['requires_php'] ) ? (string) $plugin['requires_php'] : '',
+			'requires'     => isset( $plugin['requires'] ) && is_scalar( $plugin['requires'] ) ? (string) $plugin['requires'] : '',
+		);
+
+		// Both known from the payload — skip any lookup.
+		if ( '' !== $requirements['requires_php'] && '' !== $requirements['requires'] ) {
+			return $requirements;
+		}
+
+		// Installed plugin: its own header is authoritative and needs no network call.
+		$init = isset( $plugin['init'] ) && is_scalar( $plugin['init'] ) ? (string) $plugin['init'] : '';
+		// $init can arrive from the POSTed feature_plugins payload, so only read a local
+		// file when it is a safe relative .php path (validate_file() rejects traversal).
+		if ( '' !== $init && 0 === validate_file( $init ) && '.php' === strtolower( substr( $init, -4 ) ) && file_exists( WP_PLUGIN_DIR . '/' . $init ) ) {
+			if ( ! function_exists( 'get_plugin_data' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			}
+			$data = get_plugin_data( WP_PLUGIN_DIR . '/' . $init, false, false );
+			if ( '' === $requirements['requires_php'] && ! empty( $data['RequiresPHP'] ) ) {
+				$requirements['requires_php'] = (string) $data['RequiresPHP'];
+			}
+			if ( '' === $requirements['requires'] && ! empty( $data['RequiresWP'] ) ) {
+				$requirements['requires'] = (string) $data['RequiresWP'];
+			}
+			return $requirements;
+		}
+
+		// Not installed and no slug to look up — nothing more to resolve.
+		if ( '' === $slug ) {
+			return $requirements;
+		}
+
+		$transient_key = 'astra_sites_plugin_reqs_' . $slug;
+		$resolved      = get_transient( $transient_key );
+
+		if ( ! is_array( $resolved ) ) {
+			$resolved = array(
+				'requires_php' => '',
+				'requires'     => '',
+			);
+
+			// Query the wp.org plugin info API directly with a short timeout instead of
+			// plugins_api(): this runs inside a blocking admin-ajax request, and plugins_api()
+			// uses a 15s timeout and, on an SSL retry, emits a trigger_error() warning that
+			// would corrupt the JSON response (turning the intended fail-open into fail-closed).
+			$request_url = 'https://api.wordpress.org/plugins/info/1.2/?action=plugin_information&request[slug]='
+				. rawurlencode( $slug )
+				. '&request[fields][sections]=false&request[fields][short_description]=false';
+
+			$response        = wp_safe_remote_get( $request_url, array( 'timeout' => 3 ) );
+			$code            = (int) wp_remote_retrieve_response_code( $response );
+			$resolved_answer = false;
+
+			if ( ! is_wp_error( $response ) && 200 === $code ) {
+				$info = json_decode( wp_remote_retrieve_body( $response ), true );
+				if ( is_array( $info ) && empty( $info['error'] ) ) {
+					$resolved['requires_php'] = isset( $info['requires_php'] ) && is_scalar( $info['requires_php'] ) ? (string) $info['requires_php'] : '';
+					$resolved['requires']     = isset( $info['requires'] ) && is_scalar( $info['requires'] ) ? (string) $info['requires'] : '';
+					$resolved_answer          = true;
+				} else {
+					// A 200 with an error body means the slug is not on wp.org (premium/renamed).
+					$resolved_answer = true;
+				}
+			} elseif ( 404 === $code ) {
+				$resolved_answer = true;
+			}
+
+			if ( $resolved_answer ) {
+				// A resolved requirement, or a definitive "not on wp.org" answer, is stable —
+				// cache it long so premium slugs aren't re-queried every hour.
+				set_transient( $transient_key, $resolved, 12 * HOUR_IN_SECONDS );
+			} else {
+				// Network/transient error: fail open, retry soon; never blocks the import.
+				set_transient( $transient_key, $resolved, HOUR_IN_SECONDS );
+			}
+		}
+
+		return array(
+			'requires_php' => '' !== $requirements['requires_php'] ? $requirements['requires_php'] : $resolved['requires_php'],
+			'requires'     => '' !== $requirements['requires'] ? $requirements['requires'] : $resolved['requires'],
 		);
 	}
 

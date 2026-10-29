@@ -507,6 +507,8 @@ class Ai_Builder_Plugin_Loader {
 			'canInstallPlugins'        => current_user_can( 'install_plugins' ),
 			'canActivatePlugins'       => current_user_can( 'activate_plugins' ),
 			'isWhiteLabelAIBuilder'    => $is_white_label,
+			'phpVersion'               => Helper::get_php_version(),
+			'wpVersion'                => get_bloginfo( 'version' ),
 			/**
 			 * Filter to toggle the promotional feature carousel on the import loading
 			 * screen. When disabled, the classic progress loader is shown instead.

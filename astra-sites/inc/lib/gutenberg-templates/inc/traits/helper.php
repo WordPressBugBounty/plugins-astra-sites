@@ -369,9 +369,9 @@ class Helper {
 	/**
 	 * Update files/directories.
 	 * 
-	 * @param string     $file_name The file path.
-	 * @param string|int $file_content The file content.
-	 * 
+	 * @param string $file_name The file path.
+	 * @param mixed  $file_content The file content, JSON-encoded before writing.
+	 *
 	 * @return void
 	 */
 	public function update_json_file( $file_name, $file_content ) {

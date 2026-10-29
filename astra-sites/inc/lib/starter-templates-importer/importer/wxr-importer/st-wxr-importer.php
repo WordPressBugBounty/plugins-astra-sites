@@ -204,13 +204,13 @@ class ST_WXR_Importer {
 	public function after_imported_post( $post_id, $original_id, $postdata, $data ) {
 		// Log individual post import.
 		ST_Importer_Log::add(
-			'success',
 			sprintf(
 				'Post imported successfully: ID %d, Type: %s, Original ID: %d',
 				$post_id,
 				$data['post_type'],
 				$original_id
 			),
+			'success',
 			array(
 				'post_id'     => $post_id,
 				'post_type'   => $data['post_type'],
@@ -744,8 +744,8 @@ class ST_WXR_Importer {
 	public function sse_import( $xml_url = '' ) {
 		// Log import start.
 		ST_Importer_Log::add(
-			'info',
 			'WXR import process started',
+			'info',
 			array(
 				'xml_url_provided' => ! empty( $xml_url ),
 			)
@@ -759,8 +759,8 @@ class ST_WXR_Importer {
 			if ( ! current_user_can( 'manage_options' ) ) {
 				// Log permission error.
 				ST_Importer_Log::add(
-					'error',
 					'Permission denied: User lacks manage_options capability',
+					'error',
 					array(
 						'user_id'   => get_current_user_id(),
 						'user_caps' => current_user_can( 'manage_options' ) ? 'true' : 'false',
@@ -817,8 +817,8 @@ class ST_WXR_Importer {
 		if ( empty( $xml_url ) ) {
 			// Log validation error - empty XML URL.
 			ST_Importer_Log::add(
-				'fatal',
 				'XML file URL is empty or not provided',
+				'fatal',
 				array(
 					'xml_url' => $xml_url,
 					'xml_id'  => isset( $_REQUEST['xml_id'] ) ? absint( $_REQUEST['xml_id'] ) : '',
@@ -841,8 +841,8 @@ class ST_WXR_Importer {
 		if ( ! file_exists( $xml_url ) ) {
 			// Log validation error - file does not exist.
 			ST_Importer_Log::add(
-				'fatal',
 				'XML file does not exist on server',
+				'fatal',
 				array(
 					'xml_url' => $xml_url,
 				)
@@ -864,8 +864,8 @@ class ST_WXR_Importer {
 		if ( ! is_readable( $xml_url ) ) {
 			// Log validation error - file not readable.
 			ST_Importer_Log::add(
-				'fatal',
 				'XML file is not readable due to file permission issues',
+				'fatal',
 				array(
 					'xml_url'    => $xml_url,
 					'file_perms' => substr( sprintf( '%o', fileperms( $xml_url ) ), -4 ),
@@ -954,8 +954,8 @@ class ST_WXR_Importer {
 
 		// Log import progress started.
 		ST_Importer_Log::add(
-			'info',
 			'Starting WXR file import process',
+			'info',
 			array(
 				'xml_url'   => $xml_url,
 				'file_size' => filesize( $xml_url ),
@@ -973,8 +973,8 @@ class ST_WXR_Importer {
 		} catch ( \Exception $e ) {
 			// Log exception during import.
 			ST_Importer_Log::add(
-				'error',
 				'Exception caught during WXR import: ' . $e->getMessage(),
+				'error',
 				array(
 					'exception_message' => $e->getMessage(),
 					'exception_code'    => $e->getCode(),
@@ -997,8 +997,8 @@ class ST_WXR_Importer {
 		} catch ( \Error $e ) {
 			// Log fatal error during import.
 			ST_Importer_Log::add(
-				'fatal',
 				'Fatal error occurred during WXR import: ' . $e->getMessage(),
+				'fatal',
 				array(
 					'error_message' => $e->getMessage(),
 					'error_code'    => $e->getCode(),
@@ -1028,8 +1028,8 @@ class ST_WXR_Importer {
 		if ( is_wp_error( $response ) ) {
 			// Log WP_Error response.
 			ST_Importer_Log::add(
-				'error',
 				'WP_Error returned from WXR importer: ' . $response->get_error_message(),
+				'error',
 				array(
 					'error_message' => $response->get_error_message(),
 					'error_code'    => $response->get_error_code(),
@@ -1042,8 +1042,8 @@ class ST_WXR_Importer {
 		} else {
 			// Log successful import completion.
 			ST_Importer_Log::add(
-				'success',
 				'WXR import completed successfully',
+				'success',
 				array(
 					'xml_url' => $xml_url,
 				)
@@ -1789,8 +1789,8 @@ class ST_WXR_Importer {
 	public static function download_file( $file = '', $overrides = array(), $timeout_seconds = 300 ) {
 		// Log file download attempt.
 		ST_Importer_Log::add(
-			'info',
 			'Attempting to download file: ' . $file,
+			'info',
 			array(
 				'file_url'        => $file,
 				'timeout_seconds' => $timeout_seconds,
@@ -1807,8 +1807,8 @@ class ST_WXR_Importer {
 		if ( is_wp_error( $temp_file ) ) {
 			// Log download failure.
 			ST_Importer_Log::add(
-				'error',
 				'File download failed: ' . $temp_file->get_error_message(),
+				'error',
 				array(
 					'file_url'      => $file,
 					'error_message' => $temp_file->get_error_message(),
@@ -1865,8 +1865,8 @@ class ST_WXR_Importer {
 		if ( isset( $results['error'] ) ) {
 			// Log sideload failure.
 			ST_Importer_Log::add(
-				'error',
 				'File sideload failed: ' . ( isset( $results['error'] ) ? $results['error'] : 'Unknown error' ),
+				'error',
 				array(
 					'file_url'  => $file,
 					'file_size' => $file_args['size'],
@@ -1882,8 +1882,8 @@ class ST_WXR_Importer {
 
 		// Log successful download.
 		ST_Importer_Log::add(
-			'success',
 			'File downloaded and sideloaded successfully: ' . $file,
+			'success',
 			array(
 				'file_url'      => $file,
 				'file_size'     => $file_args['size'],
@@ -1909,8 +1909,8 @@ class ST_WXR_Importer {
 	public static function get_xml_data( $path, $post_id ) {
 		// Log XML parsing start.
 		ST_Importer_Log::add(
-			'info',
 			'Starting to parse XML file for import metadata',
+			'info',
 			array(
 				'xml_file_path' => $path,
 				'xml_post_id'   => $post_id,
@@ -1930,8 +1930,8 @@ class ST_WXR_Importer {
 		// Check if XML parsing resulted in an error.
 		if ( is_wp_error( $data ) ) {
 			ST_Importer_Log::add(
-				'error',
 				'XML parsing failed: ' . $data->get_error_message(),
+				'error',
 				array(
 					'xml_file_path' => $path,
 					'error_message' => $data->get_error_message(),
@@ -1944,8 +1944,8 @@ class ST_WXR_Importer {
 
 		// Log XML metadata parsed successfully.
 		ST_Importer_Log::add(
-			'success',
 			'XML file parsed successfully with import counts',
+			'success',
 			array(
 				'xml_file_path' => $path,
 				'post_count'    => $data->post_count,
@@ -2022,8 +2022,8 @@ class ST_WXR_Importer {
 		if ( empty( $url ) ) {
 			// Log URL validation error - empty URL.
 			ST_Importer_Log::add(
-				'warning',
 				'URL validation failed: Empty or missing URL provided',
+				'warning',
 				array(
 					'url' => $url,
 				)
@@ -2036,8 +2036,8 @@ class ST_WXR_Importer {
 		if ( empty( $parse_url ) || ! is_array( $parse_url ) ) {
 			// Log URL validation error - invalid URL format.
 			ST_Importer_Log::add(
-				'warning',
 				'URL validation failed: Invalid URL format or unable to parse',
+				'warning',
 				array(
 					'url'       => $url,
 					'parse_url' => $parse_url,
@@ -2069,8 +2069,8 @@ class ST_WXR_Importer {
 		if ( in_array( $parse_url['host'], $valid_hosts, true ) ) {
 			// Log successful URL validation.
 			ST_Importer_Log::add(
-				'info',
 				'URL validation passed: Host is allowed',
+				'info',
 				array(
 					'url'  => $url,
 					'host' => $parse_url['host'],
@@ -2082,8 +2082,8 @@ class ST_WXR_Importer {
 
 		// Log URL validation failure - host not in whitelist.
 		ST_Importer_Log::add(
-			'warning',
 			'URL validation failed: Host not in whitelist',
+			'warning',
 			array(
 				'url'         => $url,
 				'host'        => $parse_url['host'],
@@ -2213,8 +2213,8 @@ class ST_WXR_Importer {
 		}
 
 		ST_Importer_Log::add(
-			'fatal',
 			'Uncatchable fatal error during WXR import: ' . $error['message'],
+			'fatal',
 			array(
 				'error_type' => $error['type'],
 				'error_file' => $error['file'],

@@ -325,6 +325,7 @@ class Intelligent_Starter_Templates_Loader {
 			'isBeaverBuilderDisabled'=> get_option( 'st-beaver-builder-flag' ) || ! self::is_legacy_beaver_builder_enabled(),
 			'analytics' => get_site_option( 'astra_sites_usage_optin', false ),
 			'phpVersion' => PHP_VERSION,
+			'wpVersion' => get_bloginfo( 'version' ),
 			'reportError' => $this->should_report_error(),
 			'bsfUsageTracking' => get_site_option( 'astra_sites_usage_optin', 'no' ) === 'yes',
 			'showOtherBuilders' => get_option( 'st-elementor-builder-flag', false ) || ( self::is_legacy_beaver_builder_enabled() && get_option( 'st-beaver-builder-flag', false ) ),

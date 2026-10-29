@@ -363,9 +363,11 @@ class ST_Importer_Log {
 		}
 
 		// Format the log entry with severity level and timestamp.
-		$severity_label    = strtoupper( $severity );
-		$timestamp         = self::current_time();
-		$formatted_content = sprintf( '[%s] [%s] %s', $timestamp, $severity_label, $message );
+		$severity_label = strtoupper( $severity );
+		$timestamp      = self::current_time();
+		// One entry per line: line breaks in a message must not forge extra log lines.
+		$log_message       = str_replace( array( "\r\n", "\r", "\n" ), ' ', (string) $message );
+		$formatted_content = sprintf( '[%s] [%s] %s', $timestamp, $severity_label, $log_message );
 
 		// Add context data if provided.
 		if ( ! empty( $context ) ) {
@@ -541,10 +543,10 @@ class ST_Importer_Log {
 		self::add( "Max Upload Size \t: " . size_format( wp_max_upload_size() ) );
 		self::add( "Memory Limit \t\t: " . self::get_memory_limit() );
 		self::add( "Timezone \t\t: " . self::get_timezone() );
-		self::add( PHP_EOL . '-----' . PHP_EOL );
+		self::add( '-----' );
 		self::add( 'Importing Started! - ' . self::current_time() );
 
-		self::add( '---' . PHP_EOL );
+		self::add( '---' );
 
 		/**
 		 * Filter the help URL displayed in import logs.
@@ -555,8 +557,8 @@ class ST_Importer_Log {
 		$help_url = apply_filters( 'st_importer_log_help_url', 'https://wpastra.com/docs/?p=1314&utm_source=demo-import-panel&utm_campaign=import-error&utm_medium=wp-dashboard' );
 
 		self::add( 'WHY IMPORT PROCESS CAN FAIL? READ THIS - ' );
-		self::add( $help_url . PHP_EOL );
-		self::add( '---' . PHP_EOL );
+		self::add( $help_url );
+		self::add( '---' );
 	}
 
 	/**

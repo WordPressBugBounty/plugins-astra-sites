@@ -221,7 +221,8 @@ class Plugin extends AjaxBase {
 			);
 		}
 
-		$id                = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
+		// AI templates have a UUID as id, intval() would turn it into its leading digits.
+		$id                = isset( $_POST['id'] ) ? sanitize_text_field( wp_unslash( $_POST['id'] ) ) : '';
 		$user_agent_string = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) : '';
 		$error             = isset( $_POST['error'] ) ? json_decode( stripslashes( $_POST['error'] ), true ) : array();
 		$local_storage     = isset( $_POST['local_storage'] ) ? json_decode( stripslashes( $_POST['local_storage'] ), true ) : array();
@@ -245,7 +246,7 @@ class Plugin extends AjaxBase {
 			'body'     => array(
 				'url'           => esc_url( site_url() ),
 				'err'           => stripslashes( $_POST['error'] ),
-				'id'            => $_POST['id'],
+				'id'            => $id,
 				'logfile'       => $this->get_log_file_path(),
 				'version'       => AI_BUILDER_VER,
 				'abspath'       => ABSPATH,

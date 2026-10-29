@@ -140,8 +140,8 @@ class ST_Option_Importer {
 	public static function update_page_id_by_option_value( $option_name, $option_value ) {
 		if ( empty( $option_value ) ) {
 			ST_Importer_Log::add(
-				'warning',
 				'Empty option value provided, skipping page ID update',
+				'warning',
 				array(
 					'option_name' => $option_name,
 				)
@@ -150,8 +150,8 @@ class ST_Option_Importer {
 		}
 
 		ST_Importer_Log::add(
-			'info',
 			'Looking up page by title for option update',
+			'info',
 			array(
 				'option_name'  => $option_name,
 				'option_value' => $option_value,
@@ -164,8 +164,8 @@ class ST_Option_Importer {
 			update_option( $option_name, $page->ID );
 
 			ST_Importer_Log::add(
-				'success',
 				'Page ID updated successfully in options',
+				'success',
 				array(
 					'option_name' => $option_name,
 					'page_title'  => $option_value,
@@ -174,8 +174,8 @@ class ST_Option_Importer {
 			);
 		} else {
 			ST_Importer_Log::add(
-				'error',
 				'Page not found for option update',
+				'error',
 				array(
 					'option_name' => $option_name,
 					'page_title'  => $option_value,
@@ -199,8 +199,8 @@ class ST_Option_Importer {
 		$menu_locations = array();
 
 		ST_Importer_Log::add(
-			'info',
 			'Starting navigation menu location mapping',
+			'info',
 			array(
 				'total_locations' => count( $nav_menu_locations ),
 			)
@@ -221,8 +221,8 @@ class ST_Option_Importer {
 					$successful_mappings++;
 
 					ST_Importer_Log::add(
-						'info',
 						'Menu location mapped successfully',
+						'info',
 						array(
 							'location' => $menu,
 							'slug'     => $value,
@@ -233,8 +233,8 @@ class ST_Option_Importer {
 					$failed_locations[] = $menu;
 
 					ST_Importer_Log::add(
-						'warning',
 						'Menu not found for location',
+						'warning',
 						array(
 							'location' => $menu,
 							'slug'     => $value,
@@ -246,8 +246,8 @@ class ST_Option_Importer {
 			set_theme_mod( 'nav_menu_locations', $menu_locations );
 
 			ST_Importer_Log::add(
-				'success',
 				'Navigation menu location mapping completed',
+				'success',
 				array(
 					'successful_mappings' => $successful_mappings,
 					'failed_locations'    => $failed_locations,
@@ -256,8 +256,8 @@ class ST_Option_Importer {
 			);
 		} else { // @phpstan-ignore-line - else branch is reachable despite PHPDoc
 			ST_Importer_Log::add(
-				'warning',
 				'No navigation menu locations provided for mapping',
+				'warning',
 				array()
 			);
 		}
@@ -273,8 +273,8 @@ class ST_Option_Importer {
 	public static function insert_logo( $image_url = '' ) {
 
 		ST_Importer_Log::add(
-			'info',
 			'Starting logo insertion process',
+			'info',
 			array(
 				'url' => $image_url,
 			)
@@ -292,8 +292,8 @@ class ST_Option_Importer {
 			set_theme_mod( 'custom_logo', $downloaded_image['id'] );
 
 			ST_Importer_Log::add(
-				'success',
 				'Logo inserted successfully and set as custom logo',
+				'success',
 				array(
 					'url'           => $image_url,
 					'attachment_id' => $downloaded_image['id'],
@@ -302,8 +302,8 @@ class ST_Option_Importer {
 			);
 		} else {
 			ST_Importer_Log::add(
-				'error',
 				'Failed to insert logo: no attachment ID returned',
+				'error',
 				array(
 					'url' => $image_url,
 				)
@@ -325,8 +325,8 @@ class ST_Option_Importer {
 
 		if ( isset( $attachment['url'] ) && ! self::is_valid_image_url( $attachment['url'] ) ) {
 			ST_Importer_Log::add(
-				'error',
 				'Invalid image URL provided for import',
+				'error',
 				array(
 					'url' => $attachment['url'] ?? '', // @phpstan-ignore-line
 				)
@@ -336,8 +336,8 @@ class ST_Option_Importer {
 
 		$image_url = $attachment['url'] ?? '';
 		ST_Importer_Log::add(
-			'info',
 			'Starting image download process',
+			'info',
 			array(
 				'url'  => $image_url,
 				'sha1' => ST_Importer_Helper::get_hash_image( $image_url ),
@@ -348,8 +348,8 @@ class ST_Option_Importer {
 
 		if ( $saved_image['status'] ) {
 			ST_Importer_Log::add(
-				'success',
 				'Image already imported, using existing attachment',
+				'success',
 				array(
 					'url'           => $image_url,
 					'attachment_id' => $saved_image['attachment']['id'] ?? 0,
@@ -370,8 +370,8 @@ class ST_Option_Importer {
 		// Empty file content?
 		if ( empty( $file_content ) ) {
 			ST_Importer_Log::add(
-				'error',
 				'Failed to download image: empty file content',
+				'error',
 				array(
 					'url'       => $image_url,
 					'file_size' => 0,
@@ -381,8 +381,8 @@ class ST_Option_Importer {
 		}
 
 		ST_Importer_Log::add(
-			'info',
 			'Image downloaded successfully',
+			'info',
 			array(
 				'url'       => $image_url,
 				'file_size' => strlen( $file_content ),
@@ -405,8 +405,8 @@ class ST_Option_Importer {
 		} else {
 			// For now just return the origin attachment.
 			ST_Importer_Log::add(
-				'error',
 				'Unable to determine file type for uploaded image',
+				'error',
 				array(
 					'filename' => $filename,
 					'filepath' => $upload['file'] ?? '', // @phpstan-ignore-line
@@ -428,8 +428,8 @@ class ST_Option_Importer {
 			);
 		} catch ( \Exception $e ) {
 			ST_Importer_Log::add(
-				'error',
 				'Failed to generate attachment metadata',
+				'error',
 				array(
 					'attachment_id' => $post_id,
 					'error_message' => $e->getMessage(),
@@ -449,8 +449,8 @@ class ST_Option_Importer {
 		self::$already_imported_ids[] = $post_id;
 
 		ST_Importer_Log::add(
-			'success',
 			'Image imported successfully',
+			'success',
 			array(
 				'url'            => $image_url,
 				'attachment_id'  => $post_id,
@@ -475,8 +475,8 @@ class ST_Option_Importer {
 		if ( apply_filters( 'astra_sites_image_importer_skip_image', false, $attachment ) ) {
 			$url = $attachment['url'] ?? '';
 			ST_Importer_Log::add(
-				'warning',
 				'Image import skipped by filter',
+				'warning',
 				array(
 					'url' => $url,
 				)
@@ -492,8 +492,8 @@ class ST_Option_Importer {
 		$url = $attachment['url'] ?? '';
 
 		ST_Importer_Log::add(
-			'info',
 			'Looking up image in database by SHA1 hash',
+			'info',
 			array(
 				'url'  => $url,
 				'sha1' => ST_Importer_Helper::get_hash_image( $url ),
@@ -519,8 +519,8 @@ class ST_Option_Importer {
 			$filename = basename( $url );
 
 			ST_Importer_Log::add(
-				'info',
 				'SHA1 hash lookup failed, trying filename lookup',
+				'info',
 				array(
 					'filename' => $filename,
 				)
@@ -546,8 +546,8 @@ class ST_Option_Importer {
 			self::$already_imported_ids[] = $post_id;
 
 			ST_Importer_Log::add(
-				'success',
 				'Existing image found in database',
+				'success',
 				array(
 					'url'            => $url,
 					'attachment_id'  => $post_id,
@@ -562,8 +562,8 @@ class ST_Option_Importer {
 		}
 
 		ST_Importer_Log::add(
-			'info',
 			'No existing image found, will proceed with download',
+			'info',
 			array(
 				'url' => $url,
 			)

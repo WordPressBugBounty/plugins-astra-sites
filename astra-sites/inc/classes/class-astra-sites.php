@@ -784,9 +784,9 @@ if ( ! class_exists( 'Astra_Sites' ) ) :
 			}
 
 			// $id would be in string for AI templates and in number for classic templates.
-			$id = isset( $_POST['id'] ) ? sanitize_text_field( $_POST['id'] ) : '';
+			$id = isset( $_POST['id'] ) ? sanitize_text_field( wp_unslash( $_POST['id'] ) ) : '';
 
-			if ( empty( $id ) || '0' === $id ) {
+			if ( ! Astra_Sites_Reporting::is_usable_template_id( $id ) ) {
 				wp_send_json_error(
 					array(
 						/* translators: %s is the Template ID. */

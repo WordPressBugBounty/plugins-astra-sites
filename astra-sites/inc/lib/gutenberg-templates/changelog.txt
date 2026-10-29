@@ -1,3 +1,6 @@
+v.2.4.37 - 28-October-2026
+- Fix: Library sync no longer replaces saved patterns, sites or categories with empty data when the library server returns an error, so the last good copy is kept.
+
 v.2.4.36 - 19-October-2026
 - Fix: Design Library no longer drops some template kits, such as Law, when the Spectra version toggle is on, as total kit pages are now fetched with the same Spectra version.
 
