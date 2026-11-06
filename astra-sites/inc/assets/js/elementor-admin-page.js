@@ -1859,7 +1859,9 @@ var AstraSitesAjaxQueue = ( function () {
 
 					$elscope.find( '.required-plugins-list' ).html( output );
 					$elscope.find( '.ast-tooltip-wrap' ).css( 'opacity', 1 );
-					$elscope.find( '.astra-sites-tooltip' ).css( { 'opacity': 1, 'pointer-events': 'auto' } );
+					$elscope
+						.find( '.astra-sites-tooltip' )
+						.css( { opacity: 1, 'pointer-events': 'auto' } );
 
 					/**
 					 * Enable Demo Import Button
@@ -2059,9 +2061,10 @@ var AstraSitesAjaxQueue = ( function () {
 							$elscope
 								.find( '.ast-tooltip-wrap' )
 								.css( 'opacity', 1 );
-							$elscope
-								.find( '.astra-sites-tooltip' )
-								.css( { 'opacity': 1, 'pointer-events': 'auto' } );
+							$elscope.find( '.astra-sites-tooltip' ).css( {
+								opacity: 1,
+								'pointer-events': 'auto',
+							} );
 						}
 
 						/**

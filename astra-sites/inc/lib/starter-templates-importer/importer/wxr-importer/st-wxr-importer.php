@@ -74,6 +74,16 @@ class ST_WXR_Importer {
 	private $last_heartbeat = 0;
 
 	/**
+	 * Unique token identifying this request as the lock owner. A worker whose
+	 * lock was reclaimed (stale heartbeat) can neither resurrect the lock nor
+	 * clobber the lock of the worker that replaced it.
+	 *
+	 * @since 1.1.39
+	 * @var string
+	 */
+	private $lock_owner = '';
+
+	/**
 	 * Initiator of this class.
 	 *
 	 * @since 1.0.0
@@ -106,7 +116,10 @@ class ST_WXR_Importer {
 
 		// To handle the multiple WXR import requests.
 		add_action( 'import_start', array( $this, 'wxr_import_transient_start' ) );
-		add_action( 'import_end', array( $this, 'wxr_import_transient_cleanup' ) );
+		// Keep the lock alive on import_end rather than releasing it — import_end
+		// fires before the remap callbacks below and before sse_import() finishes;
+		// the terminal state is written by sse_import()'s explicit cleanups.
+		add_action( 'import_end', array( $this, 'refresh_wxr_import_heartbeat' ) );
 
 		// SureDonation auto-creates a default form when a campaign is published.
 		// The imported WXR already carries the campaign's real form, so suppress
@@ -647,6 +660,9 @@ class ST_WXR_Importer {
 	 * @since 1.1.24
 	 */
 	public function wxr_import_transient_start() {
+		if ( '' === $this->lock_owner ) {
+			$this->lock_owner = uniqid( '', true );
+		}
 		$this->is_importing   = true;
 		$this->last_heartbeat = time();
 		set_transient(
@@ -654,19 +670,52 @@ class ST_WXR_Importer {
 			array(
 				'status'    => 'ongoing',
 				'heartbeat' => $this->last_heartbeat,
+				'owner'     => $this->lock_owner,
 			),
-			300
-		); // 5 minutes.
+			2 * $this->wxr_import_stale_after()
+		);
+	}
+
+	/**
+	 * Seconds after which an untouched heartbeat marks the import as dead.
+	 * Sized above the worst-case single-item time (a capped 60s attachment
+	 * download plus unbounded thumbnail generation on slow hosts).
+	 *
+	 * @since 1.1.39
+	 * @return int
+	 */
+	private function wxr_import_stale_after() {
+		return 5 * MINUTE_IN_SECONDS;
 	}
 
 	/**
 	 * WXR Import Transient Cleanup
 	 *
 	 * @since 1.1.24
+	 * @since 1.1.39 Added the `$error` parameter so a failed import's outcome is
+	 *               relayed to reconnecting clients instead of reading as success.
+	 *
+	 * @param string|false $error User-facing error message when the import failed, false on success.
 	 */
-	public function wxr_import_transient_cleanup() {
+	public function wxr_import_transient_cleanup( $error = false ) {
 		$this->is_importing = false;
-		set_transient( $this->wxr_import_progress_key, 'completed', 30 ); // 30 seconds.
+
+		// If another worker reclaimed the lock after ours went stale, leave
+		// its lock untouched — writing 'completed' here would end that
+		// worker's import in the eyes of reconnecting clients.
+		$lock = get_transient( $this->wxr_import_progress_key );
+		if ( is_array( $lock ) && ! empty( $lock['owner'] ) && '' !== $this->lock_owner && $lock['owner'] !== $this->lock_owner ) {
+			return;
+		}
+
+		set_transient(
+			$this->wxr_import_progress_key,
+			array(
+				'status' => 'completed',
+				'error'  => is_string( $error ) ? $error : false,
+			),
+			30
+		); // 30 seconds.
 	}
 
 	/**
@@ -682,14 +731,22 @@ class ST_WXR_Importer {
 			return;
 		}
 
+		// Never resurrect a reclaimed lock or clobber another worker's — only
+		// refresh a lock this request still owns.
+		$lock = get_transient( $this->wxr_import_progress_key );
+		if ( ! is_array( $lock ) || empty( $lock['owner'] ) || $lock['owner'] !== $this->lock_owner ) {
+			return;
+		}
+
 		$this->last_heartbeat = time();
 		set_transient(
 			$this->wxr_import_progress_key,
 			array(
 				'status'    => 'ongoing',
 				'heartbeat' => $this->last_heartbeat,
+				'owner'     => $this->lock_owner,
 			),
-			300
+			2 * $this->wxr_import_stale_after()
 		);
 	}
 
@@ -706,10 +763,20 @@ class ST_WXR_Importer {
 			return false;
 		}
 
-		if ( 'completed' === $wxr_progress ) {
+		$status = is_array( $wxr_progress ) && isset( $wxr_progress['status'] ) ? $wxr_progress['status'] : $wxr_progress;
+
+		if ( 'completed' === $status ) {
+			// A just-finished import only matters to SSE reconnects; direct
+			// callers (WP-CLI) importing another file should proceed.
+			if ( ! wp_doing_ajax() ) {
+				return false;
+			}
+
+			// Relay the stored outcome — a failed or crashed import must not be
+			// reported back to a reconnecting client as a success.
 			$data = array(
 				'action' => 'complete',
-				'error'  => false,
+				'error'  => is_array( $wxr_progress ) && ! empty( $wxr_progress['error'] ) ? $wxr_progress['error'] : false,
 			);
 		} else {
 			// An import is marked ongoing — make sure its worker is still alive.
@@ -717,7 +784,7 @@ class ST_WXR_Importer {
 			// ran (uncatchable fatal or killed connection); clear the lock so the
 			// import can restart instead of leaving the client reconnecting forever.
 			$heartbeat = is_array( $wxr_progress ) && isset( $wxr_progress['heartbeat'] ) ? (int) $wxr_progress['heartbeat'] : 0;
-			if ( ( time() - $heartbeat ) > 2 * MINUTE_IN_SECONDS ) {
+			if ( ( time() - $heartbeat ) > $this->wxr_import_stale_after() ) {
 				delete_transient( $this->wxr_import_progress_key );
 				return false;
 			}
@@ -825,11 +892,12 @@ class ST_WXR_Importer {
 				)
 			);
 
-			$this->wxr_import_transient_cleanup();
+			$error_message = __( 'Template content file not found or inaccessible. The import process cannot continue without the content file. Please try importing again.', 'astra-sites' );
+			$this->wxr_import_transient_cleanup( $error_message );
 			$this->emit_sse_message(
 				array(
 					'action' => 'complete',
-					'error'  => __( 'Template content file not found or inaccessible. The import process cannot continue without the content file. Please try importing again.', 'astra-sites' ),
+					'error'  => $error_message,
 				)
 			);
 			if ( wp_doing_ajax() ) {
@@ -848,11 +916,12 @@ class ST_WXR_Importer {
 				)
 			);
 
-			$this->wxr_import_transient_cleanup();
+			$error_message = __( 'Template content file does not exist on the server. The file may have been deleted or moved. Please try re-importing the template.', 'astra-sites' );
+			$this->wxr_import_transient_cleanup( $error_message );
 			$this->emit_sse_message(
 				array(
 					'action' => 'complete',
-					'error'  => __( 'Template content file does not exist on the server. The file may have been deleted or moved. Please try re-importing the template.', 'astra-sites' ),
+					'error'  => $error_message,
 				)
 			);
 			if ( wp_doing_ajax() ) {
@@ -872,11 +941,12 @@ class ST_WXR_Importer {
 				)
 			);
 
-			$this->wxr_import_transient_cleanup();
+			$error_message = __( 'Template content file cannot be read due to file permission issues. Please contact your hosting provider to fix file permissions.', 'astra-sites' );
+			$this->wxr_import_transient_cleanup( $error_message );
 			$this->emit_sse_message(
 				array(
 					'action' => 'complete',
-					'error'  => __( 'Template content file cannot be read due to file permission issues. Please contact your hosting provider to fix file permissions.', 'astra-sites' ),
+					'error'  => $error_message,
 				)
 			);
 			if ( wp_doing_ajax() ) {
@@ -982,11 +1052,12 @@ class ST_WXR_Importer {
 				)
 			);
 
-			$this->wxr_import_transient_cleanup();
+			$error_message = $this->get_contextual_import_error_message( $e->getMessage() );
+			$this->wxr_import_transient_cleanup( $error_message );
 			$this->emit_sse_message(
 				array(
 					'action'    => 'complete',
-					'error'     => $this->get_contextual_import_error_message( $e->getMessage() ),
+					'error'     => $error_message,
 					'technical' => $e->getMessage(),
 				)
 			);
@@ -1006,11 +1077,12 @@ class ST_WXR_Importer {
 				)
 			);
 
-			$this->wxr_import_transient_cleanup();
+			$error_message = __( 'A fatal error occurred during import, likely due to server resource limitations. Try a different template, or contact your hosting provider to increase server resources.', 'astra-sites' );
+			$this->wxr_import_transient_cleanup( $error_message );
 			$this->emit_sse_message(
 				array(
 					'action'    => 'complete',
-					'error'     => __( 'A fatal error occurred during import, likely due to server resource limitations. Try a different template, or contact your hosting provider to increase server resources.', 'astra-sites' ),
+					'error'     => $error_message,
 					'technical' => $e->getMessage(),
 				)
 			);
@@ -1057,7 +1129,8 @@ class ST_WXR_Importer {
 
 		// Release the lock on every exit path — a WP_Error returned before
 		// `import_start` fired would otherwise leave the early lock held.
-		$this->wxr_import_transient_cleanup();
+		// Passing the outcome lets reconnecting clients see the real result.
+		$this->wxr_import_transient_cleanup( $complete['error'] );
 
 		$this->emit_sse_message( $complete );
 		if ( wp_doing_ajax() ) {
@@ -2212,6 +2285,11 @@ class ST_WXR_Importer {
 			return;
 		}
 
+		// Release the lock before anything that could itself fail — under OOM
+		// there is little memory headroom left in the shutdown phase.
+		$error_message = $this->get_contextual_import_error_message( $error['message'] );
+		$this->wxr_import_transient_cleanup( $error_message );
+
 		ST_Importer_Log::add(
 			'Uncatchable fatal error during WXR import: ' . $error['message'],
 			'fatal',
@@ -2222,11 +2300,10 @@ class ST_WXR_Importer {
 			)
 		);
 
-		$this->wxr_import_transient_cleanup();
 		$this->emit_sse_message(
 			array(
 				'action'    => 'complete',
-				'error'     => $this->get_contextual_import_error_message( $error['message'] ),
+				'error'     => $error_message,
 				'technical' => $error['message'],
 			)
 		);

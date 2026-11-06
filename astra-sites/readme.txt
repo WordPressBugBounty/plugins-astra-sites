@@ -5,7 +5,7 @@ Tags: templates, website templates, elementor templates, gutenberg templates, st
 Requires at least: 6.6
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.7.10
+Stable tag: 4.7.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -272,6 +272,17 @@ You can report the issue through our [Bug Bounty Program](https://brainstormforc
 6. Use the power of AI with a single click to write copy, proofread, translate content into different languages. Adjust content length and tone seamlessly for maximum appeal.
 
 == Changelog ==
+v4.7.11 - 6th-November-2026
+- Improvement:
+    - AI Builder: When a required plugin can't be installed, the error now explains why, such as the plugin needing a newer PHP version or your site blocking plugin installs.
+- Fix:
+    - AI Builder: The error screen now shows the real reason when ZipWP rejects site creation, instead of a blank error message.
+    - AI Builder: Imports no longer fail when a required plugin's files are already on the site from an earlier attempt; the plugin is activated instead of stopping the import.
+    - AI Builder: Empty customizer and site options now report the real reason instead of being labelled a JSON parse error.
+    - AI Builder: The Select Features step now lists the required plugins right away, instead of only after you tick a feature.
+    - ST Importer: A crashed import is no longer reported as a success to a reconnecting import screen; the real failure reason is relayed instead.
+    - ST Importer: The import lock now carries an owner token, preventing duplicate concurrent imports.
+
 v4.7.10 - 29th-October-2026
 - Improvement:
     - WooCommerce and Elementor are now set up ahead of the plugins that depend on them during website setup.

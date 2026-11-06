@@ -1,3 +1,10 @@
+v1.2.96 - 6th-November-2026
+- Fix: The AI website builder error screen now shows the real reason when ZipWP rejects site creation, instead of a blank error message.
+- Fix: AI imports no longer fail when a required plugin's files are already on the site from an earlier attempt — the plugin is activated instead of stopping the import.
+- Improvement: When a required plugin can't be installed, the error now explains why (for example the plugin needs a newer PHP version, or your site is blocking plugin installs) instead of showing a generic message.
+- Fix: Empty customizer and site options now report the real reason instead of being labelled a JSON parse error.
+- Fix: The Select Features step now lists the required plugins right away, instead of only after you tick a feature.
+
 v1.2.95 - 28th-October-2026
 - Improvement: The AI website builder now checks each required plugin's PHP and WordPress requirements before building and clearly blocks the build when your site can't run one, instead of failing midway through the import.
 - Fix: AI import error reports now use the ai_builder type, so failures are no longer counted as classic imports.
